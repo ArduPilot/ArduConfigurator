@@ -62,19 +62,26 @@ var CONFIG,
     BATTERY_CONFIG,
     OUTPUT_MAPPING,
     SETTINGS,
-    BRAKING_CONFIG;
+    BRAKING_CONFIG,
+    SAFEHOMES;
 
 var FC = {
     MAX_SERVO_RATE: 125,
     MIN_SERVO_RATE: 0,
+    isAirplane: function () {
+        return (MIXER_CONFIG.platformType == PLATFORM_AIRPLANE);
+    },
+    isMultirotor: function () {
+        return (MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR || MIXER_CONFIG.platformType == PLATFORM_TRICOPTER);
+    },
     isRpyFfComponentUsed: function () {
         return (MIXER_CONFIG.platformType == PLATFORM_AIRPLANE || MIXER_CONFIG.platformType == PLATFORM_ROVER || MIXER_CONFIG.platformType == PLATFORM_BOAT) || ((MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR || MIXER_CONFIG.platformType == PLATFORM_TRICOPTER) && semver.gte(CONFIG.flightControllerVersion, "2.6.0"));
     },
     isRpyDComponentUsed: function () {
-        return MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR || MIXER_CONFIG.platformType == PLATFORM_TRICOPTER;
+        return true; // Currently all platforms use D term
     },
     isCdComponentUsed: function () {
-        return FC.isRpyDComponentUsed();
+        return (MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR || MIXER_CONFIG.platformType == PLATFORM_TRICOPTER);
     },
     resetState: function () {
         SENSOR_STATUS = {
@@ -238,7 +245,7 @@ var FC = {
             packetCount: 0
         };
 
-        MISSION_PLANER = {
+        /* MISSION_PLANER = {
             maxWaypoints: 0,
             isValidMission: 0,
             countBusyPoints: 0,
@@ -249,9 +256,13 @@ var FC = {
                 lon: 0,
                 alt: 0,
                 endMission: 0,
-                p1: 0
+                p1: 0,
+                p2: 0,
+                p3: 0
             }
-        };
+        }; */
+        
+        MISSION_PLANER = new WaypointCollection();
 
         ANALOG = {
             voltage: 0,
@@ -546,6 +557,8 @@ var FC = {
         OUTPUT_MAPPING = new OutputMappingCollection();
 
         SETTINGS = {};
+        
+        SAFEHOMES = new SafehomeCollection();
     },
     getOutputUsages: function() {
         return {
@@ -577,7 +590,8 @@ var FC = {
             {bit: 30, group: 'other', name: 'FW_LAUNCH', haveTip: false, showNameInTip: false},
             {bit: 2, group: 'other', name: 'TX_PROF_SEL', haveTip: false, showNameInTip: false},
             {bit: 0, group: 'other', name: 'THR_VBAT_COMP', haveTip: true, showNameInTip: true},
-            {bit: 3, group: 'other', name: 'BAT_PROFILE_AUTOSWITCH', haveTip: true, showNameInTip: true}
+            {bit: 3, group: 'other', name: 'BAT_PROFILE_AUTOSWITCH', haveTip: true, showNameInTip: true},
+            {bit: 31, group: 'other', name: "FW_AUTOTRIM", haveTip: true, showNameInTip: true}
         ];
 
         if (semver.gte(CONFIG.flightControllerVersion, "2.4.0") && semver.lt(CONFIG.flightControllerVersion, "2.5.0")) {
@@ -603,12 +617,8 @@ var FC = {
     getLooptimes: function () {
         return {
             125: {
-                defaultLooptime: 1000,
+                defaultLooptime: 500,
                 looptimes: {
-                    4000: "250Hz",
-                    3000: "334Hz",
-                    2000: "500Hz",
-                    1500: "667Hz",
                     1000: "1kHz",
                     500: "2kHz",
                     250: "4kHz",
@@ -618,8 +628,6 @@ var FC = {
             1000: {
                 defaultLooptime: 1000,
                 looptimes: {
-                    4000: "250Hz",
-                    2000: "500Hz",
                     1000: "1kHz"
                 }
             }
@@ -630,10 +638,6 @@ var FC = {
             125: {
                 defaultLooptime: 1000,
                 looptimes: {
-                    4000: "250Hz",
-                    3000: "334Hz",
-                    2000: "500Hz",
-                    1500: "667Hz",
                     1000: "1kHz",
                     500: "2kHz",
                     250: "4kHz",
@@ -643,8 +647,6 @@ var FC = {
             1000: {
                 defaultLooptime: 1000,
                 looptimes: {
-                    4000: "250Hz",
-                    2000: "500Hz",
                     1000: "1kHz"
                 }
             }
@@ -654,32 +656,26 @@ var FC = {
         return [
             {
                 tick: 125,
-                defaultDenominator: 16,
                 label: "256Hz"
             },
             {
                 tick: 1000,
-                defaultDenominator: 2,
                 label: "188Hz"
             },
             {
                 tick: 1000,
-                defaultDenominator: 2,
                 label: "98Hz"
             },
             {
                 tick: 1000,
-                defaultDenominator: 2,
                 label: "42Hz"
             },
             {
                 tick: 1000,
-                defaultDenominator: 2,
                 label: "20Hz"
             },
             {
                 tick: 1000,
-                defaultDenominator: 2,
                 label: "10Hz"
             }
         ];
@@ -886,7 +882,11 @@ var FC = {
         return [ "NONE", "HCSR04", "SRF10", "ARDUPILOT_I2C", "VL53L0X", "MSP", "UIB", "Benewake TFmini"];
     },
     getOpticalFlowNames: function () {
-        return [ "NONE", "PMW3901", "CXOF", "MSP", "FAKE" ];
+        if (semver.gte(CONFIG.flightControllerVersion, "2.7.0")) {
+            return [ "NONE", "CXOF", "MSP", "FAKE" ];
+        } else {
+            return [ "NONE", "PMW3901", "CXOF", "MSP", "FAKE" ];
+        }
     },
     getArmingFlags: function () {
         return {
@@ -1130,6 +1130,11 @@ var FC = {
                 hasOperand: [true, true],
                 output: "raw"
             },
+            40: {
+                name: "MOD",
+                hasOperand: [true, true],
+                output: "raw"
+            },
             18: {
                 name: "GVAR SET",
                 hasOperand: [true, true],
@@ -1234,7 +1239,7 @@ var FC = {
                 name: "RC CHANNEL OVERRIDE",
                 hasOperand: [true, true],
                 output: "boolean"
-            }
+            },
         }
     },
     getOperandTypes: function () {
@@ -1262,8 +1267,8 @@ var FC = {
                     1: "Home distance [m]",
                     2: "Trip distance [m]",
                     3: "RSSI",
-                    4: "Vbat [deci-Volt] [1V = 10]",
-                    5: "Cell voltage [deci-Volt] [1V = 10]",
+                    4: "Vbat [centi-Volt] [1V = 100]",
+                    5: "Cell voltage [centi-Volt] [1V = 100]",
                     6: "Current [centi-Amp] [1A = 100]",
                     7: "Current drawn [mAh]",
                     8: "GPS Sats",
@@ -1292,6 +1297,7 @@ var FC = {
                     31: "3D home distance [m]",
                     32: "CRSF LQ",
                     33: "CRSF SNR",
+                    34: "GPS Valid Fix",
                 }
             },
             3: {
