@@ -3,7 +3,7 @@
 
 // Google Analytics
 var googleAnalyticsService = analytics.getService('ice_cream_app');
-var googleAnalytics = googleAnalyticsService.getTracker("UA-75834706-2");
+var googleAnalytics = googleAnalyticsService.getTracker("UA-7583xxx4706-2");
 var googleAnalyticsConfig = false;
 googleAnalyticsService.getConfig().addCallback(function (config) {
     googleAnalyticsConfig = config;
