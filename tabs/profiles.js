@@ -66,7 +66,7 @@ TABS.profiles.initialize = function (callback, scrollPosition) {
     loadChainer.setChain([
         mspHelper.loadBfConfig,
         mspHelper.loadLoopTime,
-        mspHelper.loadINAVPidConfig,
+        mspHelper.loadARDUPILOTPidConfig,
         mspHelper.loadAdvancedConfig,
         mspHelper.loadFilterConfig,
         mspHelper.loadPidAdvanced,
@@ -80,7 +80,7 @@ TABS.profiles.initialize = function (callback, scrollPosition) {
     saveChainer.setChain([
         mspHelper.saveBfConfig,
         mspHelper.saveMixerConfig,
-        mspHelper.saveINAVPidConfig,
+        mspHelper.saveARDUPILOTPidConfig,
         mspHelper.saveLooptimeConfig,
         mspHelper.saveAdvancedConfig,
         mspHelper.saveFilterConfig,

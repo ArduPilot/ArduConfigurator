@@ -1,11 +1,11 @@
 {
     "manifest_version": 2,
     "minimum_chrome_version": "38",
-    "version": "2.7.0",
+    "version": "0.0.1",
     "author": "Several",
-    "name": "INAV - Configurator",
-    "short_name": "INAV",
-    "description": "Crossplatform configuration tool for INAVFlight flight control system",
+    "name": "ARDUPILOT - Configurator",
+    "short_name": "ARDUPILOT",
+    "description": "Crossplatform configuration tool for ARDUPILOTFlight flight control system",
 
     "offline_enabled": true,
 
@@ -43,6 +43,6 @@
     ],
 
     "icons": {
-        "128": "images/inav_icon_128.png"
+        "128": "images/ARDUPILOT_icon_128.png"
     }
 }

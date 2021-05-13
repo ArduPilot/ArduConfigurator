@@ -4,7 +4,7 @@ node_modules/
 npm-debug.log
 .idea/
 npm-debug.log
-inav-configurator.iml
+ARDUPILOT-configurator.iml
 # Generated scripts and styles
 /build
 # Used by nw-builder to download runtimes

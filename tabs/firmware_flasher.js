@@ -34,8 +34,8 @@ TABS.firmware_flasher.initialize = function (callback) {
         }
 
         function parseFilename(filename) {
-            //var targetFromFilenameExpression = /inav_([\d.]+)?_?([^.]+)\.(.*)/;
-            var targetFromFilenameExpression = /inav_([\d.]+(?:-rc\d+)?)?_?([^.]+)\.(.*)/;
+            //var targetFromFilenameExpression = /ARDUPILOT_([\d.]+)?_?([^.]+)\.(.*)/;
+            var targetFromFilenameExpression = /ARDUPILOT_([\d.]+(?:-rc\d+)?)?_?([^.]+)\.(.*)/;
             var match = targetFromFilenameExpression.exec(filename);
 
             if (!match) {
@@ -139,7 +139,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             TABS.firmware_flasher.releases = releases;
         };
 
-        $.get('https://api.github.com/repos/iNavFlight/inav/releases?per_page=10', function (releasesData){
+        $.get('https://api.github.com/repos/ARDUPILOTFlight/ARDUPILOT/releases?per_page=10', function (releasesData){
             TABS.firmware_flasher.releasesData = releasesData;
             buildBoardOptions();
 
@@ -273,7 +273,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                         $('a.flash_firmware').removeClass('disabled');
 
                         if (summary.commit) {
-                            $.get('https://api.github.com/repos/iNavFlight/inav/commits/' + summary.commit, function (data) {
+                            $.get('https://api.github.com/repos/ARDUPILOTFlight/ARDUPILOT/commits/' + summary.commit, function (data) {
                                 var data = data,
                                     d = new Date(data.commit.author.date),
                                     offset = d.getTimezoneOffset() / 60,
@@ -285,7 +285,7 @@ TABS.firmware_flasher.initialize = function (callback) {
 
                                 $('div.git_info .committer').text(data.commit.author.name);
                                 $('div.git_info .date').text(date);
-                                $('div.git_info .hash').text(data.sha.slice(0, 7)).prop('href', 'https://api.github.com/repos/iNavFlight/inav/commit/' + data.sha);
+                                $('div.git_info .hash').text(data.sha.slice(0, 7)).prop('href', 'https://api.github.com/repos/ARDUPILOTFlight/ARDUPILOT/commit/' + data.sha);
 
                                 $('div.git_info .message').text(data.commit.message);
 
@@ -395,7 +395,7 @@ TABS.firmware_flasher.initialize = function (callback) {
         });
 
         $(document).on('click', 'span.progressLabel a.save_firmware', function () {
-            chrome.fileSystem.chooseEntry({type: 'saveFile', suggestedName: 'inav', accepts: [{extensions: ['hex']}]}, function (fileEntry) {
+            chrome.fileSystem.chooseEntry({type: 'saveFile', suggestedName: 'ARDUPILOT', accepts: [{extensions: ['hex']}]}, function (fileEntry) {
                 if (chrome.runtime.lastError) {
                     console.error(chrome.runtime.lastError.message);
                     return;

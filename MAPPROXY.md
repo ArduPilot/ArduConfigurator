@@ -1,6 +1,6 @@
-# INAV Configurator MapProxy setup
+# ARDUPILOT Configurator MapProxy setup
 
-There are several different approaches to setting up MapProxy service. All that iNav needs is a 
+There are several different approaches to setting up MapProxy service. All that ARDUPILOT needs is a 
 working MapProxy WMS URL and the name of the layer that you want to use for caching
 
 ## Generic MapProxy Installation Guides
@@ -21,7 +21,7 @@ https://hub.docker.com/r/yagajs/mapproxy/ Docker image (untested)
     ```console
     sudo apt-get update && sudo apt-get upgrade && sudo reboot
     ```
-1. Set a static IP so that your iNav proxy URL does not need to be updated
+1. Set a static IP so that your ARDUPILOT proxy URL does not need to be updated
     ```console
     # get dhcp ip address and host gateway
     mapproxy@MapProxy:~$ ip route get 8.8.8.8 | awk '{print $NF; exit}'
@@ -66,8 +66,8 @@ https://hub.docker.com/r/yagajs/mapproxy/ Docker image (untested)
     ```console
     # check that mapproxy is installed
     mapproxy-util --version
-    # create inav config
-    mapproxy-util create -t base-config inavmapproxy
+    # create ARDUPILOT config
+    mapproxy-util create -t base-config ARDUPILOTmapproxy
     virtualenv --system-site-packages mapproxy
     source mapproxy/bin/activate
     ```
@@ -77,26 +77,26 @@ https://hub.docker.com/r/yagajs/mapproxy/ Docker image (untested)
     ```
     so it looks like this:
     ```apache
-    WSGIScriptAlias /inavmapproxy /home/mapproxy/inavmapproxy/config.py
+    WSGIScriptAlias /ARDUPILOTmapproxy /home/mapproxy/ARDUPILOTmapproxy/config.py
     WSGIDaemonProcess mapproxy user=mapproxy group=mapproxy processes=8 threads=25
     WSGIProcessGroup mapproxy
     # WSGIPythonHome should contain the bin and lib dir of your virtualenv
     WSGIPythonHome /home/mapproxy/mapproxy
     WSGIApplicationGroup %{GLOBAL}
 
-    <Directory /home/mapproxy/inavmapproxy/>
+    <Directory /home/mapproxy/ARDUPILOTmapproxy/>
       Order deny,allow
       Require all granted
     </Directory>
     ```
 1. Create wsgi config file
     ```console
-    vi inavmapproxy/config.py
+    vi ARDUPILOTmapproxy/config.py
     ```
     with the following content:
     ```python
     from mapproxy.wsgiapp import make_wsgi_app
-    application = make_wsgi_app(r'/home/mapproxy/inavmapproxy/mapproxy.yaml')
+    application = make_wsgi_app(r'/home/mapproxy/ARDUPILOTmapproxy/mapproxy.yaml')
     ```
 1. Enable wsgi and restart apache
     ```console
@@ -104,23 +104,23 @@ https://hub.docker.com/r/yagajs/mapproxy/ Docker image (untested)
     sudo service apache2 restart
     ```
 1. Test your MapProxy instance using web browser on host, you should see a demo link
-    http://192.168.145.20/inavmapproxy/
-1. Open iNav Configurator, connect to your flight controller
+    http://192.168.145.20/ARDUPILOTmapproxy/
+1. Open ARDUPILOT Configurator, connect to your flight controller
 1. In upper right corner click on Application Options (gears icon)
 1. For MapProxy URL use:
-    http://192.168.145.20/inavmapproxy/service?
+    http://192.168.145.20/ARDUPILOTmapproxy/service?
 1. For MapProxy layer use:
     osm
 1. If everything is working you should see a map in the GPS and Mission Planner tabs
 1. You can change your server configuration by editing
     ```console
-    mapproxy@MapProxy:~$ vi ~/inavmapproxy/mapproxy.yaml
+    mapproxy@MapProxy:~$ vi ~/ARDUPILOTmapproxy/mapproxy.yaml
     ```
     After editing configuration, restart apache
     ```console
     mapproxy@MapProxy:~$ sudo /etc/init.d/apache2 restart
     ```
-1. Some additional sample configurations, use at your own discretion (change layer in inav to layer from configuration)
+1. Some additional sample configurations, use at your own discretion (change layer in ARDUPILOT to layer from configuration)
     ```yaml
     # mundialis openstreetmap wms example
     services:
@@ -148,30 +148,30 @@ https://hub.docker.com/r/yagajs/mapproxy/ Docker image (untested)
     ```
     
     ```yaml
-    # google maps hybrid example, use inav_layer in configurator as layer name
+    # google maps hybrid example, use ARDUPILOT_layer in configurator as layer name
     services:
       demo:
       wms:
         md:
           title: MapProxy WMS Proxy
     layers:
-      - name: inav_layer
+      - name: ARDUPILOT_layer
         title: Google Maps Hybrid
-        sources: [inav_cache]
+        sources: [ARDUPILOT_cache]
     caches:
-      inav_cache:
-        grids: [inav_grid]
-        sources: [inav]
+      ARDUPILOT_cache:
+        grids: [ARDUPILOT_grid]
+        sources: [ARDUPILOT]
         cache:
           type: file
           directory_layout: tms
     sources:
-      inav:
+      ARDUPILOT:
         type: tile
         url: http://mt0.google.com/vt/lyrs=y&hl=en&x=%(x)s&y=%(y)s&z=%(z)s
-        grid: inav_grid
+        grid: ARDUPILOT_grid
     grids:
-      inav_grid:
+      ARDUPILOT_grid:
         base: GLOBAL_MERCATOR
         origin: ul
     ```
@@ -181,7 +181,7 @@ https://hub.docker.com/r/yagajs/mapproxy/ Docker image (untested)
 	  
     https://lpdaac.usgs.gov/data_access/web_map_services_wms # USGS currently has 400+ WMS layers
     
-    * You can use QGIS to browse different provieders and pick the maps you like for your iNav layers
+    * You can use QGIS to browse different provieders and pick the maps you like for your ARDUPILOT layers
 	  https://qgis.org/en/site/
     
     * There are many government and public wms providers available in different regions worldwide

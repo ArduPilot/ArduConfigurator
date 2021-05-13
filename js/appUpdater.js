@@ -4,7 +4,7 @@ var appUpdater = appUpdater || {};
 
 appUpdater.checkRelease = function (currVersion) {
     var modalStart;
-    $.get('https://api.github.com/repos/iNavFlight/inav-configurator/releases', function (releaseData) {
+    $.get('https://api.github.com/repos/davidbuzz/no-longer-inav-configurator/releases', function (releaseData) {
         GUI.log('Loaded release information from GitHub.');
         //Git return sorted list, 0 - last release
 

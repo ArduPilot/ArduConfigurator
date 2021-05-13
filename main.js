@@ -473,7 +473,7 @@ $(document).ready(function () {
 
     batteryprofile_e.change(function () {
         var batteryprofile = parseInt($(this).val());
-        MSP.send_message(MSPCodes.MSP2_INAV_SELECT_BATTERY_PROFILE, [batteryprofile], false, function () {
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SELECT_BATTERY_PROFILE, [batteryprofile], false, function () {
             GUI.log(chrome.i18n.getMessage('loadedBatteryProfile', [batteryprofile + 1]));
             updateActivatedTab();
         });

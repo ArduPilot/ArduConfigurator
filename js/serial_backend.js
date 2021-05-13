@@ -276,7 +276,7 @@ function onOpen(openInfo) {
             GUI.log(chrome.i18n.getMessage('apiVersionReceived', [CONFIG.apiVersion]));
 
             MSP.send_message(MSPCodes.MSP_FC_VARIANT, false, false, function () {
-                if (CONFIG.flightControllerIdentifier == 'INAV') {
+                if (CONFIG.flightControllerIdentifier == 'ARDUPILOT') {
                     MSP.send_message(MSPCodes.MSP_FC_VERSION, false, false, function () {
                         googleAnalytics.sendEvent('Firmware', 'Variant', CONFIG.flightControllerIdentifier + ',' + CONFIG.flightControllerVersion);
                         GUI.log(chrome.i18n.getMessage('fcInfoReceived', [CONFIG.flightControllerIdentifier, CONFIG.flightControllerVersion]));
@@ -382,7 +382,7 @@ function read_serial(info) {
 }
 
 /**
- * Sensor handler used in INAV >= 1.5
+ * Sensor handler used in ARDUPILOT >= 1.5
  * @param hw_status
  */
 function sensor_status_ex(hw_status)
@@ -441,7 +441,7 @@ function sensor_status_hash(hw_status)
 }
 
 /**
- * Legacy sensor handler used in INAV < 1.5 versions
+ * Legacy sensor handler used in ARDUPILOT < 1.5 versions
  * @param sensors_detected
  * @deprecated
  */

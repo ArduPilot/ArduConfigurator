@@ -11,7 +11,7 @@ presets.elementHelper = function (group, field, value) {
 };
 
 presets.defaultValues = {
-    INAV_PID_CONFIG: {"asynchronousMode": "0", "accelerometerTaskFrequency": 500, "attitudeTaskFrequency": 250, "magHoldRateLimit": 90, "magHoldErrorLpfFrequency": 2, "yawJumpPreventionLimit": 200, "gyroscopeLpf": "3", "accSoftLpfHz": 15},
+    ARDUPILOT_PID_CONFIG: {"asynchronousMode": "0", "accelerometerTaskFrequency": 500, "attitudeTaskFrequency": 250, "magHoldRateLimit": 90, "magHoldErrorLpfFrequency": 2, "yawJumpPreventionLimit": 200, "gyroscopeLpf": "3", "accSoftLpfHz": 15},
     RC_tuning: {"RC_RATE": 1, "RC_EXPO": 0.7, "roll_pitch_rate": 0, "roll_rate": 200, "pitch_rate": 200, "yaw_rate": 200, "dynamic_THR_PID": 0, "throttle_MID": 0.5, "throttle_EXPO": 0, "dynamic_THR_breakpoint": 1500, "RC_YAW_EXPO": 0.2},
     PID_ADVANCED: {"rollPitchItermIgnoreRate": 200, "yawItermIgnoreRate": 50, "yawPLimit": 300, "axisAccelerationLimitRollPitch": 0, "axisAccelerationLimitYaw": 1000},
     FILTER_CONFIG: {"gyroSoftLpfHz": 60, "dtermLpfHz": 40, "yawLpfHz": 30, "gyroNotchHz1": 0, "gyroNotchCutoff1": 0, "dtermNotchHz": 0, "dtermNotchCutoff": 0, "gyroNotchHz2": 0, "gyroNotchCutoff2": 0, "accNotchHz": 0, "accNotchCutoff": 0, "gyroStage2LowpassHz": 0}
@@ -46,7 +46,7 @@ presets.presets = [
         name: 'Generic 3" Quadcopter',
         description: "Quad X, 3\" propellers. F4/F7 CPU.",
         features: ["DSHOT600", "4k mode", "Matrix Filter", "Improved mechanics", "Optimized filtering", "Optimized rates"],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [],
         settings: [
             {
@@ -204,7 +204,7 @@ presets.presets = [
         name: 'Generic 5" Quadcopter',
         description: "Quad X, 5\" propellers. F4/F7 CPU.",
         features: ["DSHOT600", "2k mode", "Matrix Filter", "Improved mechanics", "Optimized filtering", "Optimized rates"],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [],
         settings: [
             {
@@ -354,7 +354,7 @@ presets.presets = [
         name: 'Generic 7" Quadcopter',
         description: "Quad X, 7\" propellers. F4/F7 CPU.",
         features: ["DSHOT600", "2k mode", "Matrix Filter", "Improved mechanics", "Optimized filtering", "Optimized rates"],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [],
         settings: [
             {
@@ -517,7 +517,7 @@ presets.presets = [
             "Improved PID defaults",
             "Adjusted filtering"
         ],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [],
         settings: [
             {
@@ -679,7 +679,7 @@ presets.presets = [
         name: '3" Cinewhoop',
         description: "Based on the iFlight MegaBee Cinewhoop.",
         features: ["DSHOT600", "4k mode", "Matrix Filter", "Improved mechanics", "Optimized filtering", "Optimized rates"],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [],
         settings: [
             {
@@ -845,7 +845,7 @@ presets.presets = [
         name: '5" Freestyle Quadcopter, 2208 2450kV motors',
         description: "Overpowered freestyle quad. 5\", 3 bladed propellers like HQProp S4, Nepal N1, 2208 2450KV motors, 4S, DSHOT600 ESC protocol.<br>Optimized for smooth, freestyle or acrobatic flight.",
         features: ["DSHOT600", "4k mode", "Matrix Filter", "Improved mechanics", "Optimized filtering", "Optimized rates"],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [],
         settings: [
             {
@@ -1003,7 +1003,7 @@ presets.presets = [
         name: '6" Freestyle Quadcopter, 2207 1700kV motors',
         description: "6\", 3 bladed propellers, 2207 1700kV motors, 4S, DSHOT600 ESC protocol.<br>Optimized for smooth, freestyle or acrobatic flight with GPS or not.",
         features: ["DSHOT600", "2k mode", "Matrix Filter", "Improved mechanics", "Optimized filtering", "Optimized rates"],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [],
         settings: [
             {
@@ -1165,12 +1165,12 @@ presets.presets = [
             "Adjusted PIDs",
             "Adjusted rates"
         ],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [
             presets.elementHelper("RC_tuning", "roll_rate", 200),
             presets.elementHelper("RC_tuning", "pitch_rate", 150),
             presets.elementHelper("RC_tuning", "yaw_rate", 90),
-            presets.elementHelper("INAV_PID_CONFIG", "gyroscopeLpf", 1)
+            presets.elementHelper("ARDUPILOT_PID_CONFIG", "gyroscopeLpf", 1)
         ],
         settings: [
             {
@@ -1224,13 +1224,13 @@ presets.presets = [
             "Adjusted PIDs",
             "Adjusted rates"
         ],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [
             presets.elementHelper("RC_tuning", "roll_rate", 350),
             presets.elementHelper("RC_tuning", "pitch_rate", 90),
             presets.elementHelper("RC_tuning", "dynamic_THR_PID", 33),
             presets.elementHelper("RC_tuning", "dynamic_THR_breakpoint", 1300),
-            presets.elementHelper("INAV_PID_CONFIG", "gyroscopeLpf", 4)
+            presets.elementHelper("ARDUPILOT_PID_CONFIG", "gyroscopeLpf", 4)
         ],
         settings: [
             {
@@ -1308,9 +1308,9 @@ presets.presets = [
             "Adjusted PIDs",
             "Adjusted rates"
         ],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [
-            presets.elementHelper("INAV_PID_CONFIG", "gyroscopeLpf", 0),
+            presets.elementHelper("ARDUPILOT_PID_CONFIG", "gyroscopeLpf", 0),
             presets.elementHelper("FILTER_CONFIG", "gyroSoftLpfHz", 40),
             presets.elementHelper("RC_tuning", "roll_rate", 280),
             presets.elementHelper("RC_tuning", "pitch_rate", 140),
@@ -1393,9 +1393,9 @@ presets.presets = [
             "Adjusted PIDs",
             "Adjusted rates"
         ],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [
-            presets.elementHelper("INAV_PID_CONFIG", "gyroscopeLpf", 0),
+            presets.elementHelper("ARDUPILOT_PID_CONFIG", "gyroscopeLpf", 0),
             presets.elementHelper("FILTER_CONFIG", "gyroSoftLpfHz", 35),
             presets.elementHelper("RC_tuning", "roll_rate", 260),
             presets.elementHelper("RC_tuning", "pitch_rate", 140),
@@ -1478,9 +1478,9 @@ presets.presets = [
             "Adjusted PIDs",
             "Adjusted rates"
         ],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [
-            presets.elementHelper("INAV_PID_CONFIG", "gyroscopeLpf", 3),
+            presets.elementHelper("ARDUPILOT_PID_CONFIG", "gyroscopeLpf", 3),
             presets.elementHelper("FILTER_CONFIG", "gyroSoftLpfHz", 30),
             presets.elementHelper("RC_tuning", "roll_rate", 360),
             presets.elementHelper("RC_tuning", "pitch_rate", 130),
@@ -1567,9 +1567,9 @@ presets.presets = [
             "Adjusted PIDs",
             "Adjusted rates"
         ],
-        applyDefaults: ["INAV_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
+        applyDefaults: ["ARDUPILOT_PID_CONFIG", "RC_tuning", "PID_ADVANCED", "FILTER_CONFIG"],
         settingsMSP: [
-            presets.elementHelper("INAV_PID_CONFIG", "gyroscopeLpf", 0),
+            presets.elementHelper("ARDUPILOT_PID_CONFIG", "gyroscopeLpf", 0),
             presets.elementHelper("FILTER_CONFIG", "gyroSoftLpfHz", 35),
             presets.elementHelper("RC_tuning", "roll_rate", 280),
             presets.elementHelper("RC_tuning", "pitch_rate", 120)

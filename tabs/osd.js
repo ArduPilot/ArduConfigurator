@@ -291,7 +291,7 @@ FONT.upload = function (callback) {
     for (var ii = 0; ii < count; ii++) {
         // Upload 2nd page first, so chips supporting just one page
         // overwrite page 2 with page 1. Note that this works fine with
-        // INAV < 2.1 because it will write invalid character data over
+        // ARDUPILOT < 2.1 because it will write invalid character data over
         // the first pass, but then it will be ovewritten by the first
         // 256 characters.
         var charIndex = ii < 256 ? ii + 256 : ii - 256;
@@ -776,7 +776,7 @@ OSD.constants = {
                 {
                     name: 'VERSION',
                     id: 119,
-                    preview: 'INAV 2.7.0'
+                    preview: 'ARDUPILOT 0.0.1'
                 }
             ]
         },
@@ -921,7 +921,7 @@ OSD.constants = {
         {
             name: 'osdGroupAltitude',
             // TODO: Make this disappear when there's no baro and no GPS.
-            // Requires not drawing these indicators in INAV even when enabled
+            // Requires not drawing these indicators in ARDUPILOT even when enabled
             // if there are no sensors to provide their data. Currently they're
             // always drawn as long as BARO or NAV support is compiled in.
             items: [
@@ -1649,7 +1649,7 @@ OSD.reload = function(callback) {
             callback();
         }
     };
-    MSP.promise(MSPCodes.MSP2_INAV_OSD_LAYOUTS).then(function (resp) {
+    MSP.promise(MSPCodes.MSP2_ARDUPILOT_OSD_LAYOUTS).then(function (resp) {
 
         OSD.msp.decodeLayoutCounts(resp);
         // Get data for all layouts
@@ -1657,17 +1657,17 @@ OSD.reload = function(callback) {
         var layouts = Promise.mapSeries(ids, function (layoutIndex, ii) {
             var data = [];
             data.push8(layoutIndex);
-            return MSP.promise(MSPCodes.MSP2_INAV_OSD_LAYOUTS, data).then(function (resp) {
+            return MSP.promise(MSPCodes.MSP2_ARDUPILOT_OSD_LAYOUTS, data).then(function (resp) {
                 OSD.msp.decodeLayout(layoutIndex, resp);
             });
         });
         layouts.then(function () {
             OSD.updateSelectedLayout(OSD.data.selected_layout || 0);
 
-            MSP.promise(MSPCodes.MSP2_INAV_OSD_ALARMS).then(function (resp) {
+            MSP.promise(MSPCodes.MSP2_ARDUPILOT_OSD_ALARMS).then(function (resp) {
                 OSD.msp.decodeAlarms(resp);
 
-                MSP.promise(MSPCodes.MSP2_INAV_OSD_PREFERENCES).then(function (resp) {
+                MSP.promise(MSPCodes.MSP2_ARDUPILOT_OSD_PREFERENCES).then(function (resp) {
                     OSD.data.supported = true;
                     OSD.msp.decodePreferences(resp);
                     done();
@@ -1697,20 +1697,20 @@ OSD.updateDisplaySize = function () {
 
 OSD.saveAlarms = function(callback) {
     let data = OSD.msp.encodeAlarms();
-    return MSP.promise(MSPCodes.MSP2_INAV_OSD_SET_ALARMS, data).then(callback);
+    return MSP.promise(MSPCodes.MSP2_ARDUPILOT_OSD_SET_ALARMS, data).then(callback);
 }
 
 OSD.saveConfig = function(callback) {
     return OSD.saveAlarms(function () {
         var data = OSD.msp.encodePreferences();
-        return MSP.promise(MSPCodes.MSP2_INAV_OSD_SET_PREFERENCES, data).then(callback);
+        return MSP.promise(MSPCodes.MSP2_ARDUPILOT_OSD_SET_PREFERENCES, data).then(callback);
     });
 };
 
 OSD.saveItem = function(item, callback) {
     let pos = OSD.data.items[item.id];
     let data = OSD.msp.encodeLayoutItem(OSD.data.selected_layout, item, pos);
-    return MSP.promise(MSPCodes.MSP2_INAV_OSD_SET_LAYOUT_ITEM, data).then(callback);
+    return MSP.promise(MSPCodes.MSP2_ARDUPILOT_OSD_SET_LAYOUT_ITEM, data).then(callback);
 };
 
 //noinspection JSUnusedLocalSymbols

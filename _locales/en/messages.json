@@ -167,7 +167,7 @@
         "message": "This firmware version is <span style=\"color: red\">not supported</span>. This version of Configurator supports firmware from $1 to $2 (excluded)"
     },
     "firmwareVariantNotSupported": {
-        "message": "This firmware variant is <span style=\"color: red\">not supported</span>. Please upgrade to INAV firmware. Use CLI for backup before flashing.  CLI backup/restore procedure is in the documention."
+        "message": "This firmware variant is <span style=\"color: red\">not supported</span>. Please upgrade to ARDUPILOT firmware. Use CLI for backup before flashing.  CLI backup/restore procedure is in the documention."
     },
 
     "tabSwitchConnectionRequired": {
@@ -246,17 +246,27 @@
     },
 
     "defaultWelcomeIntro": {
-        "message": "Welcome to <strong>INAV - Configurator</strong>, a utility designed to simplify updating, configuring and tuning of your flight controller."
+        "message": "Welcome to <strong>ARDUPILOT - Configurator</strong>, a utility designed to simplify updating, configuring and tuning of your flight controller."
     },
 
     "defaultWelcomeText": {
-        "message": "The application supports all hardware that can run INAV (<a href=\"https://inavflight.com/shop/p/MATEKF405WING\" target=\"_blank\">Matek F405-WING</a>, <a href=\"https://inavflight.com/shop/p/MATEKF722SE\" target=\"_blank\">Matek F722-SE</a> and many other). The full list of recommended hardware is available <a href=\"https://github.com/iNavFlight/inav/wiki/Welcome-to-INAV,-useful-links-and-products\" target=\"_blank\">here</a>.<br /><br />The firmware source code can be downloaded from <a href=\"https://github.com/iNavFlight\" title=\"www.github.com\" target=\"_blank\">here</a><br />The newest binary firmware image is available <a href=\"https://github.com/iNavFlight/inav/releases\" title=\"www.github.com\" target=\"_blank\">here</a>.<br /><br />Latest <strong>STM USB VCP Drivers</strong> can be downloaded from <a href=\"http://www.st.com/web/en/catalog/tools/PF257938\" title=\"http://www.st.com\" target=\"_blank\">here</a><br />Latest <strong>Zadig</strong> for Windows DFU flashing can be downloaded from <a href=\"http://zadig.akeo.ie/\" title=\"http://zadig.akeo.ie\" target=\"_blank\">here</a><br />"
+        "message": "The application supports all hardware that can run ARDUPILOT. 
+        The full list of recommended hardware is available 
+        <a href=\"https://ardupilot.org/copter/docs/common-autopilots.html\" target=\"_blank\">here</a>.
+        <br /><br />The firmware source code can be downloaded from <a href=\"https://github.com/arduPilot/ardupilot/\" 
+        title=\"www.github.com\" target=\"_blank\">here</a><br />
+        The newest binary firmware image is available <a href=\"https://github.com/arduPilot/ardupilot/releases\" 
+        title=\"www.github.com\" target=\"_blank\">here</a>.<br /><br />
+        Latest <strong>STM USB VCP Drivers</strong> can be downloaded from 
+        <a href=\"http://www.st.com/web/en/catalog/tools/PF257938\" title=\"http://www.st.com\" target=\"_blank\">here</a><br />
+        Latest <strong>Zadig</strong> for Windows DFU flashing can be downloaded from 
+        <a href=\"http://zadig.akeo.ie/\" title=\"http://zadig.akeo.ie\" target=\"_blank\">here</a><br />"
     },
     "defaultContributingHead": {
         "message": "Contributing"
     },
     "defaultContributingText": {
-        "message": "If you would like to help make INAV even better you can help in many ways, including:<br /><ul><li>Answering other users questions on the forums and IRC.</li><li>Contributing code to the firmware and configurator - new features, fixes, improvements</li><li>Testing <a href=\"https://github.com/iNavFlight/inav/pulls\" target=\"_blank\">new features/fixes</a> and providing feedback.</li><li>Helping out with <a href=\"https://github.com/iNavFlight/inav/issues\" target=\"_blank\">issues and commenting on feature requests</a>.</li></ul>"
+        "message": "If you would like to help make ARDUPILOT even better you can help in many ways, including:<br /><ul><li>Answering other users questions on the forums and IRC.</li><li>Contributing code to the firmware and configurator - new features, fixes, improvements</li><li>Testing <a href=\"https://github.com/arduPilot/ardupilot/pulls\" target=\"_blank\">new features/fixes</a> and providing feedback.</li><li>Helping out with <a href=\"https://github.com/arduPilot/ardupilot/issues\" target=\"_blank\">issues and commenting on feature requests</a>.</li></ul>"
     },
     "defaultChangelogHead": {
         "message": "Configurator - Changelog"
@@ -268,10 +278,10 @@
         "message": "Open Source / Donation Notice"
     },
     "defaultDonateText": {
-        "message": "This utility is fully <strong>open source</strong> and is available free of charge to all <strong>INAV</strong> users.<br />If you found the INAV or INAV Configurator useful, please consider <strong>supporting</strong> its development by donating."
+        "message": "This utility is fully <strong>open source</strong> and is available free of charge to all <strong>ARDUPILOT</strong> users.<br />If you found the ARDUPILOT or ARDUPILOT Configurator useful, please consider <strong>supporting</strong> its development by donating."
     },
     "defaultSponsorsHead": {
-        "message": "Sponsors"
+        "message": ""
     },
     "communityRCGroupsSupport": {
         "message": "RC Groups Support"
@@ -286,13 +296,13 @@
         "message": "Facebook Group"
     },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span style=\"color: red\">Backup and restore functionality disabled.</span>  You have firmware with API version <span style=\"color: red\">$1</span>, backup and restore requires <span style=\"color: #37a8db\">$2</span>.  Please backup your settings via the CLI, see INAV documentation for procedure."
+        "message": "<span style=\"color: red\">Backup and restore functionality disabled.</span>  You have firmware with API version <span style=\"color: red\">$1</span>, backup and restore requires <span style=\"color: #37a8db\">$2</span>.  Please backup your settings via the CLI, see ARDUPILOT documentation for procedure."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Calibrate Accelerometer"
     },
     "initialSetupCalibrateAccelText": {
-        "message": "6-point calibration of accelerometer. Go to wiki for iNav and follow Sensor Calibration for more infomation"
+        "message": "6-point calibration of accelerometer. Go to wiki for ARDUPILOT and follow Sensor Calibration for more infomation"
     },
     "initialSetupButtonCalibrateMag": {
         "message": "Calibrate Magnetometer"
@@ -573,7 +583,7 @@
         "message": "Enable motor and servo output"
     },
     "featurePWM_OUTPUT_ENABLETip": {
-        "message": "Enabling this option is required for INAV to send signals to ESC. It is a safety precaution that prevents servos from being damaged right after flashing flight controller."
+        "message": "Enabling this option is required for ARDUPILOT to send signals to ESC. It is a safety precaution that prevents servos from being damaged right after flashing flight controller."
     },
     "featureBLACKBOX": {
         "message": "Blackbox flight data recorder"
@@ -1875,13 +1885,13 @@
         "message": "Warning"
     },
     "firmwareFlasherWarningText": {
-        "message": "Please do <span style=\"color: red\">not</span> try to flash <strong>non-iNAV</strong> hardware with this firmware flasher.<br />Do <span style=\"color: red\">not</span> <strong>disconnect</strong> the board or <strong>turn off</strong> your computer while flashing.<br /><br /><strong>Note: </strong>STM32 bootloader is stored in ROM, it cannot be bricked.<br /><strong>Note: </strong><span style=\"color: red\">Auto-Connect</span> is always disabled while you are inside firmware flasher.<br /><strong>Note: </strong>Make sure you have a backup; some upgrades/downgrades will wipe your configuration.<br /><strong>Note:</strong> If you have problems flashing try disconnecting all cables from your FC first, try rebooting, upgrade chrome, upgrade drivers.<br /><strong>Note:</strong> When flashing boards that have directly connected USB sockets (SPRacingF3Mini, Sparky, ColibriRace, etc) ensure you have read the USB Flashing section of the INAV manual and have the correct software and drivers installed"
+        "message": "Please do <span style=\"color: red\">not</span> try to flash <strong>non-ARDUPILOT</strong> hardware with this firmware flasher.<br />Do <span style=\"color: red\">not</span> <strong>disconnect</strong> the board or <strong>turn off</strong> your computer while flashing.<br /><br /><strong>Note: </strong>STM32 bootloader is stored in ROM, it cannot be bricked.<br /><strong>Note: </strong><span style=\"color: red\">Auto-Connect</span> is always disabled while you are inside firmware flasher.<br /><strong>Note: </strong>Make sure you have a backup; some upgrades/downgrades will wipe your configuration.<br /><strong>Note:</strong> If you have problems flashing try disconnecting all cables from your FC first, try rebooting, upgrade chrome, upgrade drivers.<br /><strong>Note:</strong> When flashing boards that have directly connected USB sockets (SPRacingF3Mini, Sparky, ColibriRace, etc) ensure you have read the USB Flashing section of the ARDUPILOT manual and have the correct software and drivers installed"
     },
     "firmwareFlasherRecoveryHead": {
         "message": "<strong>Recovery / Lost communication<strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "If you have lost communication with your board follow these steps to restore communication: <ul><li>Power off</li><li>Enable 'No reboot sequence', enable 'Full chip erase'.</li><li>Jumper the BOOT pins or hold BOOT button.</li><li>Power on (activity LED will NOT flash if done correctly).</li><li>Install all STM32 drivers and Zadig if required (see <a href=\"https://github.com/iNavFlight/inav/blob/master/docs/USB%20Flashing.md\"target=\"_blank\">USB Flashing</a> section of INAV manual).</li><li>Close configurator, Close all running chrome instances, Close all Chrome apps, Restart Configurator.</li><li>Release BOOT button if your FC has one.</li><li>Flash with correct firmware (using manual baud rate if specified in your FC's manual).</li><li>Power off.</li><li>Remove BOOT jumper.</li><li>Power on (activity LED should flash).</li><li>Connect normally.</li></ul>"
+        "message": "If you have lost communication with your board follow these steps to restore communication: <ul><li>Power off</li><li>Enable 'No reboot sequence', enable 'Full chip erase'.</li><li>Jumper the BOOT pins or hold BOOT button.</li><li>Power on (activity LED will NOT flash if done correctly).</li><li>Install all STM32 drivers and Zadig if required (see <a href=\"https://github.com/arduPilot/ardupilot/blob/master/docs/USB%20Flashing.md\"target=\"_blank\">USB Flashing</a> section of ARDUPILOT manual).</li><li>Close configurator, Close all running chrome instances, Close all Chrome apps, Restart Configurator.</li><li>Release BOOT button if your FC has one.</li><li>Flash with correct firmware (using manual baud rate if specified in your FC's manual).</li><li>Power off.</li><li>Remove BOOT jumper.</li><li>Power on (activity LED should flash).</li><li>Connect normally.</li></ul>"
     },
     "firmwareFlasherButtonLeave": {
         "message": "Leave Firmware Flasher"
@@ -1955,7 +1965,7 @@
         "message": "Arbitrary board rotation in degrees, to allow mounting it sideways / upside down / rotated etc. When running external sensors, use the sensor alignments (Gyro, Acc, Mag) to define sensor position independent from board orientation. "
     },
     "failsafeFeaturesHelpOld": {
-        "message": "Failsafe configuration has changed considerably. Use latest INAV"
+        "message": "Failsafe configuration has changed considerably. Use latest ARDUPILOT"
     },
     "failsafePaneTitleOld": {
         "message": "Receiver failsafe"
@@ -3092,7 +3102,7 @@
         "message": "New Configurator version available."
     },
     "appUpdateNotificationDescription": {
-        "message": "Please visit the <a href=\"https://github.com/iNavFlight/inav-configurator/releases\" target=\"_blank\">website</a> to read the release notes and download."
+        "message": "Please visit the <a href=\"https://github.com/davidbuzz/no-longer-inav-configurator/releases\" target=\"_blank\">website</a> to read the release notes and download."
     },
     "closeUpdateBtn": {
         "message": "Close"
@@ -3149,7 +3159,7 @@
         "message": "Default settings"
     },
     "useOnlyStandalone": {
-        "message": "Use stand-alone application.<br> Please visit the <a href=\"https://github.com/iNavFlight/inav-configurator/releases\" target=\"_blank\">website</a> to read the release notes and download."
+        "message": "Use stand-alone application.<br> Please visit the <a href=\"https://github.com/davidbuzz/no-longer-inav-configurator/releases\" target=\"_blank\">website</a> to read the release notes and download."
     },
     "eeprom_load_ok": {
         "message": "EEPROM <span style=\"color: #37a8db\">loaded</span>"
@@ -3545,10 +3555,10 @@
         "message": "Default values"
     },
     "defaultsDialogInfo": {
-        "message": "INAV Configurator would like to know which kind of UAV you are configuring. Based on this information it will modify some default values to unlock the best flying performance. "
+        "message": "ARDUPILOT Configurator would like to know which kind of UAV you are configuring. Based on this information it will modify some default values to unlock the best flying performance. "
     },
     "defaultsDialogInfo2": {
-        "message": "Avoid blindly restoring all PID and filter configuration from the previous version of INAV. The best result can be obtained by retuning from defaults!"
+        "message": "Avoid blindly restoring all PID and filter configuration from the previous version of ARDUPILOT. The best result can be obtained by retuning from defaults!"
     },
     "throttleIdle": {
         "message": "Motors IDLE power [%]"
@@ -3569,7 +3579,7 @@
         "message": "When Reversible Motors are used, set Motors IDLE power ot 0%"
     },
     "dynamic_gyro_notch_enabled_help": {
-        "message": "Matrix Gyro Filter is the new generation of dynamic gyro notches available in INAV. It is recommended to enable it on all Multirotor builds on F4 and F7 flight controllers."
+        "message": "Matrix Gyro Filter is the new generation of dynamic gyro notches available in ARDUPILOT. It is recommended to enable it on all Multirotor builds on F4 and F7 flight controllers."
     },
     "globalFunctions": {
         "message": "Global functions"

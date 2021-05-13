@@ -36,7 +36,7 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
         mspHelper.load3dConfig,
         mspHelper.loadSensorAlignment,
         mspHelper.loadAdvancedConfig,
-        mspHelper.loadINAVPidConfig,
+        mspHelper.loadARDUPILOTPidConfig,
         mspHelper.loadSensorConfig,
         mspHelper.loadVTXConfig,
         mspHelper.loadMixerConfig,
@@ -58,7 +58,7 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
         mspHelper.saveArmingConfig,
         mspHelper.saveLooptimeConfig,
         mspHelper.saveAdvancedConfig,
-        mspHelper.saveINAVPidConfig,
+        mspHelper.saveARDUPILOTPidConfig,
         mspHelper.saveSensorConfig,
         mspHelper.saveVTXConfig,
         saveCraftName,
@@ -330,18 +330,18 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
             }
         }
 
-        $gyroLpf.val(INAV_PID_CONFIG.gyroscopeLpf);
+        $gyroLpf.val(ARDUPILOT_PID_CONFIG.gyroscopeLpf);
 
         $gyroLpf.change(function () {
-            INAV_PID_CONFIG.gyroscopeLpf = $gyroLpf.val();
+            ARDUPILOT_PID_CONFIG.gyroscopeLpf = $gyroLpf.val();
 
             GUI.fillSelect(
                 $looptime,
-                FC.getLooptimes()[FC.getGyroLpfValues()[INAV_PID_CONFIG.gyroscopeLpf].tick].looptimes,
+                FC.getLooptimes()[FC.getGyroLpfValues()[ARDUPILOT_PID_CONFIG.gyroscopeLpf].tick].looptimes,
                 FC_CONFIG.loopTime,
                 'Hz'
             );
-            $looptime.val(FC.getLooptimes()[FC.getGyroLpfValues()[INAV_PID_CONFIG.gyroscopeLpf].tick].defaultLooptime);
+            $looptime.val(FC.getLooptimes()[FC.getGyroLpfValues()[ARDUPILOT_PID_CONFIG.gyroscopeLpf].tick].defaultLooptime);
             $looptime.change();
 
             $gyroLpfMessage.hide();
@@ -350,7 +350,7 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
             $gyroLpfMessage.removeClass('warning-box');
 
             if (MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR || MIXER_CONFIG.platformType == PLATFORM_TRICOPTER) {
-                switch (parseInt(INAV_PID_CONFIG.gyroscopeLpf, 10)) {
+                switch (parseInt(ARDUPILOT_PID_CONFIG.gyroscopeLpf, 10)) {
                     case 0:
                         $gyroLpfMessage.html(chrome.i18n.getMessage('gyroLpfSuggestedMessage'));
                         $gyroLpfMessage.addClass('ok-box');
@@ -394,9 +394,9 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
                 $('#looptime-warning').hide();
             }
 
-            if (INAV_PID_CONFIG.asynchronousMode == 0) {
+            if (ARDUPILOT_PID_CONFIG.asynchronousMode == 0) {
                 //All task running together
-                ADVANCED_CONFIG.gyroSyncDenominator = Math.floor(FC_CONFIG.loopTime / FC.getGyroLpfValues()[INAV_PID_CONFIG.gyroscopeLpf].tick);
+                ADVANCED_CONFIG.gyroSyncDenominator = Math.floor(FC_CONFIG.loopTime / FC.getGyroLpfValues()[ARDUPILOT_PID_CONFIG.gyroscopeLpf].tick);
             }
         });
         $looptime.change();
@@ -490,10 +490,10 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
             }
 
             googleAnalytics.sendEvent('Setting', 'GPSEnabled', FC.isFeatureEnabled('GPS', features) ? "true" : "false");
-            googleAnalytics.sendEvent("Platform", helper.platform.getById(MIXER_CONFIG.platformType).name, "LPF: " + FC.getGyroLpfValues()[INAV_PID_CONFIG.gyroscopeLpf].label + " | Looptime: " + FC_CONFIG.loopTime);
+            googleAnalytics.sendEvent("Platform", helper.platform.getById(MIXER_CONFIG.platformType).name, "LPF: " + FC.getGyroLpfValues()[ARDUPILOT_PID_CONFIG.gyroscopeLpf].label + " | Looptime: " + FC_CONFIG.loopTime);
 
             googleAnalytics.sendEvent('Setting', 'Looptime', FC_CONFIG.loopTime);
-            googleAnalytics.sendEvent('Setting', 'GyroLpf', FC.getGyroLpfValues()[INAV_PID_CONFIG.gyroscopeLpf].label);
+            googleAnalytics.sendEvent('Setting', 'GyroLpf', FC.getGyroLpfValues()[ARDUPILOT_PID_CONFIG.gyroscopeLpf].label);
             googleAnalytics.sendEvent('Setting', 'I2CSpeed', $('#i2c_speed').children("option:selected").text());
 
             googleAnalytics.sendEvent('Board', 'Accelerometer', FC.getAccelerometerNames()[SENSOR_CONFIG.accelerometer]);

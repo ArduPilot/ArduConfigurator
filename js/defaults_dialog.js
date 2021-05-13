@@ -349,7 +349,7 @@ helper.defaultsDialog = (function() {
             ]
         },
         {
-            "title": 'Custom UAV - INAV legacy defaults (Not recommended)',
+            "title": 'Custom UAV - ARDUPILOT legacy defaults (Not recommended)',
             "notRecommended": true,
             "reboot": false,
             "settings": [

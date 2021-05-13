@@ -479,7 +479,7 @@ TABS.sensors.initialize = function (callback) {
                         return;
                     }
 
-                    MSP.send_message(MSPCodes.MSPV2_INAV_AIR_SPEED, false, false, update_airspeed_graphs);
+                    MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_AIR_SPEED, false, false, update_airspeed_graphs);
                 }, rates.airspeed, true);
             }
 
@@ -494,7 +494,7 @@ TABS.sensors.initialize = function (callback) {
                         return;
                     }
 
-                    MSP.send_message(MSPCodes.MSP2_INAV_TEMPERATURES, false, false, update_temperature_graphs);
+                    MSP.send_message(MSPCodes.MSP2_ARDUPILOT_TEMPERATURES, false, false, update_temperature_graphs);
                 }, 1000, true);
             }
 
@@ -509,7 +509,7 @@ TABS.sensors.initialize = function (callback) {
                         return;
                     }
 
-                    MSP.send_message(MSPCodes.MSP2_INAV_DEBUG, false, false, update_debug_graphs);
+                    MSP.send_message(MSPCodes.MSP2_ARDUPILOT_DEBUG, false, false, update_debug_graphs);
                 }, rates.debug, true);
             }
 

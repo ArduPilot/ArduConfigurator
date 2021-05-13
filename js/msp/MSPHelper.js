@@ -97,7 +97,7 @@ var mspHelper = (function (gui) {
                 gui.updateProfileChange();
                 break;
 
-            case MSPCodes.MSPV2_INAV_STATUS:
+            case MSPCodes.MSPV2_ARDUPILOT_STATUS:
                 CONFIG.cycleTime = data.getUint16(offset, true);
                 offset += 2;
                 CONFIG.i2cError = data.getUint16(offset, true);
@@ -212,7 +212,7 @@ var mspHelper = (function (gui) {
             case MSPCodes.MSP_SONAR:
                 SENSOR_DATA.sonar = data.getInt32(0, true);
                 break;
-            case MSPCodes.MSPV2_INAV_AIR_SPEED:
+            case MSPCodes.MSPV2_ARDUPILOT_AIR_SPEED:
                 SENSOR_DATA.air_speed = data.getInt32(0, true);
                 break;
             case MSPCodes.MSP_ANALOG:
@@ -221,7 +221,7 @@ var mspHelper = (function (gui) {
                 ANALOG.rssi = data.getUint16(3, true); // 0-1023
                 ANALOG.amperage = data.getInt16(5, true) / 100; // A
                 break;
-            case MSPCodes.MSPV2_INAV_ANALOG:
+            case MSPCodes.MSPV2_ARDUPILOT_ANALOG:
                 let tmp = data.getUint8(offset++);
                 ANALOG.battery_full_when_plugged_in = (tmp & 1 ? true : false);
                 ANALOG.use_capacity_thresholds = ((tmp & 2) >> 1 ? true : false);
@@ -260,7 +260,7 @@ var mspHelper = (function (gui) {
                 offset += 2;
                 RC_tuning.RC_YAW_EXPO = parseFloat((data.getUint8(offset++) / 100).toFixed(2));
                 break;
-            case MSPCodes.MSPV2_INAV_RATE_PROFILE:
+            case MSPCodes.MSPV2_ARDUPILOT_RATE_PROFILE:
                 // compat
                 RC_tuning.RC_RATE = 100;
                 RC_tuning.roll_pitch_rate = 0;
@@ -334,7 +334,7 @@ var mspHelper = (function (gui) {
                 MISC.vbatmaxcellvoltage = data.getUint8(offset++) / 10; // 10-50
                 MISC.vbatwarningcellvoltage = data.getUint8(offset++) / 10; // 10-50
                 break;
-            case MSPCodes.MSPV2_INAV_MISC:
+            case MSPCodes.MSPV2_ARDUPILOT_MISC:
                 MISC.midrc = data.getInt16(offset, true);
                 offset += 2;
                 MISC.minthrottle = data.getUint16(offset, true); // 0-2000
@@ -371,10 +371,10 @@ var mspHelper = (function (gui) {
                 offset += 4;
                 MISC.battery_capacity_unit = (data.getUint8(offset++) ? 'mWh' : 'mAh');
                 break;
-            case MSPCodes.MSPV2_INAV_SET_MISC:
-                console.log('MISC INAV Configuration saved');
+            case MSPCodes.MSPV2_ARDUPILOT_SET_MISC:
+                console.log('MISC ARDUPILOT Configuration saved');
                 break;
-            case MSPCodes.MSPV2_INAV_BATTERY_CONFIG:
+            case MSPCodes.MSPV2_ARDUPILOT_BATTERY_CONFIG:
                 BATTERY_CONFIG.vbatscale = data.getUint16(offset, true);
                 offset += 2;
                 BATTERY_CONFIG.voltage_source = data.getUint8(offset++);
@@ -472,7 +472,7 @@ var mspHelper = (function (gui) {
                 SERVO_RULES.cleanup();
 
                 break;
-            case MSPCodes.MSP2_INAV_SERVO_MIXER:
+            case MSPCodes.MSP2_ARDUPILOT_SERVO_MIXER:
                 SERVO_RULES.flush();
                 if (data.byteLength % 6 === 0) {
                     for (i = 0; i < data.byteLength; i += 6) {
@@ -491,10 +491,10 @@ var mspHelper = (function (gui) {
             case MSPCodes.MSP_SET_SERVO_MIX_RULE:
                 console.log("Servo mix saved");
                 break;
-            case MSPCodes.MSP2_INAV_SET_SERVO_MIXER:
+            case MSPCodes.MSP2_ARDUPILOT_SET_SERVO_MIXER:
                 console.log("Servo mix saved");
                 break;
-            case MSPCodes.MSP2_INAV_LOGIC_CONDITIONS:
+            case MSPCodes.MSP2_ARDUPILOT_LOGIC_CONDITIONS:
                 LOGIC_CONDITIONS.flush();
                 if (data.byteLength % 14 === 0) {
                     for (i = 0; i < data.byteLength; i += 14) {
@@ -513,7 +513,7 @@ var mspHelper = (function (gui) {
                 
                 break;
 
-            case MSPCodes.MSP2_INAV_LOGIC_CONDITIONS_STATUS:
+            case MSPCodes.MSP2_ARDUPILOT_LOGIC_CONDITIONS_STATUS:
                 if (data.byteLength % 4 === 0) {
                     let index = 0;
                     for (i = 0; i < data.byteLength; i += 4) {
@@ -523,7 +523,7 @@ var mspHelper = (function (gui) {
                 }
                 break;
 
-            case MSPCodes.MSP2_INAV_GVAR_STATUS:
+            case MSPCodes.MSP2_ARDUPILOT_GVAR_STATUS:
                 if (data.byteLength % 4 === 0) {
                     let index = 0;
                     for (i = 0; i < data.byteLength; i += 4) {
@@ -533,11 +533,11 @@ var mspHelper = (function (gui) {
                 }
                 break;
 
-            case MSPCodes.MSP2_INAV_SET_LOGIC_CONDITIONS:
+            case MSPCodes.MSP2_ARDUPILOT_SET_LOGIC_CONDITIONS:
                 console.log("Logic conditions saved");
                 break;
 
-            case MSPCodes.MSP2_INAV_PROGRAMMING_PID:
+            case MSPCodes.MSP2_ARDUPILOT_PROGRAMMING_PID:
                 PROGRAMMING_PID.flush();
                 if (data.byteLength % 19 === 0) {
                     for (i = 0; i < data.byteLength; i += 19) {
@@ -556,7 +556,7 @@ var mspHelper = (function (gui) {
                 }
                 break;
 
-            case MSPCodes.MSP2_INAV_PROGRAMMING_PID_STATUS:
+            case MSPCodes.MSP2_ARDUPILOT_PROGRAMMING_PID_STATUS:
                 if (data.byteLength % 4 === 0) {
                     let index = 0;
                     for (i = 0; i < data.byteLength; i += 4) {
@@ -566,7 +566,7 @@ var mspHelper = (function (gui) {
                 }
                 break;
 
-            case MSPCodes.MSP2_INAV_SET_PROGRAMMING_PID:
+            case MSPCodes.MSP2_ARDUPILOT_SET_PROGRAMMING_PID:
                 console.log("Programming PID saved");
                 break;
 
@@ -644,7 +644,7 @@ var mspHelper = (function (gui) {
             case MSPCodes.MSP_MAG_CALIBRATION:
                 console.log('Mag calibration executed');
                 break;
-            case MSPCodes.MSP2_INAV_OPFLOW_CALIBRATION:
+            case MSPCodes.MSP2_ARDUPILOT_OPFLOW_CALIBRATION:
                 console.log('Optic flow calibration executed');
                 break;
             case MSPCodes.MSP_SET_MISC:
@@ -691,7 +691,7 @@ var mspHelper = (function (gui) {
                 for (i = 0; i < 4; i++)
                     SENSOR_DATA.debug[i] = data.getInt16((2 * i), 1);
                 break;
-            case MSPCodes.MSP2_INAV_DEBUG:
+            case MSPCodes.MSP2_ARDUPILOT_DEBUG:
                 for (i = 0; i < 8; i++)
                     SENSOR_DATA.debug[i] = data.getInt32((4 * i), 1);
                 break;
@@ -1239,19 +1239,19 @@ var mspHelper = (function (gui) {
                 console.log("Sensor config saved");
                 break;
 
-            case MSPCodes.MSP_INAV_PID:
-                INAV_PID_CONFIG.asynchronousMode = data.getUint8(0);
-                INAV_PID_CONFIG.accelerometerTaskFrequency = data.getUint16(1, true);
-                INAV_PID_CONFIG.attitudeTaskFrequency = data.getUint16(3, true);
-                INAV_PID_CONFIG.magHoldRateLimit = data.getUint8(5);
-                INAV_PID_CONFIG.magHoldErrorLpfFrequency = data.getUint8(6);
-                INAV_PID_CONFIG.yawJumpPreventionLimit = data.getUint16(7, true);
-                INAV_PID_CONFIG.gyroscopeLpf = data.getUint8(9);
-                INAV_PID_CONFIG.accSoftLpfHz = data.getUint8(10);
+            case MSPCodes.MSP_ARDUPILOT_PID:
+                ARDUPILOT_PID_CONFIG.asynchronousMode = data.getUint8(0);
+                ARDUPILOT_PID_CONFIG.accelerometerTaskFrequency = data.getUint16(1, true);
+                ARDUPILOT_PID_CONFIG.attitudeTaskFrequency = data.getUint16(3, true);
+                ARDUPILOT_PID_CONFIG.magHoldRateLimit = data.getUint8(5);
+                ARDUPILOT_PID_CONFIG.magHoldErrorLpfFrequency = data.getUint8(6);
+                ARDUPILOT_PID_CONFIG.yawJumpPreventionLimit = data.getUint16(7, true);
+                ARDUPILOT_PID_CONFIG.gyroscopeLpf = data.getUint8(9);
+                ARDUPILOT_PID_CONFIG.accSoftLpfHz = data.getUint8(10);
                 break;
 
-            case MSPCodes.MSP_SET_INAV_PID:
-                console.log("MSP_INAV_PID saved");
+            case MSPCodes.MSP_SET_ARDUPILOT_PID:
+                console.log("MSP_ARDUPILOT_PID saved");
                 break;
 
             case MSPCodes.MSP_NAV_POSHOLD:
@@ -1425,7 +1425,7 @@ var mspHelper = (function (gui) {
             case MSPCodes.MSP_WP_MISSION_LOAD:
                 console.log('Mission load');
                 break;
-            case MSPCodes.MSP2_INAV_MIXER:
+            case MSPCodes.MSP2_ARDUPILOT_MIXER:
                 MIXER_CONFIG.yawMotorDirection = data.getInt8(0);
                 MIXER_CONFIG.yawJumpPreventionLimit = data.getUint16(1, true);
                 MIXER_CONFIG.platformType = data.getInt8(3);
@@ -1436,30 +1436,30 @@ var mspHelper = (function (gui) {
                 MOTOR_RULES.setMotorCount(MIXER_CONFIG.numberOfMotors);
                 SERVO_RULES.setServoCount(MIXER_CONFIG.numberOfServos);
                 break;
-            case MSPCodes.MSP2_INAV_SET_MIXER:
+            case MSPCodes.MSP2_ARDUPILOT_SET_MIXER:
                 console.log('Mixer config saved');
-            case MSPCodes.MSP2_INAV_OSD_LAYOUTS:
+            case MSPCodes.MSP2_ARDUPILOT_OSD_LAYOUTS:
                 break;
-            case MSPCodes.MSP2_INAV_OSD_SET_LAYOUT_ITEM:
+            case MSPCodes.MSP2_ARDUPILOT_OSD_SET_LAYOUT_ITEM:
                 console.log('OSD layout item saved');
                 break;
-            case MSPCodes.MSP2_INAV_OSD_ALARMS:
+            case MSPCodes.MSP2_ARDUPILOT_OSD_ALARMS:
                 break;
-            case MSPCodes.MSP2_INAV_OSD_SET_ALARMS:
+            case MSPCodes.MSP2_ARDUPILOT_OSD_SET_ALARMS:
                 console.log('OSD alarms saved');
                 break;
-            case MSPCodes.MSP2_INAV_OSD_PREFERENCES:
+            case MSPCodes.MSP2_ARDUPILOT_OSD_PREFERENCES:
                 break;
-            case MSPCodes.MSP2_INAV_OSD_SET_PREFERENCES:
+            case MSPCodes.MSP2_ARDUPILOT_OSD_SET_PREFERENCES:
                 console.log('OSD preferences saved');
                 break;
-            case MSPCodes.MSPV2_INAV_OUTPUT_MAPPING:
+            case MSPCodes.MSPV2_ARDUPILOT_OUTPUT_MAPPING:
                 OUTPUT_MAPPING.flush();
                 for (i = 0; i < data.byteLength; ++i)
                     OUTPUT_MAPPING.put(data.getUint8(i));
                 break;
 
-            case MSPCodes.MSP2_INAV_MC_BRAKING:
+            case MSPCodes.MSP2_ARDUPILOT_MC_BRAKING:
                 try {
                     BRAKING_CONFIG.speedThreshold = data.getUint16(0, true);
                     BRAKING_CONFIG.disengageSpeed = data.getUint16(2, true);
@@ -1474,7 +1474,7 @@ var mspHelper = (function (gui) {
                 }
                 break;
 
-            case MSPCodes.MSP2_INAV_SET_MC_BRAKING:
+            case MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING:
                 console.log('Braking config saved');
                 break;
             case MSPCodes.MSP2_BLACKBOX_CONFIG:
@@ -1487,7 +1487,7 @@ var mspHelper = (function (gui) {
                 console.log("Blackbox config saved");
                 break;
 
-            case MSPCodes.MSP2_INAV_TEMPERATURES:
+            case MSPCodes.MSP2_ARDUPILOT_TEMPERATURES:
                 for (i = 0; i < 8; ++i) {
                     temp_decidegrees = data.getInt16(i * 2, true);
                     SENSOR_DATA.temperature[i] = temp_decidegrees / 10; // °C
@@ -1594,7 +1594,7 @@ var mspHelper = (function (gui) {
                 buffer.push(highByte(RC_tuning.dynamic_THR_breakpoint));
                 buffer.push(Math.round(RC_tuning.RC_YAW_EXPO * 100));
                 break;
-            case MSPCodes.MSPV2_INAV_SET_RATE_PROFILE:
+            case MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE:
                 // throttle
                 buffer.push(Math.round(RC_tuning.throttle_MID * 100));
                 buffer.push(Math.round(RC_tuning.throttle_EXPO * 100));
@@ -1660,7 +1660,7 @@ var mspHelper = (function (gui) {
                 buffer.push(Math.round(MISC.vbatmaxcellvoltage * 10));
                 buffer.push(Math.round(MISC.vbatwarningcellvoltage * 10));
                 break;
-            case MSPCodes.MSPV2_INAV_SET_MISC:
+            case MSPCodes.MSPV2_ARDUPILOT_SET_MISC:
                 buffer.push(lowByte(MISC.midrc));
                 buffer.push(highByte(MISC.midrc));
                 buffer.push(lowByte(MISC.minthrottle));
@@ -1697,7 +1697,7 @@ var mspHelper = (function (gui) {
                     buffer.push(specificByte(MISC.battery_capacity_critical, byte_index));
                 buffer.push((MISC.battery_capacity_unit == 'mAh') ? 0 : 1);
                 break;
-            case MSPCodes.MSPV2_INAV_SET_BATTERY_CONFIG:
+            case MSPCodes.MSPV2_ARDUPILOT_SET_BATTERY_CONFIG:
                 buffer.push(lowByte(BATTERY_CONFIG.vbatscale));
                 buffer.push(highByte(BATTERY_CONFIG.vbatscale));
                 buffer.push(BATTERY_CONFIG.voltage_source);
@@ -1866,23 +1866,23 @@ var mspHelper = (function (gui) {
                 buffer.push(ADVANCED_CONFIG.gyroSync);
                 break;
 
-            case MSPCodes.MSP_SET_INAV_PID:
-                buffer.push(INAV_PID_CONFIG.asynchronousMode);
+            case MSPCodes.MSP_SET_ARDUPILOT_PID:
+                buffer.push(ARDUPILOT_PID_CONFIG.asynchronousMode);
 
-                buffer.push(lowByte(INAV_PID_CONFIG.accelerometerTaskFrequency));
-                buffer.push(highByte(INAV_PID_CONFIG.accelerometerTaskFrequency));
+                buffer.push(lowByte(ARDUPILOT_PID_CONFIG.accelerometerTaskFrequency));
+                buffer.push(highByte(ARDUPILOT_PID_CONFIG.accelerometerTaskFrequency));
 
-                buffer.push(lowByte(INAV_PID_CONFIG.attitudeTaskFrequency));
-                buffer.push(highByte(INAV_PID_CONFIG.attitudeTaskFrequency));
+                buffer.push(lowByte(ARDUPILOT_PID_CONFIG.attitudeTaskFrequency));
+                buffer.push(highByte(ARDUPILOT_PID_CONFIG.attitudeTaskFrequency));
 
-                buffer.push(INAV_PID_CONFIG.magHoldRateLimit);
-                buffer.push(INAV_PID_CONFIG.magHoldErrorLpfFrequency);
+                buffer.push(ARDUPILOT_PID_CONFIG.magHoldRateLimit);
+                buffer.push(ARDUPILOT_PID_CONFIG.magHoldErrorLpfFrequency);
 
-                buffer.push(lowByte(INAV_PID_CONFIG.yawJumpPreventionLimit));
-                buffer.push(highByte(INAV_PID_CONFIG.yawJumpPreventionLimit));
+                buffer.push(lowByte(ARDUPILOT_PID_CONFIG.yawJumpPreventionLimit));
+                buffer.push(highByte(ARDUPILOT_PID_CONFIG.yawJumpPreventionLimit));
 
-                buffer.push(INAV_PID_CONFIG.gyroscopeLpf);
-                buffer.push(INAV_PID_CONFIG.accSoftLpfHz);
+                buffer.push(ARDUPILOT_PID_CONFIG.gyroscopeLpf);
+                buffer.push(ARDUPILOT_PID_CONFIG.accSoftLpfHz);
 
                 buffer.push(0); //reserved
                 buffer.push(0); //reserved
@@ -2140,7 +2140,7 @@ var mspHelper = (function (gui) {
 
                 break;
 
-            case MSPCodes.MSP2_INAV_SET_MIXER:
+            case MSPCodes.MSP2_ARDUPILOT_SET_MIXER:
                 buffer.push(MIXER_CONFIG.yawMotorDirection);
                 buffer.push(lowByte(MIXER_CONFIG.yawJumpPreventionLimit));
                 buffer.push(highByte(MIXER_CONFIG.yawJumpPreventionLimit));
@@ -2150,7 +2150,7 @@ var mspHelper = (function (gui) {
                 buffer.push(highByte(MIXER_CONFIG.appliedMixerPreset));
                 break;
 
-            case MSPCodes.MSP2_INAV_SET_MC_BRAKING:
+            case MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING:
                 buffer.push(lowByte(BRAKING_CONFIG.speedThreshold));
                 buffer.push(highByte(BRAKING_CONFIG.speedThreshold));
                 buffer.push(lowByte(BRAKING_CONFIG.disengageSpeed));
@@ -2282,7 +2282,7 @@ var mspHelper = (function (gui) {
 
             var servoRule = SERVO_RULES.get()[servoIndex];
 
-            //INAV 2.2 uses different MSP frame
+            //ARDUPILOT 2.2 uses different MSP frame
             buffer.push(servoIndex);
             buffer.push(servoRule.getTarget());
             buffer.push(servoRule.getInput());
@@ -2296,7 +2296,7 @@ var mspHelper = (function (gui) {
             if (servoIndex == SERVO_RULES.getServoRulesCount()) { //This is the last rule. Not pretty, but we have to send all rules
                 nextFunction = onCompleteCallback;
             }
-            MSP.send_message(MSPCodes.MSP2_INAV_SET_SERVO_MIXER, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SERVO_MIXER, buffer, false, nextFunction);
         }
     };
 
@@ -2348,7 +2348,7 @@ var mspHelper = (function (gui) {
     };
 
     self.loadLogicConditions = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_INAV_LOGIC_CONDITIONS, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_LOGIC_CONDITIONS, false, false, callback);
     }
 
     self.sendLogicConditions = function (onCompleteCallback) {
@@ -2392,12 +2392,12 @@ var mspHelper = (function (gui) {
             if (conditionIndex == LOGIC_CONDITIONS.getCount()) { //This is the last rule. Not pretty, but we have to send all rules
                 nextFunction = onCompleteCallback;
             }
-            MSP.send_message(MSPCodes.MSP2_INAV_SET_LOGIC_CONDITIONS, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_LOGIC_CONDITIONS, buffer, false, nextFunction);
         }
     };
 
     self.loadProgrammingPid = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_INAV_PROGRAMMING_PID, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_PROGRAMMING_PID, false, false, callback);
     }
 
     self.sendProgrammingPid = function (onCompleteCallback) {
@@ -2444,7 +2444,7 @@ var mspHelper = (function (gui) {
             if (pidIndex == PROGRAMMING_PID.getCount()) { //This is the last rule. Not pretty, but we have to send all rules
                 nextFunction = onCompleteCallback;
             }
-            MSP.send_message(MSPCodes.MSP2_INAV_SET_PROGRAMMING_PID, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_PROGRAMMING_PID, buffer, false, nextFunction);
         }
     };
 
@@ -2761,8 +2761,8 @@ var mspHelper = (function (gui) {
         MSP.send_message(MSPCodes.MSP_IDENT, false, false, callback);
     };
 
-    self.loadINAVPidConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_INAV_PID, false, false, callback);
+    self.loadARDUPILOTPidConfig = function (callback) {
+        MSP.send_message(MSPCodes.MSP_ARDUPILOT_PID, false, false, callback);
     };
 
     self.loadLoopTime = function (callback) {
@@ -2786,7 +2786,7 @@ var mspHelper = (function (gui) {
     };
 
     self.loadRateProfileData = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_INAV_RATE_PROFILE, false, false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_RATE_PROFILE, false, false, callback);
     };
 
     self.loadPidData = function (callback) {
@@ -2806,7 +2806,7 @@ var mspHelper = (function (gui) {
     };
 
     self.queryFcStatus = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_INAV_STATUS, false, false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_STATUS, false, false, callback);
     };
 
     self.loadMisc = function (callback) {
@@ -2814,11 +2814,11 @@ var mspHelper = (function (gui) {
     };
 
     self.loadMiscV2 = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_INAV_MISC, false, false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_MISC, false, false, callback);
     };
 
     self.loadOutputMapping = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_INAV_OUTPUT_MAPPING, false, false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_OUTPUT_MAPPING, false, false, callback);
     };
 
     self.loadBatteryConfig = function (callback) {
@@ -2873,8 +2873,8 @@ var mspHelper = (function (gui) {
         MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, callback);
     };
 
-    self.saveINAVPidConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_INAV_PID, mspHelper.crunch(MSPCodes.MSP_SET_INAV_PID), false, callback);
+    self.saveARDUPILOTPidConfig = function (callback) {
+        MSP.send_message(MSPCodes.MSP_SET_ARDUPILOT_PID, mspHelper.crunch(MSPCodes.MSP_SET_ARDUPILOT_PID), false, callback);
     };
 
     self.saveLooptimeConfig = function (callback) {
@@ -2898,7 +2898,7 @@ var mspHelper = (function (gui) {
     };
 
     self.saveRateProfileData = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_INAV_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_INAV_SET_RATE_PROFILE), false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE), false, callback);
     };
 
     self.savePidAdvanced = function (callback) {
@@ -2914,7 +2914,7 @@ var mspHelper = (function (gui) {
     };
 
     self.saveMiscV2 = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_INAV_SET_MISC, mspHelper.crunch(MSPCodes.MSPV2_INAV_SET_MISC), false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_MISC, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_MISC), false, callback);
     };
 
     self.saveBatteryConfig = function (callback) {
@@ -3172,7 +3172,7 @@ var mspHelper = (function (gui) {
     };
 
     self.loadServoMixRules = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_INAV_SERVO_MIXER, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SERVO_MIXER, false, false, callback);
     };
 
     self.loadMotorMixRules = function (callback) {
@@ -3202,11 +3202,11 @@ var mspHelper = (function (gui) {
     };
 
     self.loadMixerConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_INAV_MIXER, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MIXER, false, false, callback);
     };
 
     self.saveMixerConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_INAV_SET_MIXER, mspHelper.crunch(MSPCodes.MSP2_INAV_SET_MIXER), false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_MIXER, mspHelper.crunch(MSPCodes.MSP2_ARDUPILOT_SET_MIXER), false, callback);
     };
 
     self.loadVTXConfig = function (callback) {
@@ -3218,11 +3218,11 @@ var mspHelper = (function (gui) {
     };
 
     self.loadBrakingConfig = function(callback) {
-        MSP.send_message(MSPCodes.MSP2_INAV_MC_BRAKING, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MC_BRAKING, false, false, callback);
     }
 
     self.saveBrakingConfig = function(callback) {
-        MSP.send_message(MSPCodes.MSP2_INAV_SET_MC_BRAKING, mspHelper.crunch(MSPCodes.MSP2_INAV_SET_MC_BRAKING), false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING, mspHelper.crunch(MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING), false, callback);
     };
 
     self.loadParameterGroups = function(callback) {
@@ -3241,16 +3241,16 @@ var mspHelper = (function (gui) {
     };
 
     self.loadBrakingConfig = function(callback) {
-        MSP.send_message(MSPCodes.MSP2_INAV_MC_BRAKING, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MC_BRAKING, false, false, callback);
     }
 
     self.loadLogicConditionsStatus = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_INAV_LOGIC_CONDITIONS_STATUS, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_LOGIC_CONDITIONS_STATUS, false, false, callback);
     };
 
     self.loadGlobalVariablesStatus = function (callback) {
         if (semver.gte(CONFIG.flightControllerVersion, "2.5.0")) {
-            MSP.send_message(MSPCodes.MSP2_INAV_GVAR_STATUS, false, false, callback);
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_GVAR_STATUS, false, false, callback);
         } else {
             callback();
         }
@@ -3258,7 +3258,7 @@ var mspHelper = (function (gui) {
 
     self.loadProgrammingPidStatus = function (callback) {
         if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
-            MSP.send_message(MSPCodes.MSP2_INAV_PROGRAMMING_PID_STATUS, false, false, callback);
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_PROGRAMMING_PID_STATUS, false, false, callback);
         } else {
             callback();
         }

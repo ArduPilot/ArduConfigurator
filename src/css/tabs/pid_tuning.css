@@ -8,7 +8,7 @@
     text-align: right;
 }
 
-.settings-table.settings-table--inav td,
+.settings-table.settings-table--ARDUPILOT td,
 .settings-table.settings-table--filtering td,
 .settings-table.settings-table--misc td {
     background-color: #f3f3f3;
@@ -319,7 +319,7 @@
     right: 0;
     z-index: -1;
     overflow: hidden;
-    background: url("../../../images/light-wide-2.svg") no-repeat 95% 20%;
+    background: url("../../../images/light-wide-2.png") no-repeat 95% 20%;
     background-size: 430px;
     height: 174px;
     opacity: 0.15;

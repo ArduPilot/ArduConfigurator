@@ -12,7 +12,7 @@ TABS.pid_tuning.initialize = function (callback) {
     var loadChain = [
         mspHelper.loadPidNames,
         mspHelper.loadPidData,
-        mspHelper.loadINAVPidConfig,
+        mspHelper.loadARDUPILOTPidConfig,
         mspHelper.loadPidAdvanced,
         mspHelper.loadFilterConfig,
         mspHelper.loadBfConfig
@@ -167,14 +167,14 @@ TABS.pid_tuning.initialize = function (callback) {
             $dtermLpfHz                     = $('#dtermLpfHz'),
             $yawLpfHz                       = $('#yawLpfHz');
 
-        $magHoldYawRate.val(INAV_PID_CONFIG.magHoldRateLimit);
+        $magHoldYawRate.val(ARDUPILOT_PID_CONFIG.magHoldRateLimit);
         $gyroSoftLpfHz.val(FILTER_CONFIG.gyroSoftLpfHz);
-        $accSoftLpfHz.val(INAV_PID_CONFIG.accSoftLpfHz);
+        $accSoftLpfHz.val(ARDUPILOT_PID_CONFIG.accSoftLpfHz);
         $dtermLpfHz.val(FILTER_CONFIG.dtermLpfHz);
         $yawLpfHz.val(FILTER_CONFIG.yawLpfHz);
 
         $magHoldYawRate.change(function () {
-            INAV_PID_CONFIG.magHoldRateLimit = parseInt($magHoldYawRate.val(), 10);
+            ARDUPILOT_PID_CONFIG.magHoldRateLimit = parseInt($magHoldYawRate.val(), 10);
         });
 
         $gyroSoftLpfHz.change(function () {
@@ -182,7 +182,7 @@ TABS.pid_tuning.initialize = function (callback) {
         });
 
         $accSoftLpfHz.change(function () {
-            INAV_PID_CONFIG.accSoftLpfHz = parseInt($accSoftLpfHz.val(), 10);
+            ARDUPILOT_PID_CONFIG.accSoftLpfHz = parseInt($accSoftLpfHz.val(), 10);
         });
 
         $dtermLpfHz.change(function () {
@@ -216,11 +216,11 @@ TABS.pid_tuning.initialize = function (callback) {
             form_to_pid_and_rc();
 
             function send_rc_tuning_changes() {
-                MSP.send_message(MSPCodes.MSPV2_INAV_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_INAV_SET_RATE_PROFILE), false, saveINAVPidConfig);
+                MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE), false, saveARDUPILOTPidConfig);
             }
 
-            function saveINAVPidConfig() {
-                MSP.send_message(MSPCodes.MSP_SET_INAV_PID, mspHelper.crunch(MSPCodes.MSP_SET_INAV_PID), false, savePidAdvanced);
+            function saveARDUPILOTPidConfig() {
+                MSP.send_message(MSPCodes.MSP_SET_ARDUPILOT_PID, mspHelper.crunch(MSPCodes.MSP_SET_ARDUPILOT_PID), false, savePidAdvanced);
             }
 
             function savePidAdvanced() {

@@ -232,7 +232,7 @@ TABS.logging.initialize = function (callback) {
 
     function prepare_file() {
         // create or load the file
-        chrome.fileSystem.chooseEntry({type: 'saveFile', suggestedName: 'inav_data_log', accepts: [{extensions: ['csv']}]}, function(entry) {
+        chrome.fileSystem.chooseEntry({type: 'saveFile', suggestedName: 'ARDUPILOT_data_log', accepts: [{extensions: ['csv']}]}, function(entry) {
             if (!entry) {
                 console.log('No file selected');
                 return;

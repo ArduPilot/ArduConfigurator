@@ -329,7 +329,7 @@ TABS.receiver.initialize = function (callback) {
                 });
             }
 
-            MSP.send_message(MSPCodes.MSPV2_INAV_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_INAV_SET_RATE_PROFILE), false, save_rc_map);
+            MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE), false, save_rc_map);
         });
 
         $("a.sticks").click(function () {

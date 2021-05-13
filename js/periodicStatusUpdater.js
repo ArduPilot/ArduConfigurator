@@ -102,9 +102,9 @@ helper.periodicStatusUpdater = (function () {
             }
 
             MSP.send_message(MSPCodes.MSP_SENSOR_STATUS, false, false);
-            MSP.send_message(MSPCodes.MSPV2_INAV_STATUS, false, false);
+            MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_STATUS, false, false);
             MSP.send_message(MSPCodes.MSP_ACTIVEBOXES, false, false);
-            MSP.send_message(MSPCodes.MSPV2_INAV_ANALOG, false, false);
+            MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_ANALOG, false, false);
 
             privateScope.updateView();
         }

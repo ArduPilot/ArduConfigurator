@@ -1,7 +1,7 @@
 # These are used in all fonts to indicate the
-# INAV font version.
+# ARDUPILOT font version.
 255: &fontmeta
   data:
-    - s: "INAV"
+    - s: "ARDUPILOT"
     - u8: 1
 256: *fontmeta

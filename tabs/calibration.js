@@ -234,7 +234,7 @@ TABS.calibration.initialize = function (callback) {
         });
 
         $('#opflow_btn').on('click', function () {
-            MSP.send_message(MSPCodes.MSP2_INAV_OPFLOW_CALIBRATION, false, false, function () {
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_OPFLOW_CALIBRATION, false, false, function () {
                 GUI.log(chrome.i18n.getMessage('initialSetupOpflowCalibStarted'));
             });
 
