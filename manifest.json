@@ -5,7 +5,7 @@
     "author": "Several",
     "name": "ARDUPILOT - Configurator",
     "short_name": "ARDUPILOT",
-    "description": "Crossplatform configuration tool for ARDUPILOTFlight flight control system",
+    "description": "Crossplatform configuration tool for ARDUPILOT flight control system",
 
     "offline_enabled": true,
 

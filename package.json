@@ -18,9 +18,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.com/ARDUPILOTFlight/ARDUPILOT-configurator"
+    "url": "github.com/davidbuzz/no-longer-inav-configurator"
   },
-  "author": "ARDUPILOTFlight",
+  "author": "davidbuzz",
   "license": "GPL-3.0",
   "dependencies": {
     "archiver": "^2.0.3",

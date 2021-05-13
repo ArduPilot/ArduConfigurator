@@ -140,7 +140,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             TABS.firmware_flasher.releases = releases;
         };
 
-        $.get('https://api.github.com/repos/ARDUPILOTFlight/ARDUPILOT/releases?per_page=10', function (releasesData){
+        $.get('https://api.github.com/repos/ArduPilot/ardupilot/releases?per_page=10', function (releasesData){
             TABS.firmware_flasher.releasesData = releasesData;
             buildBoardOptions();
 
@@ -258,7 +258,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                         $('a.flash_firmware').removeClass('disabled');
 
                         if (summary.commit) {
-                            $.get('https://api.github.com/repos/ARDUPILOTFlight/ARDUPILOT/commits/' + summary.commit, function (data) {
+                            $.get('https://api.github.com/repos/ArduPilot/ardupilot/commits/' + summary.commit, function (data) {
                                 var data = data,
                                     d = new Date(data.commit.author.date),
                                     offset = d.getTimezoneOffset() / 60,
@@ -270,7 +270,7 @@ TABS.firmware_flasher.initialize = function (callback) {
 
                                 $('div.git_info .committer').text(data.commit.author.name);
                                 $('div.git_info .date').text(date);
-                                $('div.git_info .hash').text(data.sha.slice(0, 7)).prop('href', 'https://api.github.com/repos/ARDUPILOTFlight/ARDUPILOT/commit/' + data.sha);
+                                $('div.git_info .hash').text(data.sha.slice(0, 7)).prop('href', 'https://api.github.com/repos/ArduPilot/ardupilot/commit/' + data.sha);
 
                                 $('div.git_info .message').text(data.commit.message);
 
