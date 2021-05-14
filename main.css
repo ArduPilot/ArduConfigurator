@@ -127,10 +127,10 @@ input[type="number"]::-webkit-inner-spin-button {
 #logo {
     position: absolute;
     float: left;
-    height: 80px;
+    height: 67px;
     z-index: 0;
     width: 450px;
-    background: url("../images/light-wide-2.png") no-repeat left center;
+    background: url("../images/light-wide-3s.png") no-repeat left center;
     background-size: contain;
     margin-left: 15px;
     margin-top: 10px;
