@@ -1,5 +1,5 @@
 /*global $,helper,mspHelper,MSP,GUI,SERVO_RULES,MOTOR_RULES,MIXER_CONFIG,googleAnalytics,LOGIC_CONDITIONS,TABS,ServoMixRule*/
-'use strict';
+//'use strict';
 
 TABS.mixer = {};
 

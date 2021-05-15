@@ -5,8 +5,13 @@
   "main": "main.html",
   "default_locale": "en",
   "scripts": {
-    "start": "node node_modules/gulp/bin/gulp.js build && node node_modules/nw/bin/nw .",
+    "__comment0__": " npm run build",
+    "prestart": "node node_modules/gulp/bin/gulp.js build",
+    "__comment1__": "npm start or npm run start",
+    "start": "node node_modules/nw/bin/nw --remote-debugging-port=9222 --load-extension=. .",
+    "__comment2__": "npm run gulp",
     "gulp": "gulp",
+    "__comment3__": "npm run nw",
     "nw": "nw"
   },
   "window": {

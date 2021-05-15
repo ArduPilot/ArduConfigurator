@@ -3,8 +3,151 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link type="text/css" rel="stylesheet" href="./build/styles.css" media="all" />
-    <script type="text/javascript" src="./build/script.js"></script>
+    <!--<link type="text/css" rel="stylesheet" href="./build/styles.css" media="all" />
+     <script type="text/javascript" src="./build/script.js"></script>-->
+
+     <link type="text/css" rel="stylesheet" href="./build/adjustments.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/advanced_tuning.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/auxiliary.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/calibration.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/cli.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/configuration.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/defaults_dialog.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/failsafe.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/firmware_flasher.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/flightindicators.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/font-awesome.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/fonts.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/gps.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/jBox.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/jquery.nouislider.min.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/jquery.nouislider.pips.min.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/landing.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/led_strip.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/logging.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/logic.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/main.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/mission_planer.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/mixer.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/modes.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/motors.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/ol.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/onboard_logging.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/osd.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/pid_tuning.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/ports.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/profiles.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/programming.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/receiver.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/receiver_msp.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/sensors.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/setup.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/style_lists.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/switchery.css" media="all" />
+     <link type="text/css" rel="stylesheet" href="./build/transponder.css" media="all" />
+     
+
+    <script type="text/javascript" src="./build/google-analytics-bundle.js"></script>
+    <script type="text/javascript" src="./build/jquery.min.js"></script>
+    <script type="text/javascript" src="./build/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="./build/marked.js"></script>
+    <script type="text/javascript" src="./build/d3.min.js"></script>
+    <script type="text/javascript" src="./build/jquery.nouislider.all.min.js"></script>
+    <script type="text/javascript" src="./build/three.min.js"></script>
+    <script type="text/javascript" src="./build/nw-dialog.js"></script>
+    <script type="text/javascript" src="./build/bundle_xml2js.js"></script>
+    <script type="text/javascript" src="./build/Projector.js"></script>
+    <script type="text/javascript" src="./build/CanvasRenderer.js"></script>
+    <script type="text/javascript" src="./build/jquery.flightindicators.js"></script>
+    <script type="text/javascript" src="./build/semver.js"></script>
+    <script type="text/javascript" src="./build/jBox.min.js"></script>
+    <script type="text/javascript" src="./build/switchery.js"></script>
+    <script type="text/javascript" src="./build/jquery.ba-throttle-debounce.js"></script>
+    <script type="text/javascript" src="./build/helpers.js"></script>
+    <script type="text/javascript" src="./build/inflection.min.js"></script>
+    <script type="text/javascript" src="./build/bluebird.min.js"></script>
+    <script type="text/javascript" src="./build/injected_methods.js"></script>
+    <script type="text/javascript" src="./build/intervals.js"></script>
+    <script type="text/javascript" src="./build/timeouts.js"></script>
+    <script type="text/javascript" src="./build/pid_controller.js"></script>
+    <script type="text/javascript" src="./build/simple_smooth_filter.js"></script>
+    <script type="text/javascript" src="./build/walking_average_filter.js"></script>
+    <script type="text/javascript" src="./build/gui.js"></script>
+    <script type="text/javascript" src="./build/MSPCodes.js"></script>
+    <script type="text/javascript" src="./build/MSPHelper.js"></script>
+    <script type="text/javascript" src="./build/MSPchainer.js"></script>
+    <script type="text/javascript" src="./build/port_handler.js"></script>
+    <script type="text/javascript" src="./build/serial.js"></script>
+    <script type="text/javascript" src="./build/servoMixRule.js"></script>
+    <script type="text/javascript" src="./build/motorMixRule.js"></script>
+    <script type="text/javascript" src="./build/logicCondition.js"></script>
+    <script type="text/javascript" src="./build/settings.js"></script>
+    <script type="text/javascript" src="./build/outputMapping.js"></script>
+    <script type="text/javascript" src="./build/model.js"></script>
+    <script type="text/javascript" src="./build/serial_backend.js"></script>
+    <script type="text/javascript" src="./build/data_storage.js"></script>
+    <script type="text/javascript" src="./build/fc.js"></script>
+    <script type="text/javascript" src="./build/msp.js"></script>
+    <script type="text/javascript" src="./build/stm32.js"></script>
+    <script type="text/javascript" src="./build/stm32usbdfu.js"></script>
+    <script type="text/javascript" src="./build/localization.js"></script>
+    <script type="text/javascript" src="./build/boards.js"></script>
+    <script type="text/javascript" src="./build/servoMixerRuleCollection.js"></script>
+    <script type="text/javascript" src="./build/motorMixerRuleCollection.js"></script>
+    <script type="text/javascript" src="./build/logicConditionsCollection.js"></script>
+    <script type="text/javascript" src="./build/logicConditionsStatus.js"></script>
+    <script type="text/javascript" src="./build/globalVariablesStatus.js"></script>
+    <script type="text/javascript" src="./build/programmingPid.js"></script>
+    <script type="text/javascript" src="./build/programmingPidCollection.js"></script>
+    <script type="text/javascript" src="./build/programmingPidStatus.js"></script>
+    <script type="text/javascript" src="./build/vtx.js"></script>
+    <script type="text/javascript" src="./build/main.js"></script>
+    <script type="text/javascript" src="./build/tabs.js"></script>
+    <script type="text/javascript" src="./build/preset_definitions.js"></script>
+    <script type=text/javascript src="./build/adjustments.js"></script>
+    <script type=text/javascript src="./build/advanced_tuning.js"></script>
+    <script type=text/javascript src="./build/auxiliary.js"></script>
+   <!--<script type=text/javascript src="./build/"></script> --> 
+    <script type=text/javascript src="./build/cli.js"></script>
+    <script type=text/javascript src="./build/configuration.js"></script>
+    <script type=text/javascript src="./build/failsafe.js"></script>
+    <script type=text/javascript src="./build/firmware_flasher.js"></script>
+    <script type=text/javascript src="./build/gps.js"></script>
+    <script type=text/javascript src="./build/landing.js"></script>
+    <script type=text/javascript src="./build/led_strip.js"></script>
+    <script type=text/javascript src="./build/logging.js"></script>
+    <script type=text/javascript src="./build/mission_control.js"></script>
+    <script type=text/javascript src="./build/mixer.js"></script>
+    <script type=text/javascript src="./build/modes.js"></script>
+    <script type=text/javascript src="./build/onboard_logging.js"></script>
+    <script type=text/javascript src="./build/osd.js"></script>
+    <script type=text/javascript src="./build/outputs.js"></script>
+    <script type=text/javascript src="./build/pid_tuning.js"></script>
+    <script type=text/javascript src="./build/ports.js"></script>
+    <script type=text/javascript src="./build/profiles.js"></script>
+    <script type=text/javascript src="./build/programming.js"></script>
+    <script type=text/javascript src="./build/receiver.js"></script>
+    <script type=text/javascript src="./build/receiver_msp.js"></script>
+    <script type=text/javascript src="./build/sensors.js"></script>
+    <script type=text/javascript src="./build/setup.js"></script>
+    <script type=text/javascript src="./build/transponder.js"></script>
+    <script type="text/javascript" src="./build/eventFrequencyAnalyzer.js"></script>
+    <script type="text/javascript" src="./build/periodicStatusUpdater.js"></script>
+    <script type="text/javascript" src="./build/serial_queue.js"></script>
+    <script type="text/javascript" src="./build/msp_balanced_interval.js"></script>
+    <script type="text/javascript" src="./build/advanced_tuning.js"></script>
+    <script type="text/javascript" src="./build/peripherals.js"></script>
+    <script type="text/javascript" src="./build/appUpdater.js"></script>
+    <script type="text/javascript" src="./build/feature_framework.js"></script>
+    <script type="text/javascript" src="./build/defaults_dialog.js"></script>
+    <script type="text/javascript" src="./build/safehomeCollection.js"></script>
+    <script type="text/javascript" src="./build/safehome.js"></script>
+    <script type="text/javascript" src="./build/waypointCollection.js"></script>
+    <script type="text/javascript" src="./build/waypoint.js"></script>
+    <script type="text/javascript" src="./build/ol.js"></script>
+    <script type="text/javascript" src="./build/calibration.js"></script>
+
+
     <title></title>
 </head>
 

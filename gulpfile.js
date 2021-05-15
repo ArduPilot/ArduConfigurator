@@ -213,7 +213,7 @@ var buildJsTasks = [];
             }
             gulp.task(name, function() {
                 return gulp.src(sources[key])
-                    .pipe(concat(output[key]))
+                   // .pipe(concat(output[key])) // bundler
                     .pipe(gulp.dest(outputDir));
             });
         })(k);
