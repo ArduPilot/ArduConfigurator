@@ -68,9 +68,13 @@ PortHandler.check = function () {
                     if (result.last_used_port) {
                         current_ports.forEach(function(port) {
                             if (port == result.last_used_port) {
-                                console.log('Selecting last used port: ' + result.last_used_port);
-
+                                console.log('Selecting last used port: ' + result.last_used_port);   
                                 $('#port').val(result.last_used_port);
+                                //buzz autoconnect here
+                                //if ( helper['autoconnect']  ) {
+                                    $('div.connect_controls a.connect').trigger("click");
+                                    console.log('opening port: ' + result.last_used_port);
+                                //}  
                             }
                         });
                     } else {
@@ -89,7 +93,11 @@ PortHandler.check = function () {
                         $('#wireless-mode').prop('checked', true).change();
                     }
                 });
-
+                chrome.storage.local.get('auto_connect_enabled', function (result) {
+                    //if (result['auto_connect_enabled']) {
+                        $('#auto-connect').prop('checked', true).change();
+                    //}
+                });
             }
 
             if (!self.initial_ports) {
@@ -117,9 +125,12 @@ PortHandler.check = function () {
             // select / highlight new port, if connected -> select connected port
             if (!GUI.connected_to) {
                 $('div#port-picker #port').val(new_ports[0]);
+                if ( helper['autoconnect'] == true ) {
+                    $('div#port-picker #port').val(GUI.connected_to);
+                }
             } else {
                 $('div#port-picker #port').val(GUI.connected_to);
-            }
+            } 
 
             // trigger callbacks
             for (var i = (self.port_detected_callbacks.length - 1); i >= 0; i--) {

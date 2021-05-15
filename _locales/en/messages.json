@@ -2501,6 +2501,9 @@
     "wirelessModeSwitch": {
         "message": "Wireless mode"
     },
+    "AutoConnectSwitch": {
+        "message": "AutoConnect"
+    },
     "rthConfiguration": {
         "message": "RTH settings"
     },

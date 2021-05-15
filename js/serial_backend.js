@@ -20,6 +20,16 @@ $(document).ready(function () {
         }
     });
 
+    $('#auto-connect').change(function () {
+        var $this = $(this);
+
+        if ($this.is(':checked')) {
+            helper['autoconnect'] = true; //buzz
+        } else {
+            helper['autoconnect'] = false;
+        }
+    });
+
     GUI.handleReconnect = function ($tabElement) {
 
         let modal;
@@ -252,6 +262,7 @@ function onOpen(openInfo) {
 
         chrome.storage.local.set({last_used_bps: serial.bitrate});
         chrome.storage.local.set({wireless_mode_enabled: $('#wireless-mode').is(":checked")});
+        chrome.storage.local.set({auto_connect_enabled: $('#auto-connect').is(":checked")});
 
         serial.onReceive.addListener(read_serial);
 

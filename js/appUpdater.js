@@ -8,8 +8,17 @@ appUpdater.checkRelease = function (currVersion) {
         GUI.log('Loaded [configurator] release information from GitHub.');
         //Git return sorted list, 0 - last release
 
-        let newVersion = releaseData[0].tag_name;
-        let newPrerelase = releaseData[0].prerelease;
+        let newVersion; 
+        let newPrerelase;
+        if ( releaseData[0] == undefined) {  
+            releaseData = Array({}); 
+            releaseData[0].tag_name = 'no releases found'; 
+            newPrerelase = false;
+            GUI.log('no releases available.');
+        }
+
+        newVersion = releaseData[0].tag_name;
+        newPrerelase = releaseData[0].prerelease;
 
         if (newPrerelase == false && semver.gt(newVersion, currVersion)) {
             GUI.log(newVersion, chrome.runtime.getManifest().version);
