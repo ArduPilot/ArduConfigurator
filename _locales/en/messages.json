@@ -643,7 +643,7 @@
         "message": "Description"
     },
     "configurationMixer": {
-        "message": "Mixer"
+        "message": "VehicleType / Mixer"
     },
     "configurationFeatures": {
         "message": "Other Features"
@@ -2334,7 +2334,7 @@
         "message": "Level calibration"
     },
     "tabMixer": {
-        "message": "Mixer"
+        "message": "Vehicle Type & Mixer"
     },
     "tabPresets": {
         "message": "Presets"
@@ -3303,7 +3303,7 @@
         "message": "Platform type"
     },
     "platformConfiguration": {
-        "message": "Platform configuration"
+        "message": "Platform configuration - Choose your Plane/Copter/Rover here..."
     },
     "platformHasFlaps": {
         "message": "Has flaps"
