@@ -8,7 +8,7 @@ TABS.modes.initialize = function (callback) {
 
     if (GUI.active_tab != 'modes') {
         GUI.active_tab = 'modes';
-        googleAnalytics.sendAppView('Modes');
+        //googleAnalytics.sendAppView('Modes');
     }
 
     function get_active_box_data() {

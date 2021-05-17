@@ -39,7 +39,7 @@ var concat = require('gulp-concat');
 
 var sources = {};
 
-sources.css = [
+sources.Css = [
     './main.css',
     './js/libraries/jquery.nouislider.min.css',
     './js/libraries/jquery.nouislider.pips.min.css',
@@ -55,8 +55,8 @@ sources.css = [
     './src/css/defaults_dialog.css'
 ];
 
-sources.js = [
-    './js/libraries/google-analytics-bundle.js',
+sources.Js = [
+    //'./js/libraries/google-analytics-bundle.js',
     './node_modules/jquery/dist/jquery.min.js',
     './node_modules/jquery-ui-npm/jquery-ui.min.js',
     './node_modules/marked/lib/marked.js',
@@ -153,8 +153,8 @@ sources.hexParserJs = [
 ];
 
 var output = {
-    css: 'styles.css',
-    js: 'script.js',
+    Css: 'styles.css',
+    Js: 'script.js',
     receiverCss: 'receiver-msp.css',
     receiverJs: 'receiver-msp.js',
     debugTraceJs: 'debug-trace.js',
@@ -211,9 +211,10 @@ var buildJsTasks = [];
             } else {
                 throw 'Invalid task name: "' + name + '": must end with -css or -js';
             }
+            // copies src files into output dir ./build/ and bundler smooshes them together
             gulp.task(name, function() {
                 return gulp.src(sources[key])
-                   // .pipe(concat(output[key])) // bundler
+                    .pipe(concat(output[key])) 
                     .pipe(gulp.dest(outputDir));
             });
         })(k);
@@ -388,5 +389,151 @@ gulp.task('watch', function () {
         gulp.watch(sources[k], gulp.series(get_task_name(k)));
     }
 });
+//-------------------------------------------------
+
+var glob = require("glob-promise")
+
+var fs = require('fs');
+
+
+//-------------------------------------------------
+var f_glob =[];
+
+var customstuff = "  ";
+
+var customstuff2 = "  ";
+
+
+async function get_all_srcs() {
+
+
+    // this is a dev build that is totalll bundler free, akeeping everything in original location and just building the things to include etc
+    for(var k in output) {
+        //console.log("type:"+k);
+
+        for ( var s in sources[k]) {
+            var f = sources[k][s];
+            //console.log("src:"+f);
+
+            // are there any globs to be resolved into a list of files, or just a single file?
+            if ( f.indexOf('*') != -1 ){
+                
+                await glob(f, {}, ).then(function ( files) {
+                    f_glob = f_glob.concat(files); // array assignment
+                    console.log("globby:"+files);
+                });
+
+            } else {
+                f_glob.push(f); // single element only
+                //console.log("onefile:"+f);
+
+            }
+
+        }
+
+    }
+}
+//-------------------------------------------------
+
+
+function populate_main_tmpl() {
+
+    // xxxx.js  might be one file or xxx*.js might be a bunch of files
+    for ( var g in f_glob) { 
+        var k = f_glob[g];
+        if (k.endsWith('css') ) {
+        // css
+        var csstemplate = '<link type="text/css" rel="stylesheet" href="'+k+'" media="all" />';
+        console.log(csstemplate);
+        customstuff += csstemplate ;
+        customstuff += "\n" ;
+
+        }
+        if (k.endsWith('js') ) {
+        // js
+        var jstemplate = '<script type="text/javascript" src="'+k+'"></script>';
+        console.log(jstemplate);
+        customstuff += jstemplate ;
+        customstuff += "\n" ;
+        }
+    }
+
+    //  dev version of headers
+    var someFile = "./main.tmpl.html";
+    var dstFile = "./main.html";
+
+
+    fs.readFile(someFile, 'utf8', function (err,data) {
+        if (err) {
+        return console.log(err);
+        }
+        var result = data.replace(/fixme1/g, customstuff);
+        console.log('blerg1');
+
+
+        fs.writeFile(dstFile, result, 'utf8', function (err) {
+            if (err) return console.log(err);
+            console.log('blerg2');
+
+        });
+    });
+
+}
+
+//-------------------------------------------------
+
+
+function populate_main_tmpl2() {
+
+    customstuff2 +=  ' <link type="text/css" rel="stylesheet" href="./build/styles.css" media="all" />';
+    customstuff2 += ' <script type="text/javascript" src="./build/script.js"></script>';
+    customstuff += "  ";
+
+    // bundled version of headers 
+    var someFile = "./main.tmpl.html";
+    var dstFile2 = "./main2.html";
+    var fs = require('fs')
+    fs.readFile(someFile, 'utf8', function (err,data) {
+        if (err) {
+        return console.log(err);
+        }
+        var result = data.replace(/fixme2/g, customstuff2);
+        console.log('blerg3');
+
+        fs.writeFile(dstFile2, result, 'utf8', function (err) {
+            if (err) return console.log(err);
+            console.log('blerg4');
+        });
+    });
+}
+
+
+async function dothings()  {
+
+    console.log('-------------------------------------------------');
+
+    await get_all_srcs();
+    console.log('-------------------------------------------------');
+
+    //console.log(f_glob); // filled up quite async by globs and things
+
+
+    await populate_main_tmpl();
+    console.log('-------------------------------------------------');
+
+    await populate_main_tmpl2();
+
+}
+
+dothings();
+//-------------------------------------------------
+
+// be sure to make edits in main.tmpl.html, not main.html or main2.html
+// at this point u can use main.html as-is for 'dev' , without any bundling 
+//OR
+// u can rename main2.html to main for a 'bundled' deployment
+
+//-------------------------------------------------
+
 
 gulp.task('default', gulp.series('build'));

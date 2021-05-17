@@ -7,7 +7,7 @@ TABS.auxiliary = {};
 TABS.auxiliary.initialize = function (callback) {
     GUI.active_tab_ref = this;
     GUI.active_tab = 'auxiliary';
-    googleAnalytics.sendAppView('Auxiliary');
+    //googleAnalytics.sendAppView('Auxiliary');
 
     function get_mode_ranges() {
         MSP.send_message(MSPCodes.MSP_MODE_RANGES, false, false, get_box_ids);
@@ -38,7 +38,7 @@ TABS.auxiliary.initialize = function (callback) {
 
     function sort_modes_for_display() {
         // This array defines the order that the modes are displayed in the configurator modes page
-        configuratorBoxOrder = [
+        var configuratorBoxOrder = [
             "ARM", "PREARM",                                                                           // Arming
             "ANGLE", "HORIZON", "MANUAL",                                                              // Flight modes
             "NAV RTH", "NAV POSHOLD", "NAV COURSE HOLD",                                               // Navigation mode
@@ -300,7 +300,7 @@ TABS.auxiliary.initialize = function (callback) {
             uniqueModes = $.unique(uniqueModes);
             for (var mode in uniqueModes) {
                 if (uniqueModes.hasOwnProperty(mode)) {
-                    googleAnalytics.sendEvent('Setting', 'AuxModes', uniqueModes[mode]);
+                    //googleAnalytics.sendEvent('Setting', 'AuxModes', uniqueModes[mode]);
                 }
             }
 

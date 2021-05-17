@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 ////////////////////////////////////
 //
@@ -74,7 +74,7 @@ TABS.mission_control.initialize = function (callback) {
 
     if (GUI.active_tab != 'mission_control') {
         GUI.active_tab = 'mission_control';
-        googleAnalytics.sendAppView('Mission Control');
+        //googleAnalytics.sendAppView('Mission Control');
     }
 
     if (CONFIGURATOR.connectionValid) {
@@ -160,7 +160,7 @@ TABS.mission_control.initialize = function (callback) {
                           anchor: [0.5, 0.5],
                           opacity: 1,
                           scale: 0.6,
-                          src: '../images/icons/icon_mission_airplane.png'
+                          src: '/images/icons/icon_mission_airplane.png'
                       }))
                   });
 
@@ -187,7 +187,7 @@ TABS.mission_control.initialize = function (callback) {
                           anchor: [0.5, 1.0],
                           opacity: 1,
                           scale: 0.5,
-                          src: '../images/icons/cf_icon_RTH.png'
+                          src: '/images/icons/cf_icon_RTH.png'
                       }))
                   });
 
@@ -512,7 +512,7 @@ TABS.mission_control.initialize = function (callback) {
                 anchor: [0.5, 1],
                 opacity: 1,
                 scale: 0.5,
-                src: '../images/icons/cf_icon_safehome' + (safehome.isUsed() ? '_used' : '')+ '.png'
+                src: '/images/icons/cf_icon_safehome' + (safehome.isUsed() ? '_used' : '')+ '.png'
             })),
             text: new ol.style.Text(({
                 text: String(Number(safehome.getNumber())+1),
@@ -648,7 +648,7 @@ TABS.mission_control.initialize = function (callback) {
                 anchor: [0.5, 1],
                 opacity: 1,
                 scale: 0.5,
-                src: '../images/icons/cf_icon_position' + (dictofPointIcon[waypoint.getAction()] != '' ? '_'+dictofPointIcon[waypoint.getAction()] : '') + (isEdit ? '_edit' : '')+ '.png'
+                src: '/images/icons/cf_icon_position' + (dictofPointIcon[waypoint.getAction()] != '' ? '_'+dictofPointIcon[waypoint.getAction()] : '') + (isEdit ? '_edit' : '')+ '.png'
             })),
             text: new ol.style.Text(({
                 text: String(Number(waypoint.getLayerNumber()+1)),
@@ -987,7 +987,7 @@ TABS.mission_control.initialize = function (callback) {
             var button = document.createElement('button');
 
             button.innerHTML = ' ';
-            button.style = 'background: url(\'../images/CF_settings_white.svg\') no-repeat 1px -1px;background-color: rgba(0,60,136,.5);';
+            button.style = 'background: url(\'/images/CF_settings_white.svg\') no-repeat 1px -1px;background-color: rgba(0,60,136,.5);';
 
             var handleShowSettings = function () {
                 $('#missionPlanerSettings').fadeIn(300);
@@ -1020,7 +1020,7 @@ TABS.mission_control.initialize = function (callback) {
             var button = document.createElement('button');
 
             button.innerHTML = ' ';
-            button.style = 'background: url(\'../images/icons/cf_icon_safehome_white.svg\') no-repeat 1px -1px;background-color: rgba(0,60,136,.5);';
+            button.style = 'background: url(\'/images/icons/cf_icon_safehome_white.svg\') no-repeat 1px -1px;background-color: rgba(0,60,136,.5);';
 
             var handleShowSafehome = function () {
                 $('#missionPlanerSafehome').fadeIn(300);
@@ -1167,7 +1167,7 @@ TABS.mission_control.initialize = function (callback) {
         } else {
             mapLayer = new ol.source.OSM();
         }
-        
+        var control_list;
         if (CONFIGURATOR.connectionValid) {
             control_list = [
                 new app.PlannerSettingsControl(),

@@ -6,7 +6,7 @@ TABS.advanced_tuning.initialize = function (callback) {
 
     if (GUI.active_tab != 'advanced_tuning') {
         GUI.active_tab = 'advanced_tuning';
-        googleAnalytics.sendAppView('AdvancedTuning');
+        //googleAnalytics.sendAppView('AdvancedTuning');
     }
 
     loadHtml();

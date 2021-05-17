@@ -32,6 +32,8 @@
     "bluebird": "3.4.1",
     "del": "^3.0.0",
     "fs": "0.0.1-security",
+    "glob": "^7.1.7",
+    "glob-promise": "^4.1.0",
     "graceful-fs": "^4.2.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",

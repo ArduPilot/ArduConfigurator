@@ -17,7 +17,7 @@ TABS.outputs.initialize = function (callback) {
 
     if (GUI.active_tab !== 'outputs') {
         GUI.active_tab = 'outputs';
-        googleAnalytics.sendAppView('Outputs');
+        //googleAnalytics.sendAppView('Outputs');
     }
 
     var loadChainer = new MSPChainerClass();

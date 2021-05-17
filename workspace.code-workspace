@@ -32,8 +32,8 @@
 				"request": "launch",
 				"name": "yeoman run",
 				"program": "node_modules/nw/bin/nw",
-				"args": [ "--inspect","--remote-debugging-port=9222","--load-extension=./dist/","." ],
-				//"args": [ "--remote-debugging-port=9222","." ],
+				//"args": [ "--inspect","--remote-debugging-port=9222","--load-extension=./dist/","." ], // the 'dist' version bundled etc
+				"args": [ "--inspect","--remote-debugging-port=9222","--load-extension=./","." ],  // the dev version
 				"cwd": "${workspaceFolder}",
 				"console": "integratedTerminal",
 				"internalConsoleOptions": "neverOpen"

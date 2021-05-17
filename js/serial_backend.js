@@ -192,12 +192,12 @@ function onValidFirmware()
 {
     MSP.send_message(MSPCodes.MSP_BUILD_INFO, false, false, function () {
 
-        googleAnalytics.sendEvent('Firmware', 'Using', CONFIG.buildInfo);
+        //googleAnalytics.sendEvent('Firmware', 'Using', CONFIG.buildInfo);
         GUI.log(chrome.i18n.getMessage('buildInfoReceived', [CONFIG.buildInfo]));
 
         MSP.send_message(MSPCodes.MSP_BOARD_INFO, false, false, function () {
 
-            googleAnalytics.sendEvent('Board', 'Using', CONFIG.boardIdentifier + ',' + CONFIG.boardVersion);
+            //googleAnalytics.sendEvent('Board', 'Using', CONFIG.boardIdentifier + ',' + CONFIG.boardVersion);
             GUI.log(chrome.i18n.getMessage('boardInfoReceived', [CONFIG.boardIdentifier, CONFIG.boardVersion]));
 
             MSP.send_message(MSPCodes.MSP_UID, false, false, function () {
@@ -289,7 +289,7 @@ function onOpen(openInfo) {
             MSP.send_message(MSPCodes.MSP_FC_VARIANT, false, false, function () {
                 if ( (CONFIG.flightControllerIdentifier == 'ARDUPILOT') || (CONFIG.flightControllerIdentifier == 'INAV') ){
                     MSP.send_message(MSPCodes.MSP_FC_VERSION, false, false, function () {
-                        googleAnalytics.sendEvent('Firmware', 'Variant', CONFIG.flightControllerIdentifier + ',' + CONFIG.flightControllerVersion);
+                        ////googleAnalytics.sendEvent('Firmware', 'Variant', CONFIG.flightControllerIdentifier + ',' + CONFIG.flightControllerVersion);
                         GUI.log(chrome.i18n.getMessage('fcInfoReceived', [CONFIG.flightControllerIdentifier, CONFIG.flightControllerVersion]));
                         if (semver.gte(CONFIG.flightControllerVersion, CONFIGURATOR.minfirmwareVersionAccepted) && semver.lt(CONFIG.flightControllerVersion, CONFIGURATOR.maxFirmwareVersionAccepted)) {
                             mspHelper.getCraftName(function(name) {

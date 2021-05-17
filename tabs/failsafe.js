@@ -6,7 +6,7 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
 
     if (GUI.active_tab != 'failsafe') {
         GUI.active_tab = 'failsafe';
-        googleAnalytics.sendAppView('Failsafe');
+        //googleAnalytics.sendAppView('Failsafe');
     }
 
     function load_failssafe_config() {

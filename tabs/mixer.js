@@ -18,7 +18,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
 
     if (GUI.active_tab != 'mixer') {
         GUI.active_tab = 'mixer';
-        googleAnalytics.sendAppView('Mixer');
+        //googleAnalytics.sendAppView('Mixer');
     }
 
     loadChainer.setChain([
@@ -238,8 +238,8 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         /*
          * Send tracking
          */
-        googleAnalytics.sendEvent('Mixer', 'Platform type', helper.platform.getById(MIXER_CONFIG.platformType).name);
-        googleAnalytics.sendEvent('Mixer', 'Mixer preset',  helper.mixer.getById(MIXER_CONFIG.appliedMixerPreset).name);
+        //googleAnalytics.sendEvent('Mixer', 'Platform type', helper.platform.getById(MIXER_CONFIG.platformType).name);
+        //googleAnalytics.sendEvent('Mixer', 'Mixer preset',  helper.mixer.getById(MIXER_CONFIG.appliedMixerPreset).name);
 
         /*
          * Send mixer rules

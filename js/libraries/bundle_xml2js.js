@@ -2044,8 +2044,8 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 
-}).call(this,{"isBuffer":require("../../is-buffer/index.js")})
-},{"../../is-buffer/index.js":8}],5:[function(require,module,exports){
+}).call(this,{"isBuffer":require("/is-buffer/index.js")})
+},{"/is-buffer/index.js":8}],5:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a

@@ -6,7 +6,7 @@ TABS.sensors.initialize = function (callback) {
 
     if (GUI.active_tab != 'sensors') {
         GUI.active_tab = 'sensors';
-        googleAnalytics.sendAppView('Sensors');
+        //googleAnalytics.sendAppView('Sensors');
     }
 
     function initSensorData(){
@@ -299,7 +299,7 @@ TABS.sensors.initialize = function (callback) {
             initDataArray(1),
             initDataArray(1)
         ];
-            debug_data = [
+            var debug_data = [
             initDataArray(1),
             initDataArray(1),
             initDataArray(1),

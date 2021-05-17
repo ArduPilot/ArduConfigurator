@@ -2,12 +2,12 @@
 'use strict';
 
 // Google Analytics
-var googleAnalyticsService = analytics.getService('ice_cream_app');
-var googleAnalytics = googleAnalyticsService.getTracker("UA-7583xxx4706-2");
-var googleAnalyticsConfig = false;
-googleAnalyticsService.getConfig().addCallback(function (config) {
-    googleAnalyticsConfig = config;
-});
+//var googleAnalyticsService = analytics.getService('ice_cream_app');
+//var googleAnalytics = googleAnalyticsService.getTracker("UA-7583xxx4706-2");
+//var googleAnalyticsConfig = false;
+//googleAnalyticsService.getConfig().addCallback(function (config) {
+//    googleAnalyticsConfig = config;
+//});
 
 chrome.storage = chrome.storage || {};
 
@@ -18,7 +18,15 @@ let globalSettings = {
     proxyLayer: null
 };
 
-$(document).ready(function () {
+setTimeout(function (){
+
+    zzz123();
+    
+  }, 5000); // How long do you want the delay t
+  
+  //$(document).ready(
+  function zzz123() {
+
     // translate to user-selected language
     localize();
 
@@ -275,7 +283,7 @@ $(document).ready(function () {
             el.after('<div id="options-window"></div>');
 
             $('div#options-window').load('./tabs/options.html', function () {
-                googleAnalytics.sendAppView('Options');
+                //googleAnalytics.sendAppView('Options');
 
                 // translate to user-selected language
                 localize();
@@ -289,7 +297,7 @@ $(document).ready(function () {
 
                 $('div.notifications input').change(function () {
                     var check = $(this).is(':checked');
-                    googleAnalytics.sendEvent('Settings', 'Notifications', check);
+                    //googleAnalytics.sendEvent('Settings', 'Notifications', check);
 
                     chrome.storage.local.set({'update_notify': check});
                 });
@@ -301,7 +309,7 @@ $(document).ready(function () {
 
                 $('div.statistics input').change(function () {
                     var check = $(this).is(':checked');
-                    googleAnalytics.sendEvent('Settings', 'GoogleAnalytics', check);
+                    //googleAnalytics.sendEvent('Settings', 'GoogleAnalytics', check);
                     googleAnalyticsConfig.setTrackingPermitted(check);
                 });
 
@@ -480,13 +488,13 @@ $(document).ready(function () {
             updateActivatedTab();
         });
     });
-});
+}//);
 
 function catch_startup_time(startTime) {
     var endTime = new Date().getTime(),
         timeSpent = endTime - startTime;
 
-    googleAnalytics.sendTiming('Load Times', 'Application Startup', timeSpent);
+    //googleAnalytics.sendTiming('Load Times', 'Application Startup', timeSpent);
 }
 
 function millitime() {

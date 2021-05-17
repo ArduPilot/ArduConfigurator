@@ -11,7 +11,7 @@ TABS.receiver.initialize = function (callback) {
 
     if (GUI.active_tab != 'receiver') {
         GUI.active_tab = 'receiver';
-        googleAnalytics.sendAppView('Receiver');
+        //googleAnalytics.sendAppView('Receiver');
     }
 
     var loadChainer = new MSPChainerClass();
@@ -181,7 +181,7 @@ TABS.receiver.initialize = function (callback) {
         /*
          * Send tracking event so we can know if users are using different mappings than EATR
          */
-        googleAnalytics.sendEvent('Setting', 'RcMappingRead', str);
+        //googleAnalytics.sendEvent('Setting', 'RcMappingRead', str);
 
         // validation / filter
         var last_valid = str;
@@ -291,7 +291,7 @@ TABS.receiver.initialize = function (callback) {
             /*
              * Send tracking event so we can know if users are using different mappings than EATR
              */
-            googleAnalytics.sendEvent('Setting', 'RcMappingSave', rcMapValue);
+            //googleAnalytics.sendEvent('Setting', 'RcMappingSave', rcMapValue);
 
             for (var i = 0; i < RC_MAP.length; i++) {
                 RC_MAP[i] = strBuffer.indexOf(FC.getRcMapLetters()[i]);

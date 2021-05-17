@@ -9,7 +9,7 @@ TABS.programming.initialize = function (callback, scrollPosition) {
 
     if (GUI.active_tab != 'programming') {
         GUI.active_tab = 'programming';
-        googleAnalytics.sendAppView('Programming');
+        //googleAnalytics.sendAppView('Programming');
     }
 
     loadChainer.setChain([

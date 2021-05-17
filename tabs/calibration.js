@@ -50,7 +50,7 @@ TABS.calibration.initialize = function (callback) {
 
     if (GUI.active_tab != 'calibration') {
         GUI.active_tab = 'calibration';
-        googleAnalytics.sendAppView('Calibration');
+        //googleAnalytics.sendAppView('Calibration');
     }
     loadChainer.setChain([
         mspHelper.loadStatus,
