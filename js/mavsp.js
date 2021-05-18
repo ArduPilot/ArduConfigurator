@@ -26,7 +26,12 @@ var MspMessageClass = function () {
 /**
  * @typedef {{state: number, message_direction: number, code: number, message_length_expected: number, message_length_received: number, message_buffer: null, message_buffer_uint8_view: null, message_checksum: number, callbacks: Array, packet_error: number, unsupported: number, ledDirectionLetters: [*], ledFunctionLetters: [*], ledBaseFunctionLetters: [*], ledOverlayLetters: [*], last_received_timestamp: null, analog_last_received_timestamp: number, read: MSP.read, send_message: MSP.send_message, promise: MSP.promise, callbacks_cleanup: MSP.callbacks_cleanup, disconnect_cleanup: MSP.disconnect_cleanup}} MSP
  */
+
+// buzz we leave this named as 'MSP' not 'MAVSP' as a lot of code uses that entry 
+//  point , its for compat with real lib
+//var MAVSP = MSP;
 var MSP = {
+
     symbols: {
         BEGIN: '$'.charCodeAt(0),
         PROTO_V1: 'M'.charCodeAt(0),

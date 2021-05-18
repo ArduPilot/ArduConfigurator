@@ -82,9 +82,14 @@ sources.Js = [
     './js/simple_smooth_filter.js',
     './js/walking_average_filter.js',
     './js/gui.js',
-    './js/msp/MSPCodes.js',
-    './js/msp/MSPHelper.js',
-    './js/msp/MSPchainer.js',
+  //  './js/msp/MSPCodes.js',
+  //  './js/msp/MSPHelper.js',
+  //  './js/msp/MSPchainer.js',
+
+    './js/mavsp/MAVSPCodes.js', //buzz
+    './js/mavsp/MAVSPHelper.js',//buzz
+    './js/mavsp/MAVSPchainer.js',//buzz
+
     './js/port_handler.js',
     './js/serial.js',
     './js/servoMixRule.js',
@@ -96,7 +101,8 @@ sources.Js = [
     './js/serial_backend.js',
     './js/data_storage.js',
     './js/fc.js',
-    './js/msp.js',
+//    './js/msp.js',
+    './js/mavsp.js', //buzz
     './js/protocols/stm32.js',
     './js/protocols/stm32usbdfu.js',
     './js/localization.js',

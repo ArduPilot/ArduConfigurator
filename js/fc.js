@@ -688,7 +688,8 @@ var FC = {
             'DJI NAZA',
             'UBLOX7',
             'MTK',
-            'MSP'
+            'MSP',
+            'MAVSP'
         ];
     },
     getGpsBaudRates: function () {

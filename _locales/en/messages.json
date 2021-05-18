@@ -996,6 +996,9 @@
     "portsFunction_MSP": {
         "message": "MSP"
     },
+    "portsFunction_MAVSP": {
+        "message": "MAVSP"
+    },
     "portsFunction_GPS": {
         "message": "GPS"
     },
@@ -1028,6 +1031,9 @@
     },
     "portsFunction_TELEMETRY_MSP": {
         "message": "MSP"
+    },
+    "portsFunction_TELEMETRY_MAVSP": {
+        "message": "MAVSP"
     },
     "portsFunction_TELEMETRY_SMARTPORT": {
         "message": "SmartPort"
