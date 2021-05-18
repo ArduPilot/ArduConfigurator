@@ -57,7 +57,7 @@ sources.Css = [
 
 sources.Js = [
     //'./js/libraries/google-analytics-bundle.js',
-    './node_modules/jquery/dist/jquery.min.js',
+    './node_modules/jquery/dist/jquery.js',
     './node_modules/jquery-ui-npm/jquery-ui.min.js',
     './node_modules/marked/lib/marked.js',
     './js/libraries/d3.min.js',
@@ -138,7 +138,7 @@ sources.receiverCss = [
 ];
 
 sources.receiverJs = [
-    './node_modules/jquery/dist/jquery.min.js',
+  //  './node_modules/jquery/dist/jquery.min.js',
     './node_modules/jquery-ui-npm/jquery-ui.min.js',
     './js/libraries/jquery.nouislider.all.min.js',
     './tabs/receiver_msp.js'
