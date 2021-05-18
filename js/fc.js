@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 // define all the global variables that are uses to hold FC state
 var CONFIG,

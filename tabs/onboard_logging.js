@@ -1,5 +1,5 @@
 /*global $,MSP,MSPCodes,BF_CONFIG,TABS,GUI,CONFIGURATOR,helper,mspHelper,nwdialog,SDCARD,chrome*/
-'use strict';
+//'use strict';
 
 var
     sdcardTimer;

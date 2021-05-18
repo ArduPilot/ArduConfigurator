@@ -1,5 +1,5 @@
 /*global $*/
-'use strict';
+//'use strict';
 
 var MSPChainerClass = function () {
 

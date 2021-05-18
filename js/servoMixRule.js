@@ -1,5 +1,5 @@
 /*global $*/
-'use strict';
+//'use strict';
 
 let ServoMixRule = function (target, input, rate, speed, condition) {
 

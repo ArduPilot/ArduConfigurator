@@ -1,5 +1,5 @@
 /*global helper,MSP,MSPChainerClass,googleAnalytics,GUI,mspHelper,MOTOR_RULES,TABS,$,MSPCodes,ANALOG,MOTOR_DATA,chrome,PLATFORM_MULTIROTOR,BF_CONFIG,PLATFORM_TRICOPTER,SERVO_RULES,FC,SERVO_CONFIG,SENSOR_DATA,REVERSIBLE_MOTORS,MISC,MIXER_CONFIG,OUTPUT_MAPPING*/
-'use strict';
+//'use strict';
 
 TABS.outputs = {
     allowTestMode: false,

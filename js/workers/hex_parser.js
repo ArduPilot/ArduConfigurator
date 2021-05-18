@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 // input = string
 // result = if hex file is valid, result is an object

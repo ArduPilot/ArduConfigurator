@@ -1,6 +1,6 @@
 /*global chrome*/
 
-'use strict';
+//'use strict';
 
 TABS.receiver = {
     rateChartHeight: 117

@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 /*global $,TABS,GUI,googleAnalytics*/
 
 TABS.landing = {};

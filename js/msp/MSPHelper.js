@@ -1,5 +1,5 @@
 /*global $, SERVO_DATA, PID_names, ADJUSTMENT_RANGES, RXFAIL_CONFIG, SERVO_CONFIG*/
-'use strict';
+//'use strict';
 
 var mspHelper = (function (gui) {
     var self = {};

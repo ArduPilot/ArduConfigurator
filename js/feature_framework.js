@@ -1,5 +1,5 @@
 /*global mspHelper,BF_CONFIG*/
-'use strict';
+//'use strict';
 
 var helper = helper || {};
 

@@ -1,5 +1,5 @@
 /*global $,chrome,FC,helper,mspHelper,MIXER_CONFIG,BF_CONFIG*/
-//'use strict';
+////'use strict';
 //global $;
 
 TABS.setup = {

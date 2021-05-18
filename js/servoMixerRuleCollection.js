@@ -1,5 +1,5 @@
 /*global ServoMixRule*/
-'use strict';
+//'use strict';
 
 let ServoMixerRuleCollection = function () {
 

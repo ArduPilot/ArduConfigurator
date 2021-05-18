@@ -1,5 +1,5 @@
 /*global bit_check*/
-'use strict';
+//'use strict';
 
 let OutputMappingCollection = function () {
     let self = {},

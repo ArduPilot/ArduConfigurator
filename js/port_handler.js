@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 var usbDevices = {
     STM32DFU: {'vendorId': 1155, 'productId': 57105}

@@ -1,5 +1,5 @@
 /*global mspHelper,$,GUI,MSP,BF_CONFIG,chrome*/
-'use strict';
+//'use strict';
 
 var helper = helper || {};
 

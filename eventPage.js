@@ -1,7 +1,7 @@
 /*
     If an id is also specified and a window with a matching id has been shown before, the remembered bounds of the window will be used instead.
 */
-'use strict';
+//'use strict';
 
 function startApplication() {
     var applicationStartTime = new Date().getTime();

@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 /*global chrome,GUI,TABS,nwdialog,$*/
 TABS.cli = {
     lineDelayMs: 50,

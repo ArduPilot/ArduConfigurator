@@ -1,5 +1,5 @@
 /*global $,constrain*/
-'use strict';
+//'use strict';
 
 var MotorMixRule = function (throttle, roll, pitch, yaw) {
 

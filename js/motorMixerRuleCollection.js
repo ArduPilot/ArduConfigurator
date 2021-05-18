@@ -1,5 +1,5 @@
 /*global $, MotorMixRule*/
-'use strict';
+//'use strict';
 
 var MotorMixerRuleCollection = function () {
 

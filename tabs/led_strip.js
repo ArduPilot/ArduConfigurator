@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 TABS.led_strip = {
     wireMode: false,

@@ -5,7 +5,7 @@
 
     popular choices - 921600, 460800, 256000, 230400, 153600, 128000, 115200, 57600, 38400, 28800, 19200
 */
-'use strict';
+//'use strict';
 
 var STM32_protocol = function () {
     this.baud;

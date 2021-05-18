@@ -1,5 +1,5 @@
 /*global chrome */
-//'use strict';
+////'use strict';
 
 TABS.calibration = {};
 

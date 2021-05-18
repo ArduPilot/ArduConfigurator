@@ -1,5 +1,5 @@
 /*global $,nwdialog*/
-'use strict';
+//'use strict';
 
 TABS.firmware_flasher = {};
 TABS.firmware_flasher.initialize = function (callback) {

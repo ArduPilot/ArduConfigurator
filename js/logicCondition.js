@@ -1,5 +1,5 @@
 /*global $,FC*/
-'use strict';
+//'use strict';
 
 let LogicCondition = function (enabled, activatorId, operation, operandAType, operandAValue, operandBType, operandBValue, flags) {
     let self = {};

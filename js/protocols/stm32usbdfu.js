@@ -10,7 +10,7 @@
     that being said, it seems that certain level of CLRSTATUS is required before running another type of operation for
     example switching from DNLOAD to UPLOAD, etc, clearning the state so device is in dfuIDLE is highly recommended.
 */
-'use strict';
+//'use strict';
 
 var STM32DFU_protocol = function () {
     this.callback; // ref

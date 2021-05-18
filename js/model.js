@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 const SERVO_GIMBAL_PITCH = 0,
     SERVO_GIMBAL_ROLL = 1,

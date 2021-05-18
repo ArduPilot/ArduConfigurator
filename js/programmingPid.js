@@ -1,5 +1,5 @@
 /*global $,FC*/
-'use strict';
+//'use strict';
 
 let ProgrammingPid = function (enabled, setpointType, setpointValue, measurementType, measurementValue, gainP, gainI, gainD, gainFF) {
     let self = {};

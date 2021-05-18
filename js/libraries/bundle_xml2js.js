@@ -1,5 +1,5 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-'use strict'
+//'use strict'
 
 exports.byteLength = byteLength
 exports.toByteArray = toByteArray
@@ -163,7 +163,7 @@ function fromByteArray (uint8) {
  */
 /* eslint-disable no-proto */
 
-'use strict'
+//'use strict'
 
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
@@ -2713,7 +2713,7 @@ module.exports = Array.isArray || function (arr) {
 
 },{}],10:[function(require,module,exports){
 (function (process){
-'use strict';
+//'use strict';
 
 if (!process.version ||
     process.version.indexOf('v0.') === 0 ||
@@ -2975,7 +2975,7 @@ module.exports = require('./lib/_stream_duplex.js');
 // prototypally inherits from Readable, and then parasitically from
 // Writable.
 
-'use strict';
+//'use strict';
 
 /*<replacement>*/
 
@@ -3106,7 +3106,7 @@ Duplex.prototype._destroy = function (err, cb) {
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
 
-'use strict';
+//'use strict';
 
 module.exports = PassThrough;
 
@@ -3151,7 +3151,7 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-'use strict';
+//'use strict';
 
 /*<replacement>*/
 
@@ -4214,7 +4214,7 @@ function indexOf(xs, x) {
 // would be consumed, and then the rest would wait (un-transformed) until
 // the results of the previous transformed chunk were consumed.
 
-'use strict';
+//'use strict';
 
 module.exports = Transform;
 
@@ -4392,7 +4392,7 @@ function done(stream, er, data) {
 // Implement an async ._write(chunk, encoding, cb), and it'll handle all
 // the drain event emission and buffering.
 
-'use strict';
+//'use strict';
 
 /*<replacement>*/
 
@@ -5056,7 +5056,7 @@ Writable.prototype._destroy = function (err, cb) {
 };
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("timers").setImmediate)
 },{"./_stream_duplex":13,"./internal/streams/destroy":19,"./internal/streams/stream":20,"_process":11,"core-util-is":4,"inherits":7,"process-nextick-args":10,"safe-buffer":26,"timers":29,"util-deprecate":30}],18:[function(require,module,exports){
-'use strict';
+//'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5136,7 +5136,7 @@ if (util && util.inspect && util.inspect.custom) {
   };
 }
 },{"safe-buffer":26,"util":2}],19:[function(require,module,exports){
-'use strict';
+//'use strict';
 
 /*<replacement>*/
 
@@ -5235,7 +5235,7 @@ module.exports = require('events').EventEmitter;
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-'use strict';
+//'use strict';
 
 /*<replacement>*/
 

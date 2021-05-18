@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 TABS.sensors = {};
 TABS.sensors.initialize = function (callback) {

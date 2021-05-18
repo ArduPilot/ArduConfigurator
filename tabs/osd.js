@@ -1,5 +1,5 @@
 /*global $,nwdialog*/
-'use strict';
+//'use strict';
 
 var SYM = SYM || {};
 SYM.MILLIOHM = 0x00;

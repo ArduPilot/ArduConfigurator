@@ -1,5 +1,5 @@
 /*global $*/
-'use strict';
+//'use strict';
 
 var TABS = {}; // filled by individual tab js file
 

@@ -1,5 +1,5 @@
 /*global $*/
-'use strict';
+//'use strict';
 
 TABS.adjustments = {};
 

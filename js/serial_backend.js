@@ -1,5 +1,5 @@
 /*global chrome, chrome.i18n*/
-'use strict';
+//'use strict';
 
 $(document).ready(function () {
 

@@ -1,5 +1,5 @@
 /*global chrome,helper,mspHelper*/
-'use strict';
+//'use strict';
 
 TABS.pid_tuning = {
 

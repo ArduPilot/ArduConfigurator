@@ -1,5 +1,5 @@
 /*global $*/
-'use strict';
+//'use strict';
 
 function constrain(input, min, max) {
 

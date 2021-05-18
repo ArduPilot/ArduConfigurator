@@ -1,5 +1,5 @@
 /*global $*/
-'use strict';
+//'use strict';
 
 
 let Safehome = function (number, enabled, lat, lon) {

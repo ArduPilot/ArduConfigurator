@@ -1,6 +1,6 @@
 // Disabled via main.js/main.html, cleanflight does not use MSP_BOX.
 
-'use strict';
+//'use strict';
 
 TABS.modes = {};
 TABS.modes.initialize = function (callback) {

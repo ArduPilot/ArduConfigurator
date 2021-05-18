@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 // return true if user has choose a special peripheral
 function isPeripheralSelected(peripheralName) {

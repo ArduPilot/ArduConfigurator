@@ -1,5 +1,5 @@
 /*global chrome,GUI,FC_CONFIG,$,mspHelper,googleAnalytics,ADVANCED_CONFIG*/
-'use strict';
+//'use strict';
 
 TABS.configuration = {};
 

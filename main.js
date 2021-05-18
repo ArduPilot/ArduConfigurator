@@ -1,5 +1,5 @@
 /*global $, chrome, analytics*/
-'use strict';
+//'use strict';
 
 // Google Analytics
 //var googleAnalyticsService = analytics.getService('ice_cream_app');

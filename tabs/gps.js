@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 TABS.gps = {};
 TABS.gps.initialize = function (callback) {
