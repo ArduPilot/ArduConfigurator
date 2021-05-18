@@ -277,6 +277,8 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
 
         // fill battery capacity
         $('#battery_capacity').val(MISC.battery_capacity);
+        // next two lines might divide-by-zzero so check that first..
+        if ( MISC.battery_capacity == 0 ) MISC.battery_capacity = 0.01; // small but not zero
         $('#battery_capacity_warning').val(MISC.battery_capacity_warning * 100 / MISC.battery_capacity);
         $('#battery_capacity_critical').val(MISC.battery_capacity_critical * 100 / MISC.battery_capacity);
         $('#battery_capacity_unit').val(MISC.battery_capacity_unit);
@@ -325,14 +327,26 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
             }
         }
 
+        if (ARDUPILOT_PID_CONFIG.gyroscopeLpf == null ) ARDUPILOT_PID_CONFIG.gyroscopeLpf = 3; // hack puts it back at default
+
         $gyroLpf.val(ARDUPILOT_PID_CONFIG.gyroscopeLpf);
 
         $gyroLpf.change(function () {
-            ARDUPILOT_PID_CONFIG.gyroscopeLpf = $gyroLpf.val();
+            ARDUPILOT_PID_CONFIG.gyroscopeLpf = $gyroLpf.val()??3; // force nul to 3
+
+            var m = FC.getLooptimes();
+            var l = FC.getGyroLpfValues();
+            var s = ARDUPILOT_PID_CONFIG.gyroscopeLpf;
+            var r = l[s];
+            var t = r.tick;
+            var n = m[t];
+            var p = n.looptimes;
+
+            var x = FC.getLooptimes()[FC.getGyroLpfValues()[ARDUPILOT_PID_CONFIG.gyroscopeLpf].tick].looptimes;
 
             GUI.fillSelect(
                 $looptime,
-                FC.getLooptimes()[FC.getGyroLpfValues()[ARDUPILOT_PID_CONFIG.gyroscopeLpf].tick].looptimes,
+                x,
                 FC_CONFIG.loopTime,
                 'Hz'
             );

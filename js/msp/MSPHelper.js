@@ -1249,7 +1249,7 @@ var mspHelper = (function (gui) {
                 ARDUPILOT_PID_CONFIG.magHoldRateLimit = data.getUint8(5);
                 ARDUPILOT_PID_CONFIG.magHoldErrorLpfFrequency = data.getUint8(6);
                 ARDUPILOT_PID_CONFIG.yawJumpPreventionLimit = data.getUint16(7, true);
-                ARDUPILOT_PID_CONFIG.gyroscopeLpf = data.getUint8(9);
+                ARDUPILOT_PID_CONFIG.gyroscopeLpf = data.getUint8(9); //buzz
                 ARDUPILOT_PID_CONFIG.accSoftLpfHz = data.getUint8(10);
                 break;
 
@@ -3162,6 +3162,10 @@ var mspHelper = (function (gui) {
 
     self.encodeSetting = function (name, value) {
         return this._getSetting(name).then(function (setting) {
+            if (setting === null ) { 
+                console.log("null-setting. name:"+name+" value:"+value); 
+                return []; 
+            }
             if (setting.table && !Number.isInteger(value)) {
                 var found = false;
                 for (var ii = 0; ii < setting.table.values.length; ii++) {
