@@ -170,7 +170,7 @@ $(document).ready( function () {
                 content.empty();
 
                 // display loading screen
-                $('#cache .data-loading').clone().appendTo(content);
+                //$('#cache .data-loading').clone().appendTo(content);
 
                 function content_ready() {
                     GUI.tab_switch_in_progress = false;
