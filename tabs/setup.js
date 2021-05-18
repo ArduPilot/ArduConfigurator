@@ -189,8 +189,8 @@ TABS.setup.initialize = function (callback) {
 
 TABS.setup.initializeInstruments = function() {
     var options = {size:90, showBox : false, img_directory: 'images/flightindicators/'};
-    var attitude = window.jQuery.flightIndicator('#attitude', 'attitude', options);
-    var heading = window.jQuery.flightIndicator('#heading', 'heading', options);
+    var attitude = $.flightIndicator('#attitude', 'attitude', options);
+    var heading = $.flightIndicator('#heading', 'heading', options);
 
     this.updateInstruments = function() {
         attitude.setRoll(SENSOR_DATA.kinematics[0]);

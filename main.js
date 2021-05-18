@@ -18,14 +18,8 @@ let globalSettings = {
     proxyLayer: null
 };
 
-setTimeout(function (){
-
-    zzz123();
-    
-  }, 5000); // How long do you want the delay t
-  
-  //$(document).ready(
-  function zzz123() {
+ 
+$(document).ready( function () {
 
     // translate to user-selected language
     localize();
@@ -488,7 +482,7 @@ setTimeout(function (){
             updateActivatedTab();
         });
     });
-}//);
+});
 
 function catch_startup_time(startTime) {
     var endTime = new Date().getTime(),
