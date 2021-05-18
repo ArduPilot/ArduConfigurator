@@ -282,6 +282,12 @@ var MSP = {
     },
 
     send_message: function (code, data, callback_sent, callback_msp, protocolVersion) {
+
+        function getKeyByValue(object, value) {
+            return Object.keys(object).find(key => object[key] === value);
+          }
+          
+        console.log("MSP.send_message:"+getKeyByValue(MSPCodes,code))
         var payloadLength = data && data.length ? data.length : 0;
         var length;
         var buffer;
