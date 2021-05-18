@@ -180,7 +180,7 @@ GUI_control.prototype.content_ready = function (callback) {
     });
 
     $('.cf_tip').each(function() {
-       /* $(this).jBox('Tooltip', {
+        $(this).jBox('Tooltip', {
             delayOpen: 100,
             delayClose: 100,
             position: {
@@ -188,7 +188,7 @@ GUI_control.prototype.content_ready = function (callback) {
                 y: 'center'
             },
             outside: 'x'
-            }); */
+            }); 
         });
     });
 
