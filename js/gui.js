@@ -86,7 +86,7 @@ GUI_control.prototype.tab_switch_cleanup = function (callback) {
     if (this.active_tab) {
         TABS[this.active_tab].cleanup(callback);
     } else {
-        callback();
+        if(callback) callback();
     }
 };
 
