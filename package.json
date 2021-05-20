@@ -28,6 +28,8 @@
   "author": "davidbuzz",
   "license": "GPL-3.0",
   "dependencies": {
+    "jspack": "file:js/mavsp/local_modules/jspack",
+    "long": "file:js/mavsp/local_modules/long",
     "archiver": "^2.0.3",
     "bluebird": "3.4.1",
     "del": "^3.0.0",

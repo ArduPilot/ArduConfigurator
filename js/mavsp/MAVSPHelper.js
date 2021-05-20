@@ -1,6 +1,12 @@
 /*global $, SERVO_DATA, PID_names, ADJUSTMENT_RANGES, RXFAIL_CONFIG, SERVO_CONFIG*/
 //'use strict';
 
+//var {mavlink20, MAVLink20Processor} = require("./mav_v2.js"); 
+
+var logger  = null;
+var mpo = new MAVLink20Processor(logger, 255,190); // 255 is the mavlink sysid of this code as a GCS, as per mavproxy.
+
+
 var mspHelper = (function (gui) {
     var self = {};
 

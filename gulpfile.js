@@ -86,6 +86,12 @@ sources.Js = [
   //  './js/msp/MSPHelper.js',
   //  './js/msp/MSPchainer.js',
 
+    './js/mavsp/local_modules/jspack/jspack.js', //buzz
+    './js/mavsp/local_modules/long/src/long.js', //buzz
+    './js/mavsp/buffer-5.4.3a.js', //buzz
+    './js/mavsp/mav_compat.js', //buzz
+    './js/mavsp/mav_v2.js', //buzz
+
     './js/mavsp/MAVSPCodes.js', //buzz
     './js/mavsp/MAVSPHelper.js',//buzz
     './js/mavsp/MAVSPchainer.js',//buzz
