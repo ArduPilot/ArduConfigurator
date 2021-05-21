@@ -1,6 +1,34 @@
 //'use strict';
 
+var send_heartbeat_handler = function() {
+    //console.log("hb handler");
+       var heartbeat = new mavlink20.messages.heartbeat(); 
+          heartbeat.custom_mode = 963497464; // fieldtype: uint32_t  isarray: False 
+          heartbeat.type = 17; // fieldtype: uint8_t  isarray: False 
+          heartbeat.autopilot = 84; // fieldtype: uint8_t  isarray: False 
+          heartbeat.base_mode = 151; // fieldtype: uint8_t  isarray: False 
+          heartbeat.system_status = 218; // fieldtype: uint8_t  isarray: False 
+          heartbeat.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
+    
+          mpo.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
+}
+    
+var set_stream_rates = function(rate,target_system,target_component) {
 
+// mavproxy uses a stream_rate of 4 on its links by default, so we'll just use that...
+
+//target_system, target_component, req_stream_id, req_message_rate, start_stop
+
+    var rsr = new mavlink20.messages.request_data_stream(target_system,target_component,
+                                mavlink20.MAV_DATA_STREAM_ALL,rate, 1);
+
+    mpo.send(rsr); 
+    console.log('Set Stream Rates =4');
+}
+
+
+
+    
 /**
  *
  * @constructor

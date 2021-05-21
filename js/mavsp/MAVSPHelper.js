@@ -3,7 +3,45 @@
 
 //var {mavlink20, MAVLink20Processor} = require("./mav_v2.js"); 
 
+// create the output hooks for the parser/s
+// we overwrite the default send() instead of overwriting write() or using setConnection(), which don't know the ip or port info.
+// and we accept ip/port either as part of the mavmsg object, or as a sysid in the OPTIONAL 2nd parameter
+generic_link_sender = function(mavmsg,sysid) {
+    console.log("generic send!");
+    // this is really just part of the original send()
+    var buf = mavmsg.pack(this);  //Buffer
+
+    var abuf = toArrayBuffer(buf); // ArrayBuffer
+
+    //this.write( buf ); // already open, we hope
+
+    var message = new MspMessageClass();
+        message.code = null;//code;
+        message.messageBody = b;
+        message.onFinish  = function (sendInfo) {    publicScope.freeSoftLock();  }
+
+       // message.onSend  = null;//callback_sent;
+        /* In case of MSP_REBOOT special procedure is required
+         */
+        //if (code == MSPCodes.MSP_SET_REBOOT || code == MSPCodes.MSP_EEPROM_WRITE) {
+        //    message.retryCounter = 10;
+       // }
+
+
+
+    helper.mspQueue.put(message);
+
+
+    // this is really just part of the original send()
+    this.seq = (this.seq + 1) % 256;
+    this.total_packets_sent +=1;
+    this.total_bytes_sent += buf.length;
+}
+
 var logger  = null;
+
+MAVLink20Processor.prototype.send = generic_link_sender; // tell library how to send
+
 var mpo = new MAVLink20Processor(logger, 255,190); // 255 is the mavlink sysid of this code as a GCS, as per mavproxy.
 
 
@@ -61,6 +99,8 @@ var mspHelper = (function (gui) {
     /**
      *
      * @param {MSP} dataHandler
+     * 
+     * note: this pprocesses INCOMING to the GCS data...  
      */
     self.processData = function (dataHandler) {
         var data = new DataView(dataHandler.message_buffer, 0), // DataView (allowing us to view arrayBuffer as struct/union)

@@ -1,3 +1,5 @@
+// a ingle jspack instance/ singleton
+jspack = new JSPack();
 
 // based on a similar node feature in the 'util' library
 inherits = function(ctor, superCtor) {
