@@ -278,13 +278,22 @@ function onOpen(openInfo) {
         FC.resetState();
 
         // request configuration data. Start with MSPv1 and
-        // upgrade to MSPv2 if possible.
+        // upgrade to MSPv2 if possible, and 
+        // upgrade to MAVSPv2 if possible.  ( this is mavlinkV2) 
         MSP.protocolVersion = MSP.constants.PROTOCOL_V1;
         MSP.send_message(MSPCodes.MSP_API_VERSION, false, false, function () {
+            
+            // promote to MSPv2
             if (CONFIG.apiVersion && semver.gte(CONFIG.apiVersion, "2.0.0")) {
                 MSP.protocolVersion = MSP.constants.PROTOCOL_V2;
             }
             GUI.log(chrome.i18n.getMessage('apiVersionReceived', [CONFIG.apiVersion]));
+
+            // promote to MAVSPv2
+            if (CONFIG.apiVersion && semver.gte(CONFIG.apiVersion, "2.3.0")) { // buzz todo change this for ardu
+                MSP.protocolVersion = MSP.constants.PROTOCOL_MAV2;
+            }
+            GUI.log(chrome.i18n.getMessage('apiVersionReceived', [CONFIG.apiVersion+1]));//hack
 
             MSP.send_message(MSPCodes.MSP_FC_VARIANT, false, false, function () {
                 if ( (CONFIG.flightControllerIdentifier == 'ARDUPILOT') || (CONFIG.flightControllerIdentifier == 'INAV') ){
