@@ -96,7 +96,7 @@ mavlink20.message.prototype.set = function(args,verbose) {
                     //console.log(this.fieldnames);
 // then modify
     // non-underscore alternatave to the _.each
-    foreach.each(this.fieldnames, function(e, i) {
+    foreach(this.fieldnames, function(e, i) {
         this[e] = args[i];
     }, this);
 };
@@ -16097,6 +16097,8 @@ MAVLink20Processor.prototype.decode = function(msgbuf) {
 
     }  
  
+    // non-node ism.
+    //if( false === mavlink20.map.hasOwnProperty(msgId) ) { 
     if( false === _.has(mavlink20.map, msgId) ) {
         throw new Error("Unknown MAVLink message ID (" + msgId + ")");
     }
@@ -16196,7 +16198,7 @@ MAVLink20Processor.prototype.decode = function(msgbuf) {
 
     if (elementsInMsg == actualElementsInMsg) {
         // non-underscore alternatave to the _.each
-        foreach.each(t, function(e, i, l) {
+        foreach(t, function(e, i, l) {
             args[i] = t[decoder.order_map[i]]
         });
     } else {
