@@ -89,6 +89,14 @@ var optimizeCb = function(func, context, argCount) {
   };
 };
 
+// instantiate minimal fake underscore obj as mav_v2.js generated code uses _.has
+_ = {
+  has: function(map, msgId) {
+    return map.hasOwnProperty(msgId)
+  }
+}; 
+
+
 function foreach(obj, iteratee, context) {
   iteratee = optimizeCb(iteratee, context);
   var i, length;
