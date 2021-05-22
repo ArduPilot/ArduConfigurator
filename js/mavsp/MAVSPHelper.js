@@ -16,8 +16,8 @@ generic_link_sender = function(mavmsg,sysid) {
     //this.write( buf ); // already open, we hope
 
     var message = new MspMessageClass();
-        message.code = null;//code;
-        message.messageBody = b;
+        message.code = 1;//code;
+        message.messageBody = abuf;
         message.onFinish  = function (sendInfo) {    publicScope.freeSoftLock();  }
 
        // message.onSend  = null;//callback_sent;

@@ -288,6 +288,7 @@ FONT.upload = function (callback) {
             // Force usage of V1/V2 protocol to workaround the 64 byte write bug
             // on F3 when the configurator is running on macOS
             var proto = next <= 255 ? MSP.constants.PROTOCOL_V1 : MSP.constants.PROTOCOL_V2;
+            //var proto = next <= 255 ? MSP.constants.PROTOCOL_V1 : MSP.constants.PROTOCOL_V2; PROTOCOL_MAV2?
             var data = FONT.msp.encode(next);
             return MSP.promise(MSPCodes.MSP_OSD_CHAR_WRITE, data, proto);
         });

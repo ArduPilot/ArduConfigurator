@@ -98,42 +98,42 @@ var MSP = {
 
     // 
     read: function (readInfo) {
-        var data = new Uint8Array(readInfo.data);
-
-        // add bytes into mavlink feed here?
-
-        for (var i = 0; i < data.length; i++) { // don't need to do it byte-at-a-time, but fofr now we do
-
-
-                    packetlist = mpo.parseBuffer(i); // also 'emits' msg on completion of each packet
-                    // filter the packets
-                    function isGood(element, index, array) {
-                    return element._id != -1;
-                    }
-                    // if there's no readable packets in the byte stream, dont try to iterate over it
-                    if (packetlist == null ) return;
-                    var goodpackets = packetlist.filter(isGood);
-                    console.log("packets:",packetlist.length,"good:",goodpackets.length)
+        console.log("MSP read serial bytes len:"+JSON.stringify(readInfo.data.byteLength));
         
-                    // remote end doesnt know were mavlink2, send em a mavlink2 packet...
-                    if ( goodpackets.length == 0 ) {
-                        this.heartbeat()
-                        //set_stream_rates(4);// no target sys or comp, guess?
-                    }
-        
-                    if (goodpackets[0] == undefined ) return;
-        
-                    if (this.streamrate == undefined) {
-                        set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
-                        this.streamrate = 4; 
-                    }
+       var data = new Uint8Array(readInfo.data); // from Buffer to byte array
 
-              //      this._dispatch_message(data[i]);
-          
-                 //   helper.mspQueue.freeHardLock();
-                  //  console.log('Unknown state detected: ' + this.state);
-          //  }
+        // add bytes into mavlink feed here:
+        packetlist = mpo.parseBuffer(data); // also 'emits' msg on completion of each packet
+
+        //console.log("data[]="+JSON.stringify(data)); // raw incoming data
+
+        // filter the packets
+        function isGood(element, index, array) {
+        return element._id != -1;
         }
+        // if there's no readable packets in the byte stream, dont try to iterate over it
+        if (packetlist == null ) return;
+        var goodpackets = packetlist.filter(isGood);
+        console.log("packets:",packetlist.length,"good:",goodpackets.length)
+
+
+        console.log("packets:"+JSON.stringify(packetlist[0]))
+
+
+        // remote end doesnt know were mavlink2, send em a mavlink2 packet...
+        if ( goodpackets.length == 0 ) {
+            //this.heartbeat()
+            //set_stream_rates(4);// no target sys or comp, guess?
+        }
+
+        if (goodpackets[0] == undefined ) return;
+
+        if (this.streamrate == undefined) {
+            set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
+            this.streamrate = 4; 
+        }
+
+       
         this.last_received_timestamp = Date.now();
     },
 
@@ -222,8 +222,9 @@ var MSP = {
      var message = new MspMessageClass();
          message.code = 1;//code;
          message.messageBody = abuf;
-         message.onFinish  = null;//callback_msp;
-         message.onSend  = null;//callback_sent;
+         message.onFinish  = function (sendInfo) {    publicScope.freeSoftLock();  }
+
+        // message.onSend  = null;//callback_sent;
          /* In case of MSP_REBOOT special procedure is required
           */
          //if (code == MSPCodes.MSP_SET_REBOOT || code == MSPCodes.MSP_EEPROM_WRITE) {
