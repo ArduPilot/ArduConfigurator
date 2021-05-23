@@ -124,6 +124,7 @@ var mspHelper = (function (gui) {
                 system_status: 3
                 type: 2
                 */
+
                 // buzz todo
                 break;
             case mavlink20.MAVLINK_MSG_ID_TIMESYNC:
@@ -131,6 +132,7 @@ var mspHelper = (function (gui) {
                 tc1: (3) [0, 0, false]
                 ts1: (3) [3709043417, 1904, false]
                 */
+
                 // buzz todo
                 break;
             case mavlink20.MAVLINK_MSG_ID_HWSTATUS:
@@ -138,6 +140,8 @@ var mspHelper = (function (gui) {
                 I2Cerr: 0
                 Vcc: 5122
                 */
+                CONFIG.i2cError = mavmsg.I2Cerr;
+                ANALOG.voltage = mavmsg.Vcc / 1000.0;  // cpu volts
                 // buzz todo
                 break;
             case mavlink20.MAVLINK_MSG_ID_MOUNT_STATUS:
@@ -229,6 +233,14 @@ var mspHelper = (function (gui) {
                 voltages: (10) [510, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535]
                 voltages_ext: (4) [0, 0, 0, 0]
                 */
+                ANALOG.battery_full_when_plugged_in = true; // buzz hardcoded hack to match ardu
+                ANALOG.cell_count = 4; // buzz
+                ANALOG.voltage =  mavmsg.voltages[0] / 100.0; // buzz?
+                ANALOG.amperage = mavmsg.current_battery / 100.0; //?
+                ANALOG.mAhdrawn = mavmsg.current_consumed; 
+                ANALOG.battery_remaining_capacity = mavmsg.battery_remaining; //one of these is 
+                ANALOG.battery_percentage = mavmsg.battery_remaining;         //wrong .buzz
+                // todo 'id' not handled for anything other than 'zero'  for first battrery.
 
                 // buzz todo
                 break;
@@ -251,6 +263,7 @@ var mspHelper = (function (gui) {
 
                 // buzz todo
                 break;
+
             case mavlink20.MAVLINK_MSG_ID_GPS_RAW_INT:
                 /* ["time_usec", "fix_type", "lat", "lon", "alt", "eph", "epv", "vel", "cog", "satellites_visible", "alt_ellipsoid", "h_acc", "v_acc", "vel_acc", "hdg_acc", "yaw"]
                 alt: 0
@@ -270,6 +283,31 @@ var mspHelper = (function (gui) {
                 vel_acc: 0
                 yaw: 0
                 */
+               //https://github.com/mavlink/c_library_v1/blob/master/common/mavlink_msg_gps_raw_int.h
+               /*
+                @param time_usec [us] Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number.
+                * @param fix_type  GPS fix type.
+                * @param lat [degE7] Latitude (WGS84, EGM96 ellipsoid)
+                * @param lon [degE7] Longitude (WGS84, EGM96 ellipsoid)
+                * @param alt [mm] Altitude (MSL). Positive for up. Note that virtually all GPS modules provide the MSL altitude in addition to the WGS84 altitude.
+                * @param eph  GPS HDOP horizontal dilution of position (unitless * 100). If unknown, set to: UINT16_MAX
+                * @param epv  GPS VDOP vertical dilution of position (unitless * 100). If unknown, set to: UINT16_MAX
+                * @param vel [cm/s] GPS ground speed. If unknown, set to: UINT16_MAX
+                * @param cog [cdeg] Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
+                * @param satellites_visible  Number of satellites visible. If unknown, set to UINT8_MAX
+                * */
+
+                GPS_DATA.fix = mavmsg.fix_type ; // data.getUint8(0);  MSPCodes.MSP_RAW_GPS:
+                GPS_DATA.numSat = mavmsg.satellites_visible ;// data.getUint8(1);MSPCodes.MSP_RAW_GPS:
+                GPS_DATA.lat = mavmsg.lat ;// data.getInt32(2, true);MSPCodes.MSP_RAW_GPS:
+                GPS_DATA.lon =  mavmsg.lon ;// data.getInt32(6, true);MSPCodes.MSP_RAW_GPS:
+                GPS_DATA.alt =  mavmsg.alt ;//data.getInt16(10, true);MSPCodes.MSP_RAW_GPS:
+                GPS_DATA.speed = mavmsg.vel ;//data.getUint16(12, true);MSPCodes.MSP_RAW_GPS:
+                GPS_DATA.ground_course = mavmsg.cog ;//data.getUint16(14, true);MSPCodes.MSP_RAW_GPS:
+                GPS_DATA.hdop = mavmsg.eph ;//data.getUint16(16, true);MSPCodes.MSP_RAW_GPS:
+
+                // todo none of the _acc gps acceleeration values r used?
+                // vdop is unued
 
                 // buzz todo
                 break;
@@ -316,10 +354,27 @@ var mspHelper = (function (gui) {
                 zgyro: 0
                 zmag: -337
                 */
+                // improperly scaled
+                SENSOR_DATA.accelerometer[0] = mavmsg.xacc / 512; // the 512 scaling is from MSPCodes.MSP_RAW_IMU
+                SENSOR_DATA.accelerometer[1] = mavmsg.yacc / 512; // MSPCodes.MSP_RAW_IMU
+                SENSOR_DATA.accelerometer[2] = mavmsg.zacc / 512; // MSPCodes.MSP_RAW_IMU
+
+                 // properly scaled?
+                 SENSOR_DATA.gyroscope[0] = mavmsg.xgyro * (4 / 16.4);// MSPCodes.MSP_RAW_IMU
+                 SENSOR_DATA.gyroscope[1] = mavmsg.ygyro * (4 / 16.4);// MSPCodes.MSP_RAW_IMU
+                 SENSOR_DATA.gyroscope[2] = mavmsg.zgyro * (4 / 16.4);// MSPCodes.MSP_RAW_IMU
+
+                // no clue about scaling factor
+                SENSOR_DATA.magnetometer[0] = mavmsg.xmag / 1090;// MSPCodes.MSP_RAW_IMU
+                SENSOR_DATA.magnetometer[1] = mavmsg.ymag / 1090;// MSPCodes.MSP_RAW_IMU
+                SENSOR_DATA.magnetometer[2] = mavmsg.zmag / 1090;// MSPCodes.MSP_RAW_IMU
 
                 // buzz todo
+                // unhandled :  time, temp, and id
+                // WARNING an ID != 0 is a different IMU, unhandled 
+
                 break;
-            case mavlink20.MAVLINK_MSG_ID_RC_CHANNELS:
+            case mavlink20.MAVLINK_MSG_ID_RC_CHANNELS: 
                 /* ["time_boot_ms", "chancount", "chan1_raw", "chan2_raw", "chan3_raw", "chan4_raw", "chan5_raw", "chan6_raw", "chan7_raw", "chan8_raw", "chan9_raw", "chan10_raw", "chan11_raw", "chan12_raw", "chan13_raw", "chan14_raw", "chan15_raw", "chan16_raw", "chan17_raw", "chan18_raw", "rssi"]
                 chan1_raw: 0
                 chan2_raw: 0
@@ -343,6 +398,29 @@ var mspHelper = (function (gui) {
                 rssi: 0
                 time_boot_ms: 5162925
                 */
+                RC.active_channels = mavmsg.chancount; // MSPCodes.MSP_RC
+                RC.channels[0] = mavmsg.chan1_raw;     // MSPCodes.MSP_RC
+                RC.channels[1] = mavmsg.chan2_raw;     // etc..
+                RC.channels[2] = mavmsg.chan3_raw;
+                RC.channels[3] = mavmsg.chan4_raw;
+                RC.channels[4] = mavmsg.chan5_raw;
+                RC.channels[5] = mavmsg.chan6_raw;
+                RC.channels[6] = mavmsg.chan7_raw;
+                RC.channels[7] = mavmsg.chan8_raw;
+                RC.channels[8] = mavmsg.chan9_raw;
+                RC.channels[9] = mavmsg.chan10_raw;
+                RC.channels[10] = mavmsg.chan11_raw;
+                RC.channels[11] = mavmsg.chan12_raw;
+                RC.channels[12] = mavmsg.chan13_raw;
+                RC.channels[13] = mavmsg.chan14_raw;
+                RC.channels[14] = mavmsg.chan15_raw;
+                RC.channels[15] = mavmsg.chan16_raw;
+                RC.channels[16] = mavmsg.chan17_raw;
+                RC.channels[17] = mavmsg.chan18_raw;
+
+                // buzz - one of these is wrong? probably scaled wrong too
+                MISC.rssi_channel = mavmsg.rssi  ; //SPCodes.MSPV2_ARDUPILOT_MISC: 
+                ANALOG.rssi = mavmsg.rssi; //data.getUint16(offset, true); // 0-1023 MSPCodes.MSPV2_ARDUPILOT_ANALOG:
 
                 // buzz todo
                 break;
@@ -367,6 +445,27 @@ var mspHelper = (function (gui) {
                 servo16_raw: 0
                 time_usec: 867958229
                 */
+               // buzz randomly chose 8 'servos' and 8 'motors here', msp isn't that strict.
+                // first 8 ardupilot servos are servos 
+                SERVO_DATA[0] = mavmsg.servo1_raw;  //MSPCodes.MSP_SERVO
+                SERVO_DATA[1] = mavmsg.servo2_raw;  //MSPCodes.MSP_SERVO
+                SERVO_DATA[2] = mavmsg.servo3_raw;  //MSPCodes.MSP_SERVO
+                SERVO_DATA[3] = mavmsg.servo4_raw;  //MSPCodes.MSP_SERVO
+                SERVO_DATA[4] = mavmsg.servo5_raw;  //MSPCodes.MSP_SERVO
+                SERVO_DATA[5] = mavmsg.servo6_raw;  //MSPCodes.MSP_SERVO
+                SERVO_DATA[6] = mavmsg.servo7_raw;  //MSPCodes.MSP_SERVO
+                SERVO_DATA[7] = mavmsg.servo8_raw;  //MSPCodes.MSP_SERVO
+                //- second 8 ardupilot servos are 'motors'..?
+                MOTOR_DATA[0] = mavmsg.servo9_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[1] = mavmsg.servo10_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[2] = mavmsg.servo11_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[3] = mavmsg.servo12_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[4] = mavmsg.servo13_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[5] = mavmsg.servo14_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[6] = mavmsg.servo15_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[7] = mavmsg.servo16_raw;  //MSPCodes.MSP_SERVO
+
+                // todo 'port' is unhandled. dont know what ardu uses it for?
 
                 // buzz todo
                 break;
@@ -453,6 +552,7 @@ var mspHelper = (function (gui) {
                 vy: 0
                 vz: 1
                 */
+                //GPS_DATA.fix = mavmsg.fix_type ; // data.getUint8(0);  MSPCodes.MSP_RAW_GPS:
 
                 // buzz todo
                 break;
@@ -466,7 +566,12 @@ var mspHelper = (function (gui) {
                 yaw: 3.117539882659912
                 yawspeed: 0.000008267234079539776
                 */
-            
+                SENSOR_DATA.kinematics[0]  = mavmsg.roll / 10.0; // x   MSPCodes.MSP_ATTITUDE:
+                SENSOR_DATA.kinematics[1]  = mavmsg.pitch / 10.0; // y  MSPCodes.MSP_ATTITUDE:
+                SENSOR_DATA.kinematics[2]  = mavmsg.yaw; // z           MSPCodes.MSP_ATTITUDE:
+
+                // the thre 'speed' values are unused.
+
                 // buzz todo
                 break;
                                                             
@@ -489,6 +594,31 @@ var mspHelper = (function (gui) {
                 raw_press: 102503
                 raw_temp: 5083
                 */
+                
+                //MSPCodes.MSP_CALIBRATION_DATA: ?
+
+                // i have NO idea if CALIBRATION_DATA.accZero  or  CALIBRATION_DATA.accGain should get these:
+                CALIBRATION_DATA.accZero.X = mavmsg.accel_cal_x ;
+                CALIBRATION_DATA.accZero.Y =  mavmsg.accel_cal_y ;
+                CALIBRATION_DATA.accZero.Z =  mavmsg.accel_cal_z ;
+                //?
+                //CALIBRATION_DATA.accGain.X = data.getInt16(7, true);
+                //CALIBRATION_DATA.accGain.Y = data.getInt16(9, true);
+                //CALIBRATION_DATA.accGain.Z = data.getInt16(11, true);
+
+                // i have NO idea if CALIBRATION_DATA.magZero  or  CALIBRATION_DATA.magGain should get these:
+                CALIBRATION_DATA.magZero.X = mavmsg.mag_ofs_x ;
+                CALIBRATION_DATA.magZero.Y = mavmsg.mag_ofs_y ;
+                CALIBRATION_DATA.magZero.Z = mavmsg.mag_ofs_z ;
+                //?
+                //CALIBRATION_DATA.magGain.X = data.getInt16(21, true);
+                //CALIBRATION_DATA.magGain.Y = data.getInt16(23, true);
+                //CALIBRATION_DATA.magGain.Z = data.getInt16(25, true);
+
+                // todo used here: 
+                //raw_temp , raw_press 
+                //and three gyro_cal_x/gyro_cal_y/gyro_cal_z
+                // and mag_declination
             
                 // buzz todo
                 break;
@@ -507,7 +637,7 @@ var mspHelper = (function (gui) {
             case mavlink20.MAVLINK_MSG_ID_STATUSTEXT:
                 /* ["severity", "text", "id", "chunk_seq"]
                 severity: 2
-                text: "PreArm: Throttle below Failsafe[][][][][][][]][][][]]]]"
+                text: "PreArm: Throttle below Failsafe[][][][][][][]][][][]][][]][]][][]]"
                 chunk_seq: 0
                 id: 0
                 */
@@ -555,7 +685,7 @@ var mspHelper = (function (gui) {
             colorCount,
             color;
         if (!dataHandler.unsupported || dataHandler.unsupported) switch (dataHandler.code) {
-            case MSPCodes.MSP_IDENT:
+         /*   case MSPCodes.MSP_IDENT:
                 //FIXME remove this frame when proven not needed
                 console.log('Using deprecated msp command: MSP_IDENT');
                 // Deprecated
@@ -573,10 +703,10 @@ var mspHelper = (function (gui) {
                 CONFIG.profile = data.getUint8(10);
                 gui.updateProfileChange();
                 gui.updateStatusBar();
-                break;
+                break; */
             case MSPCodes.MSP_STATUS_EX:
                 CONFIG.cycleTime = data.getUint16(0, true);
-                CONFIG.i2cError = data.getUint16(2, true);
+                CONFIG.i2cError = data.getUint16(2, true); // MAVLINK_MSG_ID_HWSTATUS.I2Cerr
                 CONFIG.activeSensors = data.getUint16(4, true);
                 CONFIG.profile = data.getUint8(10);
                 CONFIG.cpuload = data.getUint16(11, true);
