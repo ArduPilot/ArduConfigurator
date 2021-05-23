@@ -105,9 +105,11 @@ TABS.outputs.initialize = function (callback) {
 
             $escRate.find('option').remove();
 
-            for (var i in protocolData.rates) {
-                if (protocolData.rates.hasOwnProperty(i)) {
-                    $escRate.append('<option value="' + i + '">' + protocolData.rates[i] + '</option>');
+            if (protocolData) {
+                for (var i in protocolData.rates) {
+                    if (protocolData.rates.hasOwnProperty(i)) {
+                        $escRate.append('<option value="' + i + '">' + protocolData.rates[i] + '</option>');
+                    }
                 }
             }
 
@@ -135,7 +137,8 @@ TABS.outputs.initialize = function (callback) {
                 }
             }
 
-            if (protocolData.message !== null) {
+
+            if (protocolData && protocolData.message !== null) {
                 $('#esc-protocol-warning').html(chrome.i18n.getMessage(protocolData.message));
                 $('#esc-protocol-warning').show();
             } else {
