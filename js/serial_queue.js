@@ -144,11 +144,13 @@ helper.mspQueue = (function (serial, MSP) {
             publicScope.setHardLock();
 
             request.timer = setTimeout(function () {
-                console.log('MSP data request timed-out: ' + request.code);
+                console.log('MSP data request timed-out. code:' + request.code +" name:"+ request.name);
                 /*
                  * Remove current callback
                  */
-                MSP.removeCallback(request.code);
+                //MSP.removeCallback(request.code); // remove all pending callbacks for the same packet type?
+                clearTimeout(request.timer); // just remove one
+
 
                 /*
                  * To prevent infinite retry situation, allow retry only while counter is positive

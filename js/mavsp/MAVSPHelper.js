@@ -7,7 +7,7 @@
 // we overwrite the default send() instead of overwriting write() or using setConnection(), which don't know the ip or port info.
 // and we accept ip/port either as part of the mavmsg object, or as a sysid in the OPTIONAL 2nd parameter
 generic_link_sender = function(mavmsg,sysid) {
-    console.log("generic send!");
+    //console.log("generic sender queuing:"+mavmsg._name);
     // this is really just part of the original send()
     var buf = mavmsg.pack(this);  //Buffer
 
@@ -16,9 +16,20 @@ generic_link_sender = function(mavmsg,sysid) {
     //this.write( buf ); // already open, we hope
 
     var message = new MspMessageClass();
-        message.code = 1;//code;
+        message.code = 1;//code
+        message.name = mavmsg._name;
         message.messageBody = abuf;
-        message.onFinish  = function (sendInfo) {    publicScope.freeSoftLock();  }
+        message.onSend  = function (sendInfo) {  
+            console.log("msg sent! "+message.name);
+
+            // after a successful send, stop the timeout counter 
+            MSP.removeCallback(message.code);
+            //clearTimeout(this.timer);
+
+           }
+        message.onFinish  = function (sendInfo) {  
+            publicScope.freeSoftLock(); 
+           }
 
        // message.onSend  = null;//callback_sent;
         /* In case of MSP_REBOOT special procedure is required

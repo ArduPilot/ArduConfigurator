@@ -277,8 +277,10 @@ function onOpen(openInfo) {
 
         FC.resetState();
 
-        // the following stuff happens once, when the serial port is iopened. maybe 
-        set_stream_rates(); //buzz?
+        // the following stuff happens once, when the serial port is iopened.  for now, we actually 
+        // move this fron onOpen() to read: function (readInfo) in mavsp.js
+        //send_heartbeat_handler(); // shrow a heartbeat first, blindly
+        //set_stream_rates(); //buzz?
 
         // request configuration data. Start with MSPv1 and
         // upgrade to MSPv2 if possible, and 

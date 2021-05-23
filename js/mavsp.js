@@ -37,6 +37,7 @@ var MspMessageClass = function () {
 
     var publicScope = {};
 
+    publicScope.name = null;
     publicScope.code = null;
     publicScope.messageBody = null;
     publicScope.onFinish = null;
@@ -98,7 +99,7 @@ var MSP = {
 
     // 
     read: function (readInfo) {
-        console.log("MSP read serial bytes len:"+JSON.stringify(readInfo.data.byteLength));
+       // console.log("MSP read serial bytes len:"+JSON.stringify(readInfo.data.byteLength));
         
        var data = new Uint8Array(readInfo.data); // from Buffer to byte array
 
@@ -109,16 +110,15 @@ var MSP = {
 
         // filter the packets
         function isGood(element, index, array) {
-        return element._id != -1;
+            //console.log("packet:"+JSON.stringify(element._name)); // emits name of each arriving mavlink packet
+            return element._id != -1;
         }
         // if there's no readable packets in the byte stream, dont try to iterate over it
         if (packetlist == null ) return;
         var goodpackets = packetlist.filter(isGood);
-        console.log("packets:",packetlist.length,"good:",goodpackets.length)
 
-
-        console.log("packets:"+JSON.stringify(packetlist[0])) // just dumps the first one in the list 
-
+        //console.log("packets:",packetlist.length,"good:",goodpackets.length)
+        //console.log("packet:"+JSON.stringify(packetlist[0])) // just dumps the first one in the list 
 
         // remote end doesnt know were mavlink2, send em a mavlink2 packet...
         if ( goodpackets.length == 0 ) {
@@ -129,6 +129,7 @@ var MSP = {
         if (goodpackets[0] == undefined ) return;
 
         if (this.streamrate == undefined) {
+            send_heartbeat_handler(); // shrow a heartbeat first, blindly?
             set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
             this.streamrate = 4; 
         }
@@ -210,35 +211,48 @@ var MSP = {
             protocolVersion = this.protocolVersion = this.constants.PROTOCOL_MAV2;
         }
 
-        console.log("MSP.send_message:"+getKeyByValue(MSPCodes,code)+" vers:"+protocolVersion)
 
+    // buzz todo map roughly from MSPCodes.code -> to one of the mavlink20.messages.xxxxx such as mavlink20.messages.heartbeat
+        // these are all OUTGOING packts from GCS to vehicle.....
+    
+
+    switch(code){
+        case MSPCodes.MSP_SENSOR_STATUS:
+            // buzz todo
+            break;
+        case MSPCodes.MSPV2_ARDUPILOT_STATUS:
+
+            //heartbeat isn't realy but its sent often enough 
+            var heartbeat = new mavlink20.messages.heartbeat(); 
+            heartbeat.custom_mode = 963497464; // fieldtype: uint32_t  isarray: False 
+            heartbeat.type = 17; // fieldtype: uint8_t  isarray: False 
+            heartbeat.autopilot = 84; // fieldtype: uint8_t  isarray: False 
+            heartbeat.base_mode = 151; // fieldtype: uint8_t  isarray: False 
+            heartbeat.system_status = 218; // fieldtype: uint8_t  isarray: False 
+            heartbeat.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
+            mpo.send(heartbeat);
+
+            // buzz todo
+            break;
+        case MSPCodes.MSP_ACTIVEBOXES:
+            // buzz todo
+            break;
+        case MSPCodes.MSPV2_ARDUPILOT_ANALOG:
+            // buzz todo
+            break;
+        case MSPCodes.MSP_BOXNAMES:
+            // buzz todo
+            break;
+        case MSPCodes.MSP_DATAFLASH_SUMMARY:
+            // buzz todo
+            break;
+
+        // buzz todo more
+        default:
+            console.log("UNHANDLED MSP.send_message:"+getKeyByValue(MSPCodes,code)+" vers:"+protocolVersion)
+
+    }
                 
-    var heartbeat = new mavlink20.messages.heartbeat(); 
-    heartbeat.custom_mode = 963497464; // fieldtype: uint32_t  isarray: False 
-    heartbeat.type = 17; // fieldtype: uint8_t  isarray: False 
-    heartbeat.autopilot = 84; // fieldtype: uint8_t  isarray: False 
-    heartbeat.base_mode = 151; // fieldtype: uint8_t  isarray: False 
-    heartbeat.system_status = 218; // fieldtype: uint8_t  isarray: False 
-    heartbeat.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
-
-
-    var buf = heartbeat.pack(mpo); //Buffer
-
-    var abuf = toArrayBuffer(buf); // ArrayBuffer
-
- 
-     var message = new MspMessageClass();
-         message.code = 1;//code;
-         message.messageBody = abuf;
-         message.onFinish  = function (sendInfo) {    publicScope.freeSoftLock();  }
-
-        // message.onSend  = null;//callback_sent;
-         /* In case of MSP_REBOOT special procedure is required
-          */
-         //if (code == MSPCodes.MSP_SET_REBOOT || code == MSPCodes.MSP_EEPROM_WRITE) {
-         //    message.retryCounter = 10;
-        // }
-     helper.mspQueue.put(message);
 
         return true;
     },
