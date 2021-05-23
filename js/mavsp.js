@@ -10,7 +10,7 @@ var send_heartbeat_handler = function() {
           heartbeat.system_status = 218; // fieldtype: uint8_t  isarray: False 
           heartbeat.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
     
-          mpo.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
+          mavParserObj.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
 }
     
 var set_stream_rates = function(rate,target_system,target_component) {
@@ -22,11 +22,142 @@ var set_stream_rates = function(rate,target_system,target_component) {
     var rsr = new mavlink20.messages.request_data_stream(target_system,target_component,
                                 mavlink20.MAV_DATA_STREAM_ALL,rate, 1);
 
-    mpo.send(rsr); 
+    mavParserObj.send(rsr); 
     console.log('Set Stream Rates =4');
 }
 
 
+//     specific msg handler
+var heartbeat_handler =  function(message) {
+    //console.log(message);
+    var tmp_sysid = message._header.srcSystem;
+
+    // don't allow messages that appear to come from 255 to be hadled.
+    if (message._header.srcSystem == 255 ) { return;  }
+
+    // todo buzz more
+}
+mavParserObj.on('HEARTBEAT', heartbeat_handler);
+
+// Attach an event handler for any valid MAVLink message - we use this mostly for unknown packet types, console.log and debug messages. 
+// the majority of specific responses to specifc messages are not handled in the 'generic' handler, but in specific message handlers for each 
+// type of message.   eg mavlinkParser1.on('HEATBEAT') is better than here, as this 'generic' block might go away at some point.
+var generic_message_handler = function(message) {
+    //console.log(message); uncomment to see fully parsed arriving packets in all their glory
+
+    // don't dissplay or handle parsing errors -  ie Bad prefix errors, but allow signing errors thru
+    if ((message._id == -1 ) && (message._reason != 'Invalid signature') ) { return;}
+
+    // untargeted packets..   todo
+    if (message.target_system == 0 ) { }
+
+    // for packets arriving in from a --out target, their target sysid is NOT us...
+    if ((message.target_system < 250 ) && (message.target_system != 0) )  { 
+        /*console.log('--out sending:',message._name); */
+         mpo.send(message);   
+    } 
+
+    // console.log all the uncommon message types we DONT list here. 
+    if ( ! ['GPS_RAW_INT', 'VFR_HUD', 'ATTITUDE', 'SYS_STATUS', 'GLOBAL_POSITION_INT', 'HEARTBEAT','VIBRATION',
+            'BATTERY_STATUS', 'TERRAIN_REPORT', 'WIND', 'HWSTATUS', 'AHRS', 'AHRS2', 'AHRS3',
+            'SIMSTATE', 'RC_CHANNELS','RC_CHANNELS_RAW', 'SERVO_OUTPUT_RAW', 'LOCAL_POSITION_NED',
+            'MEMINFO',  'POWER_STATUS', 'SCALED_PRESSURE','SCALED_PRESSURE2', 'SCALED_IMU','SCALED_IMU2','SCALED_IMU3', 'RAW_IMU',
+            'EKF_STATUS_REPORT', 'SYSTEM_TIME', 'MISSION_CURRENT' , 'SENSOR_OFFSETS', 
+            'TIMESYNC', 'PARAM_VALUE', 'HOME_POSITION', 'POSITION_TARGET_GLOBAL_INT',
+            'NAV_CONTROLLER_OUTPUT', 'STATUSTEXT' , 'COMMAND_ACK' , 
+            'MISSION_ITEM', 'MISSION_ITEM_INT','MISSION_COUNT','MISSION_REQUEST', 'MISSION_ACK',
+            'AIRSPEED_AUTOCAL', 'MISSION_ITEM_REACHED' , 'STAT_FLTTIME' ,'AUTOPILOT_VERSION' ,
+             'FENCE_STATUS' , 'AOA_SSA' , 'GPS_GLOBAL_ORIGIN', 'TERRAIN_REQUEST', 
+            'FILE_TRANSFER_PROTOCOL', 'MOUNT_STATUS','AUTOPILOT_VERSION_REQUEST',
+            'REQUEST_DATA_STREAM', 'PARAM_REQUEST_READ', 'COMMAND_LONG', 'PARAM_REQUEST_LIST',
+            'SETUP_SIGNING', 'SET_MODE',  'MISSION_REQUEST_INT', 'FILE_TRANSFER_PROTOCOL', 'MISSION_REQUEST_LIST',
+            'PARAM_SET', 'TERRAIN_DATA',
+            ].includes(message._name) ) { 
+            
+	console.log('unhandled msg type - please add it to the list....:');
+	console.log(message);  // emit any message type that we don't list above, as we dont know about it...
+    } 
+    // log PARAM_VALUE differently to exclude common ones like where param_id starts with 'STAT_RUNTIME' etc
+    // many of these are emitted on-boot and aren't interesting as 'normal params' 
+    if (  ['PARAM_VALUE' ].includes(message._name) ) { 
+        if (  message.param_id.startsWith('STAT_RUNTIME') || 
+              message.param_id.startsWith('STAT_FLTTIME')  ||
+              message.param_id.startsWith('STAT_RESET')  ||
+              message.param_id.startsWith('STAT_BOOTCNT')  ||
+              message.param_id.startsWith('COMPASS_')  ||
+              message.param_id.startsWith('SR0_')  || 
+              message.param_id.startsWith('ARSPD_OFFSET')  || 
+              message.param_id.startsWith('MIS_TOTAL')  ||
+
+              message.param_id.startsWith('INS_ACC_ID')  || 
+              message.param_id.startsWith('INS_ACC2_ID')  || 
+              message.param_id.startsWith('INS_ACC3_ID')  || 
+
+              message.param_id.startsWith('INS_GYR_ID')  || 
+              message.param_id.startsWith('INS_GYR2_ID')  || 
+              message.param_id.startsWith('INS_GYR3_ID')  || 
+
+              message.param_id.startsWith('INS_GYROFFS_X')  || 
+              message.param_id.startsWith('INS_GYROFFS_Y')  || 
+              message.param_id.startsWith('INS_GYROFFS_Z')  || 
+              message.param_id.startsWith('INS_GYR2OFFS_X')  || 
+              message.param_id.startsWith('INS_GYR2OFFS_Y')  || 
+              message.param_id.startsWith('INS_GYR2OFFS_Z')  || 
+              message.param_id.startsWith('INS_GYR3OFFS_X')  || 
+              message.param_id.startsWith('INS_GYR3OFFS_Y')  || 
+              message.param_id.startsWith('INS_GYR3OFFS_Z')  || 
+
+              message.param_id.startsWith('GND_ALT_OFFSET')  || 
+              message.param_id.startsWith('GND_ABS_PRESS')  ){ 
+            // pass
+        } else { 
+       //     console.log(`param fetch ${message.param_id} -> ${message.param_value} ` );
+        }
+    }
+
+    //   STATUSTEXT handled elsewhere now
+
+    if (  ['COMMAND_ACK' ].includes(message._name) ) {
+        console.log(`COMMAND_ACK command= ${message.command} result= ${message.result} `);
+    } 
+
+
+    if (  ['MISSION_ITEM' ].includes(message._name) ) {
+        console.log(`MISSION_ITEM command= ${message.command} x= ${message.x} y= ${message.y} z= ${message.z} `);
+    } 
+
+    if (  ['MISSION_ITEM_INT' ].includes(message._name) ) {
+        //console.log(`MISSION_ITEM_INT seq= ${message.seq} command= ${message.command} x= ${message.x} y= ${message.y} z= ${message.z} `);
+        //console.log(message);
+    } 
+
+    if (  ['MISSION_COUNT' ].includes(message._name) ) {
+       // console.log(`MISSION_COUNT number of mission items:= ${message.count} `); //moved to mavMission.js
+
+    } 
+
+    if (  ['MISSION_REQUEST' ].includes(message._name) ) {
+        //console.log(`MISSION_REQUEST recieved `);
+    } 
+
+    if (  ['MISSION_ACK' ].includes(message._name) ) {
+        //console.log(`MISSION_ACK recieved `);
+    } 
+
+    if (  ['MISSION_ITEM_REACHED' ].includes(message._name) ) {
+        console.log(`MISSION_ITEM_REACHED recieved num:= ${message.seq} `);
+    }
+
+    if (  ['PARAM_VALUE' ].includes(message._name) &&  message.param_id.startsWith('STAT_FLTTIME')){
+        mins = parseInt(message.param_value/60,10);
+        secs = parseInt(message.param_value%60,10);
+        console.log(`TIME IN AIR:  ${mins}min:${secs}secs `);
+    }
+
+}
+
+// generic msg handler
+mavParserObj.on('message', generic_message_handler);
 
     
 /**
@@ -104,7 +235,7 @@ var MSP = {
        var data = new Uint8Array(readInfo.data); // from Buffer to byte array
 
         // add bytes into mavlink feed here:
-        packetlist = mpo.parseBuffer(data); // also 'emits' msg on completion of each packet
+        packetlist = mavParserObj.parseBuffer(data); // also 'emits' msg on completion of each packet
 
         //console.log("data[]="+JSON.stringify(data)); // raw incoming data
 
@@ -129,7 +260,7 @@ var MSP = {
         if (goodpackets[0] == undefined ) return;
 
         if (this.streamrate == undefined) {
-            send_heartbeat_handler(); // shrow a heartbeat first, blindly?
+            send_heartbeat_handler(); // throw a heartbeat first, blindly?
             set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
             this.streamrate = 4; 
         }
@@ -230,7 +361,7 @@ var MSP = {
             heartbeat.base_mode = 151; // fieldtype: uint8_t  isarray: False 
             heartbeat.system_status = 218; // fieldtype: uint8_t  isarray: False 
             heartbeat.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
-            mpo.send(heartbeat);
+            mavParserObj.send(heartbeat);
 
             // buzz todo
             break;

@@ -16,7 +16,7 @@ generic_link_sender = function(mavmsg,sysid) {
     //this.write( buf ); // already open, we hope
 
     var message = new MspMessageClass();
-        message.code = 1;//code
+        message.code = mavmsg._id;//code
         message.name = mavmsg._name;
         message.messageBody = abuf;
         message.onSend  = function (sendInfo) {  
@@ -53,8 +53,8 @@ var logger  = null;
 
 MAVLink20Processor.prototype.send = generic_link_sender; // tell library how to send
 
-var mpo = new MAVLink20Processor(logger, 255,190); // 255 is the mavlink sysid of this code as a GCS, as per mavproxy.
-
+var mavParserObj = new MAVLink20Processor(logger, 255,190); // 255 is the mavlink sysid of this code as a GCS, as per mavproxy.
+var mpo = mavParserObj; // alternative name
 
 var mspHelper = (function (gui) {
     var self = {};
