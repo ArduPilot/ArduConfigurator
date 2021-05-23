@@ -2396,7 +2396,7 @@ var mspHelper = (function (gui) {
     };
 
     self.loadLogicConditions = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_LOGIC_CONDITIONS, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_LOGIC_CONDITIONS, false, false, null);  callback(); // without a response, we'll call the callback anyway
     }
 
     self.sendLogicConditions = function (onCompleteCallback) {
@@ -2445,7 +2445,7 @@ var mspHelper = (function (gui) {
     };
 
     self.loadProgrammingPid = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_PROGRAMMING_PID, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_PROGRAMMING_PID, false, false, null);  callback(); // without a response, we'll call the callback anyway
     }
 
     self.sendProgrammingPid = function (onCompleteCallback) {
@@ -2806,235 +2806,235 @@ var mspHelper = (function (gui) {
      * @param callback
      */
     self.loadMspIdent = function (callback) {
-        MSP.send_message(MSPCodes.MSP_IDENT, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_IDENT, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadARDUPILOTPidConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_ARDUPILOT_PID, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_ARDUPILOT_PID, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadLoopTime = function (callback) {
-        MSP.send_message(MSPCodes.MSP_LOOP_TIME, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_LOOP_TIME, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadAdvancedConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_ADVANCED_CONFIG, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_ADVANCED_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadFilterConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_FILTER_CONFIG, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_FILTER_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadPidAdvanced = function (callback) {
-        MSP.send_message(MSPCodes.MSP_PID_ADVANCED, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_PID_ADVANCED, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadRcTuningData = function (callback) {
-        MSP.send_message(MSPCodes.MSP_RC_TUNING, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_RC_TUNING, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadRateProfileData = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_RATE_PROFILE, false, false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_RATE_PROFILE, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadPidData = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_PID, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_PID, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadPidNames = function (callback) {
-        MSP.send_message(MSPCodes.MSP_PIDNAMES, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_PIDNAMES, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadStatus = function (callback) {
-        MSP.send_message(MSPCodes.MSP_STATUS, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_STATUS, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadBfConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_BF_CONFIG, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_BF_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.queryFcStatus = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_STATUS, false, false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_STATUS, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadMisc = function (callback) {
-        MSP.send_message(MSPCodes.MSP_MISC, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_MISC, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadMiscV2 = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_MISC, false, false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_MISC, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadOutputMapping = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_OUTPUT_MAPPING, false, false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_OUTPUT_MAPPING, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadBatteryConfig = function (callback) {
-    MSP.send_message(MSPCodes.MSPV2_BATTERY_CONFIG, false, false, callback);
+    MSP.send_message(MSPCodes.MSPV2_BATTERY_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadArmingConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_ARMING_CONFIG, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_ARMING_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadRxConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_RX_CONFIG, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_RX_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.load3dConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_3D, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_3D, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadSensorAlignment = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SENSOR_ALIGNMENT, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_SENSOR_ALIGNMENT, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadSensorConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SENSOR_CONFIG, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_SENSOR_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadSensorStatus = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SENSOR_STATUS, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_SENSOR_STATUS, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadRcDeadband = function (callback) {
-        MSP.send_message(MSPCodes.MSP_RC_DEADBAND, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_RC_DEADBAND, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadRcMap = function (callback) {
-        MSP.send_message(MSPCodes.MSP_RX_MAP, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_RX_MAP, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadRcData = function (callback) {
-        MSP.send_message(MSPCodes.MSP_RC, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_RC, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadAccTrim = function (callback) {
-        MSP.send_message(MSPCodes.MSP_ACC_TRIM, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_ACC_TRIM, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadAnalog = function (callback) {
-        MSP.send_message(MSPCodes.MSP_ANALOG, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_ANALOG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveToEeprom = function saveToEeprom(callback) {
-        MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveARDUPILOTPidConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_ARDUPILOT_PID, mspHelper.crunch(MSPCodes.MSP_SET_ARDUPILOT_PID), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_ARDUPILOT_PID, mspHelper.crunch(MSPCodes.MSP_SET_ARDUPILOT_PID), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveLooptimeConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_LOOP_TIME, mspHelper.crunch(MSPCodes.MSP_SET_LOOP_TIME), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_LOOP_TIME, mspHelper.crunch(MSPCodes.MSP_SET_LOOP_TIME), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveAdvancedConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_ADVANCED_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_ADVANCED_CONFIG), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_ADVANCED_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_ADVANCED_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveFilterConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_FILTER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FILTER_CONFIG), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_FILTER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FILTER_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.savePidData = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_SET_PID, mspHelper.crunch(MSPCodes.MSP2_SET_PID), false, callback);
+        MSP.send_message(MSPCodes.MSP2_SET_PID, mspHelper.crunch(MSPCodes.MSP2_SET_PID), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveRcTuningData = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_RC_TUNING, mspHelper.crunch(MSPCodes.MSP_SET_RC_TUNING), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_RC_TUNING, mspHelper.crunch(MSPCodes.MSP_SET_RC_TUNING), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveRateProfileData = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE), false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.savePidAdvanced = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_PID_ADVANCED, mspHelper.crunch(MSPCodes.MSP_SET_PID_ADVANCED), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_PID_ADVANCED, mspHelper.crunch(MSPCodes.MSP_SET_PID_ADVANCED), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveBfConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_BF_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BF_CONFIG), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_BF_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BF_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveMisc = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_MISC, mspHelper.crunch(MSPCodes.MSP_SET_MISC), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_MISC, mspHelper.crunch(MSPCodes.MSP_SET_MISC), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveMiscV2 = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_MISC, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_MISC), false, callback);
+        MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_MISC, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_MISC), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveBatteryConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSPV2_SET_BATTERY_CONFIG, mspHelper.crunch(MSPCodes.MSPV2_SET_BATTERY_CONFIG), false, callback);
+        MSP.send_message(MSPCodes.MSPV2_SET_BATTERY_CONFIG, mspHelper.crunch(MSPCodes.MSPV2_SET_BATTERY_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.save3dConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_3D, mspHelper.crunch(MSPCodes.MSP_SET_3D), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_3D, mspHelper.crunch(MSPCodes.MSP_SET_3D), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveSensorAlignment = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_SENSOR_ALIGNMENT, mspHelper.crunch(MSPCodes.MSP_SET_SENSOR_ALIGNMENT), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_SENSOR_ALIGNMENT, mspHelper.crunch(MSPCodes.MSP_SET_SENSOR_ALIGNMENT), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveAccTrim = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_ACC_TRIM, mspHelper.crunch(MSPCodes.MSP_SET_ACC_TRIM), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_ACC_TRIM, mspHelper.crunch(MSPCodes.MSP_SET_ACC_TRIM), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveArmingConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_ARMING_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_ARMING_CONFIG), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_ARMING_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_ARMING_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveRxConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_RX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_RX_CONFIG), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_RX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_RX_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveSensorConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_SENSOR_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_SENSOR_CONFIG), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_SENSOR_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_SENSOR_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadNavPosholdConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_NAV_POSHOLD, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_NAV_POSHOLD, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveNavPosholdConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_NAV_POSHOLD, mspHelper.crunch(MSPCodes.MSP_SET_NAV_POSHOLD), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_NAV_POSHOLD, mspHelper.crunch(MSPCodes.MSP_SET_NAV_POSHOLD), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadPositionEstimationConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_POSITION_ESTIMATION_CONFIG, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_POSITION_ESTIMATION_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.savePositionEstimationConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_POSITION_ESTIMATION_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_POSITION_ESTIMATION_CONFIG), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_POSITION_ESTIMATION_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_POSITION_ESTIMATION_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadCalibrationData = function (callback) {
-        MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveCalibrationData = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_CALIBRATION_DATA, mspHelper.crunch(MSPCodes.MSP_SET_CALIBRATION_DATA), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_CALIBRATION_DATA, mspHelper.crunch(MSPCodes.MSP_SET_CALIBRATION_DATA), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadRthAndLandConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_RTH_AND_LAND_CONFIG, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_RTH_AND_LAND_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveRthAndLandConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SET_RTH_AND_LAND_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_RTH_AND_LAND_CONFIG), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_RTH_AND_LAND_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_RTH_AND_LAND_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadFwConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_FW_CONFIG, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_FW_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveFwConfig = function (callback) {
-            MSP.send_message(MSPCodes.MSP_SET_FW_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FW_CONFIG), false, callback);
+            MSP.send_message(MSPCodes.MSP_SET_FW_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FW_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.getMissionInfo = function (callback) {
-        MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
     
     self.loadWaypoints = function (callback) {
@@ -3052,7 +3052,7 @@ var mspHelper = (function (gui) {
                 MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, nextWaypoint);
             }
             else {
-                MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, callback);
+                MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);  callback(); // without a response, we'll call the callback anyway
             }
         };
     };
@@ -3072,7 +3072,7 @@ var mspHelper = (function (gui) {
         };
         
         function endMission() {
-            MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, callback);
+            MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);  callback(); // without a response, we'll call the callback anyway
         }
     };
     
@@ -3087,7 +3087,7 @@ var mspHelper = (function (gui) {
                 MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, nextSafehome);
             }
             else {
-                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, callback);
+                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, null);  callback(); // without a response, we'll call the callback anyway
             }
         };
     };
@@ -3102,7 +3102,7 @@ var mspHelper = (function (gui) {
                 MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, nextSendSafehome);
             }
             else {
-                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, callback);
+                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, null);  callback(); // without a response, we'll call the callback anyway
             }
         };
     };
@@ -3286,23 +3286,23 @@ var mspHelper = (function (gui) {
         var data = [];
         data.push32(secs);
         data.push16(millis);
-        MSP.send_message(MSPCodes.MSP_SET_RTC, data, false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_RTC, data, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadServoConfiguration = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SERVO_CONFIGURATIONS, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_SERVO_CONFIGURATIONS, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadServoMixRules = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SERVO_MIXER, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SERVO_MIXER, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadMotorMixRules = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_COMMON_MOTOR_MIXER, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_COMMON_MOTOR_MIXER, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadMotors = function (callback) {
-        MSP.send_message(MSPCodes.MSP_MOTOR, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_MOTOR, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.getCraftName = function(callback) {
@@ -3320,31 +3320,31 @@ var mspHelper = (function (gui) {
         for (var ii = 0; ii < name.length; ii++) {
             data.push(name.charCodeAt(ii));
         }
-        MSP.send_message(MSPCodes.MSP_SET_NAME, data, false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_NAME, data, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadMixerConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MIXER, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MIXER, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveMixerConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_MIXER, mspHelper.crunch(MSPCodes.MSP2_ARDUPILOT_SET_MIXER), false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_MIXER, mspHelper.crunch(MSPCodes.MSP2_ARDUPILOT_SET_MIXER), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadVTXConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_VTX_CONFIG, false, false, callback);
+        MSP.send_message(MSPCodes.MSP_VTX_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveVTXConfig = function(callback) {
-        MSP.send_message(MSPCodes.MSP_SET_VTX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_VTX_CONFIG), false, callback);
+        MSP.send_message(MSPCodes.MSP_SET_VTX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_VTX_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadBrakingConfig = function(callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MC_BRAKING, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MC_BRAKING, false, false, null);  callback(); // without a response, we'll call the callback anyway
     }
 
     self.saveBrakingConfig = function(callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING, mspHelper.crunch(MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING), false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING, mspHelper.crunch(MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING), false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadParameterGroups = function(callback) {
@@ -3363,16 +3363,16 @@ var mspHelper = (function (gui) {
     };
 
     self.loadBrakingConfig = function(callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MC_BRAKING, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MC_BRAKING, false, false, null);  callback(); // without a response, we'll call the callback anyway
     }
 
     self.loadLogicConditionsStatus = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_LOGIC_CONDITIONS_STATUS, false, false, callback);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_LOGIC_CONDITIONS_STATUS, false, false, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadGlobalVariablesStatus = function (callback) {
         if (semver.gte(CONFIG.flightControllerVersion, "2.5.0")) {
-            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_GVAR_STATUS, false, false, callback);
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_GVAR_STATUS, false, false, null);  callback(); // without a response, we'll call the callback anyway
         } else {
             callback();
         }
@@ -3380,7 +3380,7 @@ var mspHelper = (function (gui) {
 
     self.loadProgrammingPidStatus = function (callback) {
         if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
-            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_PROGRAMMING_PID_STATUS, false, false, callback);
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_PROGRAMMING_PID_STATUS, false, false, null);  callback(); // without a response, we'll call the callback anyway
         } else {
             callback();
         }
