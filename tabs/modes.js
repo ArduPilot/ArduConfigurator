@@ -12,22 +12,26 @@ TABS.modes.initialize = function (callback) {
     }
 
     function get_active_box_data() {
-        MSP.send_message(MSPCodes.MSP_ACTIVEBOXES, false, false, get_box_ids);
+        MSP.send_message(MSPCodes.MSP_ACTIVEBOXES, false, false, null);
+        get_box_ids();
     }
 
     function get_box_ids() {
-        MSP.send_message(MSPCodes.MSP_BOXIDS, false, false, get_rc_data);
+        MSP.send_message(MSPCodes.MSP_BOXIDS, false, false, null);
+        get_rc_data();
     }
 
     function get_rc_data() {
-        MSP.send_message(MSPCodes.MSP_RC, false, false, load_html);
+        MSP.send_message(MSPCodes.MSP_RC, false, false, null);
+        load_html();
     }
 
     function load_html() {
         GUI.load("./tabs/modes.html", process_html);
     }
 
-    MSP.send_message(MSPCodes.MSP_BOXNAMES, false, false, get_active_box_data);
+    MSP.send_message(MSPCodes.MSP_BOXNAMES, false, false, null);
+    get_active_box_data();
 
     function process_html() {
         // generate heads according to RC count
@@ -116,7 +120,8 @@ TABS.modes.initialize = function (callback) {
 
         // data pulling functions used inside interval timer
         function get_rc_data() {
-            MSP.send_message(MSPCodes.MSP_RC, false, false, update_ui);
+            MSP.send_message(MSPCodes.MSP_RC, false, false, null);
+            update_ui();
         }
 
         function update_ui() {

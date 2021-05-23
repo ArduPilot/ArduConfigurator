@@ -2869,7 +2869,8 @@ var mspHelper = (function (gui) {
             if (servoIndex == SERVO_CONFIG.length) {
                 nextFunction = onCompleteCallback;
             }
-            MSP.send_message(MSPCodes.MSP_SET_SERVO_CONFIGURATION, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP_SET_SERVO_CONFIGURATION, buffer, false, null);
+            nextFunction();
         }
     };
 
@@ -2905,7 +2906,8 @@ var mspHelper = (function (gui) {
             if (servoIndex == SERVO_RULES.getServoRulesCount()) { //This is the last rule. Not pretty, but we have to send all rules
                 nextFunction = onCompleteCallback;
             }
-            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SERVO_MIXER, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SERVO_MIXER, buffer, false, null);
+            nextFunction();
         }
     };
 
@@ -2949,7 +2951,8 @@ var mspHelper = (function (gui) {
                 if (servoIndex == MOTOR_RULES.getMotorCount()) { //This is the last rule. Not pretty, but we have to send all rules
                     nextFunction = onCompleteCallback;
                 }
-                MSP.send_message(MSPCodes.MSP2_COMMON_SET_MOTOR_MIXER, buffer, false, nextFunction);
+                MSP.send_message(MSPCodes.MSP2_COMMON_SET_MOTOR_MIXER, buffer, false, null);
+                nextFunction();
             } else {
                 onCompleteCallback();
             }
@@ -3001,7 +3004,8 @@ var mspHelper = (function (gui) {
             if (conditionIndex == LOGIC_CONDITIONS.getCount()) { //This is the last rule. Not pretty, but we have to send all rules
                 nextFunction = onCompleteCallback;
             }
-            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_LOGIC_CONDITIONS, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_LOGIC_CONDITIONS, buffer, false, null);
+            nextFunction();
         }
     };
 
@@ -3053,7 +3057,8 @@ var mspHelper = (function (gui) {
             if (pidIndex == PROGRAMMING_PID.getCount()) { //This is the last rule. Not pretty, but we have to send all rules
                 nextFunction = onCompleteCallback;
             }
-            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_PROGRAMMING_PID, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_PROGRAMMING_PID, buffer, false, null);
+            nextFunction();
         }
     };
 
@@ -3085,7 +3090,8 @@ var mspHelper = (function (gui) {
                 nextFunction = onCompleteCallback;
 
             }
-            MSP.send_message(MSPCodes.MSP_SET_MODE_RANGE, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP_SET_MODE_RANGE, buffer, false, null);
+            nextFunction();
         }
     };
 
@@ -3107,18 +3113,21 @@ var mspHelper = (function (gui) {
         }
 
         MSP.send_message(MSPCodes.MSP_DATAFLASH_READ, buffer, false, function (response) {
+          /*   buzz - not impl!
+
             var chunkAddress = response.data.getUint32(0, 1);
 
             // Verify that the address of the memory returned matches what the caller asked for
             if (chunkAddress == address) {
-                /* Strip that address off the front of the reply and deliver it separately so the caller doesn't have to
-                 * figure out the reply format:
-                 */
+                // Strip that address off the front of the reply and deliver it separately so the caller doesn't have to
+                // figure out the reply format:
+                 //
                 onDataCallback(address, response.data.buffer.slice(4));
             } else {
                 // Report error
                 onDataCallback(address, null);
             }
+            */
         });
     };
 
@@ -3149,7 +3158,8 @@ var mspHelper = (function (gui) {
                 nextFunction = onCompleteCallback;
 
             }
-            MSP.send_message(MSPCodes.MSP_SET_RXFAIL_CONFIG, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP_SET_RXFAIL_CONFIG, buffer, false, null);
+            nextFunction();
         }
     };
 
@@ -3218,7 +3228,8 @@ var mspHelper = (function (gui) {
                 nextFunction = onCompleteCallback;
 
             }
-            MSP.send_message(MSPCodes.MSP_SET_ADJUSTMENT_RANGE, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP_SET_ADJUSTMENT_RANGE, buffer, false, null);
+            nextFunction();
         }
     };
 
@@ -3236,7 +3247,8 @@ var mspHelper = (function (gui) {
                 buffer.push(color.s);
                 buffer.push(color.v);
             }
-            MSP.send_message(MSPCodes.MSP_SET_LED_COLORS, buffer, false, onCompleteCallback);
+            MSP.send_message(MSPCodes.MSP_SET_LED_COLORS, buffer, false, null);
+            onCompleteCallback();
         }
     };
 
@@ -3324,7 +3336,8 @@ var mspHelper = (function (gui) {
                 nextFunction = onCompleteCallback;
             }
 
-            MSP.send_message(MSPCodes.MSP_SET_LED_STRIP_CONFIG, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP_SET_LED_STRIP_CONFIG, buffer, false, null);
+            nextFunction();
         }
     };
 
@@ -3354,7 +3367,8 @@ var mspHelper = (function (gui) {
                 nextFunction = onCompleteCallback;
             }
 
-            MSP.send_message(MSPCodes.MSP_SET_LED_STRIP_MODECOLOR, buffer, false, nextFunction);
+            MSP.send_message(MSPCodes.MSP_SET_LED_STRIP_MODECOLOR, buffer, false, null);
+            nextFunction();
         }
     };
 
@@ -3601,16 +3615,19 @@ var mspHelper = (function (gui) {
     self.loadWaypoints = function (callback) {
         MISSION_PLANER.reinit();
         let waypointId = 1;
-        MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, getFirstWP);
+        MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);
+        getFirstWP();
         
         function getFirstWP() {
-            MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, nextWaypoint)
+            MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
+            nextWaypoint();
         };
         
         function nextWaypoint() {
             waypointId++;
             if (waypointId < MISSION_PLANER.getCountBusyPoints()) {
-                MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, nextWaypoint);
+                MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
+                nextWaypoint();
             }
             else {
                 MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);  callback(); // without a response, we'll call the callback anyway
@@ -3620,15 +3637,18 @@ var mspHelper = (function (gui) {
     
     self.saveWaypoints = function (callback) {
         let waypointId = 1;
-        MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, nextWaypoint)
+        MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
+        nextWaypoint();
 
         function nextWaypoint() {
             waypointId++;
             if (waypointId < MISSION_PLANER.get().length) {
-                MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, nextWaypoint);
+                MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
+                nextWaypoint();
             }
             else {
-                MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, endMission);
+                MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
+                endMission();
             }
         };
         
@@ -3640,12 +3660,14 @@ var mspHelper = (function (gui) {
     self.loadSafehomes = function (callback) {
         SAFEHOMES.flush();
         let safehomeId = 0;
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, nextSafehome);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, null);
+        nextSafehome();
         
         function nextSafehome() {
             safehomeId++;
             if (safehomeId < SAFEHOMES.getMaxSafehomeCount()-1) {
-                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, nextSafehome);
+                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, null);
+                nextSafehome();
             }
             else {
                 MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, null);  callback(); // without a response, we'll call the callback anyway
@@ -3655,12 +3677,14 @@ var mspHelper = (function (gui) {
     
     self.saveSafehomes = function (callback) {
         let safehomeId = 0;
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, nextSendSafehome);
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, null);
+        nextSendSafehome();
         
         function nextSendSafehome() {
             safehomeId++;
             if (safehomeId < SAFEHOMES.getMaxSafehomeCount()-1) {
-                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, nextSendSafehome);
+                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, null);
+                nextSendSafehome();
             }
             else {
                 MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, null);  callback(); // without a response, we'll call the callback anyway
@@ -3839,9 +3863,10 @@ var mspHelper = (function (gui) {
             var seconds = resp.data.read32();
             var millis = resp.data.readU16();
             if (callback) {
-                callback(seconds, millis);
+                //callback(seconds, millis);
             }
         });
+        callback(seconds, millis);
     };
 
     self.setRTC = function (callback) {
@@ -3874,9 +3899,10 @@ var mspHelper = (function (gui) {
         MSP.send_message(MSPCodes.MSP_NAME, false, false, function(resp) {
             var name = resp.data.readString();
             if (callback) {
-                callback(name);
+                //callback(name);
             }
         });
+        callback();
     };
 
     self.setCraftName = function(name, callback) {
@@ -3922,9 +3948,10 @@ var mspHelper = (function (gui) {
                 groups.push({id: id, start: start, end: end});
             }
             if (callback) {
-                callback(groups);
+               // callback(groups);
             }
         });
+        callback(groups);
     };
 
     self.loadBrakingConfig = function(callback) {

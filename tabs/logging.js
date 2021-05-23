@@ -16,14 +16,16 @@ TABS.logging.initialize = function (callback) {
 
     if (CONFIGURATOR.connectionValid) {
         var get_motor_data = function () {
-            MSP.send_message(MSPCodes.MSP_MOTOR, false, false, load_html);
+            MSP.send_message(MSPCodes.MSP_MOTOR, false, false, null);
+            load_html();
         }
 
         var load_html = function () {
             GUI.load("./tabs/logging.html", process_html);
         }
 
-        MSP.send_message(MSPCodes.MSP_RC, false, false, get_motor_data);
+        MSP.send_message(MSPCodes.MSP_RC, false, false, null);
+        get_motor_data();
     }
 
     function process_html() {

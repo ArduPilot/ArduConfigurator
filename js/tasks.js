@@ -12,13 +12,14 @@ helper.task = (function () {
         return 250;
     };
 
+
     publicScope.statusPullStart = function () {
         helper.interval.add('status_pull', function () {
             MSP.send_message(MSPCodes.MSP_STATUS, false, false, function () {
                 MSP.send_message(MSPCodes.MSP_SENSOR_STATUS);
             });
 
-        }, privateScope.getStatusPullInterval(), true);
+        }, privateScope.getStatusPullInterval(), true); // buzz todo 
     };
 
     return publicScope;

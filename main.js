@@ -469,8 +469,9 @@ $(document).ready( function () {
         var profile = parseInt($(this).val());
         MSP.send_message(MSPCodes.MSP_SELECT_SETTING, [profile], false, function () {
             GUI.log(chrome.i18n.getMessage('pidTuningLoadedProfile', [profile + 1]));
-            updateActivatedTab();
+            //updateActivatedTab();
         });
+        updateActivatedTab();
     });
 
     var batteryprofile_e = $('#batteryprofilechange');
@@ -479,8 +480,9 @@ $(document).ready( function () {
         var batteryprofile = parseInt($(this).val());
         MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SELECT_BATTERY_PROFILE, [batteryprofile], false, function () {
             GUI.log(chrome.i18n.getMessage('loadedBatteryProfile', [batteryprofile + 1]));
-            updateActivatedTab();
+            //updateActivatedTab();
         });
+        updateActivatedTab();
     });
 });
 

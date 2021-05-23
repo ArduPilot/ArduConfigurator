@@ -9,22 +9,26 @@ TABS.adjustments.initialize = function (callback) {
     //googleAnalytics.sendAppView('Adjustments');
 
     function get_adjustment_ranges() {
-        MSP.send_message(MSPCodes.MSP_ADJUSTMENT_RANGES, false, false, get_box_ids);
+        MSP.send_message(MSPCodes.MSP_ADJUSTMENT_RANGES, false, false, null);
+        get_box_ids();
     }
 
     function get_box_ids() {
-        MSP.send_message(MSPCodes.MSP_BOXIDS, false, false, get_rc_data);
+        MSP.send_message(MSPCodes.MSP_BOXIDS, false, false, null);
+        get_rc_data();
     }
 
     function get_rc_data() {
-        MSP.send_message(MSPCodes.MSP_RC, false, false, load_html);
+        MSP.send_message(MSPCodes.MSP_RC, false, false, null);
+        load_html();
     }
 
     function load_html() {
         GUI.load("./tabs/adjustments.html", process_html);
     }
 
-    MSP.send_message(MSPCodes.MSP_BOXNAMES, false, false, get_adjustment_ranges);
+    MSP.send_message(MSPCodes.MSP_BOXNAMES, false, false, null);
+    get_adjustment_ranges();
 
     function addAdjustment(adjustmentIndex, adjustmentRange, auxChannelCount) {
 
@@ -223,8 +227,9 @@ TABS.adjustments.initialize = function (callback) {
 
             function save_to_eeprom() {
                 MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
-                    GUI.log(chrome.i18n.getMessage('adjustmentsEepromSaved'));
+                   // GUI.log(chrome.i18n.getMessage('adjustmentsEepromSaved'));
                 });
+                GUI.log(chrome.i18n.getMessage('adjustmentsEepromSaved'));
             }
 
         });
@@ -254,7 +259,8 @@ TABS.adjustments.initialize = function (callback) {
                 return;
             }
 
-            MSP.send_message(MSPCodes.MSP_RC, false, false, update_ui);
+            MSP.send_message(MSPCodes.MSP_RC, false, false, null);
+            update_ui();
         }
 
         function update_ui() {

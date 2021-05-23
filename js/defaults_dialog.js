@@ -661,9 +661,11 @@ helper.defaultsDialog = (function() {
                         GUI.tab_switch_cleanup(function() {
                             MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false, function () {
                                 //noinspection JSUnresolvedVariable
+                                //GUI.log(chrome.i18n.getMessage('deviceRebooting'));
+                                //GUI.handleReconnect();
+                            });
                                 GUI.log(chrome.i18n.getMessage('deviceRebooting'));
                                 GUI.handleReconnect();
-                            });
                         });
                     }
                 });

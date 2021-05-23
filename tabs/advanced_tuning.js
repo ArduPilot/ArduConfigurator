@@ -59,8 +59,9 @@ TABS.advanced_tuning.initialize = function (callback) {
         //noinspection JSUnresolvedVariable
         GUI.log(chrome.i18n.getMessage('configurationEepromSaved'));
         GUI.tab_switch_cleanup(function () {
-            MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false, reinitialize);
+            MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false, null);
         });
+        reinitialize();
     }
 
     function reinitialize() {

@@ -434,7 +434,8 @@ TABS.sensors.initialize = function (callback) {
                         return;
                     }
 
-                    MSP.send_message(MSPCodes.MSP_RAW_IMU, false, false, update_imu_graphs);
+                    MSP.send_message(MSPCodes.MSP_RAW_IMU, false, false, null);
+                    update_imu_graphs();
                 }, fastest, true);
             }
 

@@ -10,23 +10,28 @@ TABS.auxiliary.initialize = function (callback) {
     //googleAnalytics.sendAppView('Auxiliary');
 
     function get_mode_ranges() {
-        MSP.send_message(MSPCodes.MSP_MODE_RANGES, false, false, get_box_ids);
+        MSP.send_message(MSPCodes.MSP_MODE_RANGES, false, false, null);
+        get_box_ids();
     }
 
     function get_box_ids() {
-        MSP.send_message(MSPCodes.MSP_BOXIDS, false, false, get_rc_data);
+        MSP.send_message(MSPCodes.MSP_BOXIDS, false, false, null);
+        get_rc_data();
     }
 
     function get_rc_data() {
         if (SERIAL_CONFIG.ports.length == 0) {
-            MSP.send_message(MSPCodes.MSP_RC, false, false, get_serial_config);
+            MSP.send_message(MSPCodes.MSP_RC, false, false, null);
+            get_serial_config();
         } else {
-            MSP.send_message(MSPCodes.MSP_RC, false, false, load_html);
+            MSP.send_message(MSPCodes.MSP_RC, false, false, null);
+            load_html();
         }
     }
 
     function get_serial_config() {
-        MSP.send_message(MSPCodes.MSP_CF_SERIAL_CONFIG, false, false, load_html);
+        MSP.send_message(MSPCodes.MSP_CF_SERIAL_CONFIG, false, false, null);
+        load_html();
     }
 
     function load_html() {
@@ -34,7 +39,8 @@ TABS.auxiliary.initialize = function (callback) {
         GUI.load("./tabs/auxiliary.html", process_html);
     }
 
-    MSP.send_message(MSPCodes.MSP_BOXNAMES, false, false, get_mode_ranges);
+    MSP.send_message(MSPCodes.MSP_BOXNAMES, false, false, null);
+    get_mode_ranges();
 
     function sort_modes_for_display() {
         // This array defines the order that the modes are displayed in the configurator modes page
@@ -339,7 +345,8 @@ TABS.auxiliary.initialize = function (callback) {
                 return;
             }
 
-            MSP.send_message(MSPCodes.MSP_RC, false, false, update_ui);
+            MSP.send_message(MSPCodes.MSP_RC, false, false, null);
+            update_ui();
         }
 
         function update_ui() {

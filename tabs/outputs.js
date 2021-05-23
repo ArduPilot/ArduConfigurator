@@ -459,7 +459,8 @@ TABS.outputs.initialize = function (callback) {
                 return;
             }
 
-            MSP.send_message(MSPCodes.MSP_RAW_IMU, false, false, update_accel_graph);
+            MSP.send_message(MSPCodes.MSP_RAW_IMU, false, false, null);
+            update_accel_graph();
         }, 25, true);
 
         helper.interval.add('ANALOG_pull', function () {

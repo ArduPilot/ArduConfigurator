@@ -375,7 +375,8 @@ TABS.receiver.initialize = function (callback) {
                 return;
             }
 
-            MSP.send_message(MSPCodes.MSP_RC, false, false, update_ui);
+            MSP.send_message(MSPCodes.MSP_RC, false, false, null);
+            update_ui();
         }
 
         function update_ui() {
