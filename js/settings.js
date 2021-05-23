@@ -118,7 +118,8 @@ var Settings = (function () {
 
     self.processHtml = function(callback) {
         return function() {
-            self.configureInputs().then(callback);
+            self.configureInputs(); //.then(callback);
+            callback(); // buzz
         };
     };
 

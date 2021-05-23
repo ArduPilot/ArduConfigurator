@@ -377,6 +377,16 @@ var MSP = {
         case MSPCodes.MSP_DATAFLASH_SUMMARY:
             // buzz todo
             break;
+        
+        // click on config tab...
+        case MSPCodes.MSP_BF_CONFIG:
+            // buzz todo
+            break;
+
+        //
+        case MSPCodes.MSP_ATTITUDE:
+            // buzz todo
+            break;
 
         // buzz todo more
         default:

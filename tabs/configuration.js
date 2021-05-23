@@ -24,7 +24,7 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
     };
 
     var saveCraftName = function (callback) {
-        mspHelper.setCraftName(craftName, callback);
+        mspHelper.setCraftName(craftName, null);  callback(); // without a response, we'll call the callback anyway
     };
 
     var loadChainer = new MSPChainerClass();

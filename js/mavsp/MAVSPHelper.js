@@ -3178,13 +3178,17 @@ var mspHelper = (function (gui) {
 
     self.getSetting = function (name) {
         var $this = this;
+        console.log("param/setting name:"+name);
         return this._getSetting(name).then(function (setting) {
             if (!setting) {
                 // Setting not available in the FC
                 return null;
             }
             var data = [];
-            $this._encodeSettingReference(name, setting.index, data);
+            $this._encodeSettingReference(name, setting.index, data); // determines if Integer or String etc
+
+            // promise that presumably when given a 'setting' value as raw data casts it into different
+            //   byte/unsigned/8/16/32 bit values etc 
             return MSP.promise(MSPCodes.MSPV2_SETTING, data).then(function (resp) {
                 var value;
                 switch (setting.type) {
