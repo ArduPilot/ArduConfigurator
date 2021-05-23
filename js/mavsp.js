@@ -43,7 +43,7 @@ mavParserObj.on('HEARTBEAT', heartbeat_handler);
 // the majority of specific responses to specifc messages are not handled in the 'generic' handler, but in specific message handlers for each 
 // type of message.   eg mavlinkParser1.on('HEATBEAT') is better than here, as this 'generic' block might go away at some point.
 var generic_message_handler = function(message) {
-    //console.log(message); uncomment to see fully parsed arriving packets in all their glory
+    //console.log(message); //BUZZ uncomment to see fully parsed arriving packets in all their glory
 
     // don't dissplay or handle parsing errors -  ie Bad prefix errors, but allow signing errors thru
     if ((message._id == -1 ) && (message._reason != 'Invalid signature') ) { return;}
@@ -158,6 +158,8 @@ var generic_message_handler = function(message) {
 
 // generic msg handler
 mavParserObj.on('message', generic_message_handler);
+
+//mavParserObj.on('message', MSP._dispatch_message_mav); this line is actually after MSP obj at bottom of this file
 
     
 /**
@@ -282,29 +284,13 @@ var MSP = {
         this.message_buffer_uint8_view = new Uint8Array(this.message_buffer);
     },
 
-    // called after bytes have properly been checksummed and should be a plausible packet.
-    _dispatch_message: function(expected_checksum) {
-        if (this.message_checksum == expected_checksum) {
-            // message received, process
-            mspHelper.processData(this);
-        } else {
-            console.log('code: ' + this.code + ' - crc failed');
-            this.packet_error++;
-            $('span.packet-error').html(this.packet_error);
-        }
 
-        /*
-         * Free port
-         */
-        helper.mspQueue.freeHardLock();
-
-        // Reset variables
-        this.message_length_received = 0;
-     //   this.state = this.decoder_states.IDLE;
+    //INCOMING packets thru here...
+    _dispatch_message_mav: function(pkt) {
+        mspHelper.processDataMav(pkt);
     },
 
     /**
-     *
      * @param {MSP} mspData
      */
     putCallback: function (mspData) {
@@ -419,6 +405,8 @@ var MSP = {
         this.callbacks_cleanup();
     }
 };
+
+mavParserObj.on('message', MSP._dispatch_message_mav);
 
 MSP.SDCARD_STATE_NOT_PRESENT = 0;
 MSP.SDCARD_STATE_FATAL       = 1;

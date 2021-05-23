@@ -7,7 +7,7 @@
 // we overwrite the default send() instead of overwriting write() or using setConnection(), which don't know the ip or port info.
 // and we accept ip/port either as part of the mavmsg object, or as a sysid in the OPTIONAL 2nd parameter
 generic_link_sender = function(mavmsg,sysid) {
-    //console.log("generic sender queuing:"+mavmsg._name);
+    console.log("generic sender queuing:"+mavmsg._name);
     // this is really just part of the original send()
     var buf = mavmsg.pack(this);  //Buffer
 
@@ -107,6 +107,437 @@ var mspHelper = (function (gui) {
     // always finish with a '\0'.
     var debugMsgBuffer = '';
 
+    // mav version of processData - INCOMING packets thru here...
+    self.processDataMav = function (mavmsg) {
+
+        //var data = new DataView(mavmsg._msgbuf, 0);
+        
+
+        switch (mavmsg._id ) {
+
+            case mavlink20.MAVLINK_MSG_ID_HEARTBEAT:
+                /* ["type", "autopilot", "base_mode", "custom_mode", "system_status", "mavlink_version"]
+                autopilot: 3
+                base_mode: 81
+                custom_mode: 0
+                mavlink_version: 3
+                system_status: 3
+                type: 2
+                */
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_TIMESYNC:
+                /*  ["tc1", "ts1"]
+                tc1: (3) [0, 0, false]
+                ts1: (3) [3709043417, 1904, false]
+                */
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_HWSTATUS:
+                /* ["Vcc", "I2Cerr"]
+                I2Cerr: 0
+                Vcc: 5122
+                */
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_MOUNT_STATUS:
+                /* ["target_system", "target_component", "pointing_a", "pointing_b", "pointing_c"]
+                pointing_a: 0
+                pointing_b: 0
+                pointing_c: 0
+                target_component: 0
+                target_system: 0
+                */
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_AHRS:
+                /* ["omegaIx", "omegaIy", "omegaIz", "accel_weight", "renorm_val", "error_rp", "error_yaw"]
+                accel_weight: 0
+                error_rp: 0.0010149696609005332
+                error_yaw: 0.004215225577354431
+                omegaIx: -0.00036707011167891324
+                omegaIy: -0.004113930743187666
+                omegaIz: 0.0005907636950723827
+                renorm_val: 0
+                */
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_AHRS2:
+                /* ["roll", "pitch", "yaw", "altitude", "lat", "lng"]
+                altitude: 0
+                lat: 0
+                lng: 0
+                pitch: -0.03380150720477104
+                roll: 0.0497613400220871
+                yaw: 3.117163896560669
+                */
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_AHRS3:
+                /* ["roll", "pitch", "yaw", "altitude", "lat", "lng", "v1", "v2", "v3", "v4"]
+                altitude: 0
+                lat: 0
+                lng: 0
+                pitch: -0.031533993780612946
+                roll: 0.05390428751707077
+                v1: 0
+                v2: 0
+                v3: 0
+                v4: 0
+                yaw: 3.1175403594970703
+                */
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_EKF_STATUS_REPORT:
+                /* ["flags", "velocity_variance", "pos_horiz_variance", "pos_vert_variance", "compass_variance", "terrain_alt_variance", "airspeed_variance"]
+                airspeed_variance: 0
+                compass_variance: 0.005909742787480354
+                flags: 421
+                pos_horiz_variance: 0.003528701141476631
+                pos_vert_variance: 0.005041991826146841
+                terrain_alt_variance: 0
+                velocity_variance: 0
+                */
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_VIBRATION:
+                /* ["time_usec", "vibration_x", "vibration_y", "vibration_z", "clipping_0", "clipping_1", "clipping_2"]
+                clipping_0: 0
+                clipping_1: 0
+                clipping_2: 0
+                time_usec: (3) [867970223, 1, true]
+                vibration_x: 0.025295495986938477
+                vibration_y: 0.03136098012328148
+                vibration_z: 0.043347425758838654
+                */
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_BATTERY_STATUS:
+                /* ["id", "battery_function", "type", "temperature", "voltages", "current_battery", "current_consumed", "energy_consumed", "battery_remaining", "time_remaining", "charge_state", "voltages_ext", "mode", "fault_bitmask"]
+                battery_function: 0
+                battery_remaining: 74
+                charge_state: 0
+                current_battery: 59
+                current_consumed: 844
+                energy_consumed: 15
+                fault_bitmask: 0
+                id: 0
+                mode: 0
+                temperature: 32767
+                time_remaining: 0
+                type: 0
+                voltages: (10) [510, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535, 65535]
+                voltages_ext: (4) [0, 0, 0, 0]
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_FENCE_STATUS:
+                /* ["breach_status", "breach_count", "breach_type", "breach_time", "breach_mitigation"]
+                breach_count: 0
+                breach_mitigation: 0
+                breach_status: 0
+                breach_time: 0
+                breach_type: 0
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_SYSTEM_TIME:
+                /* ["time_unix_usec", "time_boot_ms"]
+                time_boot_ms: 5162930
+                time_unix_usec: (3) [0, 0, true]
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_GPS_RAW_INT:
+                /* ["time_usec", "fix_type", "lat", "lon", "alt", "eph", "epv", "vel", "cog", "satellites_visible", "alt_ellipsoid", "h_acc", "v_acc", "vel_acc", "hdg_acc", "yaw"]
+                alt: 0
+                alt_ellipsoid: 0
+                cog: 0
+                eph: 65535
+                epv: 65535
+                fix_type: 0
+                h_acc: 0
+                hdg_acc: 0
+                lat: 0
+                lon: 0
+                satellites_visible: 0
+                time_usec: (3) [0, 0, true]
+                v_acc: 0
+                vel: 0
+                vel_acc: 0
+                yaw: 0
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_SCALED_PRESSURE:
+                /* ["time_boot_ms", "press_abs", "press_diff", "temperature", "temperature_press_diff"]
+                press_abs: 1024.4854736328125
+                press_diff: 0
+                temperature: 5131
+                temperature_press_diff: 0
+                time_boot_ms: 5162927
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_SCALED_IMU2:
+                /* ["time_boot_ms", "xacc", "yacc", "zacc", "xgyro", "ygyro", "zgyro", "xmag", "ymag", "zmag", "temperature"]
+                temperature: 0
+                time_boot_ms: 5162927
+                xacc: -37
+                xgyro: -2
+                xmag: 0
+                yacc: -27
+                ygyro: 10
+                ymag: 0
+                zacc: -896
+                zgyro: 4
+                zmag: 0
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_RAW_IMU:
+                /*["time_usec", "xacc", "yacc", "zacc", "xgyro", "ygyro", "zgyro", "xmag", "ymag", "zmag", "id", "temperature"]
+                id: 0
+                temperature: 5011
+                time_usec: (3) [867960200, 1, true]
+                xacc: 3
+                xgyro: 0
+                xmag: -382
+                yacc: -61
+                ygyro: 5
+                ymag: -27
+                zacc: -1058
+                zgyro: 0
+                zmag: -337
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_RC_CHANNELS:
+                /* ["time_boot_ms", "chancount", "chan1_raw", "chan2_raw", "chan3_raw", "chan4_raw", "chan5_raw", "chan6_raw", "chan7_raw", "chan8_raw", "chan9_raw", "chan10_raw", "chan11_raw", "chan12_raw", "chan13_raw", "chan14_raw", "chan15_raw", "chan16_raw", "chan17_raw", "chan18_raw", "rssi"]
+                chan1_raw: 0
+                chan2_raw: 0
+                chan3_raw: 0
+                chan4_raw: 0
+                chan5_raw: 0
+                chan6_raw: 0
+                chan7_raw: 0
+                chan8_raw: 0
+                chan9_raw: 0
+                chan10_raw: 0
+                chan11_raw: 0
+                chan12_raw: 0
+                chan13_raw: 0
+                chan14_raw: 0
+                chan15_raw: 0
+                chan16_raw: 0
+                chan17_raw: 0
+                chan18_raw: 0
+                chancount: 0
+                rssi: 0
+                time_boot_ms: 5162925
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
+                /* ["time_usec", "port", "servo1_raw", "servo2_raw", "servo3_raw", "servo4_raw", "servo5_raw", "servo6_raw", "servo7_raw", "servo8_raw", "servo9_raw", "servo10_raw", "servo11_raw", "servo12_raw", "servo13_raw", "servo14_raw", "servo15_raw", "servo16_raw"]
+                port: 0
+                servo1_raw: 1100
+                servo2_raw: 1100
+                servo3_raw: 1100
+                servo4_raw: 1100
+                servo5_raw: 0
+                servo6_raw: 0
+                servo7_raw: 0
+                servo8_raw: 0
+                servo9_raw: 0
+                servo10_raw: 0
+                servo11_raw: 0
+                servo12_raw: 0
+                servo13_raw: 0
+                servo14_raw: 0
+                servo15_raw: 0
+                servo16_raw: 0
+                time_usec: 867958229
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_VFR_HUD:
+                /* ["airspeed", "groundspeed", "heading", "throttle", "alt", "climb"]
+                airspeed: 0
+                alt: -8.119999885559082
+                climb: -0.014790529385209084
+                groundspeed: 0.01852068305015564
+                heading: 178
+                throttle: 0
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_MISSION_CURRENT:
+                /* ["seq"]
+                seq: 0
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
+                /*["nav_roll", "nav_pitch", "nav_bearing", "target_bearing", "wp_dist", "alt_error", "aspd_error", "xtrack_error"]
+                alt_error: 8.410773277282715
+                aspd_error: 0
+                nav_bearing: 178
+                nav_pitch: 0.00021991602261550725
+                nav_roll: 0.00017323991050943732
+                target_bearing: 0
+                wp_dist: 0
+                xtrack_error: 0
+                */
+
+                // buzz todo
+                break;
+
+            case mavlink20.MAVLINK_MSG_ID_MEMINFO:
+                /*["brkval", "freemem", "freemem32"]
+                brkval: 0
+                freemem: 53536
+                freemem32: 53536
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_POWER_STATUS:
+            /* ["Vcc", "Vservo", "flags"]
+                Vcc: 5122
+                Vservo: 108
+                flags: 4
+
+            */
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_SYS_STATUS:
+                /*["onboard_control_sensors_present", "onboard_control_sensors_enabled", "onboard_control_sensors_health", "load", "voltage_battery", "current_battery", "battery_remaining", "drop_rate_comm", "errors_comm", "errors_count1", "errors_count2", "errors_count3", "errors_count4"]
+                battery_remaining: 74
+                current_battery: 59
+                drop_rate_comm: 0
+                errors_comm: 0
+                errors_count1: 0
+                errors_count2: 0
+                errors_count3: 0
+                errors_count4: 0
+                load: 540
+                onboard_control_sensors_enabled: 309337231
+                onboard_control_sensors_health: 55614479
+                onboard_control_sensors_present: 326171791
+                voltage_battery: 510
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
+                /* ["time_boot_ms", "lat", "lon", "alt", "relative_alt", "vx", "vy", "vz", "hdg"]
+                alt: -8120
+                hdg: 17862
+                lat: 0
+                lon: 0
+                relative_alt: -8126
+                time_boot_ms: 5162922
+                vx: 1
+                vy: 0
+                vz: 1
+                */
+
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_ATTITUDE:
+                /* ["time_boot_ms", "roll", "pitch", "yaw", "rollspeed", "pitchspeed", "yawspeed"]
+                pitch: -0.03153713047504425
+                pitchspeed: 0.0013070395216345787
+                roll: 0.05391024798154831
+                rollspeed: 0.000017999147530645132
+                time_boot_ms: 5162922
+                yaw: 3.117539882659912
+                yawspeed: 0.000008267234079539776
+                */
+            
+                // buzz todo
+                break;
+                                                            
+                
+
+            // todo more
+
+            case mavlink20.MAVLINK_MSG_ID_SENSOR_OFFSETS:
+                /*["mag_ofs_x", "mag_ofs_y", "mag_ofs_z", "mag_declination", "raw_press", "raw_temp", "gyro_cal_x", "gyro_cal_y", "gyro_cal_z", "accel_cal_x", "accel_cal_y", "accel_cal_z"]
+                accel_cal_x: 0
+                accel_cal_y: 0
+                accel_cal_z: 0
+                gyro_cal_x: -0.0028628804720938206
+                gyro_cal_y: 0.011249365285038948
+                gyro_cal_z: -0.06624391674995422
+                mag_declination: 0
+                mag_ofs_x: 50
+                mag_ofs_y: 29
+                mag_ofs_z: 7
+                raw_press: 102503
+                raw_temp: 5083
+                */
+            
+                // buzz todo
+                break;
+            case mavlink20.MAVLINK_MSG_ID_PARAM_VALUE:
+                /* ["param_id", "param_value", "param_type", "param_count", "param_index"]
+                param_count: 1022
+                param_id: "STAT_RUNTIME"
+                param_index: 65535
+                param_type: 6
+                param_value: 0
+                */
+            
+                // buzz todo
+                break; 
+
+            case mavlink20.MAVLINK_MSG_ID_STATUSTEXT:
+                /* ["severity", "text", "id", "chunk_seq"]
+                severity: 2
+                text: "PreArm: Throttle below Failsafe[][][][][][][]][][][]]]]"
+                chunk_seq: 0
+                id: 0
+                */
+            
+                // buzz todo
+                break; 
+
+            // case mavlink20.MAVLINK_MSG_ID_SENSOR_OFFSETS:
+            //     /*
+            //     */
+            //
+            //     // buzz todo
+            //     break; 
+                
+            // add more 
+
+            
+            case mavlink20.MAVLINK_MSG_ID_BAD_DATA:
+                break;
+
+            default:
+                // todo
+
+                console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
+
+                break;
+        }
+
+    }
+    
     /**
      *
      * @param {MSP} dataHandler
