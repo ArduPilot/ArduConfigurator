@@ -117,7 +117,7 @@ var MSP = {
         console.log("packets:",packetlist.length,"good:",goodpackets.length)
 
 
-        console.log("packets:"+JSON.stringify(packetlist[0]))
+        console.log("packets:"+JSON.stringify(packetlist[0])) // just dumps the first one in the list 
 
 
         // remote end doesnt know were mavlink2, send em a mavlink2 packet...
@@ -133,7 +133,15 @@ var MSP = {
             this.streamrate = 4; 
         }
 
-       
+        // some form of valid mavlink means we can consider ourselves connected as far as the GUI is concerned
+        if (CONFIGURATOR.connectionValid == false ) {
+            console.log("CONNECTED!");
+            CONFIGURATOR.connectionValid = true;
+            CONFIG.flightControllerVersion = "2.5.0"; // buss hack to enable PID pidCount in serial_backend.js 
+            GUI.allowedTabs = GUI.defaultAllowedTabsWhenConnected.slice();
+            onConnect();
+        }
+
         this.last_received_timestamp = Date.now();
     },
 
