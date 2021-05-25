@@ -566,9 +566,32 @@ var mspHelper = (function (gui) {
                 yaw: 3.117539882659912
                 yawspeed: 0.000008267234079539776
                 */
-                SENSOR_DATA.kinematics[0]  = mavmsg.roll / 10.0; // x   MSPCodes.MSP_ATTITUDE:
-                SENSOR_DATA.kinematics[1]  = mavmsg.pitch / 10.0; // y  MSPCodes.MSP_ATTITUDE:
-                SENSOR_DATA.kinematics[2]  = mavmsg.yaw; // z           MSPCodes.MSP_ATTITUDE:
+
+                // works with positive range 0-360 only.
+                function wrap_360 ( angle_degs) {
+                    var remains = angle_degs % 360.0; //% = modulo
+                    if (remains < 0.0) {
+                        remains += 360; 
+                    }
+                    return remains;
+                }
+                function wrap_180( angle_degs) {
+                    var remains = wrap_360 ( angle_degs);
+                    if ( remains > 180.0) {
+                        remains -= 360.0;
+                    }
+                    return remains;
+                }
+                //var x = wrap_180(5);
+                //var y = wrap_180(190);
+                //var z = wrap_180(-270);
+                //var a = wrap_180(-370);
+
+               // kinematics is degreees, mavlink is radians
+                SENSOR_DATA.kinematics[0]  = (mavmsg.roll * 180/3.14159).toFixed(2); //roll = x   MSPCodes.MSP_ATTITUDE:
+                SENSOR_DATA.kinematics[1]  = -(mavmsg.pitch * 180/3.14159).toFixed(2); // y  MSPCodes.MSP_ATTITUDE:
+                // kinematics is 0-360 but 180 degrewss off
+                SENSOR_DATA.kinematics[2]  = -(180-(mavmsg.yaw * 180/3.14159)).toFixed(2); // z           MSPCodes.MSP_ATTITUDE:
 
                 // the thre 'speed' values are unused.
 

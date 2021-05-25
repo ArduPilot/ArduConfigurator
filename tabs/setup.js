@@ -134,13 +134,13 @@ TABS.setup.initialize = function (callback) {
                 return;
             }
 
-            MSP.send_message(MSPCodes.MSP_ATTITUDE, false, false, function () {
+           // MSP.send_message(MSPCodes.MSP_ATTITUDE, false, false, function () {
 	            roll_e.text(chrome.i18n.getMessage('initialSetupAttitude', [SENSOR_DATA.kinematics[0]]));
 	            pitch_e.text(chrome.i18n.getMessage('initialSetupAttitude', [SENSOR_DATA.kinematics[1]]));
                 heading_e.text(chrome.i18n.getMessage('initialSetupAttitude', [SENSOR_DATA.kinematics[2]]));
                 self.render3D();
                 self.updateInstruments();
-            });
+            //});
         }
 
         helper.mspBalancedInterval.add('setup_data_pull_fast', 40, 1, get_fast_data);
