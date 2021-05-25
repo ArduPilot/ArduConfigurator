@@ -188,7 +188,7 @@ TABS.setup.initialize = function (callback) {
 };
 
 TABS.setup.initializeInstruments = function() {
-    var options = {size:90, showBox : false, img_directory: 'images/flightindicators/'};
+    var options = {size:90, showBox : true, img_directory: 'images/flightindicators/'};
     var attitude = $.flightIndicator('#attitude', 'attitude', options);
     var heading = $.flightIndicator('#heading', 'heading', options);
 

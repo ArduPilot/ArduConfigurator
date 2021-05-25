@@ -74,10 +74,12 @@ $(document).ready(function () {
             helper.timeout.add('waiting_for_bootup', function waiting_for_bootup() {
                 MSP.send_message(MSPCodes.MSP_STATUS, false, false, function () {
                     //noinspection JSUnresolvedVariable
-                    GUI.log(chrome.i18n.getMessage('deviceReady'));
+                    //GUI.log(chrome.i18n.getMessage('deviceReady'));
                     //noinspection JSValidateTypes
-                    TABS.configuration.initialize(false, $('#content').scrollTop());
+                    //TABS.configuration.initialize(false, $('#content').scrollTop());
                 });
+                GUI.log(chrome.i18n.getMessage('deviceReady'));
+                TABS.configuration.initialize(false, $('#content').scrollTop());
             },1500); // 1500 ms seems to be just the right amount of delay to prevent data request timeouts
         }
     };

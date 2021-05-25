@@ -7,7 +7,7 @@
 // we overwrite the default send() instead of overwriting write() or using setConnection(), which don't know the ip or port info.
 // and we accept ip/port either as part of the mavmsg object, or as a sysid in the OPTIONAL 2nd parameter
 generic_link_sender = function(mavmsg,sysid) {
-    console.log("generic sender queuing:"+mavmsg._name);
+    //console.log("generic sender queuing:"+mavmsg._name);
     // this is really just part of the original send()
     var buf = mavmsg.pack(this);  //Buffer
 
@@ -645,6 +645,49 @@ var mspHelper = (function (gui) {
                 // buzz todo
                 break; 
 
+                
+
+            case mavlink20.MAVLINK_MSG_ID_WIND:
+                /* ["direction", "speed", "speed_z"]
+                direction: -180
+                speed: 0
+                speed_z: 0
+                */
+            
+                // buzz todo
+                break; 
+                
+            case mavlink20.MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT:
+                /*["time_boot_ms", "coordinate_frame", "type_mask", "lat_int", "lon_int", "alt", "vx", "vy", "vz", "afx", "afy", "afz", "yaw", "yaw_rate"]
+                afx: 0
+                afy: 0
+                afz: 0
+                alt: 100
+                coordinate_frame: 0
+                lat_int: 0
+                lon_int: 0
+                time_boot_ms: 61609
+                type_mask: 65528
+                vx: 0
+                vy: 0
+                vz: 0
+                yaw: 0
+                yaw_rate: 0
+                */
+            
+                // buzz todo
+                break; 
+                
+            case mavlink20.MAVLINK_MSG_ID_AOA_SSA:
+                /* ["time_usec", "AOA", "SSA"]
+                time_usec: (3) [62028591, 0, true]    
+                AOA: 0
+                SSA: 0
+                */
+            
+                // buzz todo
+                break; 
+
             // case mavlink20.MAVLINK_MSG_ID_SENSOR_OFFSETS:
             //     /*
             //     */
@@ -653,7 +696,6 @@ var mspHelper = (function (gui) {
             //     break; 
                 
             // add more 
-
             
             case mavlink20.MAVLINK_MSG_ID_BAD_DATA:
                 break;
