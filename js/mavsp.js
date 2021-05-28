@@ -24,6 +24,9 @@ var set_stream_rates = function(rate,target_system,target_component) {
 
     mavParserObj.send(rsr); 
     console.log('Set Stream Rates =4');
+
+
+    
 }
 
 
@@ -56,6 +59,10 @@ var generic_message_handler = function(message) {
         /*console.log('--out sending:',message._name); */
          mpo.send(message);   
     } 
+
+    SYSID = message._header.srcSystem;
+    COMPID =  message._header.srcComponent??null;
+    // = 
 
     // console.log all the uncommon message types we DONT list here. 
     if ( ! ['GPS_RAW_INT', 'VFR_HUD', 'ATTITUDE', 'SYS_STATUS', 'GLOBAL_POSITION_INT', 'HEARTBEAT','VIBRATION',
@@ -265,6 +272,8 @@ var MSP = {
             send_heartbeat_handler(); // throw a heartbeat first, blindly?
             set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
             this.streamrate = 4; 
+            ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
+
         }
 
         // some form of valid mavlink means we can consider ourselves connected as far as the GUI is concerned

@@ -285,6 +285,9 @@ function onOpen(openInfo) {
         send_heartbeat_handler(); // shrow a heartbeat first, blindly
         set_stream_rates(); //buzz?
 
+        ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
+
+
         // request configuration data. Start with MSPv1 and
         // upgrade to MSPv2 if possible, and 
         // upgrade to MAVSPv2 if possible.  ( this is mavlinkV2) 

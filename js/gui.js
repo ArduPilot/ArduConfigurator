@@ -23,6 +23,7 @@ var GUI_control = function () {
         'auxiliary',
         'cli',
         'configuration',
+        'params',
         'gps',
         'led_strip',
         'logging',

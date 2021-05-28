@@ -79,6 +79,9 @@
     "tabConfiguration": {
         "message": "Configuration"
     },
+    "tabParams": {
+        "message": "Params List"
+    },
     "tabPorts": {
         "message": "Ports"
     },

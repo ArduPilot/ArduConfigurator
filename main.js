@@ -210,6 +210,9 @@ $(document).ready( function () {
                     case 'configuration':
                         TABS.configuration.initialize(content_ready);
                         break;
+                    case 'params':
+                        TABS.params.initialize(content_ready);
+                        break;
                     case 'profiles':
                         TABS.profiles.initialize(content_ready);
                         break;
@@ -297,14 +300,14 @@ $(document).ready( function () {
                 });
 
                 // if tracking is enabled, check the statistics checkbox
-                if (googleAnalyticsConfig.isTrackingPermitted()) {
-                    $('div.statistics input').prop('checked', true);
-                }
+                //if (googleAnalyticsConfig.isTrackingPermitted()) {
+                //    $('div.statistics input').prop('checked', true);
+               // }
 
                 $('div.statistics input').change(function () {
                     var check = $(this).is(':checked');
                     //googleAnalytics.sendEvent('Settings', 'GoogleAnalytics', check);
-                    googleAnalyticsConfig.setTrackingPermitted(check);
+                    //googleAnalyticsConfig.setTrackingPermitted(check);
                 });
 
                 $('#map-provider-type').val(globalSettings.mapProviderType);

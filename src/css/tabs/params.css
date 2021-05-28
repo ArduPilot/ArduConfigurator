@@ -1,0 +1,251 @@
+.tab-params {
+    position: relative;
+}
+
+.tab-params .leftWrapper {
+    float: left;
+    width: calc(50% - 20px);
+}
+
+.tab-params .rightWrapper {
+    float: left;
+    width: calc(50% - 0px);
+    margin: 0 0 10px 20px;
+}
+
+.tab-params .mixerList {
+    width: 100%;
+    height: 20px;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.config-section input,
+.tab-params input {
+    padding-left: 3px;
+    height: 20px;
+    line-height: 20px;
+    text-align: left;
+    border: 1px solid silver;
+    border-radius: 3px;
+    margin-right: 11px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.config-section .number input,
+.tab-params .number input {
+    width: 106px;
+}
+
+.config-section .string input,
+.tab-params .string input {
+    width: 130px;
+}
+
+.tab-params .disabled {
+    background-color: #ececec;
+}
+
+.config-section input,
+.tab-params input {
+    float: right;
+}
+
+.config-section .spacer_box,
+.tab-params .spacer_box {
+    padding-bottom: 10px;
+    float: left;
+    width: calc(100% - 20px);
+}
+
+.tab-params .disarm {
+    margin-bottom: 5px;
+    float: left;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+}
+
+.disarmdelay {
+    margin-top: 5px;
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+}
+
+.config-section .number,
+.config-section .select,
+.config-section .checkbox,
+.tab-params .number,
+.tab-params .select,
+.tab-params .radio,
+.tab-params .checkbox,
+hr {
+    margin-bottom: 5px;
+    clear: left;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    float: left;
+}
+
+.config-section .number:last-child,
+.config-section .select:last-child,
+.config-section .checkbox:last-child,
+.tab-params .number:last-child,
+.tab-params .select:last-child,
+.tab-params .radio:last-child,
+.tab-params .checkbox:last-child,
+.config-section .number.no-bottom-border,
+.config-section .select.no-bottom-border,
+.tab-params .number.no-bottom-border,
+.tab-params .select.no-bottom-border,
+.tab-params .radio.no-bottom-border,
+.tab-params .checkbox.no-bottom-border {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.tab-params .gui_box_titlebar {
+    margin-bottom: 0;
+}
+
+.tab-params thead {
+    display: none;
+}
+
+.tab-params .gui_box {
+    margin-bottom: 10px;
+    float: left;
+}
+
+.tab-params .gui_box h3 {
+    text-decoration: underline;
+    font-size: 1.07em;
+    color: #333;
+    margin-left: 2px;
+    margin-bottom: 5px;
+}
+
+.tab-params .mixerPreview {
+    max-width: 230px;
+    background-color: #eeeeee;
+    text-align: center;
+    float: left;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.tab-params .mixerPreview img {
+    width: 90%;
+    height: 90%;
+    padding: 5%;
+}
+
+.tab-params .gui_box {
+    font-family: 'open_sanssemibold', Arial, serif;
+}
+
+.tab-params .gui_box span {
+    font-style: normal;
+    font-family: 'open_sansregular', Arial, serif;
+    line-height: 19px;
+    color: #4F4F4F;
+    font-size: 12px;
+}
+
+.tab-params .alignicon {
+    display: inline-block;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin-top: 0px;
+    margin-left: 6px;
+    margin-right: 2px;
+    top: 6px;
+}
+
+.tab-params .pitch {
+    background-size: 20px;
+    background: url(/images/icons/cf_icon_pitch.svg) no-repeat center;
+}
+
+.tab-params .yaw {
+    background-size: 20px;
+    background: url(/images/icons/cf_icon_yaw.svg) no-repeat center;
+}
+
+.tab-params .roll {
+    background-size: 20px;
+    background: url(/images/icons/cf_icon_roll.svg) no-repeat center;
+}
+
+.tab-params .board select {
+    width: 110px;
+}
+
+@media only screen and (max-width: 1055px) , only screen and (max-device-width: 1055px) {
+    .tab-params .gui_box span {
+        line-height: 17px;
+    }
+
+    .tab-params .leftWrapper {
+        width: calc(50% - 15px);
+    }
+
+    .tab-params .rightWrapper {
+        float: left;
+        width: calc(50% - 0px);
+        margin: 0 0 10px 15px;
+    }
+}
+
+#esc-protocols,
+#servo-rate-container {
+    display: none;
+}
+
+.config-section .select,
+.config-section .checkbox,
+.config-section .radio,
+.config-section .number {
+    position: relative;
+    height: 22px;
+}
+
+.config-section .checkbox label,
+.config-section .radio label {
+    cursor: pointer;
+}
+
+//.config-section label {
+//    position: absolute;
+//    left: 118px;
+//}
+
+.config-section .radio label {
+    left: 2em;
+}
+
+.config-section .string label {
+    left: 175px;
+}
+
+.config-section .radio input {
+    margin-top: 3px;
+    margin-left: 5px;
+}
+
+.esc-priority label,
+.features.esc label {
+    position: inherit;
+}
+
+.config-section select {
+    width: 110px;
+}
+
+.config-section .helpicon {
+    margin-top: 3px;
+}

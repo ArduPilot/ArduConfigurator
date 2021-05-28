@@ -91,6 +91,7 @@ sources.Js = [
     './js/mavsp/buffer-5.4.3a.js', //buzz
     './js/mavsp/mav_compat.js', //buzz
     './js/mavsp/mav_v2.js', //buzz
+    './js/mavsp/mavParam.js', //buzz
 
     './js/mavsp/MAVSPCodes.js', //buzz
     './js/mavsp/MAVSPHelper.js',//buzz

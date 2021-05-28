@@ -594,22 +594,35 @@ var FC = {
             {bit: 31, group: 'other', name: "FW_AUTOTRIM", haveTip: true, showNameInTip: true}
         ];
 
-        if (semver.gte(CONFIG.flightControllerVersion, "2.4.0") && semver.lt(CONFIG.flightControllerVersion, "2.5.0")) {
+        //if (semver.gte(CONFIG.flightControllerVersion, "2.4.0") && semver.lt(CONFIG.flightControllerVersion, "2.5.0")) {
             features.push({bit: 5, group: 'other', name: 'DYNAMIC_FILTERS', haveTip: true, showNameInTip: true});
-        }
+        //}
 
         return features.reverse();
     },
+    paramslist: [],
+    getParams: function () {
+        //var paramslist = [
+        paramslist = [
+                {name: 'todo1', value: '1', group: 'other'},
+            {name: 'todo2', value: '34.678', group: 'other'},
+            {name: 'todo3', value: "stringy", group: 'other' }
+        ];
+        paramslist.push({ name: 'pushedparam',value: 'other', group: 'other', });
+
+        return paramslist.reverse(); // rendered on-page from bottom up, so this gets them on-pase in the same order they are seen here
+    },            
     isFeatureEnabled: function (featureName, features) {
         if (features === undefined) {
             features = this.getFeatures();
         }
-        for (var i = 0; i < features.length; i++) {
-            if (features[i].name == featureName && bit_check(BF_CONFIG.features, features[i].bit)) {
-                return true;
-            }
-        }
-        return false;
+        //for (var i = 0; i < features.length; i++) {
+        //    if (features[i].name == featureName && bit_check(BF_CONFIG.features, features[i].bit)) {
+        //        return true;
+        //    }
+        //}
+        //return false;
+        return true ; // buzz hack to enable all features
     },
     isMotorOutputEnabled: function () {
         return this.isFeatureEnabled('PWM_OUTPUT_ENABLE', this.getFeatures());

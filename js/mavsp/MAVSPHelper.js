@@ -3,6 +3,10 @@
 
 //var {mavlink20, MAVLink20Processor} = require("./mav_v2.js"); 
 
+// global, just cause
+SYSID = undefined;
+COMPID = undefined;
+
 // create the output hooks for the parser/s
 // we overwrite the default send() instead of overwriting write() or using setConnection(), which don't know the ip or port info.
 // and we accept ip/port either as part of the mavmsg object, or as a sysid in the OPTIONAL 2nd parameter
