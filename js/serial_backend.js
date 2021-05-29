@@ -287,6 +287,8 @@ function onOpen(openInfo) {
 
         ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
 
+        update_dataflash_global();
+
 
         // request configuration data. Start with MSPv1 and
         // upgrade to MSPv2 if possible, and 
@@ -542,6 +544,48 @@ function bit_clear(num, bit) {
     return num & ~(1 << bit);
 }
 
+
+function update_params_complete() {
+    function content_ready() {
+        GUI.tab_switch_in_progress = false;
+    }
+   // GUI.tab_switch_in_progress = true;
+   // TABS.params.initialize(content_ready);
+    // buzz todo get 'params' tab to re-render
+   // alert("Param Download Complete - exit and reenter any tab to refresh gui");
+
+    //GUI.tab_switch_cleanup();
+
+    $(".params_global").css( "background-color","#22dd44"  );  // green=done
+
+    
+}
+
+
+function update_params_global(used,total) {
+
+   // $(".noflash_global").css({
+   //     display: 'none'
+   //  });
+
+   //  $(".dataflash-contents_global").css({
+   //     display: 'block'
+   //  });
+    //var progress_percent = total/current; 
+
+    if (used == 65535 )  return; // do nothing yet
+
+    $(".params_global").css( "background-color","#37a8db"  ); // blue=progress
+
+     $(".params_global").css({
+        width: (100-(total - used) / total * 100) + "%",
+        display: 'block'
+     });
+    // $(".dataflash-free_global div").text('Dataflash: free ' + formatFilesize(DATAFLASH.totalSize - DATAFLASH.usedSize));
+
+
+}
+
 function update_dataflash_global() {
     function formatFilesize(bytes) {
         if (bytes < 1024) {
@@ -558,7 +602,10 @@ function update_dataflash_global() {
         return megabytes.toFixed(1) + "MB";
     }
 
-    var supportsDataflash = DATAFLASH.totalSize > 0;
+    // buzz hack
+    var supportsDataflash = true; //DATAFLASH.totalSize > 0;
+    DATAFLASH.totalSize = 1024; 
+    DATAFLASH.usedSize = 512;
 
     if (supportsDataflash){
         $(".noflash_global").css({

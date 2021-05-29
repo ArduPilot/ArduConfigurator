@@ -58,6 +58,7 @@ TABS.setup.initialize = function (callback) {
 
         self.initializeInstruments();
 
+        // button on 'setup' tab
         $('a.resetSettings').click(function () {
             if (confirm(chrome.i18n.getMessage('confirm_reset_settings'))) {
                 MSP.send_message(MSPCodes.MSP_RESET_CONF, false, false, function () {
@@ -69,6 +70,12 @@ TABS.setup.initialize = function (callback) {
                 });
             }
         });
+
+        //like resetSettings but on 'params' tab
+        //refreshParams
+        //saveParams
+        //filesaveParams
+        //fileloadParams
 
         // display current yaw fix value (important during tab re-initialization)
         $('div#interactive_block > a.reset').text(chrome.i18n.getMessage('initialSetupButtonResetZaxisValue', [self.yaw_fix]));

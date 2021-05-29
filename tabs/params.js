@@ -16,13 +16,18 @@ TABS.params.initialize = function (callback, scrollPosition) {
 
 
     //ParamsObj.show_fetched_params(null); //null means all, and it console.logs them....
+
+    //clear old params 
+    FC.paramslist = {};
     
-    var parm_tbl = ParamsObj.get_param_table();
+    var parm_tbl = ParamsObj.get_param_table(); // this was hopefully already read from vehicle with mav
 
     // turn it into something the GUI can consume.
     for ( p in parm_tbl ) {
+            if (p == "" ) continue; // don't render unnamed params
 //            FC.paramslist.push({ 'name': p, 'value': p['param_value'], 'idx': p['param_index'],  'group': 'other', });
-            FC.paramslist.push({ 'name': p, 'value': parm_tbl[p]['param_value'], 'idx': parm_tbl[p]['param_index'],  'group': 'other', });
+//            FC.paramslist.push({ 'name': p, 'value': parm_tbl[p]['param_value'], 'idx': parm_tbl[p]['param_index'],  'group': 'other', });
+            FC.paramslist[p] = { 'name': p, 'value': parm_tbl[p]['param_value'], 'idx': parm_tbl[p]['param_index'],  'group': 'other', };
 
     }
 
@@ -110,15 +115,110 @@ TABS.params.initialize = function (callback, scrollPosition) {
         GUI.load("./tabs/params.html", Settings.processHtml(process_html));
     }
 
+
+    function saveParamFile(filename,ext) {
+        const fs = require('fs');
+        var filedata = '';
+
+        var paramslist = Object.fromEntries(Object.entries(FC.paramslist).sort())   ; // just FC.paramslist only sorted by keys
+
+        for (p in paramslist ) {
+            if ( p == "" ) continue;// ignore params with no name
+            var val = paramslist[p].value;
+            val = parseFloat(val).toFixed(6);
+            filedata += p+"    "+val+"\n";
+        }
+        if ( ! filename.endsWith(ext) ) { filename=filename+ext; }
+        fs.writeFile(filename, filedata, (err) => {
+            if (err) {
+                GUI.log('<span style="color: red">Error writing file</span>');
+                return console.error(err);
+            }
+            GUI.log('File saved');
+        });
+    }
     function process_html() {
 
         let i;
 
+        //like resetSettings but on 'params' tab
+        //refreshParams
+        //saveParams
+        //filesaveParams
+        //fileloadParams
+        $('a.refreshParams').click(function () {
+               update_params_global(0,100); // show no params loaded
+               ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
+        });
+        $('a.saveParams').click(function () {
+
+            var paramslist = Object.fromEntries(Object.entries(FC.paramslist).sort())   ; // just FC.paramslist only sorted by keys
+
+            for (p in paramslist ) {
+                if ( p == "" ) continue;// ignore params with no name
+                var val = paramslist[p].value;
+                console.log("setting param:"+p+" to:"+val);
+                ParamsObj.set(p,val); // send to mav as mavlink 
+            }
+        });
+        $('a.filesaveParams').click(function () {
+
+            nwdialog.setContext(document);
+            nwdialog.saveFileDialog('', '.parm', function(result) {
+                //saveMissionFile(result);
+                saveParamFile(result,'.parm');
+            })
+
+        });
+        $('a.fileloadParams').click(function () {
+
+            nwdialog.setContext(document);
+            nwdialog.openFileDialog('.parm', function(filename) {
+                const fs = require('fs');
+                
+                $('div.git_info').slideUp();
+
+                console.log('Loading file from: ' + filename);
+
+                fs.readFile(filename, (err, data) => {
+
+                    if (err) {
+                        console.log("Error loading local file", err);
+                        return;
+                    }
+
+                    console.log('File loaded');
+
+                    //clear old params 
+                    FC.paramslist = {};
+
+                    var paramdata = data.toString();
+                    var lines = paramdata.split("\n");
+
+                    for ( linenum in lines ) {
+                        var line = lines[linenum];
+                        var words = line.split(/\s+/); // any whitespaces
+                        var name = words[0];
+                        var val = words[1];
+
+                        //FC.paramslist.push({ 'name': name, 'value': val,  'group': 'fromfile', });
+                        FC.paramslist[name] = { 'name': name, 'value': val,  'group': 'fromfile' };
+
+                    }
+                });
+
+            });
+
+        });
+
+
         // generate params list
-        var paramslist = FC.paramslist;//();
+        var paramslist = Object.fromEntries(Object.entries(FC.paramslist).sort())   ; // just FC.paramslist only sorted by keys
 
         var params_e = $('.params'); // things with class="params " in params.html
-        for (i = 0; i < paramslist.length; i++) {
+
+        for (i  in  paramslist) { // keys of paramslist obj
+            if ( i == "") continue; // skip unnamed param
             var row_e,
                 tips = [],
                 param_tip_html = '';
@@ -144,7 +244,8 @@ TABS.params.initialize = function (callback, scrollPosition) {
 
             params_e.each(function () {
                 //if ($(this).hasClass(paramslist[i].group)) {
-                    $(this).after(row_e);
+                  //  $(this).after(row_e); 
+                    $(this).before(row_e); // keep alpha order A-Z
                 //}
             });
         }

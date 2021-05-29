@@ -600,18 +600,18 @@ var FC = {
 
         return features.reverse();
     },
-    paramslist: [],
-    getParams: function () {
+    paramslist: {},
+    //getParams: function () {
         //var paramslist = [
-        paramslist = [
-                {name: 'todo1', value: '1', group: 'other'},
-            {name: 'todo2', value: '34.678', group: 'other'},
-            {name: 'todo3', value: "stringy", group: 'other' }
-        ];
-        paramslist.push({ name: 'pushedparam',value: 'other', group: 'other', });
+        //paramslist = [
+        //        {name: 'todo1', value: '1', group: 'other'},
+        //    {name: 'todo2', value: '34.678', group: 'other'},
+        //    {name: 'todo3', value: "stringy", group: 'other' }
+        //];
+        //paramslist.push({ name: 'pushedparam',value: 'other', group: 'other', });
 
-        return paramslist.reverse(); // rendered on-page from bottom up, so this gets them on-pase in the same order they are seen here
-    },            
+    //    return paramslist; //.reverse(); // rendered on-page from bottom up, so this gets them on-pase in the same order they are seen here
+    //},            
     isFeatureEnabled: function (featureName, features) {
         if (features === undefined) {
             features = this.getFeatures();

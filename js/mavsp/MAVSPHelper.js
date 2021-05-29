@@ -24,7 +24,8 @@ generic_link_sender = function(mavmsg,sysid) {
         message.name = mavmsg._name;
         message.messageBody = abuf;
         message.onSend  = function (sendInfo) {  
-            console.log("msg sent! "+message.name);
+            //console.log("msg sent! "+message.name); brief
+            console.log("sending-->");console.log(message);console.log(mavmsg);  //verbose
 
             // after a successful send, stop the timeout counter 
             MSP.removeCallback(message.code);
@@ -649,7 +650,7 @@ var mspHelper = (function (gui) {
             
                 // buzz todo
                 break;
-            case mavlink20.MAVLINK_MSG_ID_PARAM_VALUE:
+            //case mavlink20.MAVLINK_MSG_ID_PARAM_VALUE:
                 /* ["param_id", "param_value", "param_type", "param_count", "param_index"]
                 param_count: 1022
                 param_id: "STAT_RUNTIME"
@@ -659,7 +660,7 @@ var mspHelper = (function (gui) {
                 */
             
                 // buzz todo
-                break; 
+            //    break; 
 
             case mavlink20.MAVLINK_MSG_ID_STATUSTEXT:
                 /* ["severity", "text", "id", "chunk_seq"]
@@ -730,7 +731,7 @@ var mspHelper = (function (gui) {
             default:
                 // todo
 
-                console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
+                console.log('recieving-->');console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
 
                 break;
         }

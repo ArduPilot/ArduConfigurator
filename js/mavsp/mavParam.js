@@ -64,9 +64,17 @@ function paramHandler(msg) {
     var terminator_idx = msg.param_id.indexOf('\u0000') // null string terminator
     var idx = msg.param_id.substring(0,terminator_idx);
     //console.log("param response:",msg.param_id);
-    process.stdout.write('^');
+    //process.stdout.write('^');
     param_table[idx] =  {   'param_value':msg.param_value,  'param_type':msg.param_type,  'param_count':msg.param_count,  'param_index':msg.param_index , 'ts':Date.now()};
     // ts = number of milliseconds elapsed since January 1, 1970 00:00:00 UTC.
+
+    // keep gui aware of progress
+    update_params_global(msg.param_index,msg.param_count); // update gui
+
+    // alert gui its finished
+    if (msg.param_index == msg.param_count-1 ) {
+        update_params_complete();
+    }
 
 }
 
@@ -94,7 +102,7 @@ MavParam.prototype.set = function(name, value, retries) {
 
     // Establish a handler to try and send the required packet every second until cancelled
     senderHandler[name] = setInterval( function() {
-        log.info('Requesting parameter ['+name+'] be set to ['+value+']...');
+        //console.log('Requesting parameter ['+name+'] be set to ['+value+']...');
         mavlinkParser.send(param_set);
     }, 1000);
 

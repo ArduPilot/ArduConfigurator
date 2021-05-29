@@ -1711,6 +1711,10 @@ dialog {
     border-radius: 4px;
 }
 
+.params_global {
+    background-color: #37a8db;
+    border-radius: 4px;
+}
 .dataflash-contents_global .notsupported_global {
     display: none;
 }
