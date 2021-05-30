@@ -562,7 +562,7 @@ function update_params_complete() {
 }
 
 
-function update_params_global(used,total) {
+function update_params_global(used,total, down=true) {
 
    // $(".noflash_global").css({
    //     display: 'none'
@@ -581,7 +581,8 @@ function update_params_global(used,total) {
         width: (100-(total - used) / total * 100) + "%",
         display: 'block'
      });
-    // $(".dataflash-free_global div").text('Dataflash: free ' + formatFilesize(DATAFLASH.totalSize - DATAFLASH.usedSize));
+     if ( down)  $(".params_global div").text('Params Download...');
+     if ( ! down)  $(".params_global div").text('Params Upload...');
 
 
 }

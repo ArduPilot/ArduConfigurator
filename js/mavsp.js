@@ -35,7 +35,7 @@ var heartbeat_handler =  function(message) {
     //console.log(message);
     var tmp_sysid = message._header.srcSystem;
 
-    // don't allow messages that appear to come from 255 to be hadled.
+    // don't allow messages that appear to come from 255 to be handled.
     if (message._header.srcSystem == 255 ) { return;  }
 
     // todo buzz more
@@ -60,8 +60,13 @@ var generic_message_handler = function(message) {
          mpo.send(message);   
     } 
 
-    SYSID = message._header.srcSystem;
-    COMPID =  message._header.srcComponent??null;
+    // record src system's ID's so we know where to reply to later - only supports one sysid right now. buzz todo
+    if( message._header.srcSystem != 255 ) {
+        SYSID = message._header.srcSystem;
+        COMPID =  message._header.srcComponent??null;
+        mpo.srcSystem = SYSID; 
+        mpo.srcComponent = COMPID;
+    }
     // = 
 
     // console.log all the uncommon message types we DONT list here. 

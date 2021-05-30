@@ -147,20 +147,35 @@ TABS.params.initialize = function (callback, scrollPosition) {
         //filesaveParams
         //fileloadParams
         $('a.refreshParams').click(function () {
-               update_params_global(0,100); // show no params loaded
+               update_params_global(0,100,true); // show no params loaded
                ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
         });
+        // ie write-to-vehiche
         $('a.saveParams').click(function () {
 
+
             var paramslist = Object.fromEntries(Object.entries(FC.paramslist).sort())   ; // just FC.paramslist only sorted by keys
+
+            var paramcount = Object.keys(paramslist).length;
+
+            // this WRITES the entire list to the drone...
+            update_params_global(0,paramcount,false);
+
+            // estimate rough total time as 3 params/sec * 1000 for ms
+            var timeestimate = paramcount/3 * 1000;
 
             for (p in paramslist ) {
                 if ( p == "" ) continue;// ignore params with no name
                 var val = paramslist[p].value;
                 console.log("setting param:"+p+" to:"+val);
-                ParamsObj.set(p,val); // send to mav as mavlink 
+                ParamsObj.set(p,val,timeestimate); // send to mav as mavlink (gets queue'd for uart if too many)
+                // exit early test
+                //if ( p == "ACRO_LOCKING") return;
             }
         });
+
+
+
         $('a.filesaveParams').click(function () {
 
             nwdialog.setContext(document);
@@ -223,24 +238,14 @@ TABS.params.initialize = function (callback, scrollPosition) {
                 tips = [],
                 param_tip_html = '';
 
-            //if (paramslist[i].showNameInTip) {
-            //    tips.push(chrome.i18n.getMessage("manualEnablingTemplate").replace("{name}", paramslist[i].name));
-            //}
+                row_e = $('<div class="number"><table width=100%><tr><td width=33%>' +
+                paramslist[i].name  +
 
-            //if (paramslist[i].haveTip) {
-            //    tips.push(chrome.i18n.getMessage("feature" + paramslist[i].name + "Tip"));
-            //}
+                '<td width=33%><input type="text" id=params-' + paramslist[i].name + ' class="params" name="' + paramslist[i].name + '" value="' + paramslist[i].value + '">' +
 
-            //if (tips.length > 0) {
-            //    param_tip_html = '<div class="helpicon cf_tip" title="' + tips.join("<br><br>") + '"></div>';
-            //}
-
-            row_e = $('<div class="number">' +
-                '<input type="text" id=params-' + paramslist[i].name + ' class="params" name="' + paramslist[i].name + '" value="' + paramslist[i].value + '" ' +
-                '>' +
-                '<label for="params-' + paramslist[i].name + '">' + paramslist[i].name + '</label>' +
-            //    param_tip_html +
-                '</div>');
+                '<td width=33%><div class="default_btn" style="width: 60%; float:right">' +
+                '<a class="writeOneParam" href="#" title="'+i+'" style="display:none;">Write Param</a></div>'+
+                    '</tr></table></div>'); // hidden buttons to start with
 
             params_e.each(function () {
                 //if ($(this).hasClass(paramslist[i].group)) {
@@ -249,6 +254,56 @@ TABS.params.initialize = function (callback, scrollPosition) {
                 //}
             });
         }
+
+
+        // the 'write param' button next to each parameter... need sto be done AFTER the above html for the list is rendered to DOM
+        $('a.writeOneParam').click(function () {
+
+            var paramname = this.title;
+            var input = document.getElementById("params-"+paramname);
+            var paramvalue = input.value; // the <input type=text" for the parm
+
+            console.log("setting param:"+paramname+" to:"+paramvalue);
+            ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+
+            $("#params-"+paramname).css('background-color', '#ffffff'); // normal white
+
+            $('a.writeOneParam[title='+paramname+']').hide();
+
+
+        });
+
+        // when user types any changes to any of the text boxes with values in them..?  ie <inputs> of class 'params'
+        //.change event will only fire when the selector has lost focus, so you will need to click somewhere else to have this work.
+        // .input fires whenever text changes without need to loose focus
+        $('input.params').on('input',function() {
+
+            //console.log("typing..");
+
+            var id = this.id;
+            var paramname = this.name;
+            var value = this.value;
+
+            var input = document.getElementById("params-"+paramname);
+
+
+            // is a number, such as floats and ints?
+            if (Number(value) == value ) {
+                $("#params-"+paramname).css('background-color', '#77ff77'); // a bit green = good but unsaved
+                $('a.writeOneParam[title='+paramname+']').show();
+
+
+            } else {
+                $("#params-"+paramname).css('background-color', '#ff7777');  // a bit red = bad, as its not a number
+                $('a.writeOneParam[title='+paramname+']').hide();
+
+            }
+
+            // show 'write' after any edit this selector chooses the specific 'writeOneParam' button by its title
+            //$('a.writeOneParam[title='+paramname+']').show();
+
+        });
+
 
         helper.features.updateUI($('.tab-params'), BF_CONFIG.features);
 
