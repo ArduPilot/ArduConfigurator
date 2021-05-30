@@ -394,7 +394,7 @@ var FC = {
         };
 
         CALIBRATION_DATA = {
-            acc: {
+            acc: { // each of the 6 positions the user holds the vehicle in diring accel cal.
                 Pos0: null,
                 Pos1: null,
                 Pos2: null,

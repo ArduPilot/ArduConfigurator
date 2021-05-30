@@ -3,42 +3,7 @@
 
 TABS.calibration = {};
 
-TABS.calibration.model = (function () {
-    var publicScope = {},
-        privateScope = {};
-
-    privateScope.step = null;
-
-    publicScope.next = function () {
-
-        if (privateScope.step === null) {
-            privateScope.step = 1;
-        } else {
-            var count = 0;
-            for (var i = 0; i < 6; i++) {
-                if (CALIBRATION_DATA.acc['Pos' + i] === 1) {
-                    count++;
-                }
-            }
-
-            privateScope.step = count;
-        }
-
-        console.log(privateScope.step);
-
-        if (privateScope.step > 5) {
-            privateScope.step = null;
-        }
-
-        return privateScope.step;
-    };
-
-    publicScope.getStep = function () {
-        return privateScope.step;
-    };
-
-    return publicScope;
-})();
+TABS.calibration.model =  0;
 
 TABS.calibration.initialize = function (callback) {
 
@@ -110,7 +75,7 @@ TABS.calibration.initialize = function (callback) {
     }
 
     function checkFinishAccCalibrate() {
-        if (TABS.calibration.model.next() === null) {
+        if (TABS.calibration.model === 0) {
             modalStop = new jBox('Modal', {
                 width: 400,
                 height: 200,
@@ -123,13 +88,16 @@ TABS.calibration.initialize = function (callback) {
         updateSensorData();
     }
 
-    function calibrateNew() {
-        var newStep = null,
-            $button = $(this);
+    // triggered when the 'Calibrate Accelerometer' button is  pressed. zz
 
-        if (TABS.calibration.model.getStep() === null) {
+    function calibrateNew() {
+        var newStep = null;
+        var $button = $(this);
+
+        if (TABS.calibration.model === 0) {
+            // reset all 6 values to zero.
             for (var i = 0; i < 6; i++) {
-                if (CALIBRATION_DATA.acc['Pos' + i] === 1) {
+                if (CALIBRATION_DATA.acc['Pos' + i] != 0) {
                     CALIBRATION_DATA.acc['Pos' + i] = 0;
                 }
             }
@@ -143,36 +111,78 @@ TABS.calibration.initialize = function (callback) {
                 content: $('#modal-acc-calibration-start')
             }).open();
         } else {
-            newStep = TABS.calibration.model.next();
+            TABS.calibration.model += 1;
+            if (TABS.calibration.model >= 6) {TABS.calibration.model =0; }
         }
+
+        var newStep = TABS.calibration.model;
+
+        // error state, start over
+        if (FC.longyREQ > 255 ) { FC.longyREQ = 99999;  } // success
 
         /*
          * Communication
          */
-        if (newStep !== null) {
-            $button.addClass('disabled');
+        //if (newStep == 0 ) {
+        $button.addClass('disabled');
 
-            modalProcessing = new jBox('Modal', {
-                width: 400,
-                height: 100,
-                animation: false,
-                closeOnClick: false,
-                closeOnEsc: false,
-                content: $('#modal-acc-processing')
-            }).open();
-
-            MSP.send_message(MSPCodes.MSP_ACC_CALIBRATION, false, false, function () {
-                GUI.log(chrome.i18n.getMessage('initialSetupAccelCalibStarted'));
-            });
-
-            helper.timeout.add('acc_calibration_timeout', function () {
-                $button.removeClass('disabled');
-
-                modalProcessing.close();
-                MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, checkFinishAccCalibrate);
-                GUI.log(chrome.i18n.getMessage('initialSetupAccelCalibEnded'));
-            }, 2000);
+        var notetext = $('div.note').html(); 
+        var newtext = "";
+        if ( newStep == 0) {
+            newtext = "Please place vehicle LEVEL NOW then press the button.";
         }
+        if ( FC.longyREQ == 1) {
+            newtext = "Please place vehicle on LEFT SIDE then press the button.";
+        }
+        if ( FC.longyREQ == 2) {
+            newtext = "Please place vehicle on RIGHT SIDE then press the button.";
+        }
+        if ( FC.longyREQ == 3) {
+            newtext = "Please place vehicle NOSE DOWN then press the button.";
+        }
+        if ( FC.longyREQ == 4) {
+            newtext = "Please place vehicle NOSE UP then press the button.";
+        }
+        if ( FC.longyREQ == 5) {
+            newtext = "Please place vehicle UPSIDE DOWN then press the button.";
+        }
+        if ( FC.longyREQ >= 6) {
+            newtext = "Success?";
+        }
+        $('div.note').html("stage:"+newStep+" "+newtext+" req:"+FC.longyREQ+" res:"+FC.longyRES); 
+
+        // at FIRST step, we send a COMMAND_LONG , CMD=241 ,ie MAV_CMD_PREFLIGHT_CALIBRATION and 'param5 = 1'
+        if (newStep == 0 ) { 
+
+            preflight_accel_cal(SYSID,COMPID,newStep );
+        }
+
+        if (newStep >= 1 ) { 
+
+            preflight_accel_cal_progress(SYSID,COMPID);
+        }
+        // modalProcessing = new jBox('Modal', {
+        //     width: 400,
+        //     height: 100,
+        //     animation: false,
+        //     closeOnClick: false,
+        //     closeOnEsc: false,
+        //     content: $('#modal-acc-processing')
+        // }).open();
+
+        //MSP.send_message(MSPCodes.MSP_ACC_CALIBRATION, false, false, function () {
+            GUI.log(chrome.i18n.getMessage('initialSetupAccelCalibStarted'));
+        //});
+
+        helper.timeout.add('acc_calibration_timeout', function () {
+            $button.removeClass('disabled');
+
+            //   modalProcessing.close();
+            //   MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, checkFinishAccCalibrate);
+
+            GUI.log(chrome.i18n.getMessage('initialSetupAccelCalibEnded'));
+        }, 2000);
+       // }
     }
 
     function processHtml() {
@@ -268,7 +278,7 @@ TABS.calibration.initialize = function (callback) {
 
         $('#modal-start-button').click(function () {
             modalStart.close();
-            TABS.calibration.model.next();
+            //TABS.calibration.model += 1;
         });
 
         $('#modal-stop-button').click(function () {
@@ -279,7 +289,7 @@ TABS.calibration.initialize = function (callback) {
         localize();
 
         $('#calibrate-start-button').on('click', calibrateNew);
-        MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, updateSensorData);
+        //MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, updateSensorData); // buzz
 
         GUI.content_ready(callback);
     }

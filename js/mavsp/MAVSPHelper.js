@@ -1,6 +1,8 @@
 /*global $, SERVO_DATA, PID_names, ADJUSTMENT_RANGES, RXFAIL_CONFIG, SERVO_CONFIG*/
 //'use strict';
 
+const { fstat } = require("fs");
+
 //var {mavlink20, MAVLink20Processor} = require("./mav_v2.js"); 
 
 // global, just cause
@@ -629,18 +631,18 @@ var mspHelper = (function (gui) {
                 //MSPCodes.MSP_CALIBRATION_DATA: ?
 
                 // i have NO idea if CALIBRATION_DATA.accZero  or  CALIBRATION_DATA.accGain should get these:
-                CALIBRATION_DATA.accZero.X = mavmsg.accel_cal_x ;
-                CALIBRATION_DATA.accZero.Y =  mavmsg.accel_cal_y ;
-                CALIBRATION_DATA.accZero.Z =  mavmsg.accel_cal_z ;
-                //?
-                //CALIBRATION_DATA.accGain.X = data.getInt16(7, true);
-                //CALIBRATION_DATA.accGain.Y = data.getInt16(9, true);
-                //CALIBRATION_DATA.accGain.Z = data.getInt16(11, true);
+                // CALIBRATION_DATA.accZero.X = mavmsg.accel_cal_x ;
+                // CALIBRATION_DATA.accZero.Y =  mavmsg.accel_cal_y ;
+                // CALIBRATION_DATA.accZero.Z =  mavmsg.accel_cal_z ;
+                // //?
+                // //CALIBRATION_DATA.accGain.X = data.getInt16(7, true);
+                // //CALIBRATION_DATA.accGain.Y = data.getInt16(9, true);
+                // //CALIBRATION_DATA.accGain.Z = data.getInt16(11, true);
 
-                // i have NO idea if CALIBRATION_DATA.magZero  or  CALIBRATION_DATA.magGain should get these:
-                CALIBRATION_DATA.magZero.X = mavmsg.mag_ofs_x ;
-                CALIBRATION_DATA.magZero.Y = mavmsg.mag_ofs_y ;
-                CALIBRATION_DATA.magZero.Z = mavmsg.mag_ofs_z ;
+                // // i have NO idea if CALIBRATION_DATA.magZero  or  CALIBRATION_DATA.magGain should get these:
+                // CALIBRATION_DATA.magZero.X = mavmsg.mag_ofs_x ;
+                // CALIBRATION_DATA.magZero.Y = mavmsg.mag_ofs_y ;
+                // CALIBRATION_DATA.magZero.Z = mavmsg.mag_ofs_z ;
                 //?
                 //CALIBRATION_DATA.magGain.X = data.getInt16(21, true);
                 //CALIBRATION_DATA.magGain.Y = data.getInt16(23, true);
@@ -661,7 +663,9 @@ var mspHelper = (function (gui) {
                 param_type: 6
                 param_value: 0
                 */
-                console.log('recieving-->');console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
+                if  ( mavmsg.param_id.startsWith("STAT_RUNTIME") ) { break;} // skip this
+
+                //console.log('recieving-->');console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
 
                 // buzz todo
                 break; 
@@ -719,6 +723,57 @@ var mspHelper = (function (gui) {
             
                 // buzz todo
                 break; 
+
+            // https://mavlink.io/en/services/command.html 
+            // https://mavlink.io/en/messages/common.html#mav_commands
+            case mavlink20.MAVLINK_MSG_ID_COMMAND_LONG:
+                /* ["target_system", "target_component", "command", "confirmation", "param1", "param2", "param3", "param4", "param5", "param6", "param7"]
+                command: 241
+                confirmation: 0
+                param1: 0
+                param2: 0
+                param3: 0
+                param4: 0
+                param5: 1
+                param6: 0
+                param7: 0
+                target_component: 1
+                target_system: 1
+                */
+            
+                // 
+                switch ( mavmsg.command ) { //any of MAV_CMD_*  's 
+                    case mavlink20.MAV_CMD_ACCELCAL_VEHICLE_POS:  //
+                        FC.longyREQ = mavmsg.param1; // veh pos
+                        console.log('receiving COMMAND_LONG MAV_CMD_ACCELCAL_VEHICLE_POS -->');console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
+
+                        break;
+
+                    default:
+                        // emit detals about unknown COMMAND_LONG packets
+                        console.log('receiving unhandled COMMAND_LONG -->');console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
+                        break;
+                }
+
+                // buzz todo
+
+                break; 
+            // this is teh ack for the above ..LONG:
+            case mavlink20.MAVLINK_MSG_ID_COMMAND_ACK:
+                /* ["command", "result", "progress", "result_param2", "target_system", "target_component"]
+                command: 241
+                progress: 0
+                result: 0
+                result_param2: 0
+                target_component: 0
+                target_system: 0
+                */
+            
+                // buzz todo
+                console.log('receiving COMMAND_ACK -->');console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
+                FC.longyRES = mavmsg.result;
+
+                break;
 
             // case mavlink20.MAVLINK_MSG_ID_SENSOR_OFFSETS:
             //     /*

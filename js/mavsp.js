@@ -14,9 +14,7 @@ var send_heartbeat_handler = function() {
 }
     
 var set_stream_rates = function(rate,target_system,target_component) {
-
 // mavproxy uses a stream_rate of 4 on its links by default, so we'll just use that...
-
 //target_system, target_component, req_stream_id, req_message_rate, start_stop
 
     var rsr = new mavlink20.messages.request_data_stream(target_system,target_component,
@@ -25,8 +23,59 @@ var set_stream_rates = function(rate,target_system,target_component) {
     mavParserObj.send(rsr); 
     console.log('Set Stream Rates =4');
 
+}
 
-    
+var preflight_accel_cal = function(target_system,target_component) {
+
+    // this.target_system , 
+    // this.target_component , 
+    // this.command , 
+    // this.confirmation , 
+    // this.param1 , 
+    // this.param2 , 
+    // this.param3 ,
+    // this.param4 , 
+    // this.param5 , 
+    // this.param6 , 
+    // this.param7
+
+    var pac = new mavlink20.messages.command_long(target_system,target_component,
+        mavlink20.MAV_CMD_PREFLIGHT_CALIBRATION,
+        0, // confirmation
+        0,0,0,0,1,0,0 // params 1-7, param5=1 means 'accelerometer calibration'
+        );
+
+    mavParserObj.send(pac); 
+    console.log('Send accel preflight cal');
+}
+
+
+var preflight_accel_cal_progress = function (target_system,target_component) {
+
+  //  vehicle sends:  MAV_CMD_ACCELCAL_VEHICLE_POS = 42429// # Used when doing accelerometer calibration. When sent to the GCS tells
+   //                         //# it what position to put the vehicle in. When
+     //                       //# sent to the vehicle says what position the
+       //                     //# vehicle is in. 
+
+    //    this.command , 
+    //    this.result , 
+    //    this.progress , 
+    //    this.result_param2 , 
+    //    this.target_system , 
+    //    this.target_component
+
+       var progress = new mavlink20.messages.command_ack(
+        mavlink20.MAVLINK_MSG_ID_COMMAND_ACK,
+        1, // result
+        1, // progress
+        0, //result2/param2
+        target_system,
+        target_component,
+        );
+
+    mavParserObj.send(progress); 
+    console.log('Send accel preflight progress');
+
 }
 
 
@@ -383,9 +432,15 @@ var MSP = {
         case MSPCodes.MSP_BF_CONFIG:
             // buzz todo
             break;
-
         //
         case MSPCodes.MSP_ATTITUDE:
+            // buzz todo
+            break;
+            
+        case MSPCodes.MSP_ALTITUDE: // was 4 graphs on 'Sensors' page
+            // buzz todo
+            break;
+        case MSPCodes.MSP_RAW_IMU: // was 4 graphs on 'Sensors' page
             // buzz todo
             break;
 

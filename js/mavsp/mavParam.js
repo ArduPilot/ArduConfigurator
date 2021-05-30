@@ -101,7 +101,7 @@ function paramHandler(msg) {
         update_params_global(paramcount-pendingcount,paramcount,false); // update gui
         if ( pendingcount == 1 ) update_params_complete(); // near enough to done
     }
-    console.log(pendingcount,paramcount,param_retry_delay); 
+    //console.log(pendingcount,paramcount,param_retry_delay); 
 
     // alert gui its finished the 'down
     if (msg.param_index == msg.param_count-1 ) {
