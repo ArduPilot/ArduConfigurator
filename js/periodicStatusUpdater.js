@@ -33,7 +33,7 @@ helper.periodicStatusUpdater = (function () {
 
         var active = ((Date.now() - MSP.analog_last_received_timestamp) < publicScope.getUpdateInterval(serial.bitrate) * 3);
 
-        if (FC.isModeEnabled('ARM'))
+        if (FC.isModeEnabled('ARM')) // buzz todo put arming info here
             $(".armedicon").css({
                 'background-image': 'url("/images/icons/cf_icon_armed_active.svg")'
             });
@@ -50,7 +50,7 @@ helper.periodicStatusUpdater = (function () {
                 'background-image': 'url("/images/icons/cf_icon_failsafe_grey.svg")'
             });
 
-        if (ANALOG != undefined) {
+        //if (ANALOG != undefined) {
             var nbCells;
 
             nbCells = ANALOG.cell_count;
@@ -80,7 +80,35 @@ helper.periodicStatusUpdater = (function () {
             }
 
             $(".battery-legend").text(ANALOG.voltage + " V");
-        }
+
+            //---------------
+            var newtext = "Start Accel Cal? ... press the blue button.";
+            if ( FC.longyREQ == 1) {
+                newtext = "Please place vehicle LEVEL NOW then press the button.";
+            }
+            if ( FC.longyREQ == 2) {
+                newtext = "Please place vehicle on LEFT SIDE then press the button.";
+            }
+            if ( FC.longyREQ == 3) {
+                newtext = "Please place vehicle on RIGHT SIDE then press the button.";
+            }
+            if ( FC.longyREQ == 4) {
+                newtext = "Please place vehicle NOSE DOWN then press the button.";
+            }
+            if ( FC.longyREQ == 5) {
+                newtext = "Please place vehicle NOSE UP then press the button.";
+            }
+            if ( FC.longyREQ == 6) {
+                newtext = "Please place vehicle UPSIDE DOWN then press the button.";
+            }
+            if ( FC.longyREQ > 6) { // 16777215 is greater than 6
+                newtext = "Success!";
+            }
+            //$('div.note').html("stage:"+TABS.calibration.model+" "+newtext+" req:"+FC.longyREQ);
+            $('div.note').html(newtext+"<br>req:"+FC.longyREQ+"<br>model["+TABS.calibration.model+"]<br>");
+            //--------------
+
+        //}
 
         $('#quad-status_wrapper').show();
     };

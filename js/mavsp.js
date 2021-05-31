@@ -50,7 +50,7 @@ var preflight_accel_cal = function(target_system,target_component) {
 }
 
 
-var preflight_accel_cal_progress = function (target_system,target_component) {
+var preflight_accel_cal_progress = function (target_system,target_component, step=1) {
 
   //  vehicle sends:  MAV_CMD_ACCELCAL_VEHICLE_POS = 42429// # Used when doing accelerometer calibration. When sent to the GCS tells
    //                         //# it what position to put the vehicle in. When
@@ -66,7 +66,7 @@ var preflight_accel_cal_progress = function (target_system,target_component) {
 
        var progress = new mavlink20.messages.command_ack(
         mavlink20.MAVLINK_MSG_ID_COMMAND_ACK,
-        1, // result
+        step, // result
         1, // progress
         0, //result2/param2
         target_system,

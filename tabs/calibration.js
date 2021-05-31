@@ -91,7 +91,7 @@ TABS.calibration.initialize = function (callback) {
     // triggered when the 'Calibrate Accelerometer' button is  pressed. zz
 
     function calibrateNew() {
-        var newStep = null;
+       // var newStep = null;
         var $button = $(this);
 
         if (TABS.calibration.model === 0) {
@@ -102,20 +102,20 @@ TABS.calibration.initialize = function (callback) {
                 }
             }
             updateCalibrationSteps();
-            modalStart = new jBox('Modal', {
-                width: 400,
-                height: 200,
-                animation: false,
-                closeOnClick: false,
-                closeOnEsc: false,
-                content: $('#modal-acc-calibration-start')
-            }).open();
-        } else {
-            TABS.calibration.model += 1;
-            if (TABS.calibration.model >= 6) {TABS.calibration.model =0; }
-        }
+            // modalStart = new jBox('Modal', {
+            //     width: 400,
+            //     height: 200,
+            //     animation: false,
+            //     closeOnClick: false,
+            //     closeOnEsc: false,
+            //     content: $('#modal-acc-calibration-start')
+            // }).open();
+        } //else {
+           // TABS.calibration.model += 1;
+           // 
+       // }
 
-        var newStep = TABS.calibration.model;
+       // var newStep = TABS.calibration.model;
 
         // error state, start over
         if (FC.longyREQ > 255 ) { FC.longyREQ = 99999;  } // success
@@ -123,44 +123,44 @@ TABS.calibration.initialize = function (callback) {
         /*
          * Communication
          */
-        //if (newStep == 0 ) {
+        //if (TABS.calibration.model == 0 ) {
         $button.addClass('disabled');
 
-        var notetext = $('div.note').html(); 
-        var newtext = "";
-        if ( newStep == 0) {
-            newtext = "Please place vehicle LEVEL NOW then press the button.";
-        }
-        if ( FC.longyREQ == 1) {
-            newtext = "Please place vehicle on LEFT SIDE then press the button.";
-        }
-        if ( FC.longyREQ == 2) {
-            newtext = "Please place vehicle on RIGHT SIDE then press the button.";
-        }
-        if ( FC.longyREQ == 3) {
-            newtext = "Please place vehicle NOSE DOWN then press the button.";
-        }
-        if ( FC.longyREQ == 4) {
-            newtext = "Please place vehicle NOSE UP then press the button.";
-        }
-        if ( FC.longyREQ == 5) {
-            newtext = "Please place vehicle UPSIDE DOWN then press the button.";
-        }
-        if ( FC.longyREQ >= 6) {
-            newtext = "Success?";
-        }
-        $('div.note').html("stage:"+newStep+" "+newtext+" req:"+FC.longyREQ+" res:"+FC.longyRES); 
+//        var notetext = $('div.note').html(); 
+
+
+
 
         // at FIRST step, we send a COMMAND_LONG , CMD=241 ,ie MAV_CMD_PREFLIGHT_CALIBRATION and 'param5 = 1'
-        if (newStep == 0 ) { 
+        if ((TABS.calibration.model == 0)  && (FC.longyREQ == 0) ) { 
 
-            preflight_accel_cal(SYSID,COMPID,newStep );
+            preflight_accel_cal(SYSID,COMPID );
+            
         }
 
-        if (newStep >= 1 ) { 
+        if ((TABS.calibration.model == 0)  && (FC.longyREQ == 1) ) { 
+            CALIBRATION_DATA.acc['Pos0'] = 1;
+            TABS.calibration.model = 1;
+            preflight_accel_cal_progress(SYSID,COMPID,TABS.calibration.model);
 
-            preflight_accel_cal_progress(SYSID,COMPID);
+        } else 
+        if (TABS.calibration.model >= 1 ) { 
+
+            preflight_accel_cal_progress(SYSID,COMPID,TABS.calibration.model);
+            CALIBRATION_DATA.acc['Pos' + TABS.calibration.model] = 1;
+            TABS.calibration.model +=1;
         }
+
+        // 
+        if (TABS.calibration.model > 6) {
+            TABS.calibration.model =0; 
+        }
+
+
+           
+
+        updateCalibrationSteps();
+
         // modalProcessing = new jBox('Modal', {
         //     width: 400,
         //     height: 100,
@@ -277,7 +277,7 @@ TABS.calibration.initialize = function (callback) {
         });
 
         $('#modal-start-button').click(function () {
-            modalStart.close();
+            //modalStart.close();
             //TABS.calibration.model += 1;
         });
 

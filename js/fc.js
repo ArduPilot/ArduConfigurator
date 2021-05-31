@@ -66,6 +66,7 @@ var CONFIG,
     SAFEHOMES;
 
 var FC = {
+    longyREQ:0,
     MAX_SERVO_RATE: 125,
     MIN_SERVO_RATE: 0,
     isAirplane: function () {
