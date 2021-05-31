@@ -82,30 +82,35 @@ helper.periodicStatusUpdater = (function () {
             $(".battery-legend").text(ANALOG.voltage + " V");
 
             //---------------
-            var newtext = "Start Accel Cal? ... press the blue button.";
-            if ( FC.longyREQ == 1) {
-                newtext = "Please place vehicle LEVEL NOW then press the button.";
+            if (GUI.active_tab == 'calibration') {
+                var newtext = "";
+                if ( FC.longyREQ == 0) {
+                    newtext = "Start Accel Cal? ... press the blue button.";
+                }
+                if ( FC.longyREQ == 1) {
+                    newtext = "Please place vehicle LEVEL NOW then press the button.";
+                }
+                if ( FC.longyREQ == 2) {
+                    newtext = "Please place vehicle on LEFT SIDE then press the button.";
+                }
+                if ( FC.longyREQ == 3) {
+                    newtext = "Please place vehicle on RIGHT SIDE then press the button.";
+                }
+                if ( FC.longyREQ == 4) {
+                    newtext = "Please place vehicle NOSE DOWN then press the button.";
+                }
+                if ( FC.longyREQ == 5) {
+                    newtext = "Please place vehicle NOSE UP then press the button.";
+                }
+                if ( FC.longyREQ == 6) {
+                    newtext = "Please place vehicle UPSIDE DOWN then press the button.";
+                }
+                if ( FC.longyREQ > 6) { // 16777215 is greater than 6
+                    newtext = "Success!";
+                }
+                //$('div.note').html("stage:"+TABS.calibration.model+" "+newtext+" req:"+FC.longyREQ);
+                $('div.note').html(newtext+"<br>req:"+FC.longyREQ+"<br>model["+TABS.calibration.model+"]<br>");
             }
-            if ( FC.longyREQ == 2) {
-                newtext = "Please place vehicle on LEFT SIDE then press the button.";
-            }
-            if ( FC.longyREQ == 3) {
-                newtext = "Please place vehicle on RIGHT SIDE then press the button.";
-            }
-            if ( FC.longyREQ == 4) {
-                newtext = "Please place vehicle NOSE DOWN then press the button.";
-            }
-            if ( FC.longyREQ == 5) {
-                newtext = "Please place vehicle NOSE UP then press the button.";
-            }
-            if ( FC.longyREQ == 6) {
-                newtext = "Please place vehicle UPSIDE DOWN then press the button.";
-            }
-            if ( FC.longyREQ > 6) { // 16777215 is greater than 6
-                newtext = "Success!";
-            }
-            //$('div.note').html("stage:"+TABS.calibration.model+" "+newtext+" req:"+FC.longyREQ);
-            $('div.note').html(newtext+"<br>req:"+FC.longyREQ+"<br>model["+TABS.calibration.model+"]<br>");
             //--------------
 
         //}

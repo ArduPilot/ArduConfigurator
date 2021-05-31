@@ -744,7 +744,7 @@ var mspHelper = (function (gui) {
                 // 
                 switch ( mavmsg.command ) { //any of MAV_CMD_*  's 
                     case mavlink20.MAV_CMD_ACCELCAL_VEHICLE_POS:  //
-                        FC.longyREQ = mavmsg.param1; // veh pos
+                        FC.longyREQ = mavmsg.param1; // veh pos 1 means 'please level' then ack., 
                         console.log('receiving COMMAND_LONG MAV_CMD_ACCELCAL_VEHICLE_POS -->');console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
 
                         break;
@@ -771,7 +771,7 @@ var mspHelper = (function (gui) {
             
                 // buzz todo
                 console.log('receiving COMMAND_ACK -->');console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
-                FC.longyRES = mavmsg.result;
+                //FC.longyRES = mavmsg.result;
 
                 break;
 
