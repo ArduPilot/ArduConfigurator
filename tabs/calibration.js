@@ -188,7 +188,8 @@ TABS.calibration.initialize = function (callback) {
     function processHtml() {
         $('#calibrateButtonSave').on('click', function () {
             CALIBRATION_DATA.opflow.Scale = parseFloat($('[name=OpflowScale]').val());
-            saveChainer.execute();
+            //saveChainer.execute();
+            preflight_reboot(); // mav
         });
 
         if (SENSOR_CONFIG.magnetometer === 0) {

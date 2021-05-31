@@ -79,6 +79,21 @@ var preflight_accel_cal_progress = function (target_system,target_component, ste
 }
 
 
+var preflight_reboot = function (target_system,target_component, step=1) {
+
+
+    var reboot = new mavlink20.messages.command_long(target_system,target_component,
+        mavlink20.MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN,
+        0, // confirmation
+        1,0,1,0,0,0,0 // params 1-7
+        );
+
+    mavParserObj.send(reboot); 
+    console.log('Send reboot!');
+}
+
+
+
 //     specific msg handler
 var heartbeat_handler =  function(message) {
     //console.log(message);
