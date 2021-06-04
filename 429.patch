@@ -1,0 +1,96 @@
+From 4b6c0ea4232af00b97c6c5e228db0f847817c53d Mon Sep 17 00:00:00 2001
+From: cs8425 <cs8425@gmail.com>
+Date: Wed, 8 Feb 2017 23:52:31 +0800
+Subject: [PATCH 1/3] fix tcp connect can't set port
+
+---
+ js/serial.js | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/js/serial.js b/js/serial.js
+index 2e1414a49b..a4f57bf76a 100644
+--- a/js/serial.js
++++ b/js/serial.js
+@@ -23,8 +23,8 @@ var serial = {
+         var testUrl = path.match(/^tcp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
+         if (testUrl) {
+             var ip = testUrl[1];
+-            var port = testUrl[2] || self.connectionPort;
+-            port = parseInt(self.connectionPort);
++            var port = testUrl[2] || 2323;
++            port = parseInt(port);
+ 
+             console.log('connect to raw tcp:', ip + ':' + port)
+             self.connectTcp(ip, port, options, callback);
+
+From 6b99981b3b0b15d359ae3c305a75be46b00a0c81 Mon Sep 17 00:00:00 2001
+From: cs8425 <cs8425@gmail.com>
+Date: Thu, 9 Feb 2017 14:32:34 +0800
+Subject: [PATCH 2/3] remove doubled up on tcp port validity checks
+
+---
+ js/serial.js | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/js/serial.js b/js/serial.js
+index a4f57bf76a..e56bc5d549 100644
+--- a/js/serial.js
++++ b/js/serial.js
+@@ -18,18 +18,11 @@ var serial = {
+     logHead: 'SERIAL: ',
+ 
+     connect: function (path, options, callback) {
+-        var self = this;
+-
+         var testUrl = path.match(/^tcp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
+         if (testUrl) {
+-            var ip = testUrl[1];
+-            var port = testUrl[2] || 2323;
+-            port = parseInt(port);
+-
+-            console.log('connect to raw tcp:', ip + ':' + port)
+-            self.connectTcp(ip, port, options, callback);
++            this.connectTcp(testUrl[1], testUrl[2], options, callback);
+         } else {
+-            self.connectSerial(path, options, callback);
++            this.connectSerial(path, options, callback);
+         }
+     },
+     connectSerial: function (path, options, callback) {
+@@ -174,6 +167,7 @@ var serial = {
+         self.connectionType = 'tcp';
+         self.logHead = 'SERIAL-TCP: ';
+ 
++        console.log('connect to raw tcp:', ip + ':' + port)
+         chrome.sockets.tcp.create({}, function(createInfo) {
+             console.log('chrome.sockets.tcp.create', createInfo)
+             if (createInfo && !self.openCanceled) {
+
+From f765fd3e1996cc55eead07eb161d3465437fb98d Mon Sep 17 00:00:00 2001
+From: cs8425 <cs8425@gmail.com>
+Date: Fri, 10 Feb 2017 21:35:51 +0800
+Subject: [PATCH 3/3] add 'self' back
+
+---
+ js/serial.js | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/js/serial.js b/js/serial.js
+index e56bc5d549..4407289b2f 100644
+--- a/js/serial.js
++++ b/js/serial.js
+@@ -18,11 +18,12 @@ var serial = {
+     logHead: 'SERIAL: ',
+ 
+     connect: function (path, options, callback) {
++        var self = this;
+         var testUrl = path.match(/^tcp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
+         if (testUrl) {
+-            this.connectTcp(testUrl[1], testUrl[2], options, callback);
++            self.connectTcp(testUrl[1], testUrl[2], options, callback);
+         } else {
+-            this.connectSerial(path, options, callback);
++            self.connectSerial(path, options, callback);
+         }
+     },
+     connectSerial: function (path, options, callback) {
