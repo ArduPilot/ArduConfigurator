@@ -389,6 +389,7 @@ var MSP = {
         }
     },
 
+    // the original MSP spec calls callback_msp AFTER REPLY is recieved,  buzz hack to call it after send ATTEMPT.
     send_message: function (code, data, callback_sent, callback_msp, protocolVersion) {
 
         // buzz
@@ -464,7 +465,12 @@ var MSP = {
             console.log("UNHANDLED MSP.send_message:"+getKeyByValue(MSPCodes,code)+" vers:"+protocolVersion)
 
     }
-                
+
+        function isFunction(functionToCheck) {
+            return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+        }
+           
+        if (isFunction(callback_msp)) callback_msp();  //buzz hack
 
         return true;
     },
