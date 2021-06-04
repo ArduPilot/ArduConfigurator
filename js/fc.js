@@ -117,7 +117,7 @@ var FC = {
             capability: 0,
             cycleTime: 0,
             i2cError: 0,
-            activeSensors: 0,
+            activeSensors: 0b1111111111111111, // 0, // 16 bit bitfield buzz todo what are all of these? gps is in there somewhere
             mode: [],
             profile: 0,
             battery_profile: 0,
