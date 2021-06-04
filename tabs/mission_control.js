@@ -305,9 +305,9 @@ TABS.mission_control.initialize = function (callback) {
               //update RTH every 5th GPS update since it really shouldn't change
               if(rthUpdateInterval >= 5)
               {
-                MISSION_PLANER.bufferPoint.number = -1; //needed to get point 0 which id RTH
+                MISSION_PLANER.bufferPoint.number = -1; //needed to get point 0 which id RTH //buzz
                 MSP.send_message(MSPCodes.MSP_WP, mspHelper.crunch(MSPCodes.MSP_WP), false, function rth_update() {
-                    var coord = ol.proj.fromLonLat([MISSION_PLANER.bufferPoint.lon, MISSION_PLANER.bufferPoint.lat]);
+                    var coord = ol.proj.fromLonLat([MISSION_PLANER.bufferPoint.lon, MISSION_PLANER.bufferPoint.lat]); buzz
                     rthGeo.setCoordinates(coord);
                   });
                 rthUpdateInterval = 0;

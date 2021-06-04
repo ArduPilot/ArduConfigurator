@@ -29,18 +29,22 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
     }
 
     function load_led_config() {
-        MSP.send_message(MSPCodes.MSP_LED_STRIP_CONFIG, false, false, load_led_colors);
+        MSP.send_message(MSPCodes.MSP_LED_STRIP_CONFIG, false, false, null);
+        load_led_colors();
     }
 
     function load_led_colors() {
-        MSP.send_message(MSPCodes.MSP_LED_COLORS, false, false, load_led_mode_colors);
+        MSP.send_message(MSPCodes.MSP_LED_COLORS, false, false, null);
+        load_led_mode_colors();
     }
 
     function load_led_mode_colors() {
-        if (semver.gte(CONFIG.apiVersion, "1.19.0"))
-            MSP.send_message(MSPCodes.MSP_LED_STRIP_MODECOLOR, false, false, load_html);
-        else
+        if (semver.gte(CONFIG.apiVersion, "1.19.0")){
+            MSP.send_message(MSPCodes.MSP_LED_STRIP_MODECOLOR, false, false, null);
             load_html();
+        }else{
+            load_html();
+        }
     }
 
 

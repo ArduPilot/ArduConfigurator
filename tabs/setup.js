@@ -109,6 +109,8 @@ TABS.setup.initialize = function (callback) {
             heading_e = $('dd.heading');
 
         function get_slow_data() {
+            // buz hack
+            //CONFIG.activeSensors = 
             if (have_sensor(CONFIG.activeSensors, 'gps')) {
 
                 /*

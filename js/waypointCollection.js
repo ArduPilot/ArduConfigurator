@@ -9,7 +9,18 @@ let WaypointCollection = function () {
         isValidMission = 0,
         countBusyPoints = 0,
         version = 0,
-        center = {}
+        center = {},
+        bufferPoint= {
+            number: 0,
+            action: 0,
+            lat: 0,
+            lon: 0,
+            alt: 0,
+            endMission: 0,
+            p1: 0,
+            p2: 0,
+            p3: 0
+        };
         
     self.getMaxWaypoints = function () {
         return maxWaypoints;

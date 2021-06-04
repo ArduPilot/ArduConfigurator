@@ -204,19 +204,23 @@ TABS.pid_tuning.initialize = function (callback) {
             form_to_pid_and_rc();
 
             function send_rc_tuning_changes() {
-                MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE), false, saveARDUPILOTPidConfig);
+                MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE), false, null);
+                saveARDUPILOTPidConfig();
             }
 
             function saveARDUPILOTPidConfig() {
-                MSP.send_message(MSPCodes.MSP_SET_ARDUPILOT_PID, mspHelper.crunch(MSPCodes.MSP_SET_ARDUPILOT_PID), false, savePidAdvanced);
+                MSP.send_message(MSPCodes.MSP_SET_ARDUPILOT_PID, mspHelper.crunch(MSPCodes.MSP_SET_ARDUPILOT_PID), false, null);
+                savePidAdvanced();
             }
 
             function savePidAdvanced() {
-                MSP.send_message(MSPCodes.MSP_SET_PID_ADVANCED, mspHelper.crunch(MSPCodes.MSP_SET_PID_ADVANCED), false, saveFilterConfig);
+                MSP.send_message(MSPCodes.MSP_SET_PID_ADVANCED, mspHelper.crunch(MSPCodes.MSP_SET_PID_ADVANCED), false, null);
+                saveFilterConfig();
             }
 
             function saveFilterConfig() {
-                MSP.send_message(MSPCodes.MSP_SET_FILTER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FILTER_CONFIG), false, saveSettings);
+                MSP.send_message(MSPCodes.MSP_SET_FILTER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FILTER_CONFIG), false, null);
+                saveSettings();
             }
 
             function saveSettings() {
@@ -224,9 +228,9 @@ TABS.pid_tuning.initialize = function (callback) {
             }
 
             function save_to_eeprom() {
-                MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
+                //MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
                     GUI.log(chrome.i18n.getMessage('pidTuningEepromSaved'));
-                });
+                //});
             }
 
             helper.features.reset();

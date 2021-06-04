@@ -3846,6 +3846,11 @@ var mspHelper = (function (gui) {
                 result.data.readString();
             }
 
+            // buzz hack for undefined data:
+            if ( result == undefined) result = {};
+            if ( result.data == undefined) result.data = new Uint16Array();
+
+
             // Discard PG ID
             result.data.readU16();
 
@@ -4027,7 +4032,8 @@ var mspHelper = (function (gui) {
 
     self.getCraftName = function(callback) {
         MSP.send_message(MSPCodes.MSP_NAME, false, false, function(resp) {
-            var name = resp.data.readString();
+            if ( resp == undefined ) return; // buzz hack
+             var name = resp.data.readString();
             if (callback) {
                 //callback(name);
             }
