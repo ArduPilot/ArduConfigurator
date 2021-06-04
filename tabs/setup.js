@@ -118,7 +118,7 @@ TABS.setup.initialize = function (callback) {
                     return;
                 }
 
-                MSP.send_message(MSPCodes.MSP_RAW_GPS, false, false, function () {
+               // MSP.send_message(MSPCodes.MSP_RAW_GPS, false, false, function () {
                     var gpsFixType = chrome.i18n.getMessage('gpsFixNone');
                     if (GPS_DATA.fix >= 2)
                         gpsFixType = chrome.i18n.getMessage('gpsFix3D');
@@ -128,7 +128,7 @@ TABS.setup.initialize = function (callback) {
                     gpsSats_e.text(GPS_DATA.numSat);
                     gpsLat_e.text((GPS_DATA.lat / 10000000).toFixed(4) + ' deg');
                     gpsLon_e.text((GPS_DATA.lon / 10000000).toFixed(4) + ' deg');
-                });
+               // });
             }
         }
 

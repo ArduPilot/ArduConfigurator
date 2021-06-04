@@ -125,20 +125,24 @@ TABS.mission_control.initialize = function (callback) {
         localize();
 
         function get_raw_gps_data() {
-            MSP.send_message(MSPCodes.MSP_RAW_GPS, false, false, get_comp_gps_data);
+            MSP.send_message(MSPCodes.MSP_RAW_GPS, false, false, null);
+            get_comp_gps_data();
         }
 
         function get_comp_gps_data() {
-            MSP.send_message(MSPCodes.MSP_COMP_GPS, false, false, get_altitude_data);
+            MSP.send_message(MSPCodes.MSP_COMP_GPS, false, false, null);
+            get_altitude_data();
         }
 
         function get_altitude_data() {
-            MSP.send_message(MSPCodes.MSP_ALTITUDE, false, false, get_attitude_data);
+            MSP.send_message(MSPCodes.MSP_ALTITUDE, false, false, null);
+            get_attitude_data();
 
         }
 
         function get_attitude_data() {
-            MSP.send_message(MSPCodes.MSP_ATTITUDE, false, false, update_gpsTrack);
+            MSP.send_message(MSPCodes.MSP_ATTITUDE, false, false, null);
+            update_gpsTrack();
         }
       
         function update_gpsTrack() {

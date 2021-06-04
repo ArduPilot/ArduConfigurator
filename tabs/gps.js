@@ -67,15 +67,18 @@ TABS.gps.initialize = function (callback) {
         mapView.setZoom(2);
 
         function get_raw_gps_data() {
-            MSP.send_message(MSPCodes.MSP_RAW_GPS, false, false, get_comp_gps_data);
+            MSP.send_message(MSPCodes.MSP_RAW_GPS, false, false, null);
+            get_comp_gps_data();
         }
 
         function get_comp_gps_data() {
-            MSP.send_message(MSPCodes.MSP_COMP_GPS, false, false, get_gpsstatistics_data);
+            MSP.send_message(MSPCodes.MSP_COMP_GPS, false, false, null);
+            get_gpsstatistics_data();
         }
 
         function get_gpsstatistics_data() {
-            MSP.send_message(MSPCodes.MSP_GPSSTATISTICS, false, false, update_ui);
+            MSP.send_message(MSPCodes.MSP_GPSSTATISTICS, false, false, null);
+            update_ui();
         }
 
         function update_ui() {
