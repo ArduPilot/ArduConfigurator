@@ -35,6 +35,14 @@ class EventEmitter{
             cbs.forEach(cb => cb(data))
         }
     }
+
+    removeAllListeners(event) {
+      if (this.callbacks == undefined ) {this.callbacks = {};}
+      if (this.callbacks[event] != undefined )  {
+        this.callbacks[event] = []; // zero-out the list of listeners , if any
+       } 
+    }
+
 }
 
 
