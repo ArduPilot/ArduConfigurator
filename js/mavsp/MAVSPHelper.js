@@ -121,8 +121,21 @@ var mspHelper = (function (gui) {
     self.processDataMav = function (mavmsg) {
 
         //var data = new DataView(mavmsg._msgbuf, 0);
-        
 
+        // for all packets we want to record the most recent...
+        var store = {};
+
+        if (mavmsg._id == -1 ) return; //mavlink20.messages.bad_data
+
+        
+        mavmsg.fieldnames.forEach(function(field) {
+            //console.log(field);
+            store[field] = mavmsg[field]; // store is a cut-down list of just data attrs, not header, raw msg bufs , sysid etc
+        });
+        FC.curr_mav_state[mavmsg._name] = store;  // or could have used mavmsg for a more verbose store
+        // this means that FC.curr_mav_state['HEARTBEAT'] is an minimal object with all the latest data in it., etc
+
+        // packet-specific stuff
         switch (mavmsg._id ) {
 
             case mavlink20.MAVLINK_MSG_ID_HEARTBEAT:

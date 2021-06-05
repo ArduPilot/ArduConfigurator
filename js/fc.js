@@ -67,6 +67,7 @@ var CONFIG,
 
 var FC = {
     longyREQ:0,
+    curr_mav_state: {}, // we'll fill this with whatever most recent mavlink data is from incoming streams , key is packet_name as str.
     MAX_SERVO_RATE: 125,
     MIN_SERVO_RATE: 0,
     isAirplane: function () {

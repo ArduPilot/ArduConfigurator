@@ -305,11 +305,17 @@ TABS.mission_control.initialize = function (callback) {
               //update RTH every 5th GPS update since it really shouldn't change
               if(rthUpdateInterval >= 5)
               {
-                MISSION_PLANER.bufferPoint.number = -1; //needed to get point 0 which id RTH //buzz
-                MSP.send_message(MSPCodes.MSP_WP, mspHelper.crunch(MSPCodes.MSP_WP), false, function rth_update() {
-                    var coord = ol.proj.fromLonLat([MISSION_PLANER.bufferPoint.lon, MISSION_PLANER.bufferPoint.lat]); buzz
-                    rthGeo.setCoordinates(coord);
-                  });
+                //MISSION_PLANER.bufferPoint.number = -1; //needed to get point 0 which id RTH //buzz
+                //MSP.send_message(MSPCodes.MSP_WP, mspHelper.crunch(MSPCodes.MSP_WP), false, function rth_update() {
+                //    var coord = ol.proj.fromLonLat([MISSION_PLANER.bufferPoint.lon, MISSION_PLANER.bufferPoint.lat]); //buzz
+                //    rthGeo.setCoordinates(coord);
+                //  });
+                var h_lat = FC.curr_mav_state['HOME_POSITION'].latitude / 10000000;
+                var h_lng = FC.curr_mav_state['HOME_POSITION'].longitude / 10000000;
+                // buzz set home..
+                var coord = ol.proj.fromLonLat([h_lng, h_lat]);
+                rthGeo.setCoordinates(coord);
+
                 rthUpdateInterval = 0;
               }
               rthUpdateInterval++;
