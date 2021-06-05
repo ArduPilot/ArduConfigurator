@@ -93,8 +93,7 @@ var preflight_reboot = function (target_system,target_component, step=1) {
 }
 
 
-
-//     specific msg handler
+//     specific msg handler, for flight mode/s and sysid record keeping
 var heartbeat_handler =  function(message) {
     //console.log(message);
     var tmp_sysid = message._header.srcSystem;
@@ -102,7 +101,38 @@ var heartbeat_handler =  function(message) {
     // don't allow messages that appear to come from 255 to be handled.
     if (message._header.srcSystem == 255 ) { return;  }
 
-    // todo buzz more
+    if (SYSID == undefined ) { return;  } // haven't set the sysid global yet, elsewhere.
+
+    if (FC.curr_mav_state['HEARTBEAT'] == undefined ) { return;} // the other handler/s haven't run yet, delay this one
+
+    // alight ardupilot vehicle 'type' with inav 'platformType'
+    if ( FC.curr_mav_state['HEARTBEAT'].type ==  mavlink20.MAV_TYPE_FIXED_WING ) 
+        MIXER_CONFIG.platformType = PLATFORM_AIRPLANE ;
+    if ( FC.curr_mav_state['HEARTBEAT'].type == mavlink20.MAV_TYPE_QUADROTOR )
+        MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR ;
+    if ( FC.curr_mav_state['HEARTBEAT'].type == mavlink20.MAV_TYPE_HEXAROTOR )
+        MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR ;
+    if ( FC.curr_mav_state['HEARTBEAT'].type == mavlink20.MAV_TYPE_OCTOROTOR )
+        MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR ;
+    if ( FC.curr_mav_state['HEARTBEAT'].type == mavlink20.MAV_TYPE_HELICOPTER ) // normal trad-heli
+        MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR ;
+    if ( FC.curr_mav_state['HEARTBEAT'].type == mavlink20.MAV_TYPE_TRICOPTER ) 
+        MIXER_CONFIG.platformType == PLATFORM_TRICOPTER ;
+    if ( FC.curr_mav_state['HEARTBEAT'].type == mavlink20.MAV_TYPE_GROUND_ROVER ) 
+        MIXER_CONFIG.platformType == PLATFORM_ROVER ;
+    // buzz todo add boat, etc etc here 
+
+
+    // don't go past this point unless its the first time we've seen this sysid
+    if ( sysids[SYSID] == true ) { return;  }  //if we don't have a 'current vehicle' sysid defined
+
+
+    // mode change hook/s:
+    // assemble a new MavFlightMode hook to watch for this sysid:
+    mavFlightModes.push(new MavFlightMode(mavlink20, mavParserObj, null, logger,tmp_sysid));
+    mavFlightModes_rehook();
+    sysids[SYSID] = true;
+
 }
 mavParserObj.on('HEARTBEAT', heartbeat_handler);
 

@@ -194,7 +194,7 @@ var FC = {
         MIXER_CONFIG = {
             yawMotorDirection: 0,
             yawJumpPreventionLimit: 0,
-            platformType: -1,
+            platformType: -1,   // plane, copter, boat, rover etc
             hasFlaps: false,
             appliedMixerPreset: -1,
             numberOfMotors: 0,

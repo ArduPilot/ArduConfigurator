@@ -66,12 +66,66 @@ MAVLink20Processor.prototype.send = generic_link_sender; // tell library how to 
 var mavParserObj = new MAVLink20Processor(logger, 255,190); // 255 is the mavlink sysid of this code as a GCS, as per mavproxy.
 var mpo = mavParserObj; // alternative name
 
+//----------------------------------------------------------------------------------------------------
+
+// todo buzz add more global mavlink setup stuff here that needs an instance of mavParserObj already done.
+// tab-specific things can also go in the relevant tabs/xxx.js
+
+//-----------------------------
+
+// this is support for multiple vehicles each in their own mode, but for now just use one.
+var mavFlightModes = [];
+var sysids = {}; // collecton if ID's we've seen
+mavFlightModes.push(new MavFlightMode(mavlink20, mavParserObj, null, null,SYSID));
+sysids[SYSID] = true;
+
+function mavFlightModes_rehook() { 
+
+    // re-hook all the MavFlightMode objects to their respective events, since we just added a new one.
+    mavFlightModes.forEach(  function(m) {
+        m.removeAllListeners('modechange');
+        m.removeAllListeners('armingchange');
+        //console.log("change hook mavFlightModes.length"+mavFlightModes.length);
+
+        // these events are generated locally by mavFlightMode.js, and it passes 'state.xxx as params
+        m.on('modechange', function(state) {
+            console.log(`\n--Got a MODE-CHANGE message `);
+            console.log(`... with armed-state: ${state.armed} and sysid: ${state.sysid} and mode: ${state.mode}`);
+
+            var armstr = state.armed==true?"ARMED":"DISARMED";
+            $(".firmware_version").text("Mode:"+state.mode+" "+armstr);
+
+        });
+        m.on('armingchange', function(state) {
+            console.log(`\n--Got a ARMING-CHANGE message `);
+            console.log(`... with armed-state: ${state.armed} and sysid: ${state.sysid} and mode: ${state.mode}`);
+            var armstr = state.armed==true?"ARMED":"DISARMED";
+            $(".firmware_version").text("Mode:"+state.mode+" "+armstr);
+            if ( state.armed==true ) {
+                $(".firmware_version").css("color","red");
+            } else {
+                $(".firmware_version").css("color","green");
+            }
+        });
+
+    });
+
+}
+
+mavFlightModes_rehook(); // first call here has no sysid, so its kinda irrelevant..
+
 //-----------------------------
 
 var ParamsObj = new MavParam(SYSID,COMPID,mavParserObj,null);
 
 
 //-----------------------------
+
+
+//-----------------------------
+
+
+//----------------------------------------------------------------------------------------------------
 var mspHelper = (function (gui) {
     var self = {};
 
@@ -767,6 +821,9 @@ var mspHelper = (function (gui) {
                         console.log('receiving COMMAND_LONG MAV_CMD_ACCELCAL_VEHICLE_POS -->');console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
 
                         break;
+                    case mavlink20.MAV_CMD_DO_SET_MODE: // 176 
+                        // buzz todo, this is the acknowledgement of a mode-change request.
+                        break;
 
                     default:
                         // emit detals about unknown COMMAND_LONG packets
@@ -775,8 +832,8 @@ var mspHelper = (function (gui) {
                 }
 
                 // buzz todo
-
                 break; 
+
             // this is teh ack for the above ..LONG:
             case mavlink20.MAVLINK_MSG_ID_COMMAND_ACK:
                 /* ["command", "result", "progress", "result_param2", "target_system", "target_component"]
@@ -794,14 +851,161 @@ var mspHelper = (function (gui) {
 
                 break;
 
-            // case mavlink20.MAVLINK_MSG_ID_SENSOR_OFFSETS:
-            //     /*
-            //     */
-            //
-            //     // buzz todo
-            //     break; 
+            case mavlink20.MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN:
+                /* ["latitude", "longitude", "altitude", "time_usec"]
+                altitude: 104100
+                latitude: -273895825
+                longitude: 1524649356
+                time_usec: (3) [1430454256, 0, true]
+                */
+                //console.log('receiving GPS_GLOBAL_ORIGIN');console.log(mavmsg);
+                // buzz todo
+                break; 
+
+            case mavlink20.MAVLINK_MSG_ID_HOME_POSITION:
+                /* ["latitude", "longitude", "altitude", "x", "y", "z", "q", "approach_x", "approach_y", "approach_z", "time_usec"]
+                altitude: 104100
+                approach_x: 0
+                approach_y: 0
+                approach_z: 0
+                latitude: -273895825
+                longitude: 1524649353
+                q: (4) [1, 0, 0, 0]
+                time_usec: (3) [1430454256, 0, true]
+                x: 0
+                y: 0
+                z: 0
+                */
+                //console.log('receiving HOME_POSITION');console.log(mavmsg);
+                // buzz todo
+                break; 
+
+            case mavlink20.MAVLINK_MSG_ID_SCALED_IMU3:
+                /* ["time_boot_ms", "xacc", "yacc", "zacc", "xgyro", "ygyro", "zgyro", "xmag", "ymag", "zmag", "temperature"]
+                temperature: 0
+                time_boot_ms: 1885853
+                xacc: 0
+                xgyro: 0
+                xmag: -90
+                yacc: 0
+                ygyro: 0
+                ymag: -251
+                zacc: 0
+                zgyro: 0
+                zmag: -459
+                */
                 
-            // add more 
+                // buzz todo
+                //console.log('receiving SCALED_IMU3');console.log(mavmsg);
+                break; 
+
+            case mavlink20.MAVLINK_MSG_ID_SCALED_PRESSURE2:
+                /* ["time_boot_ms", "press_abs", "press_diff", "temperature", "temperature_press_diff"]
+                press_abs: 1000.78515625
+                press_diff: 0
+                temperature: 3500
+                temperature_press_diff: 0
+                time_boot_ms: 1885853
+                */
+            
+                // buzz todo
+                break; 
+
+            case mavlink20.MAVLINK_MSG_ID_SIMSTATE:
+                /* ["roll", "pitch", "yaw", "xacc", "yacc", "zacc", "xgyro", "ygyro", "zgyro", "lat", "lng"]
+                lat: -273895825
+                lng: 1524649356
+                pitch: 0
+                roll: 0
+                xacc: 0
+                xgyro: 0
+                yacc: -0
+                yaw: 2.094395160675049
+                ygyro: 0
+                zacc: -9.806650161743164
+                zgyro: 0
+                */
+            
+                // buzz todo
+                break; 
+
+            case mavlink20.MAVLINK_MSG_ID_TERRAIN_REPORT:
+                /* ["lat", "lon", "spacing", "terrain_height", "current_height", "pending", "loaded"]
+                current_height: 0.14000000059604645
+                lat: -273895825
+                loaded: 504
+                lon: 1524649354
+                pending: 0
+                spacing: 100
+                terrain_height: 103.01937866210938
+                */
+            
+                // buzz todo
+                break; 
+
+            case mavlink20.MAVLINK_MSG_ID_LOCAL_POSITION_NED:
+                /* ["time_boot_ms", "x", "y", "z", "vx", "vy", "vz"]
+                time_boot_ms: 1885853
+                vx: -0.007206640671938658
+                vy: -0.029007868841290474
+                vz: -0.00868823379278183
+                x: -0.00715320510789752
+                y: -0.029470769688487053
+                z: -0.149393230676651
+                */
+            
+                // buzz todo
+                break; 
+
+            case mavlink20.MAVLINK_MSG_ID_TERRAIN_REQUEST: 
+                /*  ["lat", "lon", "grid_spacing", "mask"]
+                grid_spacing: 100
+                lat: -273963287
+                lon: 1524558001
+                mask: (3) [4294967295, 16777215, true]
+                */ 
+            
+                // buzz todo 
+                break;  
+
+            case mavlink20.MAVLINK_MSG_ID_AIRSPEED_AUTOCAL: 
+                /* ["vx", "vy", "vz", "diff_pressure", "EAS2TAS", "ratio", "state_x", "state_y", "state_z", "Pax", "Pby", "Pcz"]
+                EAS2TAS: 1.0456035137176514
+                Pax: 100
+                Pby: 100
+                Pcz: 9.999999974752427e-7
+                diff_pressure: 244.17919921875
+                ratio: 1.9936000108718872
+                state_x: 0
+                state_y: 0
+                state_z: 0.7082408666610718
+                vx: -12.03700065612793
+                vy: 18.540000915527344
+                vz: -0.0560000017285347
+                */ 
+            
+                // buzz todo 
+                break;  
+
+
+
+                            
+            case mavlink20.MAVLINK_MSG_ID_MISSION_ITEM_REACHED: 
+                /*  ["seq"]
+                seq: 7
+                // note that _header.srcSystem give the vehicle sysid that it came from as well
+                */ 
+                // buzz todo 
+                break;  
+
+            // add more here 
+                    
+            // case mavlink20.MAVLINK_MSG_ID_SENSOR_OFFSETS: 
+            //     /* 
+            //     */ 
+            // 
+            //     // buzz todo 
+            //     break; 
             
             case mavlink20.MAVLINK_MSG_ID_BAD_DATA:
                 break;
