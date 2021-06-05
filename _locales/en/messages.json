@@ -3315,7 +3315,7 @@
         "message": "Platform type"
     },
     "platformConfiguration": {
-        "message": "Platform configuration - Choose your Plane/Copter/Rover here..."
+        "message": "Your Vehicle FIRMWARE is flashed as:"
     },
     "platformHasFlaps": {
         "message": "Has flaps"

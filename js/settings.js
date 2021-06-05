@@ -10,7 +10,10 @@ var Settings = (function () {
         });
         return Promise.mapSeries(inputs, function (input, ii) {
             var settingName = input.data('setting');
-            return mspHelper.getSetting(settingName).then(function (s) {
+            var setting = {'123':123, 'min':0, 'max':14, 'type':'string'};// setting value
+            var s = {};
+            s['setting'] = setting;
+            //return mspHelper.getSetting(settingName).then(function (s) {
                 // Check if the input declares a parent
                 // to be hidden in case of the setting not being available.
                 // Otherwise, default to hiding its parent
@@ -78,7 +81,7 @@ var Settings = (function () {
                         self.saveInput(input);
                     });
                 }
-            });
+            //});
         });
     };
 

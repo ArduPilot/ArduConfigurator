@@ -619,7 +619,8 @@ helper.defaultsDialog = (function() {
     ]
 
     publicScope.init = function() {
-        mspHelper.getSetting("applied_defaults").then(privateScope.onInitSettingReturned);
+        mspHelper.getSetting("applied_defaults");
+        //then(privateScope.onInitSettingReturned);
         $container = $("#defaults-wrapper");
     };
 

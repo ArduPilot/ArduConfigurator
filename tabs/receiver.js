@@ -359,11 +359,12 @@ TABS.receiver.initialize = function (callback) {
         });
 
         // Only show the MSP control sticks if the MSP Rx feature is enabled
-        mspHelper.getSetting("receiver_type").then(function (s) {
-            if (s && s.setting.table && s.setting.table.values) {
-                $(".sticks_btn").toggle(s.setting.table.values[s.value] == 'MSP');
-            }
-        });
+        //SETTINGS['receiver_type'] = 1; // buzz force enable
+        //if (mspHelper.getSetting("receiver_type")) { //} .then(function (s) {
+        //    if (s && s.setting.table && s.setting.table.values) {
+        //        $(".sticks_btn").toggle(s.setting.table.values[s.value] == 'MSP');
+        //    }
+        //}//);
 
         function get_rc_data() {
 
@@ -375,7 +376,7 @@ TABS.receiver.initialize = function (callback) {
                 return;
             }
 
-            MSP.send_message(MSPCodes.MSP_RC, false, false, null);
+            //MSP.send_message(MSPCodes.MSP_RC, false, false, null);
             update_ui();
         }
 

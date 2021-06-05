@@ -456,6 +456,8 @@ var mspHelper = (function (gui) {
                 // unhandled :  time, temp, and id
                 // WARNING an ID != 0 is a different IMU, unhandled 
 
+                RC.active_channels = 14;  // fake it
+
                 break;
             case mavlink20.MAVLINK_MSG_ID_RC_CHANNELS: 
                 /* ["time_boot_ms", "chancount", "chan1_raw", "chan2_raw", "chan3_raw", "chan4_raw", "chan5_raw", "chan6_raw", "chan7_raw", "chan8_raw", "chan9_raw", "chan10_raw", "chan11_raw", "chan12_raw", "chan13_raw", "chan14_raw", "chan15_raw", "chan16_raw", "chan17_raw", "chan18_raw", "rssi"]
@@ -1141,11 +1143,11 @@ var mspHelper = (function (gui) {
                 }
                 break;
             case MSPCodes.MSP_RC:
-                RC.active_channels = dataHandler.message_length_expected / 2;
-
-                for (i = 0; i < RC.active_channels; i++) {
-                    RC.channels[i] = data.getUint16((i * 2), true);
-                }
+                //RC.active_channels = dataHandler.message_length_expected / 2;
+                //
+                //for (i = 0; i < RC.active_channels; i++) {
+                //    RC.channels[i] = data.getUint16((i * 2), true);
+                //}
                 break;
             case MSPCodes.MSP_RAW_GPS:
                 GPS_DATA.fix = data.getUint8(0);
@@ -2403,7 +2405,7 @@ var mspHelper = (function (gui) {
             case MSPCodes.MSP2_ARDUPILOT_MIXER:
                 MIXER_CONFIG.yawMotorDirection = data.getInt8(0);
                 MIXER_CONFIG.yawJumpPreventionLimit = data.getUint16(1, true);
-                MIXER_CONFIG.platformType = data.getInt8(3);
+                //MIXER_CONFIG.platformType = data.getInt8(3);
                 MIXER_CONFIG.hasFlaps = data.getInt8(4);
                 MIXER_CONFIG.appliedMixerPreset = data.getInt16(5, true);
                 MIXER_CONFIG.numberOfMotors = data.getInt8(7);
@@ -4047,65 +4049,67 @@ var mspHelper = (function (gui) {
 
     self._getSetting = function (name) {
         if (SETTINGS[name]) {
-            return Promise.resolve(SETTINGS[name]);
+            //return Promise.resolve(
+                SETTINGS[name];//);
         }
-        var data = [];
-        self._encodeSettingReference(name, null, data);
-        return MSP.promise(MSPCodes.MSP2_COMMON_SETTING_INFO, data).then(function (result) {
-            const MODE_LOOKUP = 1 << 6;
-            var settingTypes = {
-                0: "uint8_t",
-                1: "int8_t",
-                2: "uint16_t",
-                3: "int16_t",
-                4: "uint32_t",
-                5: "float",
-                6: "string",
-            };
-            var setting = {};
-
-            // Discard setting name
-            if (semver.gte(CONFIG.apiVersion, "2.4.0")) {
-                result.data.readString();
-            }
-
-            // buzz hack for undefined data:
-            if ( result == undefined) result = {};
-            if ( result.data == undefined) result.data = new Uint16Array();
-
-
-            // Discard PG ID
-            result.data.readU16();
-
-            var type = result.data.readU8();
-            setting.type = settingTypes[type];
-            if (!setting.type) {
-                console.log("Unknown setting type " + type + " for setting '" + name + "'");
-                return null;
-            }
-            // Discard section
-            result.data.readU8();
-            setting.mode = result.data.readU8();
-            setting.min = result.data.read32();
-            setting.max = result.data.readU32();
-
-            setting.index = result.data.readU16();
-
-            // Discard profile info
-            result.data.readU8();
-            result.data.readU8();
-
-            if (setting.mode == MODE_LOOKUP) {
-                var values = [];
-                for (var ii = setting.min; ii <= setting.max; ii++) {
-                    values.push(result.data.readString());
-                }
-                setting.table = {values: values};
-            }
-            SETTINGS[name] = setting;
-            return setting;
-        });
+       // var data = [];
     }
+        // self._encodeSettingReference(name, null, data);
+        // return MSP.promise(MSPCodes.MSP2_COMMON_SETTING_INFO, data).then(function (result) {
+        //     const MODE_LOOKUP = 1 << 6;
+        //     var settingTypes = {
+        //         0: "uint8_t",
+        //         1: "int8_t",
+        //         2: "uint16_t",
+        //         3: "int16_t",
+        //         4: "uint32_t",
+        //         5: "float",
+        //         6: "string",
+        //     };
+        //     var setting = {};
+
+        //     // Discard setting name
+        //     if (semver.gte(CONFIG.apiVersion, "2.4.0")) {
+        //         result.data.readString();
+        //     }
+
+        //     // buzz hack for undefined data:
+        //     if ( result == undefined) result = {};
+        //     if ( result.data == undefined) result.data = new Uint16Array();
+
+
+        //     // Discard PG ID
+        //     result.data.readU16();
+
+        //     var type = result.data.readU8();
+        //     setting.type = settingTypes[type];
+        //     if (!setting.type) {
+        //         console.log("Unknown setting type " + type + " for setting '" + name + "'");
+        //         return null;
+        //     }
+        //     // Discard section
+        //     result.data.readU8();
+        //     setting.mode = result.data.readU8();
+        //     setting.min = result.data.read32();
+        //     setting.max = result.data.readU32();
+
+        //     setting.index = result.data.readU16();
+
+        //     // Discard profile info
+        //     result.data.readU8();
+        //     result.data.readU8();
+
+        //     if (setting.mode == MODE_LOOKUP) {
+        //         var values = [];
+        //         for (var ii = setting.min; ii <= setting.max; ii++) {
+        //             values.push(result.data.readString());
+        //         }
+        //         setting.table = {values: values};
+        //     }
+        //     SETTINGS[name] = setting;
+        //     return setting;
+        // });
+    //}
 
     self._encodeSettingReference = function (name, index, data) {
         if (Number.isInteger(index)) {
@@ -4120,94 +4124,99 @@ var mspHelper = (function (gui) {
     };
 
     self.getSetting = function (name) {
-        var $this = this;
         console.log("param/setting name:"+name);
-        return this._getSetting(name).then(function (setting) {
-            if (!setting) {
-                // Setting not available in the FC
-                return null;
-            }
-            var data = [];
-            $this._encodeSettingReference(name, setting.index, data); // determines if Integer or String etc
+        if (SETTINGS[name]) {
+               return SETTINGS[name];
+        }
+        return undefined;
+    }
+        //.then(function (setting) {
+        //     if (!setting) {
+        //         // Setting not available in the FC
+        //         return null;
+        //     }
+        //     var data = [];
+        //     $this._encodeSettingReference(name, setting.index, data); // determines if Integer or String etc
 
-            // promise that presumably when given a 'setting' value as raw data casts it into different
-            //   byte/unsigned/8/16/32 bit values etc 
-            return MSP.promise(MSPCodes.MSPV2_SETTING, data).then(function (resp) {
-                var value;
-                switch (setting.type) {
-                    case "uint8_t":
-                        value = resp.data.getUint8(0);
-                        break;
-                    case "int8_t":
-                        value = resp.data.getInt8(0);
-                        break;
-                    case "uint16_t":
-                        value = resp.data.getUint16(0, true);
-                        break;
-                    case "int16_t":
-                        value = resp.data.getInt16(0, true);
-                        break;
-                    case "uint32_t":
-                        value = resp.data.getUint32(0, true);
-                        break;
-                    case "float":
-                        var fi32 = resp.data.getUint32(0, true);
-                        var buf = new ArrayBuffer(4);
-                        (new Uint32Array(buf))[0] = fi32;
-                        value = (new Float32Array(buf))[0];
-                        break;
-                    default:
-                        throw "Unknown setting type " + setting.type;
-                }
-                return {setting: setting, value: value};
-            });
-        });
-    };
+        //     // promise that presumably when given a 'setting' value as raw data casts it into different
+        //     //   byte/unsigned/8/16/32 bit values etc 
+        //     return MSP.promise(MSPCodes.MSPV2_SETTING, data).then(function (resp) {
+        //         var value;
+        //         switch (setting.type) {
+        //             case "uint8_t":
+        //                 value = resp.data.getUint8(0);
+        //                 break;
+        //             case "int8_t":
+        //                 value = resp.data.getInt8(0);
+        //                 break;
+        //             case "uint16_t":
+        //                 value = resp.data.getUint16(0, true);
+        //                 break;
+        //             case "int16_t":
+        //                 value = resp.data.getInt16(0, true);
+        //                 break;
+        //             case "uint32_t":
+        //                 value = resp.data.getUint32(0, true);
+        //                 break;
+        //             case "float":
+        //                 var fi32 = resp.data.getUint32(0, true);
+        //                 var buf = new ArrayBuffer(4);
+        //                 (new Uint32Array(buf))[0] = fi32;
+        //                 value = (new Float32Array(buf))[0];
+        //                 break;
+        //             default:
+        //                 throw "Unknown setting type " + setting.type;
+        //         }
+        //         return {setting: setting, value: value};
+        //     });
+        // });
+    //};
 
     self.encodeSetting = function (name, value) {
-        return this._getSetting(name).then(function (setting) {
-            if (setting === null ) { 
-                console.log("null-setting. name:"+name+" value:"+value); 
-                return []; 
-            }
-            if (setting.table && !Number.isInteger(value)) {
-                var found = false;
-                for (var ii = 0; ii < setting.table.values.length; ii++) {
-                    if (setting.table.values[ii] == value) {
-                        value = ii;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    throw 'Invalid value "' + value + '" for setting ' + name;
-                }
-            }
-            var data = [];
-            self._encodeSettingReference(name, setting.index, data);
-            switch (setting.type) {
-                case "uint8_t":
-                case "int8_t":
-                    data.push8(value);
-                    break;
-                case "uint16_t":
-                case "int16_t":
-                    data.push16(value);
-                    break;
-                case "uint32_t":
-                    data.push32(value);
-                    break;
-                case "float":
-                    var buf = new ArrayBuffer(4);
-                    (new Float32Array(buf))[0] = value;
-                    var if32 = (new Uint32Array(buf))[0];
-                    data.push32(if32);
-                    break;
-                default:
-                    throw "Unknown setting type " + setting.type;
-            }
-            return data;
-        });
+        return this._getSetting(name); 
+        //.then(function (setting) {
+          //  if (setting === null ) { 
+          //      console.log("null-setting. name:"+name+" value:"+value); 
+          //      return []; 
+            //}
+            // if (setting.table && !Number.isInteger(value)) {
+            //     var found = false;
+            //     for (var ii = 0; ii < setting.table.values.length; ii++) {
+            //         if (setting.table.values[ii] == value) {
+            //             value = ii;
+            //             found = true;
+            //             break;
+            //         }
+            //     }
+            //     if (!found) {
+            //         throw 'Invalid value "' + value + '" for setting ' + name;
+            //     }
+            // }
+            // var data = [];
+            // self._encodeSettingReference(name, setting.index, data);
+            // switch (setting.type) {
+            //     case "uint8_t":
+            //     case "int8_t":
+            //         data.push8(value);
+            //         break;
+            //     case "uint16_t":
+            //     case "int16_t":
+            //         data.push16(value);
+            //         break;
+            //     case "uint32_t":
+            //         data.push32(value);
+            //         break;
+            //     case "float":
+            //         var buf = new ArrayBuffer(4);
+            //         (new Float32Array(buf))[0] = value;
+            //         var if32 = (new Uint32Array(buf))[0];
+            //         data.push32(if32);
+            //         break;
+            //     default:
+            //         throw "Unknown setting type " + setting.type;
+            // }
+         //   return data;
+        //});
     };
 
     self.setSetting = function (name, value) {
