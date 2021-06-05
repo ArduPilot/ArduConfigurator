@@ -66,6 +66,12 @@ MAVLink20Processor.prototype.send = generic_link_sender; // tell library how to 
 var mavParserObj = new MAVLink20Processor(logger, 255,190); // 255 is the mavlink sysid of this code as a GCS, as per mavproxy.
 var mpo = mavParserObj; // alternative name
 
+//-----------------------------
+
+var ParamsObj = new MavParam(SYSID,COMPID,mavParserObj,null);
+
+
+//-----------------------------
 var mspHelper = (function (gui) {
     var self = {};
 

@@ -4,7 +4,7 @@
 TABS.params = {};
 
 
-var ParamsObj = new MavParam(SYSID,COMPID,mavParserObj,null);
+//var ParamsObj = new MavParam(SYSID,COMPID,mavParserObj,null);
 
 
 TABS.params.initialize = function (callback, scrollPosition) {
