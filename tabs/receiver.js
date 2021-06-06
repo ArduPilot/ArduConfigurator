@@ -106,10 +106,10 @@ TABS.receiver.initialize = function (callback) {
 
         // generate bars
         var bar_names = [
-                chrome.i18n.getMessage('controlAxisRoll'),
-                chrome.i18n.getMessage('controlAxisPitch'),
-                chrome.i18n.getMessage('controlAxisYaw'),
-                chrome.i18n.getMessage('controlAxisThrottle')
+                chrome.i18n.getMessage('controlAxisRoll'), //a
+                chrome.i18n.getMessage('controlAxisPitch'),//e
+                chrome.i18n.getMessage('controlAxisThrottle'), //t
+                chrome.i18n.getMessage('controlAxisYaw') //r 
             ],
             bar_container = $('.tab-receiver .bars');
 

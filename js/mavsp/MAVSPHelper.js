@@ -124,6 +124,7 @@ var ParamsObj = new MavParam(SYSID,COMPID,mavParserObj,null);
 
 //-----------------------------
 
+var testing = 0;
 
 //----------------------------------------------------------------------------------------------------
 var mspHelper = (function (gui) {
@@ -456,10 +457,10 @@ var mspHelper = (function (gui) {
                 // unhandled :  time, temp, and id
                 // WARNING an ID != 0 is a different IMU, unhandled 
 
-                RC.active_channels = 14;  // fake it
+                RC.active_channels = 16;  // fake it
 
                 break;
-            case mavlink20.MAVLINK_MSG_ID_RC_CHANNELS: 
+            case mavlink20.MAVLINK_MSG_ID_RC_CHANNELS: // tis one
                 /* ["time_boot_ms", "chancount", "chan1_raw", "chan2_raw", "chan3_raw", "chan4_raw", "chan5_raw", "chan6_raw", "chan7_raw", "chan8_raw", "chan9_raw", "chan10_raw", "chan11_raw", "chan12_raw", "chan13_raw", "chan14_raw", "chan15_raw", "chan16_raw", "chan17_raw", "chan18_raw", "rssi"]
                 chan1_raw: 0
                 chan2_raw: 0
@@ -488,20 +489,21 @@ var mspHelper = (function (gui) {
                 RC.channels[1] = mavmsg.chan2_raw;     // etc..
                 RC.channels[2] = mavmsg.chan3_raw;
                 RC.channels[3] = mavmsg.chan4_raw;
-                RC.channels[4] = mavmsg.chan5_raw;
-                RC.channels[5] = mavmsg.chan6_raw;
-                RC.channels[6] = mavmsg.chan7_raw;
-                RC.channels[7] = mavmsg.chan8_raw;
-                RC.channels[8] = mavmsg.chan9_raw;
-                RC.channels[9] = mavmsg.chan10_raw;
-                RC.channels[10] = mavmsg.chan11_raw;
-                RC.channels[11] = mavmsg.chan12_raw;
-                RC.channels[12] = mavmsg.chan13_raw;
-                RC.channels[13] = mavmsg.chan14_raw;
-                RC.channels[14] = mavmsg.chan15_raw;
-                RC.channels[15] = mavmsg.chan16_raw;
-                RC.channels[16] = mavmsg.chan17_raw;
-                RC.channels[17] = mavmsg.chan18_raw;
+                RC.channels[4] = mavmsg.chan5_raw+1000+testing;
+                RC.channels[5] = mavmsg.chan6_raw+1200+testing*2;
+                RC.channels[6] = mavmsg.chan7_raw+1300+testing*0.2;
+                RC.channels[7] = mavmsg.chan8_raw+1400+testing*3;
+                RC.channels[8] = mavmsg.chan9_raw+1500+testing*0.3;
+                RC.channels[9] = mavmsg.chan10_raw+1600+testing*4;
+                RC.channels[10] = mavmsg.chan11_raw+1700+testing*0.4;
+                RC.channels[11] = mavmsg.chan12_raw+1800+testing*5;
+                RC.channels[12] = mavmsg.chan13_raw+1900+testing*.5;
+                RC.channels[13] = mavmsg.chan14_raw+2000+testing*6;
+                RC.channels[14] = mavmsg.chan15_raw+2100+testing*.6;
+                RC.channels[15] = mavmsg.chan16_raw+2200+testing*7;
+                testing = testing+100;  if( testing > 1000 ) testing = 10;
+               // RC.channels[16] = mavmsg.chan17_raw+1300;
+               // RC.channels[17] = mavmsg.chan18_raw+1400;
 
                 // buzz - one of these is wrong? probably scaled wrong too
                 MISC.rssi_channel = mavmsg.rssi  ; //SPCodes.MSPV2_ARDUPILOT_MISC: 
@@ -509,7 +511,7 @@ var mspHelper = (function (gui) {
 
                 // buzz todo
                 break;
-            case mavlink20.MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
+            case mavlink20.MAVLINK_MSG_ID_SERVO_OUTPUT_RAW: // tis one
                 /* ["time_usec", "port", "servo1_raw", "servo2_raw", "servo3_raw", "servo4_raw", "servo5_raw", "servo6_raw", "servo7_raw", "servo8_raw", "servo9_raw", "servo10_raw", "servo11_raw", "servo12_raw", "servo13_raw", "servo14_raw", "servo15_raw", "servo16_raw"]
                 port: 0
                 servo1_raw: 1100
