@@ -10,10 +10,14 @@ var Settings = (function () {
         });
         return Promise.mapSeries(inputs, function (input, ii) {
             var settingName = input.data('setting');
-            var setting = {'123':123, 'min':0, 'max':14, 'type':'string'};// setting value
+
+            // test hard-coded setting
+            //var setting = {'123':123, 'min':0, 'max':14, 'type':'string'};// setting value
             var s = {};
+            var setting = mspHelper.getSetting(settingName);
             s['setting'] = setting;
-            //return mspHelper.getSetting(settingName).then(function (s) {
+
+            //.then(function (s) {
                 // Check if the input declares a parent
                 // to be hidden in case of the setting not being available.
                 // Otherwise, default to hiding its parent
@@ -36,7 +40,7 @@ var Settings = (function () {
                         for (var ii = s.setting.min; ii <= s.setting.max; ii++) {
                             var name = (s.setting.table ? s.setting.table.values[ii] : null);
                             if (name) {
-                                var localizedName = chrome.i18n.getMessage(name);
+                                var localizedName = settingName;//chrome.i18n.getMessage(name);
                                 if (localizedName) {
                                     name = localizedName;
                                 }
