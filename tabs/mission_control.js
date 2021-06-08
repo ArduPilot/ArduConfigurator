@@ -124,26 +124,26 @@ TABS.mission_control.initialize = function (callback) {
         }
         localize();
 
-        function get_raw_gps_data() {
-            MSP.send_message(MSPCodes.MSP_RAW_GPS, false, false, null);
-            get_comp_gps_data();
-        }
+        // function get_raw_gps_data() {
+        //     MSP.send_message(MSPCodes.MSP_RAW_GPS, false, false, null);
+        //     get_comp_gps_data();
+        // }
 
-        function get_comp_gps_data() {
-            MSP.send_message(MSPCodes.MSP_COMP_GPS, false, false, null);
-            get_altitude_data();
-        }
+        // function get_comp_gps_data() {
+        //     MSP.send_message(MSPCodes.MSP_COMP_GPS, false, false, null);
+        //     get_altitude_data();
+        // }
 
-        function get_altitude_data() {
-            MSP.send_message(MSPCodes.MSP_ALTITUDE, false, false, null);
-            get_attitude_data();
+        // function get_altitude_data() {
+        //     MSP.send_message(MSPCodes.MSP_ALTITUDE, false, false, null);
+        //     get_attitude_data();
 
-        }
+        // }
 
-        function get_attitude_data() {
-            MSP.send_message(MSPCodes.MSP_ATTITUDE, false, false, null);
-            update_gpsTrack();
-        }
+        // function get_attitude_data() {
+        //     MSP.send_message(MSPCodes.MSP_ATTITUDE, false, false, null);
+             update_gpsTrack();
+        // }
       
         function update_gpsTrack() {
 
@@ -330,16 +330,17 @@ TABS.mission_control.initialize = function (callback) {
         {
           helper.mspBalancedInterval.add('gps_pull', 200, 3, function gps_update() {
               // avoid usage of the GPS commands until a GPS sensor is detected for targets that are compiled without GPS support.
-              if (!have_sensor(CONFIG.activeSensors, 'gps')) {
-                  update_gpsTrack();
-                  return;
-              }
+              //if (!have_sensor(CONFIG.activeSensors, 'gps')) {
+              //    update_gpsTrack();
+              //    return;
+              //}
 
               if (helper.mspQueue.shouldDrop()) {
                   return;
               }
 
-              get_raw_gps_data();
+              //get_raw_gps_data();
+              update_gpsTrack(); // end of the chain of events
           });
         }
 

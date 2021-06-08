@@ -12,14 +12,15 @@ TABS.programming.initialize = function (callback, scrollPosition) {
         //googleAnalytics.sendAppView('Programming');
     }
 
-    loadChainer.setChain([
-        mspHelper.loadLogicConditions,
-        mspHelper.loadGlobalVariablesStatus,
-        mspHelper.loadProgrammingPidStatus,
-        mspHelper.loadProgrammingPid
-    ]);
-    loadChainer.setExitPoint(loadHtml);
-    loadChainer.execute();
+    // loadChainer.setChain([
+    //     mspHelper.loadLogicConditions,
+    //     mspHelper.loadGlobalVariablesStatus,
+    //     mspHelper.loadProgrammingPidStatus,
+    //     mspHelper.loadProgrammingPid
+    // ]);
+    // loadChainer.setExitPoint(loadHtml);
+    // loadChainer.execute();
+    loadHtml();
 
     saveChainer.setChain([
         mspHelper.sendLogicConditions,

@@ -14,20 +14,21 @@ TABS.receiver.initialize = function (callback) {
         //googleAnalytics.sendAppView('Receiver');
     }
 
-    var loadChainer = new MSPChainerClass();
+    // var loadChainer = new MSPChainerClass();
 
-    var loadChain = [
-        mspHelper.loadMisc,
-        mspHelper.loadRcData,
-        mspHelper.loadRcMap,
-        mspHelper.loadRxConfig,
-        mspHelper.loadRcDeadband
-    ];
+    // var loadChain = [
+    //     mspHelper.loadMisc,
+    //     mspHelper.loadRcData,
+    //     mspHelper.loadRcMap,
+    //     mspHelper.loadRxConfig,
+    //     mspHelper.loadRcDeadband
+    // ];
 
-    loadChain.push(mspHelper.loadRateProfileData);
-    loadChainer.setChain(loadChain);
-    loadChainer.setExitPoint(load_html);
-    loadChainer.execute();
+    // loadChain.push(mspHelper.loadRateProfileData);
+    // loadChainer.setChain(loadChain);
+    // loadChainer.setExitPoint(load_html);
+    // loadChainer.execute();
+    load_html();
 
     function load_html() {
         GUI.load("./tabs/receiver.html", Settings.processHtml(process_html));
@@ -359,7 +360,8 @@ TABS.receiver.initialize = function (callback) {
         });
 
         // Only show the MSP control sticks if the MSP Rx feature is enabled
-        //SETTINGS['receiver_type'] = 1; // buzz force enable
+        //ALLSETTINGS['receiver_type'] = 1; // buzz force enable
+
         //if (mspHelper.getSetting("receiver_type")) { //} .then(function (s) {
         //    if (s && s.setting.table && s.setting.table.values) {
         //        $(".sticks_btn").toggle(s.setting.table.values[s.value] == 'MSP');

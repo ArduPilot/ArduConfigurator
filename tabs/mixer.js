@@ -5,9 +5,10 @@ TABS.mixer = {};
 
 TABS.mixer.initialize = function (callback, scrollPosition) {
 
-    let loadChainer = new MSPChainerClass(),
-        saveChainer = new MSPChainerClass(),
-        currentPlatform,
+    //let loadChainer = new MSPChainerClass();
+    let saveChainer = new MSPChainerClass();
+    
+    let currentPlatform,
         currentMixerPreset,
         $servoMixTable,
         $servoMixTableBody,
@@ -21,16 +22,17 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         //googleAnalytics.sendAppView('Mixer');
     }
 
-    loadChainer.setChain([
-        mspHelper.loadMixerConfig,
-        mspHelper.loadMotors,
-        mspHelper.loadServoMixRules,
-        mspHelper.loadMotorMixRules,
-        mspHelper.loadOutputMapping,
-        mspHelper.loadLogicConditions
-    ]);
-    loadChainer.setExitPoint(loadHtml);
-    loadChainer.execute();
+    // loadChainer.setChain([
+    //     mspHelper.loadMixerConfig,
+    //     mspHelper.loadMotors,
+    //     mspHelper.loadServoMixRules,
+    //     mspHelper.loadMotorMixRules,
+    //     mspHelper.loadOutputMapping,
+    //     mspHelper.loadLogicConditions
+    // ]);
+    // loadChainer.setExitPoint(loadHtml);
+    // loadChainer.execute();
+    loadHtml();
 
     saveChainer.setChain([
         mspHelper.saveMixerConfig,
@@ -489,7 +491,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
     }
 
     function getLogicConditionsStatus() {
-        mspHelper.loadLogicConditionsStatus(onStatusPullDone);
+        //mspHelper.loadLogicConditionsStatus(onStatusPullDone);
     }
 
     function onStatusPullDone() {

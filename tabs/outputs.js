@@ -679,24 +679,24 @@ TABS.outputs.initialize = function (callback) {
 
         $motorsEnableTestMode.change();
 
-        function getPeriodicMotorOutput() {
+         function getPeriodicMotorOutput() {
 
-            if (helper.mspQueue.shouldDrop()) {
-                getPeriodicServoOutput();
-                return;
-            }
+        //     if (helper.mspQueue.shouldDrop()) {
+        //         getPeriodicServoOutput();
+        //         return;
+        //     }
 
-            MSP.send_message(MSPCodes.MSP_MOTOR, false, false, getPeriodicServoOutput);
-        }
+        //     MSP.send_message(MSPCodes.MSP_MOTOR, false, false, getPeriodicServoOutput);
+        // }
 
-        function getPeriodicServoOutput() {
-            if (helper.mspQueue.shouldDrop()) {
-                update_ui();
-                return;
-            }
+        // function getPeriodicServoOutput() {
+        //     if (helper.mspQueue.shouldDrop()) {
+                 update_ui();
+        //         return;
+        //     }
 
-            MSP.send_message(MSPCodes.MSP_SERVO, false, false, update_ui);
-        }
+        //     MSP.send_message(MSPCodes.MSP_SERVO, false, false, update_ui);
+         }
 
         var full_block_scale = MISC.maxthrottle - MISC.mincommand;
 
