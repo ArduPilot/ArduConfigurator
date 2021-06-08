@@ -4067,18 +4067,18 @@ var mspHelper = (function (gui) {
 
         // buzz todo - do we want to put all the ardupilot params into this 'Settings' obj?
 
-            var settingTypes = {
-                0: "uint8_t",
-                1: "int8_t",
-                2: "uint16_t",
-                3: "int16_t",
-                4: "uint32_t",
-                5: "float",
-                6: "string",
-            };
-            var setting = {};
+            // var settingTypes = {
+            //     0: "uint8_t",
+            //     1: "int8_t",
+            //     2: "uint16_t",
+            //     3: "int16_t",
+            //     4: "uint32_t",
+            //     5: "float",
+            //     6: "string",
+            // };
+            // var setting = {};
 
-            var type = 0; // buzz hack, all are unsigned int 8
+            // var type = 0; // buzz hack, all are unsigned int 8
             //var type = 6; // buzz hack, all are string
 
         //     // Discard setting name
@@ -4095,16 +4095,16 @@ var mspHelper = (function (gui) {
         //     result.data.readU16();
 
         //     var type = result.data.readU8();
-            setting.type = settingTypes[type];
-            if (!setting.type) {
-                console.log("Unknown setting type " + type + " for setting '" + name + "'");
-              //  return null;
-            }
+            // setting.type = settingTypes[type];
+            // if (!setting.type) {
+            //     console.log("Unknown setting type " + type + " for setting '" + name + "'");
+            //   //  return null;
+            // }
         //     // Discard section
         //     result.data.readU8();
-            setting.mode = MODE_LOOKUP;//result.data.readU8();
-            setting.min = 0; //result.data.read32();
-            setting.max = 12; // result.data.readU32();
+            // setting.mode = MODE_LOOKUP;//result.data.readU8();
+            // setting.min = 0; //result.data.read32();
+            // setting.max = 12; // result.data.readU32();
 
         //     setting.index = result.data.readU16();
 
@@ -4112,15 +4112,15 @@ var mspHelper = (function (gui) {
         //     result.data.readU8();
         //     result.data.readU8();
 
-            if (setting.mode == MODE_LOOKUP) {
-                var values = [];
-                for (var ii = setting.min; ii <= setting.max; ii++) {
-                    //values.push(result.data.readString());
-                    values.push(ii); //buzz todo
-                }
-                setting.table = {values: values};
-            }
-            SETTINGS[name] = setting;
+            // if (setting.mode == MODE_LOOKUP) {
+            //     var values = [];
+            //     for (var ii = setting.min; ii <= setting.max; ii++) {
+            //         //values.push(result.data.readString());
+            //         values.push(ii); //buzz todo
+            //     }
+            //     setting.table = {values: values};
+            // }
+            setting = ALLSETTINGS[name] ;
             return setting;
         // });
     }
@@ -4139,11 +4139,11 @@ var mspHelper = (function (gui) {
 
     self.getSetting = function (name) {
         console.log("SETTINGS param/setting name:"+name);
-        if (SETTINGS[name]) {
-               return SETTINGS[name];
+        if (ALLSETTINGS[name]) {
+               return ALLSETTINGS[name];
         }
-        this.makeNewSetting(name); // make it first, then return it
-        return SETTINGS[name];
+        //this.makeNewSetting(name); // make it first, then return it
+        return null; //ALLSETTINGS[name];
     }
         //.then(function (setting) {
         //     if (!setting) {

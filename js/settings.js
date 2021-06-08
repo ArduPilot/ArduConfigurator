@@ -40,7 +40,7 @@ var Settings = (function () {
                         for (var ii = s.setting.min; ii <= s.setting.max; ii++) {
                             var name = (s.setting.table ? s.setting.table.values[ii] : null);
                             if (name) {
-                                var localizedName = settingName;//chrome.i18n.getMessage(name);
+                                var localizedName = name;//chrome.i18n.getMessage(name);
                                 if (localizedName) {
                                     name = localizedName;
                                 }
@@ -70,14 +70,14 @@ var Settings = (function () {
                     
                     input.attr('min', s.setting.min);
                     input.attr('max', s.setting.max);
-                    input.val(s.value.toFixed(2));
+                    //input.val(s.value.toFixed(2));
                 } else {
                     var multiplier = parseFloat(input.data('setting-multiplier') || 1);
                     input.attr('type', 'number');
                     input.attr('step', 1 / multiplier);
                     input.attr('min', s.setting.min / multiplier);
                     input.attr('max', s.setting.max / multiplier);
-                    input.val((s.value / multiplier).toFixed(Math.log10(multiplier)));
+                    //input.val((s.value / multiplier).toFixed(Math.log10(multiplier)));
                 }
                 input.data('setting-info', s.setting);
                 if (input.data('live')) {

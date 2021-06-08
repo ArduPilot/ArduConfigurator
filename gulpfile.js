@@ -94,6 +94,7 @@ sources.Js = [
     './js/mavsp/mavParam.js', //buzz, from MAVAgent
     './js/mavsp/mavFlightMode.js', //buzz, from MAVAgent
 
+    './allsettings.js', //buzz
     './js/mavsp/MAVSPCodes.js', //buzz
     './js/mavsp/MAVSPHelper.js',//buzz
     './js/mavsp/MAVSPchainer.js',//buzz
