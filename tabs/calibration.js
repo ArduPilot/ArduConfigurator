@@ -37,8 +37,9 @@ TABS.calibration.initialize = function (callback) {
         GUI.log(chrome.i18n.getMessage('configurationEepromSaved'));
 
         GUI.tab_switch_cleanup(function() {
-            MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false, reinitialize);
+        //    MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false, reinitialize);
         });
+        preflight_reboot(); // mav
     }
 
     function reinitialize() {

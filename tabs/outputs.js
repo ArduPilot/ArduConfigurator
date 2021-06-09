@@ -403,6 +403,8 @@ TABS.outputs.initialize = function (callback) {
             helper.features.execute(servos_update);
         });
         $('a.save').click(function () {
+            GUI.log(chrome.i18n.getMessage('reboot?'));
+            preflight_reboot(); // buzz todo n- no worky
             saveChainer.setExitPoint(function () {
                 //noinspection JSUnresolvedVariable
                 GUI.log(chrome.i18n.getMessage('configurationEepromSaved'));
