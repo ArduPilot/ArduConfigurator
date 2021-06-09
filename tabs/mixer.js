@@ -492,7 +492,8 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
     }
 
     function getLogicConditionsStatus() {
-        //mspHelper.loadLogicConditionsStatus(onStatusPullDone);
+        //mspHelper.loadLogicConditionsStatus(onStatusPullDone); buzz todo refresh data from here maybe?
+        onStatusPullDone();
     }
 
     function onStatusPullDone() {
