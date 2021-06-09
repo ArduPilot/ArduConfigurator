@@ -20,24 +20,26 @@ TABS.outputs.initialize = function (callback) {
         //googleAnalytics.sendAppView('Outputs');
     }
 
-    var loadChainer = new MSPChainerClass();
+    // var loadChainer = new MSPChainerClass();
 
-    loadChainer.setChain([
-        mspHelper.loadMiscV2,
-        mspHelper.loadBfConfig,
-        mspHelper.load3dConfig,
-        mspHelper.loadMotors,
-        mspHelper.loadMotorMixRules,
-        mspHelper.loadServoMixRules,
-        mspHelper.loadMixerConfig,
-        mspHelper.loadServoMixRules,
-        mspHelper.loadServoConfiguration,
-        mspHelper.loadOutputMapping,
-        mspHelper.loadRcData,
-        mspHelper.loadAdvancedConfig,
-    ]);
-    loadChainer.setExitPoint(load_html);
-    loadChainer.execute();
+    // loadChainer.setChain([
+    //     mspHelper.loadMiscV2,
+    //     mspHelper.loadBfConfig,
+    //     mspHelper.load3dConfig,
+    //     mspHelper.loadMotors,
+    //     mspHelper.loadMotorMixRules,
+    //     mspHelper.loadServoMixRules,
+    //     mspHelper.loadMixerConfig,
+    //     mspHelper.loadServoMixRules,
+    //     mspHelper.loadServoConfiguration,
+    //     mspHelper.loadOutputMapping,
+    //     mspHelper.loadRcData,
+    //     mspHelper.loadAdvancedConfig,
+    // ]);
+    // loadChainer.setExitPoint(load_html);
+    // loadChainer.execute();
+    load_html();
+
     update_arm_status();
 
     var saveChainer = new MSPChainerClass();
@@ -203,7 +205,7 @@ TABS.outputs.initialize = function (callback) {
         function showHideReversibleMotorInfo() {
             const reversibleMotorEnabled = $reversibleMotorCheckbox.is(':checked');
 
-            console.log(reversibleMotorEnabled);
+            //console.log(reversibleMotorEnabled);
 
             if (reversibleMotorEnabled) {
                 $reversibleMotorBox.show();
@@ -229,7 +231,7 @@ TABS.outputs.initialize = function (callback) {
     }
 
     function update_arm_status() {
-        self.armed = FC.isModeEnabled('ARM');
+        self.armed = FC.isModeEnabled('ARM'); // buzz to arming status
     }
 
     function initSensorData() {

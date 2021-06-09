@@ -3966,85 +3966,90 @@ var mspHelper = (function (gui) {
     };
 
     self.getMissionInfo = function (callback) {
-        MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);  callback(); // without a response, we'll call the callback anyway
+        //MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);  
+        callback(); // without a response, we'll call the callback anyway
     };
     
     self.loadWaypoints = function (callback) {
         MISSION_PLANER.reinit();
         let waypointId = 1;
-        MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);
+        //MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);
         getFirstWP();
         
         function getFirstWP() {
-            MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
+            //MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
             nextWaypoint();
         };
         
         function nextWaypoint() {
             waypointId++;
             if (waypointId < MISSION_PLANER.getCountBusyPoints()) {
-                MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
+               // MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
                 nextWaypoint();
             }
             else {
-                MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);  callback(); // without a response, we'll call the callback anyway
+                //MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);  
+                callback(); // without a response, we'll call the callback anyway
             }
         };
     };
     
     self.saveWaypoints = function (callback) {
         let waypointId = 1;
-        MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
+        //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
         nextWaypoint();
 
         function nextWaypoint() {
             waypointId++;
             if (waypointId < MISSION_PLANER.get().length) {
-                MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
+                //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
                 nextWaypoint();
             }
             else {
-                MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
+                //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
                 endMission();
             }
         };
         
         function endMission() {
-            MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);  callback(); // without a response, we'll call the callback anyway
+            //MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);  
+            callback(); // without a response, we'll call the callback anyway
         }
     };
     
     self.loadSafehomes = function (callback) {
         SAFEHOMES.flush();
         let safehomeId = 0;
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, null);
+        //MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, null);
         nextSafehome();
         
         function nextSafehome() {
             safehomeId++;
             if (safehomeId < SAFEHOMES.getMaxSafehomeCount()-1) {
-                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, null);
+                //MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, null);
                 nextSafehome();
             }
             else {
-                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, null);  callback(); // without a response, we'll call the callback anyway
+                //MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SAFEHOME, [safehomeId], false, null);  
+                callback(); // without a response, we'll call the callback anyway
             }
         };
     };
     
     self.saveSafehomes = function (callback) {
         let safehomeId = 0;
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, null);
+        //MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, null);
         nextSendSafehome();
         
         function nextSendSafehome() {
             safehomeId++;
             if (safehomeId < SAFEHOMES.getMaxSafehomeCount()-1) {
-                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, null);
+                //MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, null);
                 nextSendSafehome();
             }
             else {
-                MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, null);  callback(); // without a response, we'll call the callback anyway
+                //MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SAFEHOME, SAFEHOMES.extractBuffer(safehomeId), false, null);  
+                callback(); // without a response, we'll call the callback anyway
             }
         };
     };

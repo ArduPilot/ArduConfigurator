@@ -162,16 +162,16 @@ TABS.ports.initialize = function (callback) {
         //googleAnalytics.sendAppView('Ports');
     }
 
-    load_configuration_from_fc();
+    // load_configuration_from_fc();
 
-    function load_configuration_from_fc() {
-        MSP.send_message(MSPCodes.MSP2_CF_SERIAL_CONFIG, false, false, null);
-        on_configuration_loaded_handler();
+    // function load_configuration_from_fc() {
+    //     MSP.send_message(MSPCodes.MSP2_CF_SERIAL_CONFIG, false, false, null);
+    //     on_configuration_loaded_handler();
 
-        function on_configuration_loaded_handler() {
-            GUI.load("./tabs/ports.html", on_tab_loaded_handler);
-        }
-    }
+    //     function on_configuration_loaded_handler() {
+             GUI.load("./tabs/ports.html", on_tab_loaded_handler);
+    //     }
+    // }
 
     function update_ui() {
 

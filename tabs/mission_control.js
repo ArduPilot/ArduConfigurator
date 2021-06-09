@@ -77,20 +77,20 @@ TABS.mission_control.initialize = function (callback) {
         //googleAnalytics.sendAppView('Mission Control');
     }
 
-    if (CONFIGURATOR.connectionValid) {
-        var loadChainer = new MSPChainerClass();
-        loadChainer.setChain([
-            mspHelper.getMissionInfo,
-            //mspHelper.loadWaypoints,
-            //mspHelper.loadSafehomes
-        ]);
-        loadChainer.setExitPoint(loadHtml);
-        loadChainer.execute();
-    } else {
+   // if (CONFIGURATOR.connectionValid) {
+        // var loadChainer = new MSPChainerClass();
+        // loadChainer.setChain([
+        //     mspHelper.getMissionInfo,
+        //     //mspHelper.loadWaypoints,
+        //     //mspHelper.loadSafehomes
+        // ]);
+        // loadChainer.setExitPoint(loadHtml);
+        // loadChainer.execute();
+    //} else {
 
         // FC not connected, load page anyway
         loadHtml();
-    }
+    //}
 
     function loadHtml() {
         GUI.load("./tabs/mission_control.html", process_html);

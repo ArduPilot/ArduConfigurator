@@ -7,21 +7,23 @@ TABS.pid_tuning = {
 
 TABS.pid_tuning.initialize = function (callback) {
 
-    var loadChainer = new MSPChainerClass();
+    // var loadChainer = new MSPChainerClass();
 
-    var loadChain = [
-        mspHelper.loadPidNames,
-        mspHelper.loadPidData,
-        mspHelper.loadARDUPILOTPidConfig,
-        mspHelper.loadPidAdvanced,
-        mspHelper.loadFilterConfig,
-        mspHelper.loadBfConfig
-    ];
-    loadChain.push(mspHelper.loadRateProfileData);
+    // var loadChain = [
+    //     mspHelper.loadPidNames,
+    //     mspHelper.loadPidData,
+    //     mspHelper.loadARDUPILOTPidConfig,
+    //     mspHelper.loadPidAdvanced,
+    //     mspHelper.loadFilterConfig,
+    //     mspHelper.loadBfConfig
+    // ];
+    // loadChain.push(mspHelper.loadRateProfileData);
 
-    loadChainer.setChain(loadChain);
-    loadChainer.setExitPoint(load_html);
-    loadChainer.execute();
+    // loadChainer.setChain(loadChain);
+    // loadChainer.setExitPoint(load_html);
+    // loadChainer.execute();
+    load_html();
+
 
     if (GUI.active_tab != 'pid_tuning') {
         GUI.active_tab = 'pid_tuning';

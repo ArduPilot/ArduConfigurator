@@ -49,26 +49,27 @@ TABS.params.initialize = function (callback, scrollPosition) {
         mspHelper.setCraftName(craftName, null);  callback(); // without a response, we'll call the callback anyway
     };
 
-    var loadChainer = new MSPChainerClass();
+    // var loadChainer = new MSPChainerClass();
 
-    var loadChain = [
-        mspHelper.loadBfConfig,
-        mspHelper.loadArmingConfig,
-        mspHelper.loadLoopTime,
-        mspHelper.load3dConfig,
-        mspHelper.loadSensorAlignment,
-        mspHelper.loadAdvancedConfig,
-        mspHelper.loadARDUPILOTPidConfig,
-        mspHelper.loadSensorConfig,
-        mspHelper.loadVTXConfig,
-        mspHelper.loadMixerConfig,
-        loadCraftName,
-        mspHelper.loadMiscV2
-    ];
+    // var loadChain = [
+    //     mspHelper.loadBfConfig,
+    //     mspHelper.loadArmingConfig,
+    //     mspHelper.loadLoopTime,
+    //     mspHelper.load3dConfig,
+    //     mspHelper.loadSensorAlignment,
+    //     mspHelper.loadAdvancedConfig,
+    //     mspHelper.loadARDUPILOTPidConfig,
+    //     mspHelper.loadSensorConfig,
+    //     mspHelper.loadVTXConfig,
+    //     mspHelper.loadMixerConfig,
+    //     loadCraftName,
+    //     mspHelper.loadMiscV2
+    // ];
 
-    loadChainer.setChain(loadChain);
-    loadChainer.setExitPoint(load_html);
-    loadChainer.execute();
+    // loadChainer.setChain(loadChain);
+    // loadChainer.setExitPoint(load_html);
+    // loadChainer.execute();
+    load_html();
 
     var saveChainer = new MSPChainerClass();
 

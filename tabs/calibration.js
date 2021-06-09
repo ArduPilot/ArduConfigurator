@@ -7,8 +7,8 @@ TABS.calibration.model =  0;
 
 TABS.calibration.initialize = function (callback) {
 
-    var loadChainer = new MSPChainerClass(),
-        saveChainer = new MSPChainerClass(),
+    //var loadChainer = new MSPChainerClass();
+    var saveChainer = new MSPChainerClass(),
         modalStart,
         modalStop,
         modalProcessing;
@@ -17,13 +17,14 @@ TABS.calibration.initialize = function (callback) {
         GUI.active_tab = 'calibration';
         //googleAnalytics.sendAppView('Calibration');
     }
-    loadChainer.setChain([
-        mspHelper.loadStatus,
-        mspHelper.loadSensorConfig,
-        mspHelper.loadCalibrationData
-    ]);
-    loadChainer.setExitPoint(loadHtml);
-    loadChainer.execute();
+    // loadChainer.setChain([
+    //     mspHelper.loadStatus,
+    //     mspHelper.loadSensorConfig,
+    //     mspHelper.loadCalibrationData
+    // ]);
+    // loadChainer.setExitPoint(loadHtml);
+    // loadChainer.execute();
+    loadHtml();
 
     saveChainer.setChain([
         mspHelper.saveCalibrationData,

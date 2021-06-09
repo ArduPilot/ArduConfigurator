@@ -346,7 +346,7 @@ TABS.auxiliary.initialize = function (callback) {
                 return;
             }
 
-            MSP.send_message(MSPCodes.MSP_RC, false, false, null);
+            //MSP.send_message(MSPCodes.MSP_RC, false, false, null);
             update_ui();
         }
 

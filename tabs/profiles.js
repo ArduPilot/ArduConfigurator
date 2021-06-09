@@ -63,19 +63,20 @@ TABS.profiles.initialize = function (callback, scrollPosition) {
         //googleAnalytics.sendAppView('Presets');
     }
 
-    loadChainer.setChain([
-        mspHelper.loadBfConfig,
-        mspHelper.loadLoopTime,
-        mspHelper.loadARDUPILOTPidConfig,
-        mspHelper.loadAdvancedConfig,
-        mspHelper.loadFilterConfig,
-        mspHelper.loadPidAdvanced,
-        mspHelper.loadRcTuningData,
-        mspHelper.loadPidData,
-        mspHelper.loadMixerConfig
-    ]);
-    loadChainer.setExitPoint(loadHtml);
-    loadChainer.execute();
+    // loadChainer.setChain([
+    //     mspHelper.loadBfConfig,
+    //     mspHelper.loadLoopTime,
+    //     mspHelper.loadARDUPILOTPidConfig,
+    //     mspHelper.loadAdvancedConfig,
+    //     mspHelper.loadFilterConfig,
+    //     mspHelper.loadPidAdvanced,
+    //     mspHelper.loadRcTuningData,
+    //     mspHelper.loadPidData,
+    //     mspHelper.loadMixerConfig
+    // ]);
+    // loadChainer.setExitPoint(loadHtml);
+    // loadChainer.execute();
+    loadHtml();
 
     saveChainer.setChain([
         mspHelper.saveBfConfig,

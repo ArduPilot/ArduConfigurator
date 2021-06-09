@@ -9,26 +9,26 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
         //googleAnalytics.sendAppView('Failsafe');
     }
 
-    function load_failssafe_config() {
-        MSP.send_message(MSPCodes.MSP_FAILSAFE_CONFIG, false, false, null);
-        load_config();//buzz
-    }
+    // function load_failssafe_config() {
+    //     MSP.send_message(MSPCodes.MSP_FAILSAFE_CONFIG, false, false, null);
+    //     load_config();//buzz
+    // }
 
-    function load_config() {
-        MSP.send_message(MSPCodes.MSP_BF_CONFIG, false, false, null);
-        load_misc();
-    }
+    // function load_config() {
+    //     MSP.send_message(MSPCodes.MSP_BF_CONFIG, false, false, null);
+    //     load_misc();
+    // }
 
-    function load_misc() {
-        MSP.send_message(MSPCodes.MSP_MISC, false, false, null);
-        load_html();
-    }
+    // function load_misc() {
+    //     MSP.send_message(MSPCodes.MSP_MISC, false, false, null);
+    load_html();
+    // }
 
     function load_html() {
         GUI.load("./tabs/failsafe.html", process_html);
     }
 
-    load_failssafe_config();
+    //load_failssafe_config();
 
     function process_html() {
 

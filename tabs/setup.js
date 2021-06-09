@@ -14,18 +14,19 @@ TABS.setup.initialize = function (callback) {
         //googleAnalytics.sendAppView('Setup');
     }
 
-    var loadChainer = new MSPChainerClass();
+    // var loadChainer = new MSPChainerClass();
 
-    var loadChain = [
-        mspHelper.loadBfConfig,
-        mspHelper.queryFcStatus,
-        mspHelper.loadMixerConfig
-    ];
+    // var loadChain = [
+    //     mspHelper.loadBfConfig,
+    //     mspHelper.queryFcStatus,
+    //     mspHelper.loadMixerConfig
+    // ];
 
-    loadChain.push(mspHelper.loadMiscV2);
-    loadChainer.setChain(loadChain);
-    loadChainer.setExitPoint(load_html);
-    loadChainer.execute();
+    // loadChain.push(mspHelper.loadMiscV2);
+    // loadChainer.setChain(loadChain);
+    // loadChainer.setExitPoint(load_html);
+    // loadChainer.execute();
+    load_html();
 
     function load_html() {
         GUI.load("./tabs/setup.html", process_html);
