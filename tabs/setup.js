@@ -41,7 +41,7 @@ TABS.setup.initialize = function (callback) {
         }
 
         // initialize 3D
-        self.initialize3D();
+        self.initialize3D(); // buzz
 
 		// set roll in interactive block
         $('span.roll').text(chrome.i18n.getMessage('initialSetupAttitude', [0]));
@@ -250,7 +250,7 @@ TABS.setup.initialize3D = function () {
             model_file = 'custom';
             GUI_control.prototype.log("<span style='color: red; font-weight: bolder'><strong>" + chrome.i18n.getMessage("mixerNotConfigured") + "</strong></span>");
         } else {
-            model_file = helper.mixer.getById(MIXER_CONFIG.appliedMixerPreset).model;
+            model_file = helper.mixer.getById(MIXER_CONFIG.appliedMixerPreset).model; // buzz 3d
         }
     } else {
         model_file = 'fallback'
@@ -264,33 +264,84 @@ TABS.setup.initialize3D = function () {
     // setup scene
     scene = new THREE.Scene();
 
-    loader = new THREE.JSONLoader();
-    loader.load('./resources/models/' + model_file + '.json', function (geometry, materials) {
+    loader = new THREE.LegacyJSONLoader();
+    loader.load('./resources/models/' + model_file + '.json', function (geometry, materials) { // buzz 3d
         var modelMaterial = new THREE.MeshFaceMaterial(materials);
         model = new THREE.Mesh(geometry, modelMaterial);
 
-        model.scale.set(15, 15, 15);
+        //model.scale.set(15, 15, 15);
 
-        modelWrapper.add(model);
-        scene.add(modelWrapper);
+        //modelWrapper.add(model);
+        //scene.add(modelWrapper);
     });
 
-    // stationary camera
+    // Instantiate another loader
+    //const 
+    loader2 = new THREE.GLTFLoader();
+    loader2.load( 
+        'resources/models/spitfire-1m.gltf',
+       // 'resources/models/tricopter.gltf',
+     function ( gltf ) {  // called when the resource is loaded
+    
+        //modelWrapper.add(model);
+
+            scene.add( gltf.scene );
+    
+            gltf.animations; // Array<THREE.AnimationClip>
+            gltf.scene; // THREE.Group
+            gltf.scenes; // Array<THREE.Group>
+            gltf.cameras; // Array<THREE.Camera>
+            gltf.asset; // Object
+
+            model = gltf.scene.children[0];// first child in scene?
+
+            // scaler = 5;
+            // var mdl = gltf.scene.children[0].children;
+            // //var mdl2 = gltf.scene.children[0].children[0];
+            // mdl1.forEach(function callbackFn(e) { 
+            //     e.scale.set(scaler, scaler, scaler);
+            // });
+    
+        },
+        // called while loading is progressing
+        function ( xhr ) {
+    
+            console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+    
+        },
+        // called when loading has errors
+        function ( error ) {
+    
+            console.log( 'An error happened' );
+    
+        }
+    );
+
+    //stationary camera
     camera = new THREE.PerspectiveCamera(50, wrapper.width() / wrapper.height(), 1, 10000);
 
-    // some light
+    //some light
     light = new THREE.AmbientLight(0x404040);
     light2 = new THREE.DirectionalLight(new THREE.Color(1, 1, 1), 1.5);
     light2.position.set(0, 1, 0);
 
-    // move camera away from the model
-    camera.position.z = 125;
+    //move camera away from the model
+    camera.position.z = 2;  // tri = 8, spitfire=1
 
-    // add camera, model, light to the foreground scene
-    scene.add(light);
-    scene.add(light2);
-    scene.add(camera);
-    scene.add(modelWrapper);
+    //add camera, model, light to the foreground scene
+   scene.add(light);
+   scene.add(light2);
+   scene.add(camera);
+   //scene.add(modelWrapper);
+
+
+    //----------------------------
+
+    //buzz 3d gltf loader , as GLTF is a newer format thats supported going forward in newer Three.js vrsions.
+
+
+
+    //----------------
 
     this.render3D = function () {
         if (!model) {

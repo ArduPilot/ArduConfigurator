@@ -62,7 +62,12 @@ sources.Js = [
     './node_modules/marked/lib/marked.js',
     './js/libraries/d3.min.js',
     './js/libraries/jquery.nouislider.all.min.js',
-    './node_modules/three/three.min.js',
+   // './node_modules/three/three.min.js',
+   // './node_modules/three/three.js',
+   './node_modules/three/build/three.js',
+   './node_modules/three/examples/js/loaders/deprecated/LegacyJSONLoader.js',
+   './node_modules/three/examples/js/loaders/GLTFLoader.js',
+
     './js/libraries/nw-dialog.js',
     './js/libraries/bundle_xml2js.js',
     './js/libraries/Projector.js',
