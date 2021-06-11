@@ -283,9 +283,16 @@ TABS.setup.initialize3D = function () {
        // 'resources/models/tricopter.gltf',
      function ( gltf ) {  // called when the resource is loaded
     
-        //modelWrapper.add(model);
+        
 
-            scene.add( gltf.scene );
+
+            // pick model object as the first child in the scene, hopefull.y
+            model = gltf.scene.children[0];// first child in scene?
+
+            modelWrapper.add(model);
+            scene.add(modelWrapper);
+
+            //scene.add( gltf.scene );
     
             gltf.animations; // Array<THREE.AnimationClip>
             gltf.scene; // THREE.Group
@@ -293,7 +300,6 @@ TABS.setup.initialize3D = function () {
             gltf.cameras; // Array<THREE.Camera>
             gltf.asset; // Object
 
-            model = gltf.scene.children[0];// first child in scene?
 
             // scaler = 5;
             // var mdl = gltf.scene.children[0].children;
