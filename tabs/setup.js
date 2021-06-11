@@ -264,16 +264,16 @@ TABS.setup.initialize3D = function () {
     // setup scene
     scene = new THREE.Scene();
 
-    loader = new THREE.LegacyJSONLoader();
-    loader.load('./resources/models/' + model_file + '.json', function (geometry, materials) { // buzz 3d
-        var modelMaterial = new THREE.MeshFaceMaterial(materials);
-        model = new THREE.Mesh(geometry, modelMaterial);
+    //loader = new THREE.LegacyJSONLoader();
+    //loader.load('./resources/models/' + model_file + '.json', function (geometry, materials) { // buzz 3d
+        //var modelMaterial = new THREE.MeshFaceMaterial(materials);
+        //model = new THREE.Mesh(geometry, modelMaterial);
 
         //model.scale.set(15, 15, 15);
 
         //modelWrapper.add(model);
         //scene.add(modelWrapper);
-    });
+   // });
 
     // Instantiate another loader
     //const 
@@ -283,9 +283,7 @@ TABS.setup.initialize3D = function () {
        // 'resources/models/tricopter.gltf',
      function ( gltf ) {  // called when the resource is loaded
     
-        
-
-
+    
             // pick model object as the first child in the scene, hopefull.y
             model = gltf.scene.children[0];// first child in scene?
 
@@ -300,13 +298,6 @@ TABS.setup.initialize3D = function () {
             gltf.cameras; // Array<THREE.Camera>
             gltf.asset; // Object
 
-
-            // scaler = 5;
-            // var mdl = gltf.scene.children[0].children;
-            // //var mdl2 = gltf.scene.children[0].children[0];
-            // mdl1.forEach(function callbackFn(e) { 
-            //     e.scale.set(scaler, scaler, scaler);
-            // });
     
         },
         // called while loading is progressing
