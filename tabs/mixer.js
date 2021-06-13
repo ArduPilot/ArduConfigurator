@@ -3,6 +3,109 @@
 
 TABS.mixer = {};
 
+window.$platformSelect  = window.$platformSelect??{};
+$platformSelect = window.$platformSelect;
+
+window.$hasFlapsWrapper = $('#has-flaps-wrapper');
+$hasFlapsWrapper = window.$hasFlapsWrapper;
+
+window.$mixerPreset  = window.$mixerPreset??{};
+$mixerPreset = window.$mixerPreset;
+
+function buzz_veh_sels() {
+    
+
+    $platformSelect.find("*").remove();
+
+    let platforms = platformList;
+
+    for (let i in platforms) {
+        if (platforms.hasOwnProperty(i)) {
+            let p = platforms[i];
+            $platformSelect.append('<option value="' + p.id + '">' + p.name + '</option>');
+        }
+    }
+
+    function fillMixerPreset() { 
+        let mixers = helper.mixer.getByPlatform(MIXER_CONFIG.platformType);
+
+        $mixerPreset.find("*").remove();
+        for (i in mixers) {
+            if (mixers.hasOwnProperty(i)) {
+                let m = mixers[i];
+                $mixerPreset.append('<option value="' + m.id + '">' + m.name + '</option>');
+            }
+        }
+    }
+
+
+    $platformSelect.change(function () {
+
+        //console.log('drop 1 changed');
+
+        MIXER_CONFIG.platformType = parseInt($platformSelect.val(), 10);
+        // currentPlatform = helper.platform.getById(MIXER_CONFIG.platformType); 
+        currentPlatform =  platformList[MIXER_CONFIG.platformType];
+
+        var $platformSelectParent = $platformSelect.parent('.select');
+
+        if (currentPlatform.flapsPossible) {
+            $hasFlapsWrapper.removeClass('is-hidden');
+            $platformSelectParent.removeClass('no-bottom-border');
+        } else {
+            $hasFlapsWrapper.addClass('is-hidden');
+            $platformSelectParent.addClass('no-bottom-border');
+        }
+
+        fillMixerPreset();
+        $mixerPreset.change();
+
+        
+    });
+
+    //currentPlatform = helper.platform.getById(MIXER_CONFIG.platformType);
+    currentPlatform =  platformList[MIXER_CONFIG.platformType];
+
+    $platformSelect.val(MIXER_CONFIG.platformType).change();
+
+
+    $mixerPreset.change(function () {
+
+        //console.log('PLEASE REFRESH TAB BY VISITING ANOTHER THEN COME BACK');
+
+     
+        const presetId = parseInt($mixerPreset.val(), 10);
+        currentMixerPreset = helper.mixer.getById(presetId);
+
+        MIXER_CONFIG.appliedMixerPreset = presetId; // buzz 3d chooser
+
+        // if (currentMixerPreset.id == 3) {
+        //     $wizardButton.parent().removeClass("is-hidden");
+        // } else {
+        //     $wizardButton.parent().addClass("is-hidden");
+        // }
+
+        $('.mixerPreview img').attr('src', './resources/motor_order/'
+            + currentMixerPreset.image + '.svg');
+
+               //function content_ready() {
+        //    GUI.tab_switch_in_progress = false;
+        //}
+        // reload current page due to model change? brok bad
+        //TABS.setup.initialize(content_ready);
+        TABS.setup.initialize3D();
+          
+
+    });
+
+    if (MIXER_CONFIG.appliedMixerPreset > -1) {
+        $mixerPreset.val(MIXER_CONFIG.appliedMixerPreset).change();
+    } else {
+        $mixerPreset.change();
+    }
+
+}
+
 TABS.mixer.initialize = function (callback, scrollPosition) {
 
     //let loadChainer = new MSPChainerClass();
@@ -261,24 +364,13 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         $motorMixTable = $('#motor-mix-table');
         $motorMixTableBody = $motorMixTable.find('tbody');
 
-        function fillMixerPreset() {
-            let mixers = helper.mixer.getByPlatform(MIXER_CONFIG.platformType);
 
-            $mixerPreset.find("*").remove();
-            for (i in mixers) {
-                if (mixers.hasOwnProperty(i)) {
-                    let m = mixers[i];
-                    $mixerPreset.append('<option value="' + m.id + '">' + m.name + '</option>');
-                }
-            }
-        }
-
-        let $platformSelect = $('#platform-type'),
+       // let $platformSelect = $('#platform-type');
             //platforms = helper.platform.getList(),
-            $hasFlapsWrapper = $('#has-flaps-wrapper'),
-            $hasFlaps = $('#has-flaps'),
-            $mixerPreset = $('#mixer-preset'),
-            $wizardButton = $("#mixer-wizard");
+        let $hasFlapsWrapper = $('#has-flaps-wrapper');
+        let $hasFlaps = $('#has-flaps');
+        //window.$mixerPreset = $('#mixer-preset');
+        let $wizardButton = $("#mixer-wizard");
 
         let platforms = platformList; // 
 
@@ -350,15 +442,6 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
             motorWizardModal.close();
         });
 
-        $platformSelect.find("*").remove();
-
-        for (let i in platforms) {
-            if (platforms.hasOwnProperty(i)) {
-                let p = platforms[i];
-                $platformSelect.append('<option value="' + p.id + '">' + p.name + '</option>');
-            }
-        }
-
         $hasFlaps.prop("checked", MIXER_CONFIG.hasFlaps);
         $hasFlaps.change(function () {
             if ($(this).is(":checked")) {
@@ -369,51 +452,11 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         });
         $hasFlaps.change();
 
-        $platformSelect.change(function () {
-            MIXER_CONFIG.platformType = parseInt($platformSelect.val(), 10);
-            // currentPlatform = helper.platform.getById(MIXER_CONFIG.platformType); 
-            currentPlatform =  platformList[MIXER_CONFIG.platformType];
 
-            var $platformSelectParent = $platformSelect.parent('.select');
+        window.$platformSelect = $('#platform-type');
+        window.$mixerPreset = $('#mixer-preset');
+        buzz_veh_sels();
 
-            if (currentPlatform.flapsPossible) {
-                $hasFlapsWrapper.removeClass('is-hidden');
-                $platformSelectParent.removeClass('no-bottom-border');
-            } else {
-                $hasFlapsWrapper.addClass('is-hidden');
-                $platformSelectParent.addClass('no-bottom-border');
-            }
-
-            fillMixerPreset();
-            $mixerPreset.change();
-        });
-
-        //currentPlatform = helper.platform.getById(MIXER_CONFIG.platformType);
-        currentPlatform =  platformList[MIXER_CONFIG.platformType];
-
-        $platformSelect.val(MIXER_CONFIG.platformType).change();
-
-        $mixerPreset.change(function () {
-            const presetId = parseInt($mixerPreset.val(), 10);
-            currentMixerPreset = helper.mixer.getById(presetId);
-
-            MIXER_CONFIG.appliedMixerPreset = presetId; // buzz 3d chooser
-
-            if (currentMixerPreset.id == 3) {
-                $wizardButton.parent().removeClass("is-hidden");
-            } else {
-                $wizardButton.parent().addClass("is-hidden");
-            }
-
-            $('.mixerPreview img').attr('src', './resources/motor_order/'
-                + currentMixerPreset.image + '.svg');
-        });
-
-        if (MIXER_CONFIG.appliedMixerPreset > -1) {
-            $mixerPreset.val(MIXER_CONFIG.appliedMixerPreset).change();
-        } else {
-            $mixerPreset.change();
-        }
 
         modal = new jBox('Modal', {
             width: 480,
