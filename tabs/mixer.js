@@ -274,11 +274,13 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         }
 
         let $platformSelect = $('#platform-type'),
-            platforms = helper.platform.getList(),
+            //platforms = helper.platform.getList(),
             $hasFlapsWrapper = $('#has-flaps-wrapper'),
             $hasFlaps = $('#has-flaps'),
             $mixerPreset = $('#mixer-preset'),
             $wizardButton = $("#mixer-wizard");
+
+        let platforms = platformList; // 
 
         motorWizardModal = new jBox('Modal', {
             width: 480,
@@ -369,7 +371,8 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
 
         $platformSelect.change(function () {
             MIXER_CONFIG.platformType = parseInt($platformSelect.val(), 10);
-            currentPlatform = helper.platform.getById(MIXER_CONFIG.platformType);
+            // currentPlatform = helper.platform.getById(MIXER_CONFIG.platformType); 
+            currentPlatform =  platformList[MIXER_CONFIG.platformType];
 
             var $platformSelectParent = $platformSelect.parent('.select');
 
@@ -385,14 +388,16 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
             $mixerPreset.change();
         });
 
-        currentPlatform = helper.platform.getById(MIXER_CONFIG.platformType);
+        //currentPlatform = helper.platform.getById(MIXER_CONFIG.platformType);
+        currentPlatform =  platformList[MIXER_CONFIG.platformType];
+
         $platformSelect.val(MIXER_CONFIG.platformType).change();
 
         $mixerPreset.change(function () {
             const presetId = parseInt($mixerPreset.val(), 10);
             currentMixerPreset = helper.mixer.getById(presetId);
 
-            MIXER_CONFIG.appliedMixerPreset = presetId;
+            MIXER_CONFIG.appliedMixerPreset = presetId; // buzz 3d chooser
 
             if (currentMixerPreset.id == 3) {
                 $wizardButton.parent().removeClass("is-hidden");

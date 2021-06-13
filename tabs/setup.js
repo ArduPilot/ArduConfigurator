@@ -244,22 +244,27 @@ TABS.setup.initialize3D = function () {
     // modelWrapper adds an extra axis of rotation to avoid gimbal lock with the euler angles
     modelWrapper = new THREE.Object3D();
 
+    var veh_type =  platformList[MIXER_CONFIG.platformType].name;
+    //var mix_type =  mixerList[MIXER_CONFIG.platformType];
+
+    //if veh_type == "Multirotor" } {}
+
     // load the model including materials
-    if (useWebGlRenderer) {
-        if (MIXER_CONFIG.appliedMixerPreset === -1) {
-            model_file = 'custom';
+    //if (useWebGlRenderer) {
+        //if (MIXER_CONFIG.appliedMixerPreset === -1) {
+        //    model_file = 'custom';
             GUI_control.prototype.log("<span style='color: red; font-weight: bolder'><strong>" + chrome.i18n.getMessage("mixerNotConfigured") + "</strong></span>");
-        } else {
+       // } else {
             model_file = helper.mixer.getById(MIXER_CONFIG.appliedMixerPreset).model; // buzz 3d
-        }
-    } else {
-        model_file = 'fallback'
-    }
+       // }
+   // } else {
+    //    model_file = 'fallback'
+    //}
 
     // Temporary workaround for 'custom' model until akfreak's custom model is merged.
-    if (model_file == 'custom') {
-        model_file = 'fallback';
-    }
+    if (model_file == 'custom')   model_file = 'fallback';
+    if (model_file == undefined ) model_file = 'fallback';
+    
 
     // setup scene
     scene = new THREE.Scene();
@@ -275,28 +280,54 @@ TABS.setup.initialize3D = function () {
         //scene.add(modelWrapper);
    // });
 
+    //buzz 3d gltf loader , as GLTF is a newer format thats supported going forward in newer Three.js vrsions.
+    // the 'key' here is from model.js mixerList[] that defines aircraft/subtypes/servos relationships
+    var _3d_models = {
+        'spitfire'  : {'file' :'resources/models/spitfire-1.2m.gltf', 'scaling':5, 'sceneoffset':0},
+        'tricopter' : {'file' :'resources/models/tricopter.gltf', 'scaling':1, 'sceneoffset':0},
+        'flying_wing' : {'file' :'resources/models/flying_wing.gltf', 'scaling':0.8, 'sceneoffset':0},
+        'quad_x' : {'file' :'resources/models/quad_x.gltf', 'scaling':0.8, 'sceneoffset':0},
+        'hex_x' : {'file' :'resources/models/hex_x.gltf', 'scaling':0.6, 'sceneoffset':0},
+        'talon' : {'file' :'resources/models/mini-talon-1m.bix-tex.gltf', 'scaling':8, 'sceneoffset':0},
+        'bixler' : {'file' :'resources/models/bixler-1m.gltf', 'scaling':5, 'sceneoffset':0},
+        'griffin' : {'file' :'resources/models/griffin-1m.black.gltf', 'scaling':5, 'sceneoffset':0},
+        'cub' : {'file' :'resources/models/piper-supercub.fixed.tex.gltf', 'scaling':5, 'sceneoffset':0},
+        'alti' : {'file' :'resources/models/alti-transition3.propped.gltf', 'scaling':5, 'sceneoffset':0},
+        //
+        'fallback' : {'file' :'resources/models/fallback.redo.gltf', 'scaling':5, 'sceneoffset':0},
+    };
+
     // Instantiate another loader
     //const 
     loader2 = new THREE.GLTFLoader();
+    //var modelname = 'alti';
+    var modelname = model_file; // 
+    var fname = _3d_models[modelname].file;
+    var scaler = _3d_models[modelname].scaling;
+    var sceneoffset = _3d_models[modelname].sceneoffset;
     loader2.load( 
-        'resources/models/spitfire-1m.gltf',
-       // 'resources/models/tricopter.gltf',
+        fname,
      function ( gltf ) {  // called when the resource is loaded
     
     
             // pick model object as the first child in the scene, hopefull.y
-            model = gltf.scene.children[0];// first child in scene?
+            model = gltf.scene.children[sceneoffset];// first child in scene?
+
+            //model.scale.set(1, 1, 1);
+
+            model.scale.x = model.scale.x *scaler; 
+            model.scale.y = model.scale.y *scaler; 
+            model.scale.z = model.scale.z *scaler;
 
             modelWrapper.add(model);
             scene.add(modelWrapper);
 
-            //scene.add( gltf.scene );
-    
-            gltf.animations; // Array<THREE.AnimationClip>
-            gltf.scene; // THREE.Group
-            gltf.scenes; // Array<THREE.Group>
-            gltf.cameras; // Array<THREE.Camera>
-            gltf.asset; // Object
+            // //scene.add( gltf.scene );
+            // gltf.animations; // Array<THREE.AnimationClip>
+            // gltf.scene; // THREE.Group
+            // gltf.scenes; // Array<THREE.Group>
+            // gltf.cameras; // Array<THREE.Camera>
+            // gltf.asset; // Object
 
     
         },
@@ -318,24 +349,18 @@ TABS.setup.initialize3D = function () {
     camera = new THREE.PerspectiveCamera(50, wrapper.width() / wrapper.height(), 1, 10000);
 
     //some light
-    light = new THREE.AmbientLight(0x404040);
+    light = new THREE.AmbientLight(0x606060);
     light2 = new THREE.DirectionalLight(new THREE.Color(1, 1, 1), 1.5);
     light2.position.set(0, 1, 0);
 
-    //move camera away from the model
-    camera.position.z = 2;  // tri = 8, spitfire=1
+    //move camera toward/away from the model
+    camera.position.z = 8;  // 8 is ok for models around 1m in size.
 
     //add camera, model, light to the foreground scene
    scene.add(light);
    scene.add(light2);
    scene.add(camera);
    //scene.add(modelWrapper);
-
-
-    //----------------------------
-
-    //buzz 3d gltf loader , as GLTF is a newer format thats supported going forward in newer Three.js vrsions.
-
 
 
     //----------------
