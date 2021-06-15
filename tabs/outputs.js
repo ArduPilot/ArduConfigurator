@@ -2,7 +2,7 @@
 //'use strict';
 
 TABS.outputs = {
-    allowTestMode: false,
+    allowTestMode: true,
     feature3DEnabled: false,
     feature3DSupported: false
 };
@@ -427,7 +427,7 @@ TABS.outputs.initialize = function (callback) {
         $motorsEnableTestMode = $('#motorsEnableTestMode');
 
         if (self.feature3DEnabled && !self.feature3DSupported) {
-            self.allowTestMode = false;
+            self.allowTestMode = true;
         }
 
         $motorsEnableTestMode.prop('checked', false);
@@ -693,6 +693,7 @@ TABS.outputs.initialize = function (callback) {
         //     MSP.send_message(MSPCodes.MSP_MOTOR, false, false, getPeriodicServoOutput);
         // }
 
+
         // function getPeriodicServoOutput() {
         //     if (helper.mspQueue.shouldDrop()) {
                  update_ui();
@@ -715,8 +716,12 @@ TABS.outputs.initialize = function (callback) {
 
             for (i = 0; i < MOTOR_DATA.length; i++) {
                 data = MOTOR_DATA[i] - MISC.mincommand;
+                if (data === 0 ) { data = 0.01;}
                 margin_top = block_height - (data * (block_height / full_block_scale)).clamp(0, block_height);
+                if (isNaN(margin_top)) { margin_top = 0.01;}
                 height = (data * (block_height / full_block_scale)).clamp(0, block_height);
+                if (isNaN(height)) { height = 0.01;}
+
                 color = parseInt(data * 0.009);
 
                 $('.motor-' + i + ' .label', motors_wrapper).text(getMotorOutputValue(MOTOR_DATA[i]));
@@ -735,15 +740,15 @@ TABS.outputs.initialize = function (callback) {
             }
             //keep the following here so at least we get a visual cue of our motor setup
             update_arm_status();
-            if (!self.allowTestMode) return;
+            //if (!self.allowTestMode) return;
 
             if (self.armed) {
                 $motorsEnableTestMode.prop('disabled', true);
                 $motorsEnableTestMode.prop('checked', false);
             } else {
-                if (self.allowTestMode) {
+                //if (self.allowTestMode) {
                     $motorsEnableTestMode.prop('disabled', false);
-                }
+                //}
             }
 
             if (previousArmState != self.armed) {

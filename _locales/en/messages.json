@@ -2333,14 +2333,29 @@
     "MagCalText": {
         "message": "After pressing the button you have 30 seconds to hold the copter in the air and rotate it so that each side (front, back, left, right, top and bottom) points down towards the earth."
     },
+    "MagCalText2": {
+        "message": "Large Vehicle Mag Calibration... please point your flight-controller to the NORTH, and ensure you have a good GPS lock, then press the button"
+    },
     "MagBtn": {
-        "message": "Calibrate Compass"
+        "message": "Calibrate Compass 3D"
+    },
+    "MagBtn2": {
+        "message": "Accept 3D cal?"
+    },
+    "MagBtn3": {
+        "message": "Cancel 3D cal?"
     },
     "LevCalText": {
-        "message": "Please put some Text here…"
+        "message": "Set default accelerometer offsets... this requires you to place your autopilot flat and level!"
+    },
+    "LevCalText2": {
+        "message": "Large Vehicle Mag Calibration... please point your flight-controller to the NORTH, and ensure you have a good GPS lock, then press the button"
     },
     "LevBtn": {
-        "message": "Level calibration"
+        "message": "Accel Level calibration"
+    },
+    "LevBtn2": {
+        "message": "Compass Level calibration"
     },
     "tabMixer": {
         "message": "Vehicle Type & Mixer"

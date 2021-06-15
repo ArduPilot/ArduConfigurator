@@ -182,32 +182,73 @@ TABS.calibration.initialize = function (callback) {
             //   modalProcessing.close();
             //   MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, checkFinishAccCalibrate);
 
+            // blerg 
+
             GUI.log(chrome.i18n.getMessage('initialSetupAccelCalibEnded'));
         }, 2000);
        // }
     }
 
     function processHtml() {
+
+        // show/hide areas
+        if (SENSOR_CONFIG.magnetometer === 0) { 
+            //Comment for test
+            $('#mag_btn, #mag-calibrated-data').css('pointer-events', 'none').css('opacity', '0.4');
+        }
+        // show/hide areas
+        if (SENSOR_CONFIG.opflow === 0) {
+            //Comment for test
+            $('#opflow_btn, #opflow-calibrated-data').css('pointer-events', 'none').css('opacity', '0.4');
+        }
+        // show/hide areas
+        $('#mag_btn2').css('pointer-events', 'none').css('opacity', '0.4'); // make non-interactive
+        $('#mag_btn3').css('pointer-events', 'none').css('opacity', '0.4'); // make  non-interactive
+
+        // respond to button press/s
+        $('#level_btn').on('click', function () {
+            //CALIBRATION_DATA.opflow.Scale = parseFloat($('[name=OpflowScale]').val());
+            //saveChainer.execute();
+            //preflight_reboot(); // mav
+            level_accel_cal();
+            updateSensorData();
+
+        });
+        // respond to button press/s
+        $('#level_btn2').on('click', function () {
+            //CALIBRATION_DATA.opflow.Scale = parseFloat($('[name=OpflowScale]').val());
+            //saveChainer.execute();
+            //preflight_reboot(); // mav
+            large_veh_mag_cal(); // assumes yawwed to north if not given by GUI
+            updateSensorData();
+
+        });
+        // respond to button press/s
         $('#calibrateButtonSave').on('click', function () {
             CALIBRATION_DATA.opflow.Scale = parseFloat($('[name=OpflowScale]').val());
             //saveChainer.execute();
             preflight_reboot(); // mav
         });
-
-        if (SENSOR_CONFIG.magnetometer === 0) {
-            //Comment for test
-            $('#mag_btn, #mag-calibrated-data').css('pointer-events', 'none').css('opacity', '0.4');
-        }
-
-        if (SENSOR_CONFIG.opflow === 0) {
-            //Comment for test
-            $('#opflow_btn, #opflow-calibrated-data').css('pointer-events', 'none').css('opacity', '0.4');
-        }
-
+        // respond to button press/s
+        $('#mag_btn3').on('click', function () {  
+            mag_cal_cancel();
+            updateSensorData();
+        });
+        // respond to button press/s
+        $('#mag_btn2').on('click', function () {  
+            mag_cal_accept();
+            updateSensorData();
+        });
+        // respond to button press/s
         $('#mag_btn').on('click', function () {
-            MSP.send_message(MSPCodes.MSP_MAG_CALIBRATION, false, false, function () {
+
+            //MSP.send_message(MSPCodes.MSP_MAG_CALIBRATION, false, false, function () {
                 GUI.log(chrome.i18n.getMessage('initialSetupMagCalibStarted'));
-            });
+            //});
+
+            mag_cal_start();
+            $('#mag_btn2').css('pointer-events', 'auto').css('opacity', '1.0'); // make fully visible and interactive
+            $('#mag_btn3').css('pointer-events', 'auto').css('opacity', '1.0'); // make fully visible and interactive
 
             var button = $(this);
 
@@ -232,7 +273,8 @@ TABS.calibration.initialize = function (callback) {
                         modalProcessing.close();
                         GUI.log(chrome.i18n.getMessage('initialSetupMagCalibEnded'));
                         
-                        MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, updateSensorData);
+                        //MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, null);
+                        updateSensorData();
                         helper.interval.remove('compass_calibration_interval');
 
                         //Cleanup
@@ -245,7 +287,7 @@ TABS.calibration.initialize = function (callback) {
 
             }, 1000);
         });
-
+        // respond to button press/s
         $('#opflow_btn').on('click', function () {
             MSP.send_message(MSPCodes.MSP2_ARDUPILOT_OPFLOW_CALIBRATION, false, false, function () {
                 GUI.log(chrome.i18n.getMessage('initialSetupOpflowCalibStarted'));
@@ -273,7 +315,8 @@ TABS.calibration.initialize = function (callback) {
 
                     modalProcessing.close();
                     GUI.log(chrome.i18n.getMessage('initialSetupOpflowCalibEnded'));
-                    MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, updateSensorData);
+                    //MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, null);
+                    updateSensorData();
                     helper.interval.remove('opflow_calibration_interval');
                 }
             }, 1000);
@@ -292,8 +335,8 @@ TABS.calibration.initialize = function (callback) {
         localize();
 
         $('#calibrate-start-button').on('click', calibrateNew);
-        //MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, updateSensorData); // buzz
-
+        //MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, null); // buzz
+        updateSensorData();
         GUI.content_ready(callback);
     }
 };

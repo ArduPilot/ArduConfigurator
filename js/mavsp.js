@@ -17,15 +17,18 @@ var set_stream_rates = function(rate,target_system,target_component) {
 // mavproxy uses a stream_rate of 4 on its links by default, so we'll just use that...
 //target_system, target_component, req_stream_id, req_message_rate, start_stop
 
-    var rsr = new mavlink20.messages.request_data_stream(target_system,target_component,
+    var packet = new mavlink20.messages.request_data_stream(target_system,target_component,
                                 mavlink20.MAV_DATA_STREAM_ALL,rate, 1);
 
-    mavParserObj.send(rsr); 
+    mavParserObj.send(packet); 
     console.log('Set Stream Rates =4');
 
 }
 
 var preflight_accel_cal = function(target_system,target_component) {
+
+    if (target_system == undefined )target_system = SYSID;
+    if (target_component == undefined )target_component = COMPID;
 
     // this.target_system , 
     // this.target_component , 
@@ -39,18 +42,22 @@ var preflight_accel_cal = function(target_system,target_component) {
     // this.param6 , 
     // this.param7
 
-    var pac = new mavlink20.messages.command_long(target_system,target_component,
+    var packet = new mavlink20.messages.command_long(target_system,target_component,
         mavlink20.MAV_CMD_PREFLIGHT_CALIBRATION,
         0, // confirmation
         0,0,0,0,1,0,0 // params 1-7, param5=1 means 'accelerometer calibration'
         );
 
-    mavParserObj.send(pac); 
+    mavParserObj.send(packet); 
     console.log('Send accel preflight cal');
 }
 
 
 var preflight_accel_cal_progress = function (target_system,target_component, step=1) {
+
+
+    if (target_system == undefined )target_system = SYSID;
+    if (target_component == undefined )target_component = COMPID;
 
   //  vehicle sends:  MAV_CMD_ACCELCAL_VEHICLE_POS = 42429// # Used when doing accelerometer calibration. When sent to the GCS tells
    //                         //# it what position to put the vehicle in. When
@@ -64,7 +71,7 @@ var preflight_accel_cal_progress = function (target_system,target_component, ste
     //    this.target_system , 
     //    this.target_component
 
-       var progress = new mavlink20.messages.command_ack(
+       var packet = new mavlink20.messages.command_ack(
         mavlink20.MAVLINK_MSG_ID_COMMAND_ACK,
         step, // result
         1, // progress
@@ -73,24 +80,101 @@ var preflight_accel_cal_progress = function (target_system,target_component, ste
         target_component,
         );
 
-    mavParserObj.send(progress); 
+    mavParserObj.send(packet); 
     console.log('Send accel preflight progress');
 
 }
 
 
-var preflight_reboot = function (target_system,target_component, step=1) {
+var preflight_reboot = function (target_system,target_component) {
 
+    if (target_system == undefined )target_system = SYSID;
+    if (target_component == undefined )target_component = COMPID;
+    
 
-    var reboot = new mavlink20.messages.command_long(target_system,target_component,
+    var packet = new mavlink20.messages.command_long(target_system,target_component,
         mavlink20.MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN,
         0, // confirmation
         1,0,1,0,0,0,0 // params 1-7
         );
 
-    mavParserObj.send(reboot); 
-    console.log('Send reboot!');
+    mavParserObj.send(packet); 
+    console.log('Send preflight_reboot!');
 }
+
+var large_veh_mag_cal = function (yaw_heading, target_system,target_component ) {
+
+    if (yaw_heading == undefined )yaw_heading = 1; // north if not given
+
+    if (target_system == undefined )target_system = SYSID;
+    if (target_component == undefined )target_component = COMPID;
+
+    var packet = new mavlink20.messages.command_long(target_system,target_component,
+        mavlink20.MAV_CMD_FIXED_MAG_CAL_YAW, // 42006
+        0, // confirmation
+        yaw_heading,0,0,0,0,0,0 // params 1-7  // as per MP's button
+        );
+
+    mavParserObj.send(packet); 
+    console.log('Send large_veh_mag_cal!');
+}
+
+
+var level_accel_cal = function ( target_system,target_component ) {
+
+    // this is nearly exactly a  preflight_accel_cal(); but param5=1 means 'accelerometer calibration' and we use param5=2
+
+    if (target_system == undefined )target_system = SYSID;
+    if (target_component == undefined )target_component = COMPID;
+
+    var packet = new mavlink20.messages.command_long(target_system,target_component,
+        mavlink20.MAV_CMD_PREFLIGHT_CALIBRATION, // 241
+        0, // confirmation
+        0,0,0,0,2,0,0 // params 1-7  // as per MP's "Calibrate Level" button in the 'Accel Calibration' screen.   param5=2
+        );
+
+    mavParserObj.send(packet); 
+    console.log('Send level_accel_cal!');
+
+}
+
+// start  = 42424 / 0,1,1,0,0,0,0
+// accept = 42425 / 0,0,1,0,0,0,0
+// cancel = 42426 / 0,0,1,0,0,0,0
+var mag_cal_start = function ( target_system,target_component ) {
+    if (target_system == undefined )target_system = SYSID;
+    if (target_component == undefined )target_component = COMPID;
+    var packet = new mavlink20.messages.command_long(target_system,target_component,
+        mavlink20.MAV_CMD_DO_START_MAG_CAL, // 42424
+        0, // confirmation
+        0,1,1,0,0,0,0 // params 1-7  // as per MP's "Onboard Mag Cal" -> "Start" button in the 'Compass' screen. 
+        );
+    mavParserObj.send(packet); 
+    console.log('Send mag_cal_start!');
+}
+var mag_cal_accept = function ( target_system,target_component ) {
+    if (target_system == undefined )target_system = SYSID;
+    if (target_component == undefined )target_component = COMPID;
+    var packet = new mavlink20.messages.command_long(target_system,target_component,
+        mavlink20.MAV_CMD_DO_ACCEPT_MAG_CAL, // 42425
+        0, // confirmation
+        0,0,1,0,0,0,0 // params 1-7  // as per MP's "Onboard Mag Cal" -> "Accept" button in the 'Compass' screen. 
+        );
+    mavParserObj.send(packet); 
+    console.log('Send mag_cal_accept!');
+}
+var mag_cal_cancel = function ( target_system,target_component ) {
+    if (target_system == undefined )target_system = SYSID;
+    if (target_component == undefined )target_component = COMPID;
+    var packet = new mavlink20.messages.command_long(target_system,target_component,
+        mavlink20.MAV_CMD_DO_CANCEL_MAG_CAL, // 42426
+        0, // confirmation
+        0,0,1,0,0,0,0 // params 1-7  // as per MP's "Onboard Mag Cal" -> "Cancel" button in the 'Compass' screen. 
+        );
+    mavParserObj.send(packet); 
+    console.log('Send mag_cal_cancel!');
+}
+
 
 
 //     specific msg handler, for flight mode/s and sysid record keeping
@@ -178,7 +262,7 @@ var generic_message_handler = function(message) {
             'REQUEST_DATA_STREAM', 'PARAM_REQUEST_READ', 'COMMAND_LONG', 'PARAM_REQUEST_LIST',
             'SETUP_SIGNING', 'SET_MODE',  'MISSION_REQUEST_INT', 'FILE_TRANSFER_PROTOCOL', 'MISSION_REQUEST_LIST',
             'PARAM_SET', 'PARAM_VALUE',
-            'TERRAIN_DATA',
+            'TERRAIN_DATA', 'MAG_CAL_PROGRESS','MAG_CAL_REPORT',
             ].includes(message._name) ) { 
             
 	console.log('unhandled msg type - please add it to the list....:');

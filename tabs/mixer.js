@@ -112,7 +112,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
     let saveChainer = new MSPChainerClass();
     
     let currentPlatform,
-        currentMixerPreset,
+    //    currentMixerPreset,
         $servoMixTable,
         $servoMixTableBody,
         $motorMixTable,
@@ -469,6 +469,9 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         });
 
         $('#execute-button').click(function () {
+            const presetId = parseInt($mixerPreset.val(), 10);
+            currentMixerPreset = helper.mixer.getById(presetId);
+
             helper.mixer.loadServoRules(currentMixerPreset);
             helper.mixer.loadMotorRules(currentMixerPreset);
             renderServoMixRules();
@@ -479,6 +482,9 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         });
 
         $('#load-mixer-button').click(function () {
+            const presetId = parseInt($mixerPreset.val(), 10);
+            currentMixerPreset = helper.mixer.getById(presetId);
+
             helper.mixer.loadServoRules(currentMixerPreset);
             helper.mixer.loadMotorRules(currentMixerPreset);
             renderServoMixRules();

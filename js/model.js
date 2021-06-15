@@ -423,8 +423,7 @@ const mixerList = [
         legacy: true,
         platform: PLATFORM_AIRPLANE, //PLATFORM_MULTIROTOR,
         motorMixer: [
-            new MotorMixRule(1.0, 0.0, 0.0, 0.0),          // front buzz todo
-            new MotorMixRule(1.0, 0.0, 1.0, 1.0),          // REAR_R
+            new MotorMixRule(1.0, 0.0, 1.0, 1.0),          // REAR_R // buzz todo tilt
             new MotorMixRule(1.0, -1.0, -1.0, 0.0),        // FRONT_R
             new MotorMixRule(1.0, 0.0, 1.0, -1.0),         // REAR_L
             new MotorMixRule(1.0, 1.0, -1.0, -0.0),        // FRONT_L

@@ -61,7 +61,7 @@ var CONFIG,
     MIXER_CONFIG,
     BATTERY_CONFIG,
     OUTPUT_MAPPING,
-    SETTINGS,
+  //  SETTINGS,
     BRAKING_CONFIG,
     SAFEHOMES;
 
@@ -99,12 +99,12 @@ var FC = {
         };
 
         SENSOR_CONFIG = {
-            accelerometer: 0,
-            barometer: 0,
-            magnetometer: 0,
-            pitot: 0,
-            rangefinder: 0,
-            opflow: 0
+            accelerometer: 1, // buzz hack to default-enable all of these
+            barometer: 1,     // buzz hack to default-enable all of these
+            magnetometer: 1,  // buzz hack to default-enable all of these
+            pitot: 1,         // buzz hack to default-enable all of these
+            rangefinder: 1,   // buzz hack to default-enable all of these
+            opflow: 1         // buzz hack to default-enable all of these
         };
 
         CONFIG = {
@@ -558,7 +558,7 @@ var FC = {
 
         OUTPUT_MAPPING = new OutputMappingCollection();
 
-        SETTINGS = {};
+     //   SETTINGS = {};
         
         SAFEHOMES = new SafehomeCollection();
     },

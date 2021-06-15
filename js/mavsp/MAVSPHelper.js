@@ -543,14 +543,15 @@ var mspHelper = (function (gui) {
                 SERVO_DATA[6] = mavmsg.servo7_raw;  //MSPCodes.MSP_SERVO
                 SERVO_DATA[7] = mavmsg.servo8_raw;  //MSPCodes.MSP_SERVO
                 //- second 8 ardupilot servos are 'motors'..?
-                MOTOR_DATA[0] = mavmsg.servo9_raw;  //MSPCodes.MSP_SERVO
-                MOTOR_DATA[1] = mavmsg.servo10_raw;  //MSPCodes.MSP_SERVO
-                MOTOR_DATA[2] = mavmsg.servo11_raw;  //MSPCodes.MSP_SERVO
-                MOTOR_DATA[3] = mavmsg.servo12_raw;  //MSPCodes.MSP_SERVO
-                MOTOR_DATA[4] = mavmsg.servo13_raw;  //MSPCodes.MSP_SERVO
-                MOTOR_DATA[5] = mavmsg.servo14_raw;  //MSPCodes.MSP_SERVO
-                MOTOR_DATA[6] = mavmsg.servo15_raw;  //MSPCodes.MSP_SERVO
-                MOTOR_DATA[7] = mavmsg.servo16_raw;  //MSPCodes.MSP_SERVO
+                var rand2 = Math.floor(Math.random() * 100) + 1;  //1-100
+                MOTOR_DATA[0] = rand2;// mavmsg.servo9_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[1] = rand2;//mavmsg.servo10_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[2] = rand2;//mavmsg.servo11_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[3] = rand2;//mavmsg.servo12_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[4] = rand2;//mavmsg.servo13_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[5] = rand2;//mavmsg.servo14_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[6] = rand2;//mavmsg.servo15_raw;  //MSPCodes.MSP_SERVO
+                MOTOR_DATA[7] = rand2;//mavmsg.servo16_raw;  //MSPCodes.MSP_SERVO
 
                 // todo 'port' is unhandled. dont know what ardu uses it for?
 
@@ -837,6 +838,102 @@ var mspHelper = (function (gui) {
 
                 // buzz todo
                 break; 
+
+            case mavlink20.MAVLINK_MSG_ID_MAG_CAL_PROGRESS: // 191
+                /* ["compass_id", "cal_mask", "cal_status", "attempt", "completion_pct", "completion_mask", "direction_x", "direction_y", "direction_z"]
+                attempt: 1
+                cal_mask: 1
+                cal_status: 2
+                compass_id: 0
+                completion_mask: "XXXXXXXXX"
+                completion_pct: 0
+                direction_x: 0
+                direction_y: 0
+                direction_z: 0
+                */
+                console.log('Progress? :',mavmsg.completion_pct);
+                
+                // buzz todo
+                break;
+
+                //https://mavlink.io/en/messages/common.html#MAG_CAL_REPORT
+                case mavlink20.MAVLINK_MSG_ID_MAG_CAL_REPORT: // 192
+                /*["compass_id", "cal_mask", "cal_status", "autosaved", "fitness", "ofs_x", "ofs_y", "ofs_z", "diag_x", "diag_y", "diag_z", "offdiag_x", "offdiag_y", "offdiag_z", "orientation_confidence", "old_orientation", "new_orientation", "scale_factor"]
+                autosaved: 1
+                cal_mask: 1
+                cal_status: 4
+                compass_id: 0
+                diag_x: 1.00935959815979
+                diag_y: 0.9637462496757507
+                diag_z: 1.007657766342163
+                fitness: 12.47597885131836
+                new_orientation: 0
+                offdiag_x: -0.0018800647230818868
+                offdiag_y: -0.000028397449568728916
+                offdiag_z: 0.01615700125694275
+                ofs_x: 100.86463165283203
+                ofs_y: 79.57767486572266
+                ofs_z: 53.80006790161133
+                old_orientation: 0
+                orientation_confidence: 18.874120712280273
+                scale_factor: 0
+                */
+
+                // CALIBRATION_DATA.accZero.X =  mavmsg.accel_cal_x ;
+                // CALIBRATION_DATA.accZero.Y =  mavmsg.accel_cal_y ;
+                // CALIBRATION_DATA.accZero.Z =  mavmsg.accel_cal_z ;
+                // //?
+                // CALIBRATION_DATA.accGain.X = mavmsg.;//data.getInt16(7, true);
+                // CALIBRATION_DATA.accGain.Y = mavmsg.;//data.getInt16(9, true);
+                // CALIBRATION_DATA.accGain.Z = mavmsg.ofs_z;//data.getInt16(11, true);
+                //
+                CALIBRATION_DATA.magZero.X = mavmsg.ofs_x ;
+                CALIBRATION_DATA.magZero.Y = mavmsg.ofs_y ;
+                CALIBRATION_DATA.magZero.Z = mavmsg.ofs_z ;
+                //
+                CALIBRATION_DATA.magGain.X = mavmsg.offdiag_x;//data.getInt16(21, true);
+                CALIBRATION_DATA.magGain.Y = mavmsg.offdiag_y;//data.getInt16(23, true);
+                CALIBRATION_DATA.magGain.Z = mavmsg.offdiag_z;//data.getInt16(25, true);
+
+                if (mavmsg.cal_status == mavlink20.MAG_CAL_SUCCESS){ //4
+                console.log('MAG_CAL_SUCCESS!! :',100); // 100 % completed
+                } else {
+                    switch ( mavmsg.cal_status ) {
+                        case mavlink20.MAG_CAL_NOT_STARTED:
+                            console.log('MAG_CAL_NOT_STARTED'); 
+                            break;
+                        case mavlink20.MAG_CAL_WAITING_TO_START:
+                            console.log('MAG_CAL_WAITING_TO_START'); 
+                            break; 
+                        case mavlink20.MAG_CAL_RUNNING_STEP_ONE:
+                            console.log('MAG_CAL_RUNNING_STEP_ONE'); 
+                            break; 
+                        case mavlink20.MAG_CAL_RUNNING_STEP_TWO:
+                            console.log('MAG_CAL_RUNNING_STEP_TWO'); 
+                            break; 
+                        //case mavlink20.MAG_CAL_SUCCESS:
+                        //    console.log('MAG_CAL_SUCCESS'); 
+                        //    break; 
+                        case mavlink20.MAG_CAL_FAILED:
+                            console.log('MAG_CAL_FAILED'); 
+                            break;
+                        case mavlink20.MAG_CAL_BAD_ORIENTATION:
+                            console.log('MAG_CAL_BAD_ORIENTATION'); 
+                            break;
+                        case mavlink20.MAG_CAL_BAD_RADIUS:
+                            console.log('MAG_CAL_BAD_RADIUS'); 
+                            break;
+                        case mavlink20.MAG_CAL_STATUS_ENUM_END:
+                            console.log('MAG_CAL_STATUS_ENUM_END'); 
+                            break;
+                    }
+
+                }
+
+                
+                // buzz todo
+                break;
+                
 
             // this is teh ack for the above ..LONG:
             case mavlink20.MAVLINK_MSG_ID_COMMAND_ACK:
@@ -4263,23 +4360,28 @@ var mspHelper = (function (gui) {
         var data = [];
         data.push32(secs);
         data.push16(millis);
-        MSP.send_message(MSPCodes.MSP_SET_RTC, data, false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP_SET_RTC, data, false, null);  
+        callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadServoConfiguration = function (callback) {
-        MSP.send_message(MSPCodes.MSP_SERVO_CONFIGURATIONS, false, false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP_SERVO_CONFIGURATIONS, false, false, null);  
+        callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadServoMixRules = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SERVO_MIXER, false, false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SERVO_MIXER, false, false, null);  
+        callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadMotorMixRules = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_COMMON_MOTOR_MIXER, false, false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP2_COMMON_MOTOR_MIXER, false, false, null);  
+        callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadMotors = function (callback) {
-        MSP.send_message(MSPCodes.MSP_MOTOR, false, false, null);  callback(); // without a response, we'll call the callback anyway
+        //MSP.send_message(MSPCodes.MSP_MOTOR, false, false, null);  
+        callback(); // without a response, we'll call the callback anyway
     };
 
     self.getCraftName = function(callback) {
@@ -4299,31 +4401,38 @@ var mspHelper = (function (gui) {
         for (var ii = 0; ii < name.length; ii++) {
             data.push(name.charCodeAt(ii));
         }
-        MSP.send_message(MSPCodes.MSP_SET_NAME, data, false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP_SET_NAME, data, false, null);  
+        callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadMixerConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MIXER, false, false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MIXER, false, false, null); 
+         callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveMixerConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_MIXER, mspHelper.crunch(MSPCodes.MSP2_ARDUPILOT_SET_MIXER), false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_MIXER, mspHelper.crunch(MSPCodes.MSP2_ARDUPILOT_SET_MIXER), false, null); 
+         callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadVTXConfig = function (callback) {
-        MSP.send_message(MSPCodes.MSP_VTX_CONFIG, false, false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP_VTX_CONFIG, false, false, null);  
+        callback(); // without a response, we'll call the callback anyway
     };
 
     self.saveVTXConfig = function(callback) {
-        MSP.send_message(MSPCodes.MSP_SET_VTX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_VTX_CONFIG), false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP_SET_VTX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_VTX_CONFIG), false, null);  
+        callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadBrakingConfig = function(callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MC_BRAKING, false, false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MC_BRAKING, false, false, null); 
+         callback(); // without a response, we'll call the callback anyway
     }
 
     self.saveBrakingConfig = function(callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING, mspHelper.crunch(MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING), false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING, mspHelper.crunch(MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING), false, null); 
+         callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadParameterGroups = function(callback) {
@@ -4343,16 +4452,19 @@ var mspHelper = (function (gui) {
     };
 
     self.loadBrakingConfig = function(callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MC_BRAKING, false, false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_MC_BRAKING, false, false, null); 
+         callback(); // without a response, we'll call the callback anyway
     }
 
     self.loadLogicConditionsStatus = function (callback) {
-        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_LOGIC_CONDITIONS_STATUS, false, false, null);  callback(); // without a response, we'll call the callback anyway
+        MSP.send_message(MSPCodes.MSP2_ARDUPILOT_LOGIC_CONDITIONS_STATUS, false, false, null); 
+         callback(); // without a response, we'll call the callback anyway
     };
 
     self.loadGlobalVariablesStatus = function (callback) {
         if (semver.gte(CONFIG.flightControllerVersion, "2.5.0")) {
-            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_GVAR_STATUS, false, false, null);  callback(); // without a response, we'll call the callback anyway
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_GVAR_STATUS, false, false, null);  
+            callback(); // without a response, we'll call the callback anyway
         } else {
             callback();
         }
@@ -4360,7 +4472,8 @@ var mspHelper = (function (gui) {
 
     self.loadProgrammingPidStatus = function (callback) {
         if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
-            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_PROGRAMMING_PID_STATUS, false, false, null);  callback(); // without a response, we'll call the callback anyway
+            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_PROGRAMMING_PID_STATUS, false, false, null); 
+             callback(); // without a response, we'll call the callback anyway
         } else {
             callback();
         }
