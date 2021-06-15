@@ -110,6 +110,7 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
             console.log(">>>>>>>>>>>>>>>>");
             console.log(self.newState);
             console.log("<<<<<<<<<<<<<<<<");
+            self.state.sysid = self.sysid;
             self.state.mode = self.newState.mode;
             self.state.armed = self.newState.armed; // pass arming as a bonus
 		    self.emit('modechange', self.state);
@@ -120,6 +121,7 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
             console.log(">>>>>>>>>>>>>>>>");
             console.log(self.newState);
             console.log("<<<<<<<<<<<<<<<<");
+            self.state.sysid = self.sysid;
             self.state.mode = self.newState.mode; // pass mode as a bonus
             self.state.armed = self.newState.armed;
 		    self.emit('armingchange', self.state);
