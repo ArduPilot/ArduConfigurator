@@ -142,13 +142,20 @@ TABS.mission_control.initialize = function (callback) {
 
         // function get_attitude_data() {
         //     MSP.send_message(MSPCodes.MSP_ATTITUDE, false, false, null);
+        //if ( map != undefined ) { // initMap is slow
              update_gpsTrack();
+        //}
         // }
       
         function update_gpsTrack() {
 
           let lat = GPS_DATA.lat / 10000000;
           let lon = GPS_DATA.lon / 10000000;
+
+          // first time thru, if map not instantiated yet, do it now
+          if (map == undefined ) {
+            return;
+          }
 
           //Update map
           if (GPS_DATA.fix >= 2) {
