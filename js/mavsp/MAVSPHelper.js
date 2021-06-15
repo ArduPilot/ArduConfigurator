@@ -367,15 +367,22 @@ var mspHelper = (function (gui) {
                 vel_acc: 0
                 yaw: 0
                 */
-               //https://github.com/mavlink/c_library_v1/blob/master/common/mavlink_msg_gps_raw_int.h
+               //https://github.com/mavlink/c_library_v2/blob/master/common/mavlink_msg_gps_raw_int.h
                /*
+                int32_t alt; //< [mm] Altitude (MSL). Positive for up. Note that virtually all GPS modules provide the MSL altitude in addition to the WGS84 altitude.//
+                int32_t alt_ellipsoid; //< [mm] Altitude (above WGS84, EGM96 ellipsoid). Positive for up.//
+                uint32_t h_acc; //< [mm] Position uncertainty.//
+                uint32_t v_acc; //< [mm] Altitude uncertainty.//
+                uint32_t hdg_acc; //< [degE5] Heading / track uncertainty//
+                uint32_t vel_acc; //< [mm] Speed uncertainty.//
+                uint16_t yaw; //< [cdeg] Yaw in earth frame from north. Use 0 if this GPS does not provide yaw. Use UINT16_MAX if this GPS is configured to provide yaw and is currently unable to provide it. Use 36000 for north./
                 @param time_usec [us] Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number.
                 * @param fix_type  GPS fix type.
                 * @param lat [degE7] Latitude (WGS84, EGM96 ellipsoid)
                 * @param lon [degE7] Longitude (WGS84, EGM96 ellipsoid)
                 * @param alt [mm] Altitude (MSL). Positive for up. Note that virtually all GPS modules provide the MSL altitude in addition to the WGS84 altitude.
                 * @param eph  GPS HDOP horizontal dilution of position (unitless * 100). If unknown, set to: UINT16_MAX
-                * @param epv  GPS VDOP vertical dilution of position (unitless * 100). If unknown, set to: UINT16_MAX
+      //unused: * @param epv  GPS VDOP vertical dilution of position (unitless * 100). If unknown, set to: UINT16_MAX
                 * @param vel [cm/s] GPS ground speed. If unknown, set to: UINT16_MAX
                 * @param cog [cdeg] Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
                 * @param satellites_visible  Number of satellites visible. If unknown, set to UINT8_MAX
@@ -385,10 +392,12 @@ var mspHelper = (function (gui) {
                 GPS_DATA.numSat = mavmsg.satellites_visible ;// data.getUint8(1);MSPCodes.MSP_RAW_GPS:
                 GPS_DATA.lat = mavmsg.lat ;// data.getInt32(2, true);MSPCodes.MSP_RAW_GPS:
                 GPS_DATA.lon =  mavmsg.lon ;// data.getInt32(6, true);MSPCodes.MSP_RAW_GPS:
-                GPS_DATA.alt =  mavmsg.alt ;//data.getInt16(10, true);MSPCodes.MSP_RAW_GPS:
-                GPS_DATA.speed = mavmsg.vel ;//data.getUint16(12, true);MSPCodes.MSP_RAW_GPS:
+                GPS_DATA.alt =  mavmsg.alt /1000.0;  //ASL, AboveSeaLevel = MSL. //data.getInt16(10, true);MSPCodes.MSP_RAW_GPS:
+                GPS_DATA.speed = mavmsg.vel /100.0;//data.getUint16(12, true);MSPCodes.MSP_RAW_GPS:
                 GPS_DATA.ground_course = mavmsg.cog ;//data.getUint16(14, true);MSPCodes.MSP_RAW_GPS:
                 GPS_DATA.hdop = mavmsg.eph ;//data.getUint16(16, true);MSPCodes.MSP_RAW_GPS:
+                GPS_DATA.eph = mavmsg.h_acc /10.0; //eph and HDOP are basically same thing but different units. here we convert 'mm' to match scale in MP 'Status' screen for gcs display 
+                GPS_DATA.epv = mavmsg.v_acc /10.0; // buzz todo, in the GUI we claim these two are 'm' meters, but i scaled it as mm->cm ?
 
                 // todo none of the _acc gps acceleeration values r used?
                 // vdop is unued
