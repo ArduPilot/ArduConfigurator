@@ -688,7 +688,7 @@ var mspHelper = (function (gui) {
                 SENSOR_DATA.kinematics[0]  = (mavmsg.roll * 180/3.14159).toFixed(2); //roll = x   MSPCodes.MSP_ATTITUDE:
                 SENSOR_DATA.kinematics[1]  = -(mavmsg.pitch * 180/3.14159).toFixed(2); // y  MSPCodes.MSP_ATTITUDE:
                 // kinematics is 0-360 but 180 degrewss off
-                SENSOR_DATA.kinematics[2]  = -(180-(mavmsg.yaw * 180/3.14159)).toFixed(2); // z           MSPCodes.MSP_ATTITUDE:
+                SENSOR_DATA.kinematics[2]  = 360-(180-(mavmsg.yaw * 180/3.14159)).toFixed(2); // z           MSPCodes.MSP_ATTITUDE:
 
                 // the thre 'speed' values are unused.
 
