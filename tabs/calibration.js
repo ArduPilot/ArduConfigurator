@@ -263,10 +263,57 @@ TABS.calibration.initialize = function (callback) {
             //     content: $('#modal-compass-processing').clone()
             // }).open();
 
-            var countdown = 30;
+
+
+            
+
+            setInterval(function () {
+                var c = document.getElementById("gyrocal");
+                //let width = $("#gyrocal canvas").width(), height = $("#gyrocal canvas").height();
+
+                var ctx = c.getContext("2d");
+
+                // ctx.beginPath();
+                // ctx.moveTo(0, 0); // go there without drawing
+                // ctx.lineTo(300, 150); // go there WITH drawing a line
+                // ctx.stroke();
+
+                // wipe cancvas
+                ctx.fillStyle = "#FFFF99";
+                ctx.fillRect(0, 0, 500, 100);
+
+                var raw = FC.curr_mav_state['MAG_CAL_PROGRESS'].completion_mask;
+                //var bbb = new Array(10);
+                //Buffer.from(raw); 
+                
+
+                // canvas notes:  upper-left is 0,0
+                var points = [0,0,0,0,0,0,0,0,0,0]; // len 10
+                points.forEach( (v,i) => {
+                    var x  = raw[i];
+                    points[i] = x.charCodeAt(0);
+                 });
+
+                // we have 10 data points, ranging from 0-254, draw them on canvas
+                points.forEach( (v,i) => {
+                    ctx.fillStyle = "#CC0000";
+                    var sx = i*40+10*i; // box is 500 wide and we have 10 of them
+                    var sy = 0;  // box is 100 tall, and we go to 255
+                    var width = 30; // vert bars are 30 wide
+                    var height = v; // goes to bottom
+                    ctx.fillRect(sx, sy, width, height);
+                    
+                 });
+
+
+                //if ((map.width_ != width) || (map.height_ != height)) map.updateSize();
+                //map.width_ = width; map.height_ = height;
+            }, 200);
+
+            var countdown = 0;
             helper.interval.add('compass_calibration_interval', function () {
-                countdown--;
-                if (countdown === 0) {
+                countdown++;
+                if (countdown >= 300) { // at 100ms intervals, 30sec
                     setTimeout(function () {
                         $(button).removeClass('disabled');
 
