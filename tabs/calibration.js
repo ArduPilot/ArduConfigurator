@@ -8,10 +8,10 @@ TABS.calibration.model =  0;
 TABS.calibration.initialize = function (callback) {
 
     //var loadChainer = new MSPChainerClass();
-    var saveChainer = new MSPChainerClass(),
-        modalStart,
-        modalStop,
-        modalProcessing;
+    var saveChainer = new MSPChainerClass();//,
+        //modalStart,
+        //modalStop,
+        //modalProcessing;
 
     if (GUI.active_tab != 'calibration') {
         GUI.active_tab = 'calibration';
@@ -78,14 +78,14 @@ TABS.calibration.initialize = function (callback) {
 
     function checkFinishAccCalibrate() {
         if (TABS.calibration.model === 0) {
-            modalStop = new jBox('Modal', {
-                width: 400,
-                height: 200,
-                animation: false,
-                closeOnClick: false,
-                closeOnEsc: false,
-                content: $('#modal-acc-calibration-stop')
-            }).open();
+            // modalStop = new jBox('Modal', {
+            //     width: 400,
+            //     height: 200,
+            //     animation: false,
+            //     closeOnClick: false,
+            //     closeOnEsc: false,
+            //     content: $('#modal-acc-calibration-stop')
+            // }).open();
         }
         updateSensorData();
     }
@@ -254,14 +254,14 @@ TABS.calibration.initialize = function (callback) {
 
             $(button).addClass('disabled');
 
-            let modalProcessing = new jBox('Modal', {
-                width: 400,
-                height: 100,
-                animation: false,
-                closeOnClick: false,
-                closeOnEsc: false,
-                content: $('#modal-compass-processing').clone()
-            }).open();
+            // let modalProcessing = new jBox('Modal', {
+            //     width: 400,
+            //     height: 100,
+            //     animation: false,
+            //     closeOnClick: false,
+            //     closeOnEsc: false,
+            //     content: $('#modal-compass-processing').clone()
+            // }).open();
 
             var countdown = 30;
             helper.interval.add('compass_calibration_interval', function () {
@@ -270,7 +270,7 @@ TABS.calibration.initialize = function (callback) {
                     setTimeout(function () {
                         $(button).removeClass('disabled');
 
-                        modalProcessing.close();
+                        //modalProcessing.close();
                         GUI.log(chrome.i18n.getMessage('initialSetupMagCalibEnded'));
                         
                         //MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, null);
@@ -278,11 +278,11 @@ TABS.calibration.initialize = function (callback) {
                         helper.interval.remove('compass_calibration_interval');
 
                         //Cleanup
-                        delete modalProcessing;
-                        $('.jBox-wrapper').remove();
-                    }, 1000);
+                       // delete modalProcessing;
+                       // $('.jBox-wrapper').remove();
+                    }, 100);
                 } else {
-                    modalProcessing.content.find('.modal-compass-countdown').text(countdown);
+                    //modalProcessing.content.find('.modal-compass-countdown').text(countdown);
                 }
 
             }, 1000);
@@ -297,14 +297,14 @@ TABS.calibration.initialize = function (callback) {
 
             $(button).addClass('disabled');
 
-            modalProcessing = new jBox('Modal', {
-                width: 400,
-                height: 100,
-                animation: false,
-                closeOnClick: false,
-                closeOnEsc: false,
-                content: $('#modal-opflow-processing')
-            }).open();
+            // modalProcessing = new jBox('Modal', {
+            //     width: 400,
+            //     height: 100,
+            //     animation: false,
+            //     closeOnClick: false,
+            //     closeOnEsc: false,
+            //     content: $('#modal-opflow-processing')
+            // }).open();
 
             var countdown = 30;
             helper.interval.add('opflow_calibration_interval', function () {
@@ -313,7 +313,7 @@ TABS.calibration.initialize = function (callback) {
                 if (countdown === 0) {
                     $(button).removeClass('disabled');
 
-                    modalProcessing.close();
+                    //modalProcessing.close();
                     GUI.log(chrome.i18n.getMessage('initialSetupOpflowCalibEnded'));
                     //MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, null);
                     updateSensorData();
@@ -328,7 +328,7 @@ TABS.calibration.initialize = function (callback) {
         });
 
         $('#modal-stop-button').click(function () {
-            modalStop.close();
+            //modalStop.close();
         });
 
         // translate to user-selected language
