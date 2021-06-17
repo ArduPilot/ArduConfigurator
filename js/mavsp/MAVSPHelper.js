@@ -848,6 +848,7 @@ var mspHelper = (function (gui) {
                 // buzz todo
                 break; 
 
+            //https://github.com/mavlink/c_library_v2/blob/master/ardupilotmega/mavlink_msg_mag_cal_progress.h
             case mavlink20.MAVLINK_MSG_ID_MAG_CAL_PROGRESS: // 191
                 /* ["compass_id", "cal_mask", "cal_status", "attempt", "completion_pct", "completion_mask", "direction_x", "direction_y", "direction_z"]
                 attempt: 1
@@ -860,7 +861,14 @@ var mspHelper = (function (gui) {
                 direction_y: 0
                 direction_z: 0
                 */
+
+                var c_id = mavmsg.compass_id;
+
+                var mask = mavmsg.completion_mask; // buzz
+
                 console.log('Progress? :',mavmsg.completion_pct);
+
+
                 
                 // buzz todo
                 break;
@@ -906,6 +914,12 @@ var mspHelper = (function (gui) {
 
                 if (mavmsg.cal_status == mavlink20.MAG_CAL_SUCCESS){ //4
                 console.log('MAG_CAL_SUCCESS!! :',100); // 100 % completed
+
+                    // artificially fill in completion mast as 100%, if it exists.
+                    if ( FC.curr_mav_state && FC.curr_mav_state['MAG_CAL_PROGRESS'] && FC.curr_mav_state['MAG_CAL_PROGRESS'].completion_mask  ){
+                      FC.curr_mav_state['MAG_CAL_PROGRESS'].completion_mask = String.fromCharCode(254,254,254,254,254,254,254,254,254,254);
+                    }
+
                 } else {
                     switch ( mavmsg.cal_status ) {
                         case mavlink20.MAG_CAL_NOT_STARTED:

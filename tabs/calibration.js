@@ -265,11 +265,13 @@ TABS.calibration.initialize = function (callback) {
 
 
 
-            
+
 
             setInterval(function () {
-                var c = document.getElementById("gyrocal");
+                var c = document.getElementById("gyrocal");  // 500x100pixels
                 //let width = $("#gyrocal canvas").width(), height = $("#gyrocal canvas").height();
+
+                if (c == undefined ) return;
 
                 var ctx = c.getContext("2d");
 
@@ -281,10 +283,16 @@ TABS.calibration.initialize = function (callback) {
                 // wipe cancvas
                 ctx.fillStyle = "#FFFF99";
                 ctx.fillRect(0, 0, 500, 100);
-
-                var raw = FC.curr_mav_state['MAG_CAL_PROGRESS'].completion_mask;
+                var raw = String.fromCharCode(0,0,0,0,0,0,0,0,0,0);
+                if ( FC.curr_mav_state && FC.curr_mav_state['MAG_CAL_PROGRESS'] && FC.curr_mav_state['MAG_CAL_PROGRESS'].completion_mask  ){
+                    raw = FC.curr_mav_state['MAG_CAL_PROGRESS'].completion_mask;
+                }
                 //var bbb = new Array(10);
                 //Buffer.from(raw); 
+
+                //mavmsg.cal_status == mavlink20.MAG_CAL_SUCCESS
+
+                //FC.curr_mav_state['MAG_CAL_REPORT'].
                 
 
                 // canvas notes:  upper-left is 0,0
@@ -297,10 +305,10 @@ TABS.calibration.initialize = function (callback) {
                 // we have 10 data points, ranging from 0-254, draw them on canvas
                 points.forEach( (v,i) => {
                     ctx.fillStyle = "#CC0000";
-                    var sx = i*40+10*i; // box is 500 wide and we have 10 of them
-                    var sy = 0;  // box is 100 tall, and we go to 255
+                    var sx = 10+i*40+10*i; // box is 500 wide and we have 10 of them
+                    var sy = 100-v/2.4;  // box is 100 tall, and we go to 255
                     var width = 30; // vert bars are 30 wide
-                    var height = v; // goes to bottom
+                    var height = v/2.4; // goes to bottom 100->255 scaling
                     ctx.fillRect(sx, sy, width, height);
                     
                  });
