@@ -17,6 +17,9 @@ var set_stream_rates = function(rate,target_system,target_component) {
 // mavproxy uses a stream_rate of 4 on its links by default, so we'll just use that...
 //target_system, target_component, req_stream_id, req_message_rate, start_stop
 
+    if (target_system == undefined )target_system = SYSID;
+    if (target_component == undefined )target_component = COMPID;
+
     var packet = new mavlink20.messages.request_data_stream(target_system,target_component,
                                 mavlink20.MAV_DATA_STREAM_ALL,rate, 1);
 
