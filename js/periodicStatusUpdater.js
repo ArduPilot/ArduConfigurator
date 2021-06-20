@@ -86,30 +86,40 @@ helper.periodicStatusUpdater = (function () {
                 var newtext = "";
                 if ( FC.longyREQ == 0) {
                     newtext = "Start Accel Cal? ... press the blue button.";
+                    $('#calibrate-start-button').css('pointer-events', 'auto').css('opacity', '1.0'); // make 'Calibrate Access' interactive again
                 }
                 if ( FC.longyREQ == 1) {
-                    newtext = "Please place vehicle LEVEL NOW then press the button.";
+                    newtext = "Please place vehicle <span style='color:red'>LEVEL NOW</span> then press the button.";
+                    $('#calibrate-start-button').css('pointer-events', 'auto').css('opacity', '1.0'); // make 'Calibrate Access' interactive again
                 }
                 if ( FC.longyREQ == 2) {
-                    newtext = "Please place vehicle on LEFT SIDE then press the button.";
+                    newtext = "Please place vehicle on <span style='color:orange'>LEFT SIDE</span> then press the button.";
+                    $('#calibrate-start-button').css('pointer-events', 'auto').css('opacity', '1.0'); // make 'Calibrate Access' interactive again
                 }
                 if ( FC.longyREQ == 3) {
-                    newtext = "Please place vehicle on RIGHT SIDE then press the button.";
+                    newtext = "Please place vehicle on <span style='color:cyan'>RIGHT SIDE</span> then press the button.";
+                    $('#calibrate-start-button').css('pointer-events', 'auto').css('opacity', '1.0'); // make 'Calibrate Access' interactive again
                 }
                 if ( FC.longyREQ == 4) {
-                    newtext = "Please place vehicle NOSE DOWN then press the button.";
+                    newtext = "Please place vehicle <span style='color:green'>NOSE DOWN</span> then press the button.";
+                    $('#calibrate-start-button').css('pointer-events', 'auto').css('opacity', '1.0'); // make 'Calibrate Access' interactive again
                 }
                 if ( FC.longyREQ == 5) {
-                    newtext = "Please place vehicle NOSE UP then press the button.";
+                    newtext = "Please place vehicle <span style='color:blue'>NOSE UP</span> then press the button.";
+                    $('#calibrate-start-button').css('pointer-events', 'auto').css('opacity', '1.0'); // make 'Calibrate Access' interactive again
                 }
                 if ( FC.longyREQ == 6) {
-                    newtext = "Please place vehicle UPSIDE DOWN then press the button.";
+                    newtext = "Please place vehicle <span style='color:purple'>UPSIDE DOWN</span> then press the button.";
+                    $('#calibrate-start-button').css('pointer-events', 'auto').css('opacity', '1.0'); // make 'Calibrate Access' interactive again
                 }
                 if ( FC.longyREQ > 6) { // 16777215 is greater than 6
-                    newtext = "Success!";
+                    newtext = "Success!, recommend reboot now.";
+                    //FC.longyREQ = 0;
                 }
                 //$('div.note').html("stage:"+TABS.calibration.model+" "+newtext+" req:"+FC.longyREQ);
                 $('div.note').html(newtext+"<br>req:"+FC.longyREQ+"<br>model["+TABS.calibration.model+"]<br>");
+                
+
             }
             //--------------
 

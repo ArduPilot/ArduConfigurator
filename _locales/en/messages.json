@@ -472,6 +472,9 @@
     "initialSetupAccelCalibStarted": {
         "message": "Accelerometer calibration started"
     },
+    "initialSetupAccelCalibProgesss": {
+        "message": "Accelerometer calibration in progress...."
+    },
     "initialSetupAccelCalibEnded": {
         "message": "Accelerometer calibration <span style=\"color: #37a8db\">finished</span>"
     },

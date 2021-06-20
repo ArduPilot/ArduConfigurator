@@ -196,6 +196,8 @@ var mspHelper = (function (gui) {
         FC.curr_mav_state[mavmsg._name] = store;  // or could have used mavmsg for a more verbose store
         // this means that FC.curr_mav_state['HEARTBEAT'] is an minimal object with all the latest data in it., etc
 
+        //console.log(mavmsg._name);
+
         // packet-specific stuff
         switch (mavmsg._id ) {
 
@@ -913,7 +915,9 @@ var mspHelper = (function (gui) {
                 CALIBRATION_DATA.magGain.Z = mavmsg.offdiag_z;//data.getInt16(25, true);
 
                 if (mavmsg.cal_status == mavlink20.MAG_CAL_SUCCESS){ //4
-                console.log('MAG_CAL_SUCCESS!! :',100); // 100 % completed
+                    console.log('MAG_CAL_SUCCESS!! :',100); // 100 % completed
+
+                    FC.curr_mav_state['MAG_CAL_PROGRESS'].completed = 1; // this boolean is not in the mav stream directly.
 
                     // artificially fill in completion mast as 100%, if it exists.
                     if ( FC.curr_mav_state && FC.curr_mav_state['MAG_CAL_PROGRESS'] && FC.curr_mav_state['MAG_CAL_PROGRESS'].completion_mask  ){
@@ -921,6 +925,9 @@ var mspHelper = (function (gui) {
                     }
 
                 } else {
+
+                    FC.curr_mav_state['MAG_CAL_PROGRESS'].completed = 0; // this boolean is not in the mav stream directly.
+
                     switch ( mavmsg.cal_status ) {
                         case mavlink20.MAG_CAL_NOT_STARTED:
                             console.log('MAG_CAL_NOT_STARTED'); 
