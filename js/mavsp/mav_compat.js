@@ -14,25 +14,42 @@ inherits = function(ctor, superCtor) {
     });
   };
 
-  // based on a similar node feature
+  // based on a similar node feature, but with uuid's available and works in-browser
+  /// if uuid is passed in at "on(x,...,someuuid)", then u can later use the same uuid in off(x,someuuid) to remove just that ONE
 class EventEmitter{
     constructor(){
-        this.callbacks = {}
+      this.callbacks = {}
     }
 
-    on(event, cb){
+    uuidv4() {
+      return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      );
+    }
+
+    on(event, cb, uuid=undefined){
         if (this.callbacks == undefined ) {this.callbacks = {};}
         if(!this.callbacks[event]) this.callbacks[event] = [];
+
+        if ( uuid == undefined) { uuid=this.uuidv4(); }
+
         console.log('listening for: '+event);
-        this.callbacks[event].push(cb)
+        this.callbacks[event].push({'cb':cb,'uuid':uuid}) ; // callback and uuid wrapped toghether in a minimal obj
+        return uuid;
     }
 
     emit(event, data){
         if (this.callbacks == undefined ) {this.callbacks = {};}
         //if ( event != 'message' ) console.log(event);
-        let cbs = this.callbacks[event]
+        let cbs = this.callbacks[event];
         if(cbs){
-            cbs.forEach(cb => cb(data))
+            //cbs.forEach(cb => cb(data));
+            //cbs.forEach(function callbackFn(obj) { var cb = obj.cb; var uuid = obj.uuid; cb(data,uuid);  });
+            cbs.forEach(function callbackFn(obj) { 
+              if (obj == undefined ) return;
+              var cb = obj.cb;  
+              cb(data);  
+            });
         }
     }
 
@@ -43,10 +60,37 @@ class EventEmitter{
        } 
     }
 
+    // for short-term hooks that want to un-listen after a bit
+    off(event, REFuuid=undefined) {
+      if (this.callbacks == undefined ) {this.callbacks = {};}
+
+      //if ( REFuuid == undefined) { REFuuid=this.uuidv4(); }
+
+      if (this.callbacks[event] != undefined )  { // only bother if there's any listerners
+        // shortcut for if only have 1 of them:
+        if (this.callbacks[event].length == 1 ) {
+          this.callbacks[event] = []; // zero-out the list of listeners , if any
+          return;
+        }
+        // else buzz todo magic to figure which callback..?
+        var cbs = this.callbacks[event];
+        if ( cbs) {
+          cbs.forEach(function callbackFn(obj,idx) { 
+                  if (obj == undefined ) return;
+                  var cb = obj.cb; 
+                  if ( (REFuuid) && (obj.uuid==REFuuid) ) { 
+                        this[idx] = undefined; // modifying 'cbs' while iterating it.
+                   }  
+              },cbs);
+        }
+        //console.log(this.callbacks[event]);
+      }
+    }
+
 }
 
 
-//uses class EventEmitter from mav_v1.js a second time for wrapping the client-side parser with outgoing and incoming callback/s.
+//uses class EventEmitter from mav_xx.js a second time for wrapping the client-side parser with outgoing and incoming callback/s.
 MSGHANDLER = function(a){
     this.a = a;
 }

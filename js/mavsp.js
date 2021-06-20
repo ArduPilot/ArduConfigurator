@@ -120,6 +120,21 @@ var large_veh_mag_cal = function (yaw_heading, target_system,target_component ) 
 
     mavParserObj.send(packet); 
     console.log('Send large_veh_mag_cal!');
+
+    // add temporary hook to listen for ACK, eg COMMAND_ACK command= 42006 result= 4
+    //https://github.com/mavlink/c_library_v2/blob/master/common/mavlink_msg_command_ack.h
+    var m1 = mavlinkParser.on('COMMAND_ACK', function(ack) {
+            var from = this;
+            if ( ( ack.command == mavlink20.MAV_CMD_FIXED_MAG_CAL_YAW )  && (ack.result == 4 ) ) {  // 4 -= success?
+
+                console.log('Send large_veh_mag_cal REPLIED');
+
+                // after getting an acknowledgement in the mavlink stream, stop listening
+                mavlinkParser.off('COMMAND_ACK',m1 ); // note we pass in the uuid 'm1' here be be sure we remove the *correct* 'off' hook
+            }   
+
+        }
+    );
 }
 
 
