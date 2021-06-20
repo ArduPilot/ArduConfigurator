@@ -121,7 +121,7 @@ TABS.calibration.initialize = function (callback) {
             TABS.calibration.model = 1;
             preflight_accel_cal_progress(SYSID,COMPID,TABS.calibration.model);
 
-            GUI.log(chrome.i18n.getMessage('initialSetupAccelCalibProgess'));
+            GUI.log(chrome.i18n.getMessage('initialSetupAccelCalibProgress'));
 
         } else 
         if (TABS.calibration.model >= 1 ) { 
@@ -129,7 +129,7 @@ TABS.calibration.initialize = function (callback) {
             preflight_accel_cal_progress(SYSID,COMPID,TABS.calibration.model);
             CALIBRATION_DATA.acc['Pos' + TABS.calibration.model] = 1;
             TABS.calibration.model +=1;
-            GUI.log(chrome.i18n.getMessage('initialSetupAccelCalibProgess'));
+            GUI.log(chrome.i18n.getMessage('initialSetupAccelCalibProgress'));
 
         }
 
