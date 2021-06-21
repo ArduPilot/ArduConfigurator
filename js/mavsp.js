@@ -131,6 +131,15 @@ var large_veh_mag_cal = function (yaw_heading, target_system,target_component ) 
 
                 // after getting an acknowledgement in the mavlink stream, stop listening
                 mavlinkParser.off('COMMAND_ACK',m1 ); // note we pass in the uuid 'm1' here be be sure we remove the *correct* 'off' hook
+
+                $('#level_btn2').find('a').delay(2000).css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#008000');//.css('a:hover', 'purple'); // test
+                //  green=success                                                 blue                   blue                              green
+                $('#level_btn2').find('a').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
+                    // Animation complete.
+                    $('#level_btn2').find('a').removeAttr('style'); // removeAttr removes all attribure styling, returning it 'stock'
+                  }); 
+                //  return to stock white/blue after some time                           white             blue 
+     
             }   
 
         }

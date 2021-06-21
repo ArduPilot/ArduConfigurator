@@ -170,7 +170,11 @@ TABS.calibration.initialize = function (callback) {
             //preflight_reboot(); // mav
             large_veh_mag_cal(); // assumes yawwed to north if not given by GUI
             updateSensorData();
-
+            // change color of the thing that was clicked.
+            //var x = this;
+            //$('#'+(this.id)).find('a').css('color', 'red').css('border', 'red').css('background-color', 'yellow').css('a:hover', 'purple'); // test
+            $('#level_btn2').find('a').css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#FDBE02');//.css('a:hover', 'purple'); // test
+            //                                                   blue                   blue                              yellow/mango
         });
         // respond to 'calibrate compas 3d' button press/s
         $('#calibrateButtonSave').on('click', function () {
