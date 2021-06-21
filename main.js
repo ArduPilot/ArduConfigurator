@@ -213,6 +213,9 @@ $(document).ready( function () {
                     case 'params':
                         TABS.params.initialize(content_ready);
                         break;
+                    case 'inspector':
+                        TABS.inspector.initialize(content_ready);
+                        break;
                     case 'profiles':
                         TABS.profiles.initialize(content_ready);
                         break;

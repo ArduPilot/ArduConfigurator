@@ -82,6 +82,9 @@
     "tabParams": {
         "message": "Params List"
     },
+    "tabInspector": {
+        "message": "Mavlink Inspector"
+    },
     "tabPorts": {
         "message": "Ports"
     },

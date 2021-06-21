@@ -24,6 +24,7 @@ var GUI_control = function () {
         'cli',
         'configuration',
         'params',
+        'inspector',
         'gps',
         'led_strip',
         'logging',
