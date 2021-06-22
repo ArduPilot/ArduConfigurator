@@ -84,50 +84,46 @@ TABS.inspector.initialize = function (callback, scrollPosition) {
 
         var inspector_e = $('.inspector'); // things with class="inspector " in inspector.html
 
-        var blerg = `<div>
-        <h3>Root</h3>
-        <ul>        
-          <li>SysID 1
-            <ul>
-                <li>CompID 1
-                    <ul>
-                        <li>file1.xml</li>
-                        <li>file2.xml</li>
-                        <li>file3.xml</li>
-                    </ul>
-                </li>
-                <li>file.html</li>
-              </ul>
-          </li>
-          <li>file.psd</li>
-          <li>file.cpp</li>
-        </ul>
-        </div>`;
+        // var blerg = `<div>
+        // <h3>Root</h3>
+        // <ul>        
+        //   <li>SysID 1
+        //     <ul>
+        //         <li>CompID 1
+        //             <ul>
+        //                 <li>file1.xml</li>
+        //                 <li>file2.xml</li>
+        //                 <li>file3.xml</li>
+        //             </ul>
+        //         </li>
+        //         <li>file.html</li>
+        //       </ul>
+        //   </li>
+        //   <li>file.psd</li>
+        //   <li>file.cpp</li>
+        // </ul>
+        // </div>`;
 
-        $('#spacer_box').html('blerg');
+        // $('#blerg').html('blerg');
 
         for (i  in  FC.inspectorlist) { // keys of inspectorlist obj
             if ( i == "") continue; // skip unnamed param
 
             var row_e =  $('<li>' + i  + '<ul>'); // hidden buttons to start with
-            $('#spacer_box').after(row_e);
+            $('#blerg').before(row_e);
 
             var obj = FC.inspectorlist[i];
             for ( z in obj){
-                var row_f =  $('<li>' + z  + '</li>'); // hidden buttons to start with
-                $('#spacer_box').after(row_f);
+
+                var displayme = z + "&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp;&nbsp;&nbsp;<span id='"+z+"'>" +  obj[z] +"</span>";
+                var row_f =  $('<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + displayme  + '</li>'); // hidden buttons to start with
+                $('#blerg').before(row_f);
 
             }
 
             var row_e =  $('</ul></li>'); // hidden buttons to start with
-            $('#spacer_box').after(row_e);
+            $('#blerg').before(row_e);
 
-           // inspector_e.each(function () {
-                //if ($(this).hasClass(inspectorlist[i].group)) {
-                  //  $(this).after(row_e); 
-                //    $(this).before(row_e); // keep alpha order A-Z
-                //}
-           // });
         }
 
         $('a.writeOneParam').click(function () {
@@ -165,6 +161,27 @@ TABS.inspector.initialize = function (callback, scrollPosition) {
 
         helper.interval.add('config_load_analog', function () {
 
+
+            for (i  in  FC.inspectorlist) { // keys of inspectorlist obj
+                if ( i == "") continue; // skip unnamed param
+    
+               // var row_e =  $('<li>' + i  + '<ul>'); // hidden buttons to start with
+               // $('#').before(row_e);
+    
+                var obj = FC.inspectorlist[i];
+                for ( z in obj){
+    
+                   // var displayme = z + "&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp;&nbsp;&nbsp;<span id='"+z+"'>" +  obj[z] +"</span>";
+                    //var row_f =  $('<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + displayme  + '</li>'); // hidden buttons to start with
+                    $('#'+z).html(obj[z]);
+    
+                }
+    
+               // var row_e =  $('</ul></li>'); // hidden buttons to start with
+                //$('#blerg').before(row_e);
+    
+            }
+            
             // todo buzz refresh....
         }, 100, true); // 10 fps
 
