@@ -307,12 +307,15 @@ GUI_control.prototype.renderLogicConditionSelect = function ($container, logicCo
     let $select = $container.append('<select class="mix-rule-condition">').find("select"),
         lcCount = logicConditions.getCount();
 
-    if (withAlways) {
-        $select.append('<option value="-1">Always</option>')
-    }
-    for (let i = 0; i < lcCount ; i++) {
-        $select.append('<option value="' + i + '">Logic Condition ' + i + ' </option>');
-    }
+        $select.append('<option value="0">No</option>')
+        $select.append('<option value="1">Yes</option>')
+
+    // if (withAlways) {
+    //     $select.append('<option value="-1">Always</option>')
+    // }
+    // for (let i = 0; i < lcCount ; i++) {
+    //     $select.append('<option value="' + i + '">Logic Condition ' + i + ' </option>');
+    // }
 
     $select.val(current).change(onChange);
 }

@@ -43,7 +43,11 @@ function buzz_veh_sels() {
 
         //console.log('drop 1 changed');
 
-        MIXER_CONFIG.platformType = parseInt($platformSelect.val(), 10);
+        MIXER_CONFIG.platformType = parseInt(window.$platformSelect.val(), 10);
+
+        if (isNaN(MIXER_CONFIG.platformType)) {
+            MIXER_CONFIG.platformType = 0;
+        }  
         // currentPlatform = helper.platform.getById(MIXER_CONFIG.platformType); 
         currentPlatform =  platformList[MIXER_CONFIG.platformType];
 
@@ -209,8 +213,8 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
                     <td><input type="number" class="mix-rule-servo" step="1" min="0" max="15" /></td>\
                     <td><select class="mix-rule-input"></select></td>\
                     <td class="mixer-fixed-value-col"><input type="number" class="mix-rule-fixed-value" min="875" max="2125" disabled /></td> \
-                    <td><input type="number" class="mix-rule-rate" step="1" min="-125" max="125" /></td>\
-                    <td><input type="number" class="mix-rule-speed" step="1" min="0" max="255" /></td>\
+                    <td><input type="number" class="mix-rule-rate" step="1" min="975" max="2025" /></td>\
+                    <td><input type="number" class="mix-rule-speed" step="1" min="975" max="2025" /></td>\
                     <td class="mixer-table__condition"></td>\
                     <td><span class="btn default_btn narrow red"><a href="#" data-role="role-servo-delete" data-i18n="servoMixerDelete"></a></span></td>\
                     </tr>\
@@ -240,14 +244,14 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
                 });
 
                 $row.find(".mix-rule-rate").val(servoRule.getRate()).change(function () {
-                    servoRule.setRate($(this).val());
+                    //servoRule.setRate($(this).val());
                     $row.find(".mix-rule-fixed-value").val(mapServoWeightToFixedValue($(this).val()));
                 });
 
                 $row.find(".mix-rule-fixed-value").val(mapServoWeightToFixedValue($row.find(".mix-rule-rate").val()));
 
                 $row.find(".mix-rule-speed").val(servoRule.getSpeed()).change(function () {
-                    servoRule.setSpeed($(this).val());
+                    //servoRule.setSpeed($(this).val());
                 });
 
                 $row.find("[data-role='role-servo-delete']").attr("data-index", servoRuleIndex);
@@ -257,8 +261,8 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         }
 
         let rate_inputs = $('.mix-rule-rate');
-        rate_inputs.attr("min", -1000);
-        rate_inputs.attr("max", 1000);
+       // rate_inputs.attr("min", 1000);
+       // rate_inputs.attr("max", 2000);
 
         localize();
     }

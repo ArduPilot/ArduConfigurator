@@ -3393,16 +3393,19 @@
         "message": "Servo"
     },
     "input": {
-        "message": "Input"
+        //"message": "Input"
+        "message": "Servo Functions/Behaviours"
     },
     "fixedValue": {
         "message": "Fixed Value (µs)"
     },
     "weight": {
-        "message": "Weight (%)"
+       // "message": "Weight (%)"
+        "message": "MIN-PWM"
     },
     "speed": {
-        "message": "Speed (10µs/s)"
+       // "message": "Speed (10µs/s)"
+        "message": "MAX-PWM"
     },
     "mixerPresetTitle": {
         "message": "Mixer preset"
@@ -3585,7 +3588,8 @@
         "message": "Save"
     },
     "active": {
-        "message": "Active"
+      //  "message": "Active"
+        "message": "Reverse?"
     },
     "itermRelax": {
         "message": "Iterm Relax"

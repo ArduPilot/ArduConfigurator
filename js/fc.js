@@ -997,46 +997,170 @@ var FC = {
         return true;
     },
     getServoMixInputNames: function () {
-        return [
-            'Stabilized Roll',      // 0
-            'Stabilized Pitch',     // 1
-            'Stabilized Yaw',       // 2
-            'Stabilized Throttle',  // 3
-            'RC Roll',              // 4
-            'RC Pitch',             // 5
-            'RC Yaw',               // 6
-            'RC Throttle',          // 7
-            'RC Channel 5',         // 8
-            'RC Channel 6',         // 9
-            'RC Channel 7',         // 10
-            'RC Channel 8',         // 11
-            'Gimbal Pitch',         // 12
-            'Gimbal Roll',          // 13
-            'Flaps',                // 14
-            'RC Channel 9',         // 15
-            'RC Channel 10',        // 16
-            'RC Channel 11',        // 17
-            'RC Channel 12',        // 18
-            'RC Channel 13',        // 19
-            'RC Channel 14',        // 20
-            'RC Channel 15',        // 21
-            'RC Channel 16',        // 22
-            'Stabilized Roll+',     // 23
-            'Stabilized Roll-',     // 24
-            'Stabilized Pitch+',    // 25
-            'Stabilized Pitch-',    // 26
-            'Stabilized Yaw+',      // 27
-            'Stabilized Yaw-',      // 28,
-            'MAX',                  // 29,
-            'GVAR 0',               // 30
-            'GVAR 1',               // 31
-            'GVAR 2',               // 32
-            'GVAR 3',               // 33
-            'GVAR 4',               // 34
-            'GVAR 5',               // 35
-            'GVAR 6',               // 36
-            'GVAR 7',               // 37
-        ];
+
+        // given a number, get the name
+        var Ardu_ServoX_functionsObj = {
+            0 : 'Disabled  => 0',
+            1 : 'RCPassThru  => 1',
+            2 : 'Flap  => 2',
+            3 : 'FlapAuto  => 3',
+            4 : 'Aileron  => 4',
+            6 : 'MountPan  => 6',
+            7 : 'MountTilt  => 7',
+            8 : 'MountRoll  => 8',
+            9 : 'MountOpen  => 9',
+            10 : 'CameraTrigger  => 10',
+            12 : 'Mount2Pan  => 12',
+            13 : 'Mount2Tilt  => 13',
+            14 : 'Mount2Roll  => 14',
+            15 : 'Mount2Open  => 15',
+            16 : 'DifferentialSpoilerLeft1  => 16',
+            17 : 'DifferentialSpoilerRight1  => 17',
+            19 : 'Elevator  => 19',
+            21 : 'Rudder  => 21',
+            22 : 'SprayerPump  => 22',
+            23 : 'SprayerSpinner  => 23',
+            24 : 'FlaperonLeft  => 24',
+            25 : 'FlaperonRight  => 25',
+            26 : 'GroundSteering  => 26',
+            27 : 'Parachute  => 27',
+            28 : 'Gripper  => 28',
+            29 : 'LandingGear  => 29',
+            30 : 'EngineRunEnable  => 30',
+            33 : 'Motor1  => 33',
+            34 : 'Motor2  => 34',
+            35 : 'Motor3  => 35',
+            36 : 'Motor4  => 36',
+            37 : 'Motor5  => 37',
+            38 : 'Motor6  => 38',
+            39 : 'Motor7/TailTiltServo  => 39',
+            40 : 'Motor8  => 40',
+            41 : 'TiltMotorsFront  => 41',
+            45 : 'TiltMotorsRear  => 45',
+            46 : 'TiltMotorRearLeft  => 46',
+            47 : 'TiltMotorRearRight  => 47',
+            51 : 'RCIN1  => 51',
+            52 : 'RCIN2  => 52',
+            53 : 'RCIN3  => 53',
+            54 : 'RCIN4  => 54',
+            55 : 'RCIN5  => 55',
+            56 : 'RCIN6  => 56',
+            57 : 'RCIN7  => 57',
+            58 : 'RCIN8  => 58',
+            59 : 'RCIN9  => 59',
+            60 : 'RCIN10  => 60',
+            61 : 'RCIN11  => 61',
+            62 : 'RCIN12  => 62',
+            63 : 'RCIN13  => 63',
+            64 : 'RCIN14  => 64',
+            65 : 'RCIN15  => 65',
+            66 : 'RCIN16  => 66',
+            67 : 'Ignition => 67',
+            69 : 'Starter  => 69',
+            70 : 'Throttle  => 70',
+            73 : 'ThrottleLeft  => 73',
+            74 : 'ThrottleRight  => 74',
+            75 : 'TiltMotorFrontLeft  => 75',
+            76 : 'TiltMotorFrontRight  => 76',
+            77 : 'ElevonLeft  => 77',
+            78 : 'ElevonRight  => 78',
+            79 : 'VTailLeft  => 79',
+            80 : 'VTailRight  => 80',
+            82 : 'Motor9  => 82',
+            83 : 'Motor10  => 83',
+            84 : 'Motor11  => 84',
+            85 : 'Motor12  => 85',
+            86 : 'DifferentialSpoilerLeft2  => 86',
+            87 : 'DifferentialSpoilerRight2  => 87',
+            90 : 'CameraISO  => 90',
+            91 : 'CameraAperture  => 91',
+            92 : 'CameraFocus  => 92',
+            93 : 'CameraShutterSpeed  => 93',
+            94 : 'Script1  => 94',
+            95 : 'Script2  => 95',
+            96 : 'Script3  => 96',
+            97 : 'Script4  => 97',
+            98 : 'Script5  => 98',
+            99 : 'Script6  => 99',
+            100 : 'Script7  => 100',
+            101 : 'Script8  => 101',
+            102 : 'Script9  => 102',
+            103 : 'Script10  => 103',
+            104 : 'Script11  => 104',
+            105 : 'Script12  => 105',
+            106 : 'Script13  => 106',
+            107 : 'Script14  => 107',
+            108 : 'Script15  => 108',
+            109 : 'Script16  => 109',
+            120 : 'NeoPixel1  => 120',
+            121 : 'NeoPixel2  => 121',
+            122 : 'NeoPixel3  => 122',
+            123 : 'NeoPixel4  => 123',
+            124 : 'RateRoll   => 124',
+            125 : 'RatePitch  => 125',
+            126 : 'RateThrust => 126',
+            127 : 'RateYaw    => 127',
+            129 : 'ProfiLED1  => 129',
+            130 : 'ProfiLED2  => 130',
+            131 : 'ProfiLED3  => 131',
+            132 : 'ProfiLEDClock => 132',
+            134 : 'SERVOn_MIN  => 134',
+            135 : 'SERVOn_TRIM  => 135',
+            136 : 'SERVOn_MAX  => 136',
+        };
+
+
+        var Ardu_ServoX_functionsObjNAME = {};
+        for ( prop in Ardu_ServoX_functionsObj ) {
+            var name = Ardu_ServoX_functionsObj[prop];
+            
+            Ardu_ServoX_functionsObjNAME[name] = prop; // from name -> number
+        }
+
+        // an list of just the names
+        var Ardu_ServoX_functionsARR = Object.keys(Ardu_ServoX_functionsObjNAME);
+        return Ardu_ServoX_functionsARR; 
+
+        // return [
+        //     'Stabilized Roll',      // 0
+        //     'Stabilized Pitch',     // 1
+        //     'Stabilized Yaw',       // 2
+        //     'Stabilized Throttle',  // 3
+        //     'RC Roll',              // 4
+        //     'RC Pitch',             // 5
+        //     'RC Yaw',               // 6
+        //     'RC Throttle',          // 7
+        //     'RC Channel 5',         // 8
+        //     'RC Channel 6',         // 9
+        //     'RC Channel 7',         // 10
+        //     'RC Channel 8',         // 11
+        //     'Gimbal Pitch',         // 12
+        //     'Gimbal Roll',          // 13
+        //     'Flaps',                // 14
+        //     'RC Channel 9',         // 15
+        //     'RC Channel 10',        // 16
+        //     'RC Channel 11',        // 17
+        //     'RC Channel 12',        // 18
+        //     'RC Channel 13',        // 19
+        //     'RC Channel 14',        // 20
+        //     'RC Channel 15',        // 21
+        //     'RC Channel 16',        // 22
+        //     'Stabilized Roll+',     // 23
+        //     'Stabilized Roll-',     // 24
+        //     'Stabilized Pitch+',    // 25
+        //     'Stabilized Pitch-',    // 26
+        //     'Stabilized Yaw+',      // 27
+        //     'Stabilized Yaw-',      // 28,
+        //     'MAX',                  // 29,
+        //     'GVAR 0',               // 30
+        //     'GVAR 1',               // 31
+        //     'GVAR 2',               // 32
+        //     'GVAR 3',               // 33
+        //     'GVAR 4',               // 34
+        //     'GVAR 5',               // 35
+        //     'GVAR 6',               // 36
+        //     'GVAR 7',               // 37
+        // ];
     },
     getServoMixInputName: function (input) {
         return this.getServoMixInputNames()[input];
