@@ -3342,13 +3342,15 @@
         "message": "Has flaps"
     },
     "mixerPreset": {
-        "message": "Mixer preset"
+       "message": "Mixer preset"
     },
     "mixerLoadPresetRules": {
-        "message": "Load mixer"
+        //"message": "Load mixer"
+        "message": "View preset"
     },
     "mixerLoadAndApplyPresetRules": {
-        "message": "Load and apply"
+       // "message": "Load and apply"
+        "message": "                "
     },
     "mixerApplyModalTitle" : {
         "message": "Confirm"
@@ -3408,7 +3410,9 @@
         "message": "MAX-PWM"
     },
     "mixerPresetTitle": {
-        "message": "Mixer preset"
+       // "message": "Mixer preset"
+       "message": "Optionally choose one of these common vehicle layouts? ( then click View Preset)"
+
     },
     "fcFirmwareUpdateRequired": {
         "message": "Flight controller firmware has to be updated to latest version to use this function"
