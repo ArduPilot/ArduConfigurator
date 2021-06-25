@@ -306,7 +306,7 @@ TABS.mission_control.initialize = function (callback) {
                               'H: ' + SENSOR_DATA.kinematics[2] +
                               '\nAlt: ' + SENSOR_DATA.altitude +
                               'm\nSpeed: ' + GPS_DATA.speed + 'cm/s\n' +
-                              'Dist: ' + GPS_DATA.distanceToHome + 'm');
+                              'Dist: ' + GPS_DATA.distanceToHome + 'm'); // buzz H: here wrong
 
 
               //update RTH every 5th GPS update since it really shouldn't change
