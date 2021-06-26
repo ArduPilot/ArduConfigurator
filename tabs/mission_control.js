@@ -392,7 +392,10 @@ TABS.mission_control.initialize = function (callback) {
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     //      define & init Waypoints parameters
-    //////////////////////////////////////////////////////////////////////////////////////////////    
+    //////////////////////////////////////////////////////////////////////////////////////////////   
+    // buzz todo need ot understand diff between global MISSION_PLANER and this var..
+    // this 'var mission =' is updated/modifled/adjusted by the user in the GUI , NOT the drone.
+    //    and i think MISSION_PLANER is used for the drone to read/write from/to.
     var mission = new WaypointCollection();
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -1843,14 +1846,14 @@ TABS.mission_control.initialize = function (callback) {
     //
     /////////////////////////////////////////////
     function getWaypointsFromFC() {
-        mspHelper.loadWaypoints();
+        mspHelper.loadWaypoints(); // getWaypointsFromFC
         setTimeout(function(){
             mission.reinit();
             mission.copy(MISSION_PLANER);
             mission.update(true);
             redrawLayers();
             updateTotalInfo();
-        }, 2000);
+        }, 5000);
     }
     
     function sendWaypointsToFC() {

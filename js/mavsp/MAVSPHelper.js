@@ -103,7 +103,7 @@ async function send_canned_mission_to_drone() {
     MissionObj.MissionToDrone(miss).then(results => { console.log('END SEND MISSION to drone');  });
 }
 
-function get_mission_from_drone() {
+async function get_mission_from_drone(cb) {
     // obj for missions
     if (MissionObj ==undefined )  MissionObj = new MavMission(SYSID,COMPID,mavlink20, mavParserObj , null, logger);
 
@@ -111,8 +111,13 @@ function get_mission_from_drone() {
    
     console.log('START READ MISSION from drone',writefilename)
     // awaiting in a non-async is like this...
-    MissionObj.DroneToMission(writefilename).then(results => { console.log('END READ MISSION from drone');  });
+    await MissionObj.DroneToMission(writefilename).then(results => { 
+        console.log('END READ MISSION from drone');  
+        console.log(MISSION_PLANER); 
+        if ( cb ) cb();
+    });
 
+    
 }
 
 function mavFlightModes_rehook() { 
@@ -4146,7 +4151,7 @@ var mspHelper = (function (gui) {
         MISSION_PLANER.reinit();
         let waypointId = 1;
 
-        get_mission_from_drone();
+        get_mission_from_drone(callback);
         // //MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);
         // getFirstWP();
         
@@ -4166,6 +4171,7 @@ var mspHelper = (function (gui) {
         //         callback(); // without a response, we'll call the callback anyway
         //     }
         // };
+        //callback();
     };
      
     self.saveWaypoints = function (callback) {  //sendWaypointsToFC

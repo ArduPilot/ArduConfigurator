@@ -360,6 +360,26 @@ MavMission.prototype.DroneToMission = async function(filename) {
                 data2 += "[";
                 data2 += l.toString();
                 data2 += "],\n";
+
+                var wp_type = MWNP.WPTYPE.WAYPOINT;
+                //if ( e.command == 16 ) wp_type = MWNP.WPTYPE.WAYPOINT; // The scheduled action for the waypoint.
+
+                // skip 'home' = 'zero' wp from drone
+                if ( e.seq != 0 ) {
+                    //number, action, lat, lon, alt=0, p1=0, p2=0, p3=0, endMission=0, isUsed=true, isAttached=false, attachedId=""
+                    MISSION_PLANER.put(new Waypoint(
+                        e.seq,//data.getUint8(0),//number
+                        wp_type,//data.getUint8(1),       //action like MWNP.WPTYPE.JUMP  or MWNP.WPTYPE.WAYPOINT
+                        e.x*10000000,//data.getInt32(2, true), //lat
+                        e.y*10000000,//data.getInt32(6, true), //lon
+                        e.z,//data.getInt32(10, true), //alt
+                        e.param1,//data.getInt16(14, true), //p1 
+                        e.param2,//data.getInt16(16, true), //p2 
+                        e.param3,//data.getInt16(18, true)  //p3
+                        // eep buzz todo, fit e.param4 
+                    ));
+                }
+                //
         });
         data2 += '];\n//module.exports = missionItems;\n';
         await fs.writeFile(filename, data2);
