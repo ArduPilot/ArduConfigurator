@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.com/davidbuzz/no-longer-inav-configurator"
+    "url": "github.com/davidbuzz/ardu-configurator"
   },
   "author": "davidbuzz",
   "license": "GPL-3.0",

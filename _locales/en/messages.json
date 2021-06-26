@@ -3246,7 +3246,7 @@
         "message": "New Configurator version available."
     },
     "appUpdateNotificationDescription": {
-        "message": "Please visit the <a href=\"https://github.com/davidbuzz/no-longer-inav-configurator/releases\" target=\"_blank\">website</a> to read the release notes and download."
+        "message": "Please visit the <a href=\"https://github.com/davidbuzz/ardu-configurator/releases\" target=\"_blank\">website</a> to read the release notes and download."
     },
     "closeUpdateBtn": {
         "message": "Close"
@@ -3263,12 +3263,12 @@
     "saveMissionButton": {
         "message": "Save mission to FC"
     },
-    "loadEepromMissionButton": {
-        "message": "Load Eeprom mission"
-    },
-    "saveEepromMissionButton": {
-        "message": "Save Eeprom mission"
-    },
+    // "loadEepromMissionButton": {
+    //     "message": "Load Eeprom mission"
+    // },
+    // "saveEepromMissionButton": {
+    //     "message": "Save Eeprom mission"
+    // },
     "loadFileMissionButton": {
         "message": "Load file"
     },
@@ -3312,7 +3312,7 @@
         "message": "Action Menu"
     },
     "useOnlyStandalone": {
-        "message": "Use stand-alone application.<br> Please visit the <a href=\"https://github.com/davidbuzz/no-longer-inav-configurator/releases\" target=\"_blank\">website</a> to read the release notes and download."
+        "message": "Use stand-alone application.<br> Please visit the <a href=\"https://github.com/davidbuzz/ardu-configurator/releases\" target=\"_blank\">website</a> to read the release notes and download."
     },
     "eeprom_load_ok": {
         "message": "EEPROM <span style=\"color: #37a8db\">loaded</span>"

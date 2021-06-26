@@ -6,6 +6,14 @@ It runs as an app within Google Chrome and allows you to configure the ARDUPILOT
 
 Various types of aircraft are supported by the tool and by ARDUPILOT, e.g. quadcopters, hexacopters, octocopters and fixed-wing aircraft.
 
+![pic1](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator1.png?raw=true)
+![pic2](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator2.png?raw=true)
+![pic3](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator3.png?raw=true)
+![pic4](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator4.png?raw=true)
+![pic5](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator5.png?raw=true)
+![pic6](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator6.png?raw=true)
+
+
 ## ARDUPILOT Configurator start minimized, what should I do?
 
 You have to remove `C:\Users%Your_UserNname%\AppData\Local\ARDUPILOT-configurator` folder and all its content.
@@ -20,7 +28,7 @@ Depending on target operating system, _ARDUPILOT Configurator_ is distributed as
 
 ### Windows
 
-1. Visit [release page](https://github.com/davidbuzz/no-longer-inav-configurator/releases)
+1. Visit [release page](https://github.com/davidbuzz/ardu-configurator/releases)
 1. Download Configurator for Windows platform (win32 or win64 is present)
 1. Extract ZIP archive
 1. Run ARDUPILOT Configurator app from unpacked folder
@@ -28,7 +36,7 @@ Depending on target operating system, _ARDUPILOT Configurator_ is distributed as
 
 ### Linux
 
-1. Visit [release page](https://github.com/davidbuzz/no-longer-inav-configurator/releases)
+1. Visit [release page](https://github.com/davidbuzz/ardu-configurator/releases)
 1. Download Configurator for Linux platform (linux32 and linux64 are present)
 1. Extract tar.gz archive
 1. Make the ARDUPILOT-configurator file executable (chmod +x ARDUPILOT-configurator)
@@ -36,7 +44,7 @@ Depending on target operating system, _ARDUPILOT Configurator_ is distributed as
 
 ### Mac
 
-1. Visit [release page](https://github.com/davidbuzz/no-longer-inav-configurator/releases)
+1. Visit [release page](https://github.com/davidbuzz/ardu-configurator/releases)
 1. Download Configurator for Mac platform
 1. Extract ZIP archive
 1. Run ARDUPILOT Configurator
@@ -134,7 +142,7 @@ everything, hardware is not working or have any other _support_ problem, please 
 
 For ARDUPILOT configurator issues raise them here
 
-https://github.com/davidbuzz/no-longer-inav-configurator/issues
+https://github.com/davidbuzz/ardu-configurator/issues
 
 For ARDUPILOT firmware issues raise them here
 

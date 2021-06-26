@@ -4,7 +4,7 @@ var appUpdater = appUpdater || {};
 
 appUpdater.checkRelease = function (currVersion) {
     var modalStart;
-    $.get('https://api.github.com/repos/davidbuzz/no-longer-inav-configurator/releases', function (releaseData) {
+    $.get('https://api.github.com/repos/davidbuzz/ardu-configurator/releases', function (releaseData) {
         GUI.log('Loaded [configurator] release information from GitHub.');
         //Git return sorted list, 0 - last release
 
