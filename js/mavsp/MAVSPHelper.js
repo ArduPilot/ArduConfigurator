@@ -79,6 +79,33 @@ var sysids = {}; // collecton if ID's we've seen
 mavFlightModes.push(new MavFlightMode(mavlink20, mavParserObj, null, null,SYSID));
 sysids[SYSID] = true;
 
+// global mav mission object for gettting/sending missions to drone
+var MissionObj = undefined ; // we delay instantion till we know SYSID // new MavMission(SYSID,COMPID,mavlink20, mavParserObj , null, logger);
+
+function send_canned_mission_to_drone() {
+    // obj for missions
+    if (MissionObj ==undefined )  MissionObj = new MavMission(SYSID,COMPID,mavlink20, mavParserObj , null, logger);
+
+    var readfilename = "./gotmission3.js";
+    var miss = require(readfilename);
+
+    console.log('START SEND MISSION to drone:',readfilename);
+    // awaiting in a non-async is like this...
+    MissionObj.MissionToDrone(miss).then(results => { console.log('END SEND MISSION to drone');  });
+}
+
+function get_mission_from_drone() {
+    // obj for missions
+    if (MissionObj ==undefined )  MissionObj = new MavMission(SYSID,COMPID,mavlink20, mavParserObj , null, logger);
+
+    var writefilename = "./gotmission1.js"; // default if not specificed
+   
+    console.log('START READ MISSION from drone',writefilename)
+    // awaiting in a non-async is like this...
+    MissionObj.DroneToMission(writefilename).then(results => { console.log('END READ MISSION from drone');  });
+
+}
+
 function mavFlightModes_rehook() { 
 
     // re-hook all the MavFlightMode objects to their respective events, since we just added a new one.
