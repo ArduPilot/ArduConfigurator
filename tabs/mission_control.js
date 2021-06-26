@@ -1623,18 +1623,39 @@ TABS.mission_control.initialize = function (callback) {
             })
         });
 
-        $('#loadMissionButton').on('click', function () {
+        $('#loadMissionButton').on('click', function () {  // load FROM FC
             if (markers.length && !confirm(chrome.i18n.getMessage('confirm_delete_all_points'))) return;
+            $('#loadMissionButton').delay(2000).css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#909000');//.css('a:hover', 'purple'); // test 
+            //  yellow=progress                                                 blue                   blue                              yellow 
+            
             removeAllWaypoints();
             $(this).addClass('disabled');
+
+            //$('#loadMissionButton').delay(2000).css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#008000');//.css('a:hover', 'purple'); // test 
+            //  green=success                                                 blue                   blue                              green 
+            $('#loadMissionButton').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
+                // Animation complete.
+                $('#loadMissionButton').removeAttr('style'); // removeAttr removes all attribure styling, returning it 'stock'
+              }); 
+            //  return to stock white/blue after some time                           white             blue 
+            
             GUI.log('Start get point');
             getWaypointsFromFC();
             GUI.log('End get point');
             $('#loadMissionButton').removeClass('disabled');
         });
 
-        $('#saveMissionButton').on('click', function () {
+        $('#saveMissionButton').on('click', function () { // save TO.. FC
             $(this).addClass('disabled');
+             
+            $('#saveMissionButton').delay(2000).css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#909000');//.css('a:hover', 'purple'); // test 
+            //  yellow=progress                                                 blue                   blue                              yellow 
+            $('#saveMissionButton').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
+                // Animation complete.
+                $('#saveMissionButton').removeAttr('style'); // removeAttr removes all attribure styling, returning it 'stock'
+              }); 
+            //  return to stock white/blue after some time                           white             blue 
+
             GUI.log('Start send point');
             sendWaypointsToFC();
             GUI.log('End send point');
