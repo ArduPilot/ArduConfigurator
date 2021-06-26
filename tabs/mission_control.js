@@ -104,8 +104,8 @@ TABS.mission_control.initialize = function (callback) {
             $('#infoMissionValid').hide();
             $('#loadMissionButton').hide();
             $('#saveMissionButton').hide();
-            $('#loadEepromMissionButton').hide();
-            $('#saveEepromMissionButton').hide();
+            // $('#loadEepromMissionButton').hide();
+            // $('#saveEepromMissionButton').hide();
             isOffline = true;
         }
         
@@ -1642,24 +1642,24 @@ TABS.mission_control.initialize = function (callback) {
             
         });
 
-        $('#loadEepromMissionButton').on('click', function () {
-            if (markers.length && !confirm(chrome.i18n.getMessage('confirm_delete_all_points'))) return;
-            removeAllWaypoints();
-            GUI.log(chrome.i18n.getMessage('eeprom_load_ok'));
-            MSP.send_message(MSPCodes.MSP_WP_MISSION_LOAD, [0], getWaypointsFromFC);
-        });
+        // $('#loadEepromMissionButton').on('click', function () {
+        //     if (markers.length && !confirm(chrome.i18n.getMessage('confirm_delete_all_points'))) return;
+        //     removeAllWaypoints();
+        //     GUI.log(chrome.i18n.getMessage('eeprom_load_ok'));
+        //     MSP.send_message(MSPCodes.MSP_WP_MISSION_LOAD, [0], getWaypointsFromFC);
+        // });
         
-        $('#saveEepromMissionButton').on('click', function () {
-            $(this).addClass('disabled');
-            GUI.log('Start send point');
-            sendWaypointsToFC();
-            GUI.log('End send point');
-            $('#saveEepromMissionButton').removeClass('disabled');
-            GUI.log(chrome.i18n.getMessage('eeprom_saved_ok'));
-            setTimeout(function(){
-                MSP.send_message(MSPCodes.MSP_WP_MISSION_SAVE, [0], false);
-            },2000);
-        });
+        // $('#saveEepromMissionButton').on('click', function () {
+        //     $(this).addClass('disabled');
+        //     GUI.log('Start send point');
+        //     sendWaypointsToFC();
+        //     GUI.log('End send point');
+        //     $('#saveEepromMissionButton').removeClass('disabled');
+        //     GUI.log(chrome.i18n.getMessage('eeprom_saved_ok'));
+        //     setTimeout(function(){
+        //         MSP.send_message(MSPCodes.MSP_WP_MISSION_SAVE, [0], false);
+        //     },2000);
+        // });
 
         /////////////////////////////////////////////
         // Callback for settings
