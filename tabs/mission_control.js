@@ -317,8 +317,17 @@ TABS.mission_control.initialize = function (callback) {
                 //    var coord = ol.proj.fromLonLat([MISSION_PLANER.bufferPoint.lon, MISSION_PLANER.bufferPoint.lat]); //buzz
                 //    rthGeo.setCoordinates(coord);
                 //  });
-                var h_lat = FC.curr_mav_state['HOME_POSITION'].latitude / 10000000;
-                var h_lng = FC.curr_mav_state['HOME_POSITION'].longitude / 10000000;
+
+                // if the drone has given us its HOME_POSITION, then use that otherwise fall back to its current GPS co-ord.
+                var h_lat;
+                var h_lng;
+                if ( FC.curr_mav_state['HOME_POSITION'] ) {
+                h_lat = FC.curr_mav_state['HOME_POSITION'].latitude / 10000000;
+                h_lng = FC.curr_mav_state['HOME_POSITION'].longitude / 10000000;
+                } else {
+                h_lat = FC.curr_mav_state['GLOBAL_POSITION_INT'].lat / 10000000;
+                h_lng = FC.curr_mav_state['GLOBAL_POSITION_INT'].lon / 10000000;
+                }
                 // buzz set home..
                 var coord = ol.proj.fromLonLat([h_lng, h_lat]);
                 rthGeo.setCoordinates(coord);
