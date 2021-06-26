@@ -159,6 +159,7 @@ TABS.calibration.initialize = function (callback) {
             //CALIBRATION_DATA.opflow.Scale = parseFloat($('[name=OpflowScale]').val());
             //saveChainer.execute();
             //preflight_reboot(); // mav
+            $('#level_btn').find('a').css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#FDBE02');//.css('a:hover', 'purple'); // test
             level_accel_cal();
             updateSensorData();
 
@@ -168,12 +169,13 @@ TABS.calibration.initialize = function (callback) {
             //CALIBRATION_DATA.opflow.Scale = parseFloat($('[name=OpflowScale]').val());
             //saveChainer.execute();
             //preflight_reboot(); // mav
+            $('#level_btn2').find('a').css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#FDBE02');//.css('a:hover', 'purple'); // test
+
             large_veh_mag_cal(); // assumes yawwed to north if not given by GUI
             updateSensorData();
             // change color of the thing that was clicked.
             //var x = this;
             //$('#'+(this.id)).find('a').css('color', 'red').css('border', 'red').css('background-color', 'yellow').css('a:hover', 'purple'); // test
-            $('#level_btn2').find('a').css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#FDBE02');//.css('a:hover', 'purple'); // test
             //                                                   blue                   blue                              yellow/mango
         });
         // respond to 'calibrate compas 3d' button press/s
@@ -188,8 +190,20 @@ TABS.calibration.initialize = function (callback) {
         // respond to 'accept' button press/s
         $('#mag_btn2').on('click', function () {  
             helper.interval.remove('compass_calibration_interval');
-            $('#mag_btn2').css('pointer-events', 'none').css('opacity', '0.4'); // make non-interactive
             $('#mag_btn3').css('pointer-events', 'none').css('opacity', '0.4'); // make non-interactive
+
+            $('#mag_btn').find('a').css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#ffffff');//.css('a:hover', 'purple'); // test
+
+            $('#mag_btn2').find('a').delay(2000).css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#008000');//.css('a:hover', 'purple'); // test
+            //  green=success                                                 blue                   blue                              green
+            $('#mag_btn2').find('a').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
+                // Animation complete.
+                $('#mag_btn2').find('a').removeAttr('style'); // removeAttr removes all attribure styling, returning it 'stock'
+                $('#mag_btn2').css('pointer-events', 'none').css('opacity', '0.4'); // make non-interactive
+
+              }); 
+            //  return to stock white/blue after some time                           white             blue 
+        
             $('#3d_cal_notes').html("3D Compass CAL ACCEPTED.")
             mag_cal_accept();
             updateSensorData();
@@ -198,13 +212,28 @@ TABS.calibration.initialize = function (callback) {
         $('#mag_btn3').on('click', function () {  
             helper.interval.remove('compass_calibration_interval');
             $('#mag_btn2').css('pointer-events', 'none').css('opacity', '0.4'); // make non-interactive
-            $('#mag_btn3').css('pointer-events', 'none').css('opacity', '0.4'); // make non-interactive
+
+            $('#mag_btn').find('a').css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#ffffff');//.css('a:hover', 'purple'); // test
+
+            $('#mag_btn3').find('a').delay(2000).css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#008000');//.css('a:hover', 'purple'); // test
+            //  green=success-fully cancellded                               blue                   blue                              green
+            $('#mag_btn3').find('a').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
+                // Animation complete.
+                $('#mag_btn3').find('a').removeAttr('style'); // removeAttr removes all attribure styling, returning it 'stock'
+                $('#mag_btn3').css('pointer-events', 'none').css('opacity', '0.4'); // make non-interactive
+
+              }); 
+            //  return to stock white/blue after some time                           white             blue 
+
             $('#3d_cal_notes').html("3D Compass CAL CANCELLED.")
             mag_cal_cancel();
             updateSensorData();
         });
         //  respond to button press/s  ( )
         $('#mag_btn').on('click', function () {
+
+            $('#mag_btn').find('a').css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#FDBE02');//.css('a:hover', 'purple'); // test
+
 
             //MSP.send_message(MSPCodes.MSP_MAG_CALIBRATION, false, false, function () {
                 GUI.log(chrome.i18n.getMessage('initialSetupMagCalibStarted'));
@@ -214,6 +243,7 @@ TABS.calibration.initialize = function (callback) {
 
             if ( FC.curr_mav_state && FC.curr_mav_state['MAG_CAL_PROGRESS'] && FC.curr_mav_state['MAG_CAL_PROGRESS'].completed  ){
                 FC.curr_mav_state['MAG_CAL_PROGRESS'].completed = 0;
+                FC.curr_mav_state['MAG_CAL_PROGRESS'].completion_mask = String.fromCharCode(0,0,0,0,0,0,0,0,0,0);
             }
             mag_cal_start();
             // accept

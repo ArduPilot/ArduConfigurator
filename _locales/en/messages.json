@@ -2337,7 +2337,7 @@
         "message": "Calibrate Accelerometer"
     },
     "MagCalText": {
-        "message": "After pressing the button you have 30 seconds to hold the copter in the air and rotate it so that each side (front, back, left, right, top and bottom) points down towards the earth."
+        "message": "After pressing the button you have to hold the copter in the air and rotate it so that each side (front, back, left, right, top and bottom) points down towards the earth."
     },
     "MagCalText2": {
         "message": "Large Vehicle Mag Calibration... please point your flight-controller to the NORTH, and ensure you have a good GPS lock, then press the button"

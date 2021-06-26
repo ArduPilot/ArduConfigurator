@@ -163,6 +163,30 @@ var level_accel_cal = function ( target_system,target_component ) {
     mavParserObj.send(packet); 
     console.log('Send level_accel_cal!');
 
+    // add temporary hook to listen for ACK, eg COMMAND_ACK command= 42006 result= 4
+    //https://github.com/mavlink/c_library_v2/blob/master/common/mavlink_msg_command_ack.h
+    var m1 = mavlinkParser.on('COMMAND_ACK', function(ack) {
+        var from = this;
+        if ( ( ack.command == mavlink20.MAV_CMD_PREFLIGHT_CALIBRATION )  && (ack.result == 0 ) ) {  // 0 = success? buzz todo
+
+            console.log('Send level_accel_cal REPLIED');
+
+            // after getting an acknowledgement in the mavlink stream, stop listening
+            mavlinkParser.off('COMMAND_ACK',m1 ); // note we pass in the uuid 'm1' here be be sure we remove the *correct* 'off' hook
+
+            $('#level_btn').find('a').delay(2000).css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#008000');//.css('a:hover', 'purple'); // test
+            //  green=success                                                 blue                   blue                              green
+            $('#level_btn').find('a').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
+                // Animation complete.
+                $('#level_btn').find('a').removeAttr('style'); // removeAttr removes all attribure styling, returning it 'stock'
+              }); 
+            //  return to stock white/blue after some time                           white             blue 
+ 
+        }   
+
+    }
+);
+
 }
 
 // start  = 42424 / 0,1,1,0,0,0,0
