@@ -82,12 +82,21 @@ sysids[SYSID] = true;
 // global mav mission object for gettting/sending missions to drone
 var MissionObj = undefined ; // we delay instantion till we know SYSID // new MavMission(SYSID,COMPID,mavlink20, mavParserObj , null, logger);
 
-function send_canned_mission_to_drone() {
+async function send_canned_mission_to_drone() {
     // obj for missions
     if (MissionObj ==undefined )  MissionObj = new MavMission(SYSID,COMPID,mavlink20, mavParserObj , null, logger);
 
-    var readfilename = "./gotmission3.js";
-    var miss = require(readfilename);
+    var module = { exports: {} }; // hack for node compat
+    var readfilename = "/gotmission1.js"; // no leading . or ./  its an absolute url ah-la http://xxxx/gotmission1.js
+//    var miss = require(readfilename); Node.js
+
+    //let modulePath = prompt("Which module to load?");
+
+
+    mod = await import(readfilename);
+
+    var miss = window.missionItems;
+
 
     console.log('START SEND MISSION to drone:',readfilename);
     // awaiting in a non-async is like this...
@@ -1148,13 +1157,22 @@ var mspHelper = (function (gui) {
 
 
                             
-            case mavlink20.MAVLINK_MSG_ID_MISSION_ITEM_REACHED: 
+            case mavlink20.MAVLINK_MSG_ID_MISSION_ITEM_REACHED:  //46
                 /*  ["seq"]
                 seq: 7
                 // note that _header.srcSystem give the vehicle sysid that it came from as well
                 */ 
                 // buzz todo 
                 break;  
+
+            case mavlink20.MAVLINK_MSG_ID_MISSION_ITEM_INT: // 73
+            case mavlink20.MAVLINK_MSG_ID_MISSION_ITEM: //39
+            case mavlink20.MAVLINK_MSG_ID_MISSION_REQUEST_INT: //51
+            case mavlink20.MAVLINK_MSG_ID_MISSION_REQUEST: //40
+            case mavlink20.MAVLINK_MSG_ID_MISSION_ACK: //47
+
+                // buzz todo 
+                break; 
 
             // add more here 
                     
@@ -4124,51 +4142,57 @@ var mspHelper = (function (gui) {
         callback(); // without a response, we'll call the callback anyway
     };
     
-    self.loadWaypoints = function (callback) {
+    self.loadWaypoints = function (callback) { //getWaypointsFromFC
         MISSION_PLANER.reinit();
         let waypointId = 1;
-        //MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);
-        getFirstWP();
-        
-        function getFirstWP() {
-            //MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
-            nextWaypoint();
-        };
-        
-        function nextWaypoint() {
-            waypointId++;
-            if (waypointId < MISSION_PLANER.getCountBusyPoints()) {
-               // MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
-                nextWaypoint();
-            }
-            else {
-                //MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);  
-                callback(); // without a response, we'll call the callback anyway
-            }
-        };
-    };
-    
-    self.saveWaypoints = function (callback) {
-        let waypointId = 1;
-        //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
-        nextWaypoint();
 
-        function nextWaypoint() {
-            waypointId++;
-            if (waypointId < MISSION_PLANER.get().length) {
-                //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
-                nextWaypoint();
-            }
-            else {
-                //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
-                endMission();
-            }
-        };
+        get_mission_from_drone();
+        // //MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);
+        // getFirstWP();
         
-        function endMission() {
-            //MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);  
-            callback(); // without a response, we'll call the callback anyway
-        }
+        // function getFirstWP() {
+        //     //MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
+        //     nextWaypoint();
+        // };
+        
+        // function nextWaypoint() {
+        //     waypointId++;
+        //     if (waypointId < MISSION_PLANER.getCountBusyPoints()) {
+        //        // MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
+        //         nextWaypoint();
+        //     }
+        //     else {
+        //         //MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);  
+        //         callback(); // without a response, we'll call the callback anyway
+        //     }
+        // };
+    };
+     
+    self.saveWaypoints = function (callback) {  //sendWaypointsToFC
+        let waypointId = 1;
+
+        send_canned_mission_to_drone();
+
+
+        //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
+        // nextWaypoint();
+
+        // function nextWaypoint() {
+        //     waypointId++;
+        //     if (waypointId < MISSION_PLANER.get().length) {
+        //         //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
+        //         nextWaypoint();
+        //     }
+        //     else {
+        //         //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
+        //         endMission();
+        //     }
+        // };
+        
+        // function endMission() {
+        //     //MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);  
+        //     callback(); // without a response, we'll call the callback anyway
+        // }
     };
     
     self.loadSafehomes = function (callback) {

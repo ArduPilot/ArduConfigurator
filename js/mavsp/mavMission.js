@@ -44,7 +44,7 @@ var soccerFieldFlight = [
 ];
 
 // Waypoints, an ordered array of waypoint MAVLink objects
-var missionItems = [];
+//var missionItems = [];
 
 // Mission object constructor
 class MavMission {
@@ -68,7 +68,8 @@ class MavMission {
 
 }
 
-util.inherits(MavMission, events.EventEmitter);
+//util.inherits(MavMission, events.EventEmitter);
+inherits(MavMission, EventEmitter);
 
 
 // Handler when the ArduPilot requests individual waypoints: upon receiving a request,
@@ -127,7 +128,7 @@ MavMission.prototype.enableSendMission = function() {
 
 		if(mavlink20.MAV_MISSION_ACCEPTED === ack.type) {
             console.log('mission:sent to drone');
-			t.emit('mission:sent to drone');
+			//t.emit('mission:sent to drone');
             t.send_complete = true; // t is this
 		} else if(mavlink20.MAV_MISSION_INVALID === ack.type) { 
             console.log("invalid mission");
@@ -138,7 +139,8 @@ MavMission.prototype.enableSendMission = function() {
             console.log("invalid sequence");
 		} else {
             console.log(ack);
-			throw new Error('Unexpected mission acknowledgement received in mavMission.js');
+			//throw new Error('Unexpected mission acknowledgement received in mavMission.js');
+			console.log('Unexpected mission acknowledgement received in mavMission.js');
         }
 	});
 
@@ -285,7 +287,8 @@ MavMission.prototype.enableGetMission = function() {
 // MissionItemMessage is a MAVLink MessageItem object
 MavMission.prototype.addMissionItem = function(missionItemMessage) {
 	if( _.isUndefined(missionItemMessage)) {
-		throw new Error('Undefined message item in MavMission.addMissionItem!');
+		//throw new Error('Undefined message item in MavMission.addMissionItem!');
+		console.log('Undefined message item in MavMission.addMissionItem!');
 	}
 	this.missionItems[missionItemMessage.seq] = missionItemMessage;
 };
@@ -336,7 +339,7 @@ MavMission.prototype.DroneToMission = async function(filename) {
         //await fs.writeFile(filename, data);
 
         // write as mission format compatible with this script for cut-n-paste 
-        var data2 = 'var missionItems = [\n';
+        var data2 = 'window.missionItems = [\n';
 	    _.each(this.missionItems, function(e, i, l) {
 
                 //console.log(e);
@@ -349,8 +352,8 @@ MavMission.prototype.DroneToMission = async function(filename) {
 			    e.param2, //5
 			    e.param3, //6
 			    e.param4, //7
-			    e.x/10000000,    //8
-			    e.y/10000000,    //9
+			    e.x,///10000000,    //8
+			    e.y,///10000000,    //9
 			    e.z,  //10
 			    e.autocontinue]; //11
 
@@ -358,7 +361,7 @@ MavMission.prototype.DroneToMission = async function(filename) {
                 data2 += l.toString();
                 data2 += "],\n";
         });
-        data2 += '];\nmodule.exports = missionItems;\n';
+        data2 += '];\n//module.exports = missionItems;\n';
         await fs.writeFile(filename, data2);
         
         console.log("MISSION FILE WRITTEN:",filename);// this happens after file written
@@ -397,8 +400,8 @@ this.enableGetMission(); // can be called too many times, thats fine.
 			e[5],  // param2,
 			e[6],  // param3
 			e[7],  // param4
-			e[8],  // x (latitude
-			e[9],  // y (longitude
+			e[8],//*10000000,  // x (latitude
+			e[9],//*10000000,  // y (longitude
 			e[10],  // z (altitude
 		);
 
@@ -578,4 +581,4 @@ var missionItemsQuadTesting = [
   # z
   */
 
-module.exports = MavMission;
+//module.exports = MavMission;
