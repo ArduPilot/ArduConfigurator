@@ -8,3 +8,10 @@ You have to remove `C:\Users%Your_UserNname%\AppData\Local\ARDUPILOT-configurato
 
 Alternatively, on Windows with PowerShell you can use `post_install_cleanup.ps1` script that will do the cleaning. (thank you James Cherrill)
 
+## 3d model doesn't work in your browser / app screen comes up all white?
+
+you have a crappy video card that doesn't support web-gl by default:
+goto chrome://flags/#ignore-gpu-blacklist
+and enable it .
+
+
