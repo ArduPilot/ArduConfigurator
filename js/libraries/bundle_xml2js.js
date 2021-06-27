@@ -5863,11 +5863,11 @@ function deprecate (fn, msg) {
 function config (name) {
   // accessing global.localStorage can trigger a DOMException in sandboxed iframes
   try {
-    if (!global.localStorage) return false;
+    if (!chrome.storage.local) return false;
   } catch (_) {
     return false;
   }
-  var val = global.localStorage[name];
+  var val = chrome.storage.local[name];
   if (null == val) return false;
   return String(val).toLowerCase() === 'true';
 }

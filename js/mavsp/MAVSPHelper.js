@@ -1,7 +1,7 @@
 /*global $, SERVO_DATA, PID_names, ADJUSTMENT_RANGES, RXFAIL_CONFIG, SERVO_CONFIG*/
 //'use strict';
 
-const { fstat } = require("fs");
+//const { fstat } = require("fs");
 
 //var {mavlink20, MAVLink20Processor} = require("./mav_v2.js"); 
 

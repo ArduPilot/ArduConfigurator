@@ -1,7 +1,7 @@
 /*
 Waypoint state manager.
 */
-var _ = require('underscore');
+//var _ = require('underscore');
 
 // Logging object (winston)
 var log;
