@@ -5,14 +5,18 @@
   "main": "main.html",
   "default_locale": "en",
   "scripts": {
-    "__comment0__": " npm run build",
+    "__comment0__": " npm run gulp build",
     "prestart": "node node_modules/gulp/bin/gulp.js build",
-    "__comment1__": "npm start or npm run start",
+    "__comment1__": "npm run dev",
+    "dev": "cp main-dev.html main.html ; node node_modules/nw/bin/nw --remote-debugging-port=9222 --load-extension=. .",
+    "__comment2__": "npm start or npm run start",
     "start": "node node_modules/nw/bin/nw --remote-debugging-port=9222 --load-extension=. .",
-    "__comment2__": "npm run gulp",
+    "__comment3__": "npm run gulp",
     "gulp": "gulp",
-    "__comment3__": "npm run nw",
-    "nw": "nw"
+    "__comment4__": "npm run nw",
+    "nw": "nw",
+    "__comment5__": "npm run gulp dist",
+    "__comment6__": "npm run gulp release"
   },
   "window": {
     "title": "ARDUPILOT Configurator",

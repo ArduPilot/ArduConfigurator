@@ -441,7 +441,7 @@ async function get_all_srcs() {
                 
                 await glob(f, {}, ).then(function ( files) {
                     f_glob = f_glob.concat(files); // array assignment
-                    console.log("globby:"+files);
+                    //console.log("globby:"+files);
                 });
 
             } else {
@@ -465,7 +465,7 @@ function populate_main_tmpl() {
         if (k.endsWith('css') ) {
         // css
         var csstemplate = '<link type="text/css" rel="stylesheet" href="'+k+'" media="all" />';
-        console.log(csstemplate);
+        //console.log(csstemplate);
         customstuff += csstemplate ;
         customstuff += "\n" ;
 
@@ -473,7 +473,7 @@ function populate_main_tmpl() {
         if (k.endsWith('js') ) {
         // js
         var jstemplate = '<script type="text/javascript" src="'+k+'"></script>';
-        console.log(jstemplate);
+        //console.log(jstemplate);
         customstuff += jstemplate ;
         customstuff += "\n" ;
         }
@@ -481,20 +481,20 @@ function populate_main_tmpl() {
 
     //  dev version of headers
     var someFile = "./main.tmpl.html";
-    var dstFile = "./main.html";
+    var dstFile = "./main-dev.html";
 
 
     fs.readFile(someFile, 'utf8', function (err,data) {
         if (err) {
         return console.log(err);
         }
-        var result = data.replace(/fixme1/g, customstuff);
-        console.log('blerg1');
+        var result = data.replace(/.*fixme1.*/g, customstuff);
+        //console.log('blerg1');
 
 
         fs.writeFile(dstFile, result, 'utf8', function (err) {
             if (err) return console.log(err);
-            console.log('blerg2');
+            //console.log('blerg2');
 
         });
     });
@@ -512,18 +512,18 @@ function populate_main_tmpl2() {
 
     // bundled version of headers 
     var someFile = "./main.tmpl.html";
-    var dstFile2 = "./main2.html";
+    var dstFile2 = "./main.html"; // by default we'll use the bundled file
     var fs = require('fs')
     fs.readFile(someFile, 'utf8', function (err,data) {
         if (err) {
         return console.log(err);
         }
-        var result = data.replace(/fixme2/g, customstuff2);
-        console.log('blerg3');
+        var result = data.replace(/.*fixme1.*/g, customstuff2);
+        //console.log('blerg3');
 
         fs.writeFile(dstFile2, result, 'utf8', function (err) {
             if (err) return console.log(err);
-            console.log('blerg4');
+            //console.log('blerg4');
         });
     });
 }
@@ -531,16 +531,16 @@ function populate_main_tmpl2() {
 
 async function dothings()  {
 
-    console.log('-------------------------------------------------');
+    //console.log('-------------------------------------------------');
 
     await get_all_srcs();
-    console.log('-------------------------------------------------');
+    //console.log('-------------------------------------------------');
 
     //console.log(f_glob); // filled up quite async by globs and things
 
 
     await populate_main_tmpl();
-    console.log('-------------------------------------------------');
+    //console.log('-------------------------------------------------');
 
     await populate_main_tmpl2();
 
@@ -549,10 +549,10 @@ async function dothings()  {
 dothings();
 //-------------------------------------------------
 
-// be sure to make edits in main.tmpl.html, not main.html or main2.html
-// at this point u can use main.html as-is for 'dev' , without any bundling 
+// be sure to make edits in main.tmpl.html, not main.html or main-dev.html
+// at this point u can use main.html as-is for 'bundled' , without any bundling 
 //OR
-// u can rename main2.html to main for a 'bundled' deployment
+// u can rename main-dev.html to main for a 'dev' deployment
 
 //-------------------------------------------------
 
