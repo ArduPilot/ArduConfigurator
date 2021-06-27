@@ -46,3 +46,8 @@ js/mavsp/local_modules/long/src/long.js  - mostly not my code, a implementation 
 We're not actually using any of the original MSP serial/usb protocol, its just the old protocol that was used, and i'm progressively massaging it till theres none left.
 
 
+## MavLink replacing MSP. - these seems to be a lot of MSP code in there thats not being used/executed any more, and is just 'dead code'. 
+
+Yep.   I'm calling it 'reference material' to help understand how it *did* work before i messed it all up with this mavlink mellarky. 
+
+ I'll go through at an appropriate time and drop all those unused bits on the floor.   eg js/mavsp/MAVSPHelper.js -> self.processData function (1500 lines of unsed code).  that sort of thing.
