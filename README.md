@@ -68,6 +68,10 @@ in the `./dist/` directory.
 directory. Running this task on macOS or Linux requires Wine, since it's needed to set the icon
 for the Windows app. If you don't have Wine installed you can create a release by running the **release-only-linux** task.
 
+Quick start ( Devs use linux , so other platforms YMMV):
+'npm start' to run it from the source folder without comressing any resources, great for debug and code hacking. 
+'npm run gulp dist' to bundle it.
+'npm run gulp release' to make win32/win64/osx/linux32/linux64 packages.
 
 ## BUGs?  absolutely.
 
