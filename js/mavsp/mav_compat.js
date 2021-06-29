@@ -141,14 +141,8 @@ var optimizeCb = function(func, context, argCount) {
   };
 };
 
-// instantiate minimal fake underscore obj as mav_v2.js generated code uses _.has
-_ = {
-  has: function(map, msgId) {
-    return map.hasOwnProperty(msgId)
-  }
-}; 
 
-
+// this is inspired by _.each()
 function foreach(obj, iteratee, context) {
   iteratee = optimizeCb(iteratee, context);
   var i, length;
@@ -165,3 +159,12 @@ function foreach(obj, iteratee, context) {
   return obj;
 };
 /*   above blantantly ripped from underscore.js */
+
+
+// instantiate minimal fake underscore obj as mav_v2.js generated code uses _.has and _.each
+_ = {
+  has: function(map, msgId) {
+    return map.hasOwnProperty(msgId)
+  },
+  each: foreach
+}; 
