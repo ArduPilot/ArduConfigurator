@@ -271,6 +271,7 @@ function onOpen(openInfo) {
 
         update_dataflash_global();
 
+        autopilot_version_request(); 
         // buzz todo populdate these before posting
         //googleAnalytics.sendEvent('Firmware', 'Variant', CONFIG.flightControllerIdentifier + ',' + CONFIG.flightControllerVersion);
 
