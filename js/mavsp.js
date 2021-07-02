@@ -297,13 +297,18 @@ var heartbeat_handler =  function(message) {
 mavParserObj.on('HEARTBEAT', heartbeat_handler);
 
 var autopilot_version_handler = function(message){
-    console.log(`AUTOPILOT_VERSION recieved`);
+    console.log(`AUTOPILOT_VERSION received`);
+    //console.log(message);
+    
     // don't allow messages that appear to come from 255 to be handled.
-    if (message._header.srcSystem == 255 ) { return;  }
+    if (message._header.srcSystem == 255 ) { return; }
 
-    if (SYSID == undefined ) { return;  } // haven't set the sysid global yet, elsewhere.
+    if (SYSID == undefined ) { return;} // haven't set the sysid global yet, elsewhere.
 
-    if (FC.curr_mav_state['AUTOPILOT_VERSION'] == undefined ) { return;} // the other handler/s haven't run yet, delay this one
+    if (FC.curr_mav_state['AUTOPILOT_VERSION'] == undefined ) { 
+        autopilot_version_request(); // hack to trigger it again so it updates FIXME
+        return;
+    } // the other handler/s haven't run yet, delay this one
 
     updateFirmwareVersion();
 }
