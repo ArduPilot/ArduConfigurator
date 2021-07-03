@@ -60,7 +60,7 @@ TABS.profiles.initialize = function (callback, scrollPosition) {
 
     if (GUI.active_tab != 'profiles') {
         GUI.active_tab = 'profiles';
-        //googleAnalytics.sendAppView('Presets');
+        googleAnalytics.sendAppView('Presets');
     }
 
     // loadChainer.setChain([
@@ -190,14 +190,14 @@ TABS.profiles.initialize = function (callback, scrollPosition) {
 
             $('#save-button').removeClass('disabled');
 
-            //googleAnalytics.sendEvent('Presets', 'Displayed', currentPreset.name);
+            googleAnalytics.sendEvent('Presets', 'Displayed', currentPreset.name);
         });
 
         $('#execute-button').click(function () {
             applyAndSave();
             modal.close();
 
-            //googleAnalytics.sendEvent('Presets', 'Applied', currentPreset.name);
+            googleAnalytics.sendEvent('Presets', 'Applied', currentPreset.name);
         });
 
         localize();

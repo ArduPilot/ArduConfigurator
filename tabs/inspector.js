@@ -11,7 +11,7 @@ TABS.inspector.initialize = function (callback, scrollPosition) {
 
     if (GUI.active_tab != 'inspector') {
         GUI.active_tab = 'inspector';
-        //googleAnalytics.sendAppView('Inspector');
+        googleAnalytics.sendAppView('Inspector');
     }
 
     //clear old inspector 

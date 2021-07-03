@@ -119,8 +119,9 @@ $(document).ready(function () {
 
             var clicks = $(this).data('clicks');
             var selected_baud = parseInt($baud.val());
-            var selected_port = $port.find('option:selected').data().isManual ?
-                    $portOverride.val() :
+            //if ($port.find('option:selected').data() ) { var is_manual = $port.find('option:selected').data().is_manual??0;}
+            var selected_port = //$port.find('option:selected').data().isManual ?
+                   // $portOverride.val() //:
                     String($port.val());
             if (selected_port === 'DFU') {
                 GUI.log(chrome.i18n.getMessage('dfu_connect_message'));
@@ -194,12 +195,12 @@ function onValidFirmware()
 {
     MSP.send_message(MSPCodes.MSP_BUILD_INFO, false, false, function () {
 
-        //googleAnalytics.sendEvent('Firmware', 'Using', CONFIG.buildInfo);
+        googleAnalytics.sendEvent('Firmware', 'Using', CONFIG.buildInfo);
         GUI.log(chrome.i18n.getMessage('buildInfoReceived', [CONFIG.buildInfo]));
 
         MSP.send_message(MSPCodes.MSP_BOARD_INFO, false, false, function () {
 
-            //googleAnalytics.sendEvent('Board', 'Using', CONFIG.boardIdentifier + ',' + CONFIG.boardVersion);
+            googleAnalytics.sendEvent('Board', 'Using', CONFIG.boardIdentifier + ',' + CONFIG.boardVersion);
             GUI.log(chrome.i18n.getMessage('boardInfoReceived', [CONFIG.boardIdentifier, CONFIG.boardVersion]));
 
             MSP.send_message(MSPCodes.MSP_UID, false, false, function () {
@@ -289,6 +290,10 @@ function onOpen(openInfo) {
 
         update_dataflash_global();
 
+        // buzz todo populdate these before posting
+        //googleAnalytics.sendEvent('Firmware', 'Variant', CONFIG.flightControllerIdentifier + ',' + CONFIG.flightControllerVersion);
+
+
 
         // request configuration data. Start with MSPv1 and
         // upgrade to MSPv2 if possible, and 
@@ -312,7 +317,7 @@ function onOpen(openInfo) {
             MSP.send_message(MSPCodes.MSP_FC_VARIANT, false, false, function () {
                 if ( (CONFIG.flightControllerIdentifier == 'ARDUPILOT') || (CONFIG.flightControllerIdentifier == 'INAV') ){
                     MSP.send_message(MSPCodes.MSP_FC_VERSION, false, false, function () {
-                        ////googleAnalytics.sendEvent('Firmware', 'Variant', CONFIG.flightControllerIdentifier + ',' + CONFIG.flightControllerVersion);
+                        //googleAnalytics.sendEvent('Firmware', 'Variant', CONFIG.flightControllerIdentifier + ',' + CONFIG.flightControllerVersion);
                         GUI.log(chrome.i18n.getMessage('fcInfoReceived', [CONFIG.flightControllerIdentifier, CONFIG.flightControllerVersion]));
                         if (semver.gte(CONFIG.flightControllerVersion, CONFIGURATOR.minfirmwareVersionAccepted) && semver.lt(CONFIG.flightControllerVersion, CONFIGURATOR.maxFirmwareVersionAccepted)) {
                             mspHelper.getCraftName(function(name) {

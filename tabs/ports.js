@@ -159,7 +159,7 @@ TABS.ports.initialize = function (callback) {
 
     if (GUI.active_tab != 'ports') {
         GUI.active_tab = 'ports';
-        //googleAnalytics.sendAppView('Ports');
+        googleAnalytics.sendAppView('Ports');
     }
 
     // load_configuration_from_fc();
@@ -325,7 +325,7 @@ TABS.ports.initialize = function (callback) {
             }
 
             if (telemetryFunction.length > 0) {
-                //googleAnalytics.sendEvent('Setting', 'Telemetry Protocol', telemetryFunction);
+                googleAnalytics.sendEvent('Setting', 'Telemetry Protocol', telemetryFunction);
             }
 
             var serialPort = {

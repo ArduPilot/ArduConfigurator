@@ -7,7 +7,7 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
 
     if (GUI.active_tab != 'configuration') {
         GUI.active_tab = 'configuration';
-        //googleAnalytics.sendAppView('Configuration');
+        googleAnalytics.sendAppView('Configuration');
     }
 
     var craftName = null;
@@ -454,26 +454,26 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
             craftName = $('input[name="craft_name"]').val();
 
             if (FC.isFeatureEnabled('GPS', features)) {
-                //googleAnalytics.sendEvent('Setting', 'GpsProtocol', gpsProtocols[MISC.gps_type]);
-                //googleAnalytics.sendEvent('Setting', 'GpsSbas', gpsSbas[MISC.gps_ubx_sbas]);
+                googleAnalytics.sendEvent('Setting', 'GpsProtocol', gpsProtocols[MISC.gps_type]);
+                googleAnalytics.sendEvent('Setting', 'GpsSbas', gpsSbas[MISC.gps_ubx_sbas]);
             }
 
-            //googleAnalytics.sendEvent('Setting', 'GPSEnabled', FC.isFeatureEnabled('GPS', features) ? "true" : "false");
-            //googleAnalytics.sendEvent("Platform", helper.platform.getById(MIXER_CONFIG.platformType).name, "LPF: " + FC.getGyroLpfValues()[ARDUPILOT_PID_CONFIG.gyroscopeLpf].label + " | Looptime: " + FC_CONFIG.loopTime);
+            googleAnalytics.sendEvent('Setting', 'GPSEnabled', FC.isFeatureEnabled('GPS', features) ? "true" : "false");
+            googleAnalytics.sendEvent("Platform", helper.platform.getById(MIXER_CONFIG.platformType).name, "LPF: " + FC.getGyroLpfValues()[ARDUPILOT_PID_CONFIG.gyroscopeLpf].label + " | Looptime: " + FC_CONFIG.loopTime);
 
-            //googleAnalytics.sendEvent('Setting', 'Looptime', FC_CONFIG.loopTime);
-            //googleAnalytics.sendEvent('Setting', 'GyroLpf', FC.getGyroLpfValues()[ARDUPILOT_PID_CONFIG.gyroscopeLpf].label);
-            //googleAnalytics.sendEvent('Setting', 'I2CSpeed', $('#i2c_speed').children("option:selected").text());
+            googleAnalytics.sendEvent('Setting', 'Looptime', FC_CONFIG.loopTime);
+            googleAnalytics.sendEvent('Setting', 'GyroLpf', FC.getGyroLpfValues()[ARDUPILOT_PID_CONFIG.gyroscopeLpf].label);
+            googleAnalytics.sendEvent('Setting', 'I2CSpeed', $('#i2c_speed').children("option:selected").text());
 
-            //googleAnalytics.sendEvent('Board', 'Accelerometer', FC.getAccelerometerNames()[SENSOR_CONFIG.accelerometer]);
-            //googleAnalytics.sendEvent('Board', 'Magnetometer', FC.getMagnetometerNames()[SENSOR_CONFIG.magnetometer]);
-            //googleAnalytics.sendEvent('Board', 'Barometer', FC.getBarometerNames()[SENSOR_CONFIG.barometer]);
-            //googleAnalytics.sendEvent('Board', 'Pitot', FC.getPitotNames()[SENSOR_CONFIG.pitot]);
+            googleAnalytics.sendEvent('Board', 'Accelerometer', FC.getAccelerometerNames()[SENSOR_CONFIG.accelerometer]);
+            googleAnalytics.sendEvent('Board', 'Magnetometer', FC.getMagnetometerNames()[SENSOR_CONFIG.magnetometer]);
+            googleAnalytics.sendEvent('Board', 'Barometer', FC.getBarometerNames()[SENSOR_CONFIG.barometer]);
+            googleAnalytics.sendEvent('Board', 'Pitot', FC.getPitotNames()[SENSOR_CONFIG.pitot]);
 
             for (var i = 0; i < features.length; i++) {
                 var featureName = features[i].name;
                 if (FC.isFeatureEnabled(featureName, features)) {
-                    //googleAnalytics.sendEvent('Setting', 'Feature', featureName);
+                    googleAnalytics.sendEvent('Setting', 'Feature', featureName);
                 }
             }
 

@@ -7,7 +7,7 @@ TABS.auxiliary = {};
 TABS.auxiliary.initialize = function (callback) {
     GUI.active_tab_ref = this;
     GUI.active_tab = 'auxiliary';
-    //googleAnalytics.sendAppView('Auxiliary');
+    googleAnalytics.sendAppView('Auxiliary');
 
     // function get_mode_ranges() {
     //     MSP.send_message(MSPCodes.MSP_MODE_RANGES, false, false, null);
@@ -307,7 +307,7 @@ TABS.auxiliary.initialize = function (callback) {
             uniqueModes = $.unique(uniqueModes);
             for (var mode in uniqueModes) {
                 if (uniqueModes.hasOwnProperty(mode)) {
-                    //googleAnalytics.sendEvent('Setting', 'AuxModes', uniqueModes[mode]);
+                    googleAnalytics.sendEvent('Setting', 'AuxModes', uniqueModes[mode]);
                 }
             }
 

@@ -15,7 +15,7 @@
 				//
 				"type": "node",
 				"request": "launch",
-				"name": "yeoman build",
+				"name": "ardu-configurator build",
 				"program": "node_modules/gulp/bin/gulp.js",
 				"args": [ "build" ],
 				"cwd": "${workspaceFolder}",
@@ -30,7 +30,7 @@
 				//
 				"type": "node",
 				"request": "launch",
-				"name": "yeoman run",
+				"name": "ardu-configurator run",
 				"program": "node_modules/nw/bin/nw",
 				//"args": [ "--inspect","--remote-debugging-port=9222","--load-extension=./dist/","." ], // the 'dist' version bundled etc
 				"args": [ "--inspect","--remote-debugging-port=9222","--load-extension=./","." ],  // the dev version
@@ -38,35 +38,38 @@
 				"console": "integratedTerminal",
 				"internalConsoleOptions": "neverOpen"
 			},
+			// {
+			// 	"args": [
+			// 		"--extensionDevelopmentPath=${workspaceFolder}"
+			//     ],
+			// 	"name": "Launch Extension",
+			// 	"outFiles": [
+			// 		"${workspaceFolder}/build/*.js"
+			// 	],
+			// 	"preLaunchTask": "npm",
+			// 	"request": "launch",
+			// 	"type": "extensionHost"
+			// },
+			// {
+			// 	"name": "Attach to Chrome",
+			// 	"port": 9222,
+			// 	"request": "attach",
+			// 	"type": "pwa-chrome",
+			// 	"webRoot": "${workspaceFolder}"
+			// },
 			{
-				"args": [
-					"--extensionDevelopmentPath=${workspaceFolder}"
-			],
-				"name": "Launch Extension",
-				"outFiles": [
-					"${workspaceFolder}/build/*.js"
-				],
-				"preLaunchTask": "npm",
+				"name": "Launch Chrome 2",
 				"request": "launch",
-				"type": "extensionHost"
-			},
-			{
-				"name": "Attach to Chrome",
-				"port": 9222,
-				"request": "attach",
 				"type": "pwa-chrome",
-				"webRoot": "${workspaceFolder}"
-			},
-			{
-				"name": "Launch Chrome",
-				"request": "launch",
-				"type": "pwa-chrome",
-				"url": "http://localhost:8080",
-				"webRoot": "${workspaceFolder}",
+				//"url": "http://localhost:8080", //ohflclpaoaoibajpookeoccfmhgjmejb
+				//"url": "chrome-extension://aiknbikejhbebemfjgfjnjlkakgmnh", no-worky
+
+				//"webRoot": "${workspaceFolder}",
 				"runtimeArgs": [
-					"${workspaceFolder}",
-					"--remote-debugging-port=9222",
-					"--load-extension=${workspaceFolder}"
+					//"${workspaceFolder}",
+					//"--remote-debugging-port=9222",
+					//"--load-extension=${workspaceFolder}"
+					"--load-and-launch-app=${workspaceFolder}"
 				],
 				"port": 9222,
 				"runtimeExecutable": "stable"

@@ -21,7 +21,7 @@ TABS.setup.initialize = function (callback) {
 
     if (GUI.active_tab != 'setup') {
         GUI.active_tab = 'setup';
-        //googleAnalytics.sendAppView('Setup');
+        googleAnalytics.sendAppView('Setup');
     }
 
     // var loadChainer = new MSPChainerClass();

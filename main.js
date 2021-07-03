@@ -2,12 +2,12 @@
 //'use strict';
 
 // Google Analytics
-//var googleAnalyticsService = analytics.getService('ice_cream_app');
-//var googleAnalytics = googleAnalyticsService.getTracker("UA-7583xxx4706-2");
-//var googleAnalyticsConfig = false;
-//googleAnalyticsService.getConfig().addCallback(function (config) {
-//    googleAnalyticsConfig = config;
-//});
+var googleAnalyticsService = analytics.getService('ArduConfigurator');
+var googleAnalytics = googleAnalyticsService.getTracker("UA-201128261-1");
+var googleAnalyticsConfig = false;
+googleAnalyticsService.getConfig().addCallback(function (config) {
+   googleAnalyticsConfig = config;
+});
 
 chrome.storage = chrome.storage || {};
 
@@ -283,7 +283,7 @@ $(document).ready( function () {
             el.after('<div id="options-window"></div>');
 
             $('div#options-window').load('./tabs/options.html', function () {
-                //googleAnalytics.sendAppView('Options');
+                googleAnalytics.sendAppView('Options');
 
                 // translate to user-selected language
                 localize();
@@ -297,20 +297,20 @@ $(document).ready( function () {
 
                 $('div.notifications input').change(function () {
                     var check = $(this).is(':checked');
-                    //googleAnalytics.sendEvent('Settings', 'Notifications', check);
+                    googleAnalytics.sendEvent('Settings', 'Notifications', check);
 
                     chrome.storage.local.set({'update_notify': check});
                 });
 
                 // if tracking is enabled, check the statistics checkbox
-                //if (googleAnalyticsConfig.isTrackingPermitted()) {
-                //    $('div.statistics input').prop('checked', true);
-               // }
+                if (googleAnalyticsConfig.isTrackingPermitted()) {
+                   $('div.statistics input').prop('checked', true);
+                }
 
                 $('div.statistics input').change(function () {
                     var check = $(this).is(':checked');
-                    //googleAnalytics.sendEvent('Settings', 'GoogleAnalytics', check);
-                    //googleAnalyticsConfig.setTrackingPermitted(check);
+                    googleAnalytics.sendEvent('Settings', 'GoogleAnalytics', check);
+                    googleAnalyticsConfig.setTrackingPermitted(check);
                 });
 
                 $('#map-provider-type').val(globalSettings.mapProviderType);
@@ -496,7 +496,7 @@ function catch_startup_time(startTime) {
     var endTime = new Date().getTime(),
         timeSpent = endTime - startTime;
 
-    //googleAnalytics.sendTiming('Load Times', 'Application Startup', timeSpent);
+    googleAnalytics.sendTiming('Load Times', 'Application Startup', timeSpent);
 }
 
 function millitime() {

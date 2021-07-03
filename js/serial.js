@@ -53,7 +53,7 @@ var serial = {
 
                 self.onReceiveError.addListener(function watch_for_on_receive_errors(info) {
                     console.error(info);
-                    //googleAnalytics.sendException('Serial: ' + info.error, false);
+                    googleAnalytics.sendException('Serial: ' + info.error, false);
 
                     switch (info.error) {
                         case 'system_error': // we might be able to recover from this one
@@ -63,13 +63,13 @@ var serial = {
                                         if (info) {
                                             if (!info.paused) {
                                                 console.log('SERIAL: Connection recovered from last onReceiveError');
-                                                //googleAnalytics.sendException('Serial: onReceiveError - recovered', false);
+                                                googleAnalytics.sendException('Serial: onReceiveError - recovered', false);
 
                                                 self.failed = 0;
                                             } else {
                                                 console.log('SERIAL: Connection did not recover from last onReceiveError, disconnecting');
                                                 GUI.log('Unrecoverable <span style="color: red">failure</span> of serial connection, disconnecting...');
-                                                //googleAnalytics.sendException('Serial: onReceiveError - unrecoverable', false);
+                                                googleAnalytics.sendException('Serial: onReceiveError - unrecoverable', false);
 
                                                 if (GUI.connected_to || GUI.connecting_to) {
                                                     $('a.connect').click();
@@ -100,7 +100,7 @@ var serial = {
                                                 // assume unrecoverable, disconnect
                                                 console.log('SERIAL: Connection did not recover from ' + self.error + ' condition, disconnecting');
                                                 GUI.log('Unrecoverable <span style="color: red">failure</span> of serial connection, disconnecting...');
-                                                //googleAnalytics.sendException('Serial: ' + self.error + ' - unrecoverable', false);
+                                                googleAnalytics.sendException('Serial: ' + self.error + ' - unrecoverable', false);
     
                                                 if (GUI.connected_to || GUI.connecting_to) {
                                                     $('a.connect').click();
@@ -110,7 +110,7 @@ var serial = {
                                             }
                                             else {
                                                 console.log('SERIAL: Connection recovered from ' + self.error + ' condition');
-                                                //googleAnalytics.sendException('Serial: ' + self.error + ' - recovered', false);
+                                                googleAnalytics.sendException('Serial: ' + self.error + ' - recovered', false);
                                             }
                                         }
                                     });
@@ -162,7 +162,7 @@ var serial = {
             } else {
                 self.openRequested = false;
                 console.log('SERIAL: Failed to open serial port');
-                //googleAnalytics.sendException('Serial: FailedToOpen', false);
+                googleAnalytics.sendException('Serial: FailedToOpen', false);
                 if (callback) callback(false);
             }
         });
@@ -270,7 +270,7 @@ var serial = {
                     console.log(self.logHead + 'Connection with ID: ' + self.connectionId + ' closed, Sent: ' + self.bytesSent + ' bytes, Received: ' + self.bytesReceived + ' bytes');
                 } else {
                     //console.log('SERIAL: Failed to close connection with ID: ' + self.connectionId + ' closed, Sent: ' + self.bytesSent + ' bytes, Received: ' + self.bytesReceived + ' bytes');
-                    //googleAnalytics.sendException('Serial: FailedToClose', false);
+                    googleAnalytics.sendException('Serial: FailedToClose', false);
                     console.log(self.logHead + 'Connection with ID: ' + self.connectionId + ' closed, Sent: ' + self.bytesSent + ' bytes, Received: ' + self.bytesReceived + ' bytes');
                 }
 

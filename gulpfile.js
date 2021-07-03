@@ -56,7 +56,7 @@ sources.Css = [
 ];
 
 sources.Js = [
-    //'./js/libraries/google-analytics-bundle.js',
+    './js/libraries/google-analytics-bundle.js',
     './node_modules/jquery/dist/jquery.js',
     './node_modules/jquery-ui-npm/jquery-ui.min.js',
     './node_modules/marked/lib/marked.js',

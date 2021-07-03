@@ -74,7 +74,7 @@ TABS.mission_control.initialize = function (callback) {
 
     if (GUI.active_tab != 'mission_control') {
         GUI.active_tab = 'mission_control';
-        //googleAnalytics.sendAppView('Mission Control');
+        googleAnalytics.sendAppView('Mission Control');
     }
 
    // if (CONFIGURATOR.connectionValid) {
