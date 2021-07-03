@@ -84,7 +84,12 @@ MavMission.prototype.missionRequestHandler = function(missionItemRequest,tt) {
     if ( this.missionItems[missionItemRequest.seq] ) { 
         // sending new mavlink20.messages.mission_item prepared earlier
         console.log('MISSION_ITEM -->',missionItemRequest.seq);
-	    mavlinkParser.send(this.missionItems[missionItemRequest.seq]);
+        var pkt = this.missionItems[missionItemRequest.seq]; // its either a packet or 'last'
+        if (pkt != 'last' ) {
+	        mavlinkParser.send(pkt);
+        } else {
+        	console.log(`unable to send mission item ${missionItemRequest.seq}, does not exist, skipping`);
+        }
     } else { 
         console.log(`unable to send mission item ${missionItemRequest.seq}, does not exist, skipping`);
     } 
