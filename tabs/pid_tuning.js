@@ -119,27 +119,27 @@ TABS.pid_tuning.initialize = function (callback) {
             $('th.feedforward').attr('title', chrome.i18n.getMessage('pidTuningControlDerivative'));
         }
 
-        if (semver.gte(CONFIG.flightControllerVersion, "2.4.0")) {
-            $('.requires-v2_4').show();
-        } else {
-            $('.requires-v2_4').hide();
-        }
+        //if (semver.gte(CONFIG.flightControllerVersion, "2.4.0")) {
+        //    $('.requires-v2_4').show();
+        // } else {
+        //     $('.requires-v2_4').hide();
+        // }
 
-        if (semver.gte(CONFIG.flightControllerVersion, "2.5.0")) {
-            $('.requires-v2_5').show();
-            $('.hides-v2_5').hide();
-        } else {
-            $('.requires-v2_5').hide();
-            $('.hides-v2_5').show();
-        }
+        //if (semver.gte(CONFIG.flightControllerVersion, "2.5.0")) {
+         //   $('.requires-v2_5').show();
+         //   $('.hides-v2_5').hide();
+        // } else {
+        //     $('.requires-v2_5').hide();
+        //     $('.hides-v2_5').show();
+        // }
 
-        if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
+       // if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
             $('.requires-v2_6').show();
             $('.hides-v2_6').hide();
-        } else {
-            $('.requires-v2_6').hide();
-            $('.hides-v2_6').show();
-        }
+        // } else {
+        //     $('.requires-v2_6').hide();
+        //     $('.hides-v2_6').show();
+        // }
 
         helper.tabs.init($('.tab-pid_tuning'));
         helper.features.updateUI($('.tab-pid_tuning'), BF_CONFIG.features);

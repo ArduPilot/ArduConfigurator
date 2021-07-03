@@ -1913,7 +1913,7 @@ var mspHelper = (function (gui) {
                 break;
 
             case MSPCodes.MSP_FC_VERSION:
-                CONFIG.flightControllerVersion = data.getUint8(offset++) + '.' + data.getUint8(offset++) + '.' + data.getUint8(offset++);
+                //CONFIG.flightControllerVersion = data.getUint8(offset++) + '.' + data.getUint8(offset++) + '.' + data.getUint8(offset++);
                 break;
 
             case MSPCodes.MSP_BUILD_INFO:
@@ -2445,11 +2445,11 @@ var mspHelper = (function (gui) {
                 CALIBRATION_DATA.magZero.Z = data.getInt16(17, true);
                 CALIBRATION_DATA.opflow.Scale = (data.getInt16(19, true) / 256.0);
                 
-                if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
+                //if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
                     CALIBRATION_DATA.magGain.X = data.getInt16(21, true);
                     CALIBRATION_DATA.magGain.Y = data.getInt16(23, true);
                     CALIBRATION_DATA.magGain.Z = data.getInt16(25, true);
-                }
+                //}
 
                 break;
 
@@ -3112,7 +3112,7 @@ var mspHelper = (function (gui) {
                 buffer.push(lowByte(Math.round(CALIBRATION_DATA.opflow.Scale * 256)));
                 buffer.push(highByte(Math.round(CALIBRATION_DATA.opflow.Scale * 256)));
 
-                if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
+                //if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
                     buffer.push(lowByte(CALIBRATION_DATA.magGain.X));
                     buffer.push(highByte(CALIBRATION_DATA.magGain.X));
 
@@ -3121,7 +3121,7 @@ var mspHelper = (function (gui) {
 
                     buffer.push(lowByte(CALIBRATION_DATA.magGain.Z));
                     buffer.push(highByte(CALIBRATION_DATA.magGain.Z));
-                }
+                //}
 
                 break;
 
@@ -3518,9 +3518,9 @@ var mspHelper = (function (gui) {
 
             buffer.push(conditionIndex);
             buffer.push(condition.getEnabled());
-            if (semver.gte(CONFIG.flightControllerVersion, "2.5.0")) {
+            //if (semver.gte(CONFIG.flightControllerVersion, "2.5.0")) {
                 buffer.push(condition.getActivatorId());
-            }
+            //}
             buffer.push(condition.getOperation());
             buffer.push(condition.getOperandAType());
             buffer.push(specificByte(condition.getOperandAValue(), 0));
@@ -4552,21 +4552,21 @@ var mspHelper = (function (gui) {
     };
 
     self.loadGlobalVariablesStatus = function (callback) {
-        if (semver.gte(CONFIG.flightControllerVersion, "2.5.0")) {
+        //if (semver.gte(CONFIG.flightControllerVersion, "2.5.0")) {
             MSP.send_message(MSPCodes.MSP2_ARDUPILOT_GVAR_STATUS, false, false, null);  
             callback(); // without a response, we'll call the callback anyway
-        } else {
-            callback();
-        }
+        //} else {
+        //    callback();
+        //}
     };
 
     self.loadProgrammingPidStatus = function (callback) {
-        if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
+        //if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
             MSP.send_message(MSPCodes.MSP2_ARDUPILOT_PROGRAMMING_PID_STATUS, false, false, null); 
              callback(); // without a response, we'll call the callback anyway
-        } else {
-            callback();
-        }
+        //} else {
+        //    callback();
+        //}
     };
 
     return self;

@@ -77,7 +77,7 @@ var FC = {
         return (MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR || MIXER_CONFIG.platformType == PLATFORM_TRICOPTER);
     },
     isRpyFfComponentUsed: function () {
-        return (MIXER_CONFIG.platformType == PLATFORM_AIRPLANE || MIXER_CONFIG.platformType == PLATFORM_ROVER || MIXER_CONFIG.platformType == PLATFORM_BOAT) || ((MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR || MIXER_CONFIG.platformType == PLATFORM_TRICOPTER) && semver.gte(CONFIG.flightControllerVersion, "2.6.0"));
+        //return (MIXER_CONFIG.platformType == PLATFORM_AIRPLANE || MIXER_CONFIG.platformType == PLATFORM_ROVER || MIXER_CONFIG.platformType == PLATFORM_BOAT) || ((MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR || MIXER_CONFIG.platformType == PLATFORM_TRICOPTER) && semver.gte(CONFIG.flightControllerVersion, "2.6.0"));
     },
     isRpyDComponentUsed: function () {
         return true; // Currently all platforms use D term
@@ -881,28 +881,28 @@ var FC = {
         return ["NONE", "AUTO", "HMC5883", "AK8975", "GPSMAG", "MAG3110", "AK8963", "IST8310", "QMC5883", "MPU9250", "IST8308", "LIS3MDL", "MSP", "FAKE"];
     },
     getBarometerNames: function () {
-        if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
+        //if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
             return ["NONE", "AUTO", "BMP085", "MS5611", "BMP280", "MS5607", "LPS25H", "SPL06", "BMP388", "DPS310", "MSP", "FAKE"];
-        } else {
-            return ["NONE", "AUTO", "BMP085", "MS5611", "BMP280", "MS5607", "LPS25H", "SPL06", "BMP388", "FAKE"];
-        }
+        //} else {
+        //    return ["NONE", "AUTO", "BMP085", "MS5611", "BMP280", "MS5607", "LPS25H", "SPL06", "BMP388", "FAKE"];
+        //}
     },
     getPitotNames: function () {
-        if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
+        //if (semver.gte(CONFIG.flightControllerVersion, "2.6.0")) {
             return ["NONE", "AUTO", "MS4525", "ADC", "VIRTUAL", "FAKE", "MSP"];
-        } else {
-            return ["NONE", "AUTO", "MS4525", "ADC", "VIRTUAL", "FAKE"];
-        }
+        //} else {
+        //    return ["NONE", "AUTO", "MS4525", "ADC", "VIRTUAL", "FAKE"];
+        //}
     },
     getRangefinderNames: function () {
         return [ "NONE", "HCSR04", "SRF10", "ARDUPILOT_I2C", "VL53L0X", "MSP", "UIB", "Benewake TFmini"];
     },
     getOpticalFlowNames: function () {
-        if (semver.gte(CONFIG.flightControllerVersion, "2.7.0")) {
+        //if (semver.gte(CONFIG.flightControllerVersion, "2.7.0")) {
             return [ "NONE", "CXOF", "MSP", "FAKE" ];
-        } else {
-            return [ "NONE", "PMW3901", "CXOF", "MSP", "FAKE" ];
-        }
+        //} else {
+        //    return [ "NONE", "PMW3901", "CXOF", "MSP", "FAKE" ];
+        //}
     },
     getArmingFlags: function () {
         return {
@@ -953,9 +953,9 @@ var FC = {
             'Velocity Z'
         ];
 
-        if (semver.gte(CONFIG.flightControllerVersion, '2.5.0')) {
+        //if (semver.gte(CONFIG.flightControllerVersion, '2.5.0')) {
             list.push("Nav Heading")
-        }
+        //}
 
         return list;
     },

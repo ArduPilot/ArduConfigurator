@@ -369,11 +369,11 @@ function osdMainBatteryPreview() {
     if (Settings.getInputValue('osd_main_voltage_decimals') == 2) {
         s += '3';
     }
-    if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
-        s += 'V';
-    } else {
+    //if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
+    //    s += 'V';
+    //} else {
         s += FONT.symbol(SYM.VOLT);
-    }
+    //}
     return FONT.symbol(SYM.BATT) + FONT.embed_dot(s);
 }
 
@@ -666,19 +666,19 @@ OSD.constants = {
                     name: 'REMAINING_FLIGHT_DISTANCE',
                     id: 49,
                     preview: function(osd_data) {
-                        if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
-                            if (OSD.data.preferences.units === 0) {
-                                // Imperial
-                                return FONT.symbol(SYM.TRIP_DIST) + FONT.symbol(SYM.DIST_MI) + FONT.embed_dot('0.98');
-                            }
-                            return FONT.symbol(SYM.TRIP_DIST) + FONT.symbol(SYM.DIST_KM) + FONT.embed_dot('1.73');
-                        } else {
+                        // if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
+                        //     if (OSD.data.preferences.units === 0) {
+                        //         // Imperial
+                        //         return FONT.symbol(SYM.TRIP_DIST) + FONT.symbol(SYM.DIST_MI) + FONT.embed_dot('0.98');
+                        //     }
+                        //     return FONT.symbol(SYM.TRIP_DIST) + FONT.symbol(SYM.DIST_KM) + FONT.embed_dot('1.73');
+                        // } else {
                             if (OSD.data.preferences.units === 0) {
                                 // Imperial
                                 return FONT.symbol(SYM.TRIP_DIST) + FONT.embed_dot('0.98') + FONT.symbol(SYM.DIST_MI);
                             }
                             return FONT.symbol(SYM.TRIP_DIST) + FONT.embed_dot('1.73') + FONT.symbol(SYM.DIST_KM);
-                        }
+                        //}
                     }
                 },
                 {
@@ -913,19 +913,19 @@ OSD.constants = {
                     name: 'ALTITUDE',
                     id: 15,
                     preview: function () {
-                        if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
-                            if (OSD.data.preferences.units === 0) {
-                                // imperial
-                                return FONT.symbol(SYM.ALT_FT) + '118';
-                            }
-                            return FONT.symbol(SYM.ALT_M) + '399'
-                        } else {
+                        // if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
+                        //     if (OSD.data.preferences.units === 0) {
+                        //         // imperial
+                        //         return FONT.symbol(SYM.ALT_FT) + '118';
+                        //     }
+                        //     return FONT.symbol(SYM.ALT_M) + '399'
+                        // } else {
                             if (OSD.data.preferences.units === 0) {
                                 // imperial
                                 return '118' + FONT.symbol(SYM.ALT_FT);
                             }
                             return '399' + FONT.symbol(SYM.ALT_M);
-                        }
+                        //}
                     }
                 },
                 {
@@ -1048,55 +1048,55 @@ OSD.constants = {
                     name: 'CURRENT_DRAW',
                     id: 11,
                     preview: function() {
-                        if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
-                            return FONT.symbol(SYM.AMP) + FONT.embed_dot('42.1');
-                        } else {
+                        // if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
+                        //     return FONT.symbol(SYM.AMP) + FONT.embed_dot('42.1');
+                        // } else {
                             return FONT.embed_dot('42.1') + FONT.symbol(SYM.AMP);
-                        }
+                       // }
                     }
                 },
                 {
                     name: 'MAH_DRAWN',
                     id: 12,
                     preview: function() {
-                        if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
-                            return FONT.symbol(SYM.MAH) + '690 '; // 4 chars
-                        } else {
+                        // if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
+                        //     return FONT.symbol(SYM.MAH) + '690 '; // 4 chars
+                        // } else {
                             return ' 690' + FONT.symbol(SYM.MAH); // 4 chars
-                        }
+                        //}
                     }
                 },
                 {
                     name: 'WH_DRAWN',
                     id: 36,
                     preview: function() {
-                        if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
-                            return FONT.symbol(SYM.WH) + FONT.embed_dot('1.25');
-                        } else {
+                        // if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
+                        //     return FONT.symbol(SYM.WH) + FONT.embed_dot('1.25');
+                        // } else {
                             return FONT.embed_dot('1.25') + FONT.symbol(SYM.WH);
-                        }
+                       // }
                     }
                 },
                 {
                     name: 'POWER',
                     id: 19,
                     preview: function() {
-                        if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
-                            return FONT.symbol(SYM.WATT) + '50 '; // 3 chars
-                        } else {
+                        // if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
+                        //     return FONT.symbol(SYM.WATT) + '50 '; // 3 chars
+                        // } else {
                             return ' 50' + FONT.symbol(SYM.WATT); // 3 chars
-                        }
+                       // }
                     }
                 },
                 {
                     name: 'MAIN_BATT_REMAINING_CAPACITY',
                     id: 37,
                     preview: function() {
-                        if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
-                            return FONT.symbol(SYM.MAH) + '690 '; // 4 chars
-                        } else {
+                        // if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
+                        //     return FONT.symbol(SYM.MAH) + '690 '; // 4 chars
+                        // } else {
                             return ' 690' + FONT.symbol(SYM.MAH); // 4 chars
-                        }
+                       // }
                     }
                 },
                 {
@@ -1153,19 +1153,19 @@ OSD.constants = {
                     name: 'MSL_ALTITUDE',
                     id: 96,
                     preview: function(osd_data) {
-                        if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
-                            if (OSD.data.preferences.units === 0) {
-                                // Imperial
-                                return FONT.symbol(SYM.ALT_FT) + '275';
-                            }
-                            return FONT.symbol(SYM.ALT_M) + '477';
-                        } else {
+                        // if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
+                        //     if (OSD.data.preferences.units === 0) {
+                        //         // Imperial
+                        //         return FONT.symbol(SYM.ALT_FT) + '275';
+                        //     }
+                        //     return FONT.symbol(SYM.ALT_M) + '477';
+                        // } else {
                             if (OSD.data.preferences.units === 0) {
                                 // Imperial
                                 return '275' + FONT.symbol(SYM.ALT_FT);
                             }
                             return '477' + FONT.symbol(SYM.ALT_M);
-                        }
+                        //}
                     },
                 },
                 {
@@ -1224,19 +1224,19 @@ OSD.constants = {
                     name: 'DISTANCE_TO_HOME',
                     id: 23,
                     preview: function(osd_data) {
-                        if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
-                            if (OSD.data.preferences.units === 0) {
-                                // Imperial
-                                return FONT.symbol(SYM.HOME) + FONT.symbol(SYM.DIST_MI) + FONT.embed_dot('0.98');
-                            }
-                            return FONT.symbol(SYM.HOME) + FONT.symbol(SYM.DIST_KM) + FONT.embed_dot('1.73');
-                        } else {
+                        // if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
+                        //     if (OSD.data.preferences.units === 0) {
+                        //         // Imperial
+                        //         return FONT.symbol(SYM.HOME) + FONT.symbol(SYM.DIST_MI) + FONT.embed_dot('0.98');
+                        //     }
+                        //     return FONT.symbol(SYM.HOME) + FONT.symbol(SYM.DIST_KM) + FONT.embed_dot('1.73');
+                        // } else {
                             if (OSD.data.preferences.units === 0) {
                                 // Imperial
                                 return FONT.symbol(SYM.HOME) + FONT.embed_dot('0.98') + FONT.symbol(SYM.DIST_MI);
                             }
                             return FONT.symbol(SYM.HOME) + FONT.embed_dot('1.73') + FONT.symbol(SYM.DIST_KM);
-                        }
+                       // }
                     }
                 },
                 {
@@ -1244,19 +1244,19 @@ OSD.constants = {
                     id: 40,
                     min_version: '1.9.1',
                     preview: function(osd_data) {
-                        if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
-                            if (OSD.data.preferences.units === 0) {
-                                // Imperial
-                                return FONT.symbol(SYM.TRIP_DIST) + FONT.symbol(SYM.DIST_MI) + FONT.embed_dot('0.98');
-                            }
-                            return FONT.symbol(SYM.TRIP_DIST) + FONT.symbol(SYM.DIST_KM) + FONT.embed_dot('1.73');
-                        } else {
+                        // if (semver.lt(CONFIG.flightControllerVersion, '2.2.0')) {
+                        //     if (OSD.data.preferences.units === 0) {
+                        //         // Imperial
+                        //         return FONT.symbol(SYM.TRIP_DIST) + FONT.symbol(SYM.DIST_MI) + FONT.embed_dot('0.98');
+                        //     }
+                        //     return FONT.symbol(SYM.TRIP_DIST) + FONT.symbol(SYM.DIST_KM) + FONT.embed_dot('1.73');
+                        // } else {
                             if (OSD.data.preferences.units === 0) {
                                 // Imperial
                                 return FONT.symbol(SYM.TRIP_DIST) + FONT.embed_dot('0.98') + FONT.symbol(SYM.DIST_MI);
                             }
                             return FONT.symbol(SYM.TRIP_DIST) + FONT.embed_dot('1.73') + FONT.symbol(SYM.DIST_KM);
-                        }
+                        //}
                     }
                 },
                 {
@@ -1635,9 +1635,9 @@ OSD.is_item_displayed = function(item, group) {
     if (typeof group.enabled === 'function' && group.enabled() === false) {
         return false;
     }
-    if (item.min_version && !semver.gte(CONFIG.flightControllerVersion, item.min_version)) {
-        return false;
-    }
+    // if (item.min_version && !semver.gte(CONFIG.flightControllerVersion, item.min_version)) {
+    //     return false;
+    // }
     if (typeof item.enabled === 'function' && item.enabled() === false) {
         return false;
     }
@@ -1760,12 +1760,12 @@ OSD.msp = {
         result.push16(OSD.data.alarms.max_altitude);
         result.push16(OSD.data.alarms.dist);
         result.push16(OSD.data.alarms.max_neg_altitude);
-        if (semver.gte(CONFIG.flightControllerVersion, '2.2.0')) {
+       // if (semver.gte(CONFIG.flightControllerVersion, '2.2.0')) {
             result.push16(OSD.data.alarms.gforce);
             result.push16(OSD.data.alarms.gforce_axis_min);
             result.push16(OSD.data.alarms.gforce_axis_max);
             result.push8(OSD.data.alarms.current);
-        }
+        //}
         result.push16(OSD.data.alarms.imu_temp_alarm_min);
         result.push16(OSD.data.alarms.imu_temp_alarm_max);
         result.push16(OSD.data.alarms.baro_temp_alarm_min);
@@ -1781,12 +1781,12 @@ OSD.msp = {
         OSD.data.alarms.max_altitude = alarms.readU16();
         OSD.data.alarms.dist = alarms.readU16();
         OSD.data.alarms.max_neg_altitude = alarms.readU16();
-        if (semver.gte(CONFIG.flightControllerVersion, '2.2.0')) {
+        //if (semver.gte(CONFIG.flightControllerVersion, '2.2.0')) {
             OSD.data.alarms.gforce = alarms.readU16();
             OSD.data.alarms.gforce_axis_min = alarms.read16();
             OSD.data.alarms.gforce_axis_max = alarms.read16();
             OSD.data.alarms.current = alarms.readU8();
-        }
+        //}
         OSD.data.alarms.imu_temp_alarm_min = alarms.read16();
         OSD.data.alarms.imu_temp_alarm_max = alarms.read16();
         OSD.data.alarms.baro_temp_alarm_min = alarms.read16();
@@ -2009,9 +2009,9 @@ OSD.GUI.updateUnits = function() {
 
     for (var i = 0; i < OSD.constants.UNIT_TYPES.length; i++) {
         var unitType = OSD.constants.UNIT_TYPES[i];
-        if (unitType.min_version && semver.lt(CONFIG.flightControllerVersion, unitType.min_version)) {
-            continue;
-        }
+        // if (unitType.min_version && semver.lt(CONFIG.flightControllerVersion, unitType.min_version)) {
+        //     continue;
+        // }
         var name = chrome.i18n.getMessage(unitType.name);
         var $option = $('<option>' + name + '</option>');
         $option.attr('value', name);

@@ -515,7 +515,7 @@ var MSP = {
         if (CONFIGURATOR.connectionValid == false ) {
             console.log("CONNECTED!");
             CONFIGURATOR.connectionValid = true;
-            CONFIG.flightControllerVersion = "2.5.0"; // buss hack to enable PID pidCount in serial_backend.js 
+            CONFIG.flightControllerVersion = "0.0.0"; // buss hack to enable PID pidCount in serial_backend.js 
             GUI.allowedTabs = GUI.defaultAllowedTabsWhenConnected.slice();
             onConnect();
         }

@@ -73,11 +73,11 @@ TABS.outputs.initialize = function (callback) {
         process_servos();
         processConfiguration();
 
-        if (semver.gte(CONFIG.flightControllerVersion, "2.4.0")) {
+        //if (semver.gte(CONFIG.flightControllerVersion, "2.4.0")) {
             $('.requires-v2_4').show();
-        } else {
-            $('.requires-v2_4').hide();
-        }
+        // } else {
+        //     $('.requires-v2_4').hide();
+        // }
 
         finalize();
     }
