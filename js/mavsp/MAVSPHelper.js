@@ -112,6 +112,7 @@ async function get_mission_from_drone(cb) {
     console.log('START READ MISSION from drone',writefilename)
     // awaiting in a non-async is like this...
     await MissionObj.DroneToMission(writefilename).then(results => { 
+        // mavMission.js does a  MISSION_PLANER.put(new Waypoint( ... )) for each of things it gets from the vehicle before we get here.
         console.log('END READ MISSION from drone');  
         console.log(MISSION_PLANER); 
         if ( cb ) cb();
@@ -4176,6 +4177,8 @@ var mspHelper = (function (gui) {
      
     self.saveWaypoints = function (callback) {  //sendWaypointsToFC
         let waypointId = 1;
+
+        //buzz MISSION_PLANER todo, this isn't interaactive with the gui yet.
 
         send_canned_mission_to_drone();
 
