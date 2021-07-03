@@ -56,6 +56,7 @@ $(document).ready( function () {
 
     $('#status-bar .version').text(chrome.runtime.getManifest().version);
     $('#logo .version').text(chrome.runtime.getManifest().version);
+    
     updateFirmwareVersion();
 
     // notification messages for various operating systems
@@ -123,6 +124,14 @@ $(document).ready( function () {
     console.log('Libraries: jQuery - ' + $.fn.jquery + ', d3 - ' + d3.version + ', three.js - ' + THREE.REVISION);
     //console.log('Libraries: '+process.versions['nw-flavor']); // returns 'sdk'
 
+    googleAnalytics.sendEvent('Setting','OS' , GUI.operating_system );
+    googleAnalytics.sendEvent('Setting','Chrome' , window.navigator.appVersion.replace(/.*Chrome\/([0-9.]*).*/, "$1") );
+    googleAnalytics.sendEvent('Setting','AppVer' , chrome.runtime.getManifest().version );
+    googleAnalytics.sendEvent('Setting','jQuery' , $.fn.jquery );
+    googleAnalytics.sendEvent('Setting','d3' , d3.version);
+    googleAnalytics.sendEvent('Setting','three.js' ,THREE.REVISION);
+    //googleAnalytics.sendEvent('Setting', 'CONFIG.flightControllerVersion',CONFIG.flightControllerVersion);
+
     // Tabs
     var ui_tabs = $('#tabs > ul');
     $('a', ui_tabs).click(function () {
@@ -130,6 +139,9 @@ $(document).ready( function () {
         if ($(this).parent().hasClass("tab_help")) {            
             return;
         }
+
+        googleAnalytics.sendEvent('Setting','current_tab', $(this).text() );
+
 
         if ($(this).parent().hasClass('active') == false && !GUI.tab_switch_in_progress) { // only initialize when the tab isn't already active
             var self = this,

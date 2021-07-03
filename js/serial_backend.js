@@ -193,33 +193,14 @@ $(document).ready(function () {
 
 function onValidFirmware()
 {
-    MSP.send_message(MSPCodes.MSP_BUILD_INFO, false, false, function () {
 
-        googleAnalytics.sendEvent('Firmware', 'Using', CONFIG.buildInfo);
-        GUI.log(chrome.i18n.getMessage('buildInfoReceived', [CONFIG.buildInfo]));
+    googleAnalytics.sendEvent('Board', 'Using', CONFIG.boardIdentifier + ',' + CONFIG.boardVersion);
+    GUI.log(chrome.i18n.getMessage('boardInfoReceived', [CONFIG.boardIdentifier, CONFIG.boardVersion]));
 
-        MSP.send_message(MSPCodes.MSP_BOARD_INFO, false, false, function () {
+    $('#tabs ul.mode-connected .tab_setup a').click();
 
-            googleAnalytics.sendEvent('Board', 'Using', CONFIG.boardIdentifier + ',' + CONFIG.boardVersion);
-            GUI.log(chrome.i18n.getMessage('boardInfoReceived', [CONFIG.boardIdentifier, CONFIG.boardVersion]));
+    updateFirmwareVersion();
 
-            MSP.send_message(MSPCodes.MSP_UID, false, false, function () {
-
-                GUI.log(chrome.i18n.getMessage('uniqueDeviceIdReceived', [CONFIG.uid[0].toString(16) + CONFIG.uid[1].toString(16) + CONFIG.uid[2].toString(16)]));
-
-                // continue as usually
-                CONFIGURATOR.connectionValid = true;
-                GUI.allowedTabs = GUI.defaultAllowedTabsWhenConnected.slice();
-                onConnect();
-
-                helper.defaultsDialog.init();
-
-                $('#tabs ul.mode-connected .tab_setup a').click();
-
-                updateFirmwareVersion();
-            });
-        });
-    });
 }
 
 function onInvalidFirmwareVariant()
@@ -294,49 +275,11 @@ function onOpen(openInfo) {
         //googleAnalytics.sendEvent('Firmware', 'Variant', CONFIG.flightControllerIdentifier + ',' + CONFIG.flightControllerVersion);
 
 
+        //onValidFirmware(); //buzz todo we need CONFIG.boardIdentifier and CONFIG.boardVersion set b4 calling this
 
-        // request configuration data. Start with MSPv1 and
-        // upgrade to MSPv2 if possible, and 
-        // upgrade to MAVSPv2 if possible.  ( this is mavlinkV2) 
-       // MSP.protocolVersion = MSP.constants.PROTOCOL_V1;
-        /*
-        MSP.send_message(MSPCodes.MSP_API_VERSION, false, false, function () {
-            
-            // promote to MSPv2
-            //if (CONFIG.apiVersion && semver.gte(CONFIG.apiVersion, "2.0.0")) {
-            //    MSP.protocolVersion = MSP.constants.PROTOCOL_V2;
-            //}
-            GUI.log(chrome.i18n.getMessage('apiVersionReceived', [CONFIG.apiVersion]));
+        
 
-            // promote to MAVSPv2
-            //if (CONFIG.apiVersion && semver.gte(CONFIG.apiVersion, "2.3.0")) { // buzz todo change this for ardu
-            //    MSP.protocolVersion = MSP.constants.PROTOCOL_MAV2;
-            //}
-            //GUI.log(chrome.i18n.getMessage('apiVersionReceived', [CONFIG.apiVersion+1]));//hack
 
-            MSP.send_message(MSPCodes.MSP_FC_VARIANT, false, false, function () {
-                if ( (CONFIG.flightControllerIdentifier == 'ARDUPILOT') || (CONFIG.flightControllerIdentifier == 'INAV') ){
-                    MSP.send_message(MSPCodes.MSP_FC_VERSION, false, false, function () {
-                        //googleAnalytics.sendEvent('Firmware', 'Variant', CONFIG.flightControllerIdentifier + ',' + CONFIG.flightControllerVersion);
-                        GUI.log(chrome.i18n.getMessage('fcInfoReceived', [CONFIG.flightControllerIdentifier, CONFIG.flightControllerVersion]));
-                        if (semver.gte(CONFIG.flightControllerVersion, CONFIGURATOR.minfirmwareVersionAccepted) && semver.lt(CONFIG.flightControllerVersion, CONFIGURATOR.maxFirmwareVersionAccepted)) {
-                            mspHelper.getCraftName(function(name) {
-                                if (name) {
-                                    CONFIG.name = name;
-                                }
-                                onValidFirmware();
-                            });
-                        } else  {
-                            onInvalidFirmwareVersion();
-                        }
-                    });
-                } else {
-                    onInvalidFirmwareVariant();
-                }
-            });
-
-        });
-        */
     } else {
         console.log('Failed to open serial port');
         GUI.log(chrome.i18n.getMessage('serialPortOpenFail'));

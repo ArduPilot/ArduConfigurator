@@ -182,7 +182,7 @@ TABS.receiver.initialize = function (callback) {
         /*
          * Send tracking event so we can know if users are using different mappings than EATR
          */
-        googleAnalytics.sendEvent('Setting', 'RcMappingRead', str);
+        //googleAnalytics.sendEvent('Setting', 'RcMappingRead', str);
 
         // validation / filter
         var last_valid = str;
