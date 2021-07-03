@@ -88,16 +88,64 @@ async function send_canned_mission_to_drone() {
 
     var module = { exports: {} }; // hack for node compat
     var readfilename = "/gotmission1.js"; // no leading . or ./  its an absolute url ah-la http://xxxx/gotmission1.js
-//    var miss = require(readfilename); Node.js
 
-    //let modulePath = prompt("Which module to load?");
+    //mod = await import(readfilename);
+    // 'miss' is in a javascript list-of-lists (mission-of-waypoints) format as used by mavMission.js
+    //var miss = window.missionItems;
 
+    // now we'll build something in a equivalent suitable format from the GUI data:
+    var miss = [];
 
-    mod = await import(readfilename);
+    //////////////////////////////////////////////
+    //var waypointId = 0;
+    //var wp = MISSION_PLANER.extractBuffer(waypointId);
 
-    var miss = window.missionItems;
+        var gui_miss = MISSION_PLANER.get();
+        var gui_miss_len = MISSION_PLANER.get().length;
 
+        for ( e of gui_miss) { // e stands for 'element' . Yes an 'of' loop!
 
+            var act = e.getAction(); // eg == MWNP.WPTYPE.SET_HEAD or == MWNP.WPTYPE.JUMP
+            var seq = e.getNumber();
+            var p1 = e.getP1();
+            var p2 = e.getP3();
+            var p3 = e.getP3();
+            var p4 = 0;// e.getP4(); buzz toto get a P4()
+
+            var attachment = e.isAttached(); //nfi
+            var xlat = e.getLatMap(); //its badically just getLat /10000000
+            var xlon = e.getLonMap(); // 
+            var xalt = e.getAlt(); // 
+
+            // element.setP1(123);
+            // element.setP2(123);
+            // element.setP3(123);
+            // element.setAction(zzz);
+            var autocontinue = 1; 
+
+            //if terrain_alt:
+            //frame = mavlink20.MAV_FRAME_GLOBAL_TERRAIN_ALT
+            //else:
+            var frame = mavlink20.MAV_FRAME_GLOBAL_RELATIVE_ALT
+
+            var tmp = [
+                seq,//e.seq, // 0
+			    0,//e.current,  //1
+			    frame,//e.frame,  //2
+			    act,//e.command, //3
+			    p1,//e.param1, //4
+			    p2,//e.param2, //5
+			    p3,//e.param3, //6
+			    p4,//e.param4, //7
+			    xlat,//e.x,///10000000,    //8
+			    xlon,//e.y,///10000000,    //9
+			    xalt,//e.z,  //10
+			    autocontinue]; 
+
+            miss.push(tmp);
+        }
+        
+    //////////////////////////////////
     console.log('START SEND MISSION to drone:',readfilename);
     // awaiting in a non-async is like this...
     MissionObj.MissionToDrone(miss).then(results => { console.log('END SEND MISSION to drone');  });
