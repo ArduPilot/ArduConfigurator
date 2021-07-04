@@ -126,19 +126,23 @@
                         </div>
                     </div>
                     <div class="spacer" id="WPeditContent">
-                        <input type="hidden" name="pointNumber" value="">
+                        <!-- <input type="hidden" id="pointNumber" name="pointNumber" value=""> -->
                         <div class="point">
+                            <label class="point-label" for="pointNumber">WP Num: </label>
+                            <input type="text" id="pointNumber" name="pointNumber" value="" disabled style="width:30%;">&nbsp;
+                            <a class="wp-down" href="#" style="color:red;" title="WP-down"><</a> &nbsp;&nbsp;
+                            <a class="wp-up" href="#" style="color:red;" title="WP-up">></a><br>
                             <label class="point-label" for="pointType">Type: </label>
                             <select name="type" id="pointType">
-                                <!--<option value="1">Home</option>-->
+                                <!-- <option value="1">Home</option>
                                 <option value="1">Waypoint</option>
-								<!-- <option value="2">PH_UNLIM</option> -->
+								<option value="2">PH_UNLIM</option>
 								<option value="3">PH_TIME</option>
-								<!--<option value="4">RTH</option>-->
+								<option value="4">RTH</option>
 								<option value="5">Point of Interest</option>
-								<!--<option value="6">Jump</option>
-								<option value="7">Heading lock</option>-->
-								<option value="8">Land</option>
+								<option value="6">Jump</option>
+								<option value="7">Heading lock</option>
+								<option value="8">Land</option> -->
                             </select>
                         </div>
                         <div class="point">

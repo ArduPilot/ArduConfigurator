@@ -13,14 +13,19 @@ var MWNP = MWNP || {};
 // WayPoint type
 MWNP.WPTYPE = {
     WAYPOINT:           1,
-    POSHOLD_UNLIM:      2,
-    POSHOLD_TIME:       3,
+   // POSHOLD_UNLIM:      2,
+   // POSHOLD_TIME:       3,
     RTH:                4,
-    SET_POI:            5,
+   // SET_POI:            5,
     JUMP:               6,
-    SET_HEAD:           7,
+   // SET_HEAD:           7,
     LAND:               8
 };
+
+// the above is equivalenrt to mavsp.js ->
+//nav_commands
+
+// buzz todo change WPTYPE's 
 
 // Reverse WayPoint type dictionary
 function swap(dict) {
@@ -124,6 +129,15 @@ TABS.mission_control.initialize = function (callback) {
         }
         localize();
 
+        // update drop-down of different avail waypoint types..
+        var dropdown = $("#pointType");
+
+
+        $.each(nav_commands, function(a ) {
+            var x = new Option(a, nav_commands[a]);
+            dropdown.append(x);
+        });
+
         // function get_raw_gps_data() {
         //     MSP.send_message(MSPCodes.MSP_RAW_GPS, false, false, null);
         //     get_comp_gps_data();
@@ -148,6 +162,10 @@ TABS.mission_control.initialize = function (callback) {
         // }
       
         function update_gpsTrack() {
+
+          if ( GPS_DATA.lat == undefined ) {
+                return;
+          }
 
           let lat = GPS_DATA.lat / 10000000;
           let lon = GPS_DATA.lon / 10000000;
@@ -412,6 +430,7 @@ TABS.mission_control.initialize = function (callback) {
     //
     /////////////////////////////////////////////
     function clearEditForm() {
+        $('#pointNumber').val('');
         $('#pointLat').val('');
         $('#pointLon').val('');
         $('#pointAlt').val('');
@@ -420,6 +439,17 @@ TABS.mission_control.initialize = function (callback) {
         $('#pointP3').val('');
         $('#missionDistance').text(0);
         $('#MPeditPoint').fadeOut(300);
+    }
+    function fillEditForm(a,b,c,d,e,f,g,h) {
+        $('#pointNumber').val(a);
+        $('#pointLat').val(b);
+        $('#pointLon').val(c);
+        $('#pointAlt').val(d);
+        $('#pointP1').val(e);
+        $('#pointP2').val(f);
+        $('#pointP3').val(g);
+        $('#missionDistance').text(h);
+        $('#MPeditPoint').fadeIn(300);
     }
     
     /////////////////////////////////////////////
@@ -1131,6 +1161,10 @@ TABS.mission_control.initialize = function (callback) {
                 tempWp.setLat(Math.round(coord[1] * 10000000));
                 $('#pointLon').val(Math.round(coord[0] * 10000000) / 10000000);
                 $('#pointLat').val(Math.round(coord[1] * 10000000) / 10000000);
+
+                $('#pointNumber').val(tempWp.getNumber()+1); // GUI starts at 1, internals start at zer
+
+                
                 mission.updateWaypoint(tempWp);
                 repaintLine4Waypoints(mission);
             }
@@ -1262,6 +1296,7 @@ TABS.mission_control.initialize = function (callback) {
         // Map on-click behavior definition 
         //////////////////////////////////////////////////////////////////////////
         map.on('click', function (evt) {
+            //debugger;
             if (selectedMarker != null && selectedFeature != null) {
                 try {
                     selectedFeature.setStyle(getWaypointIcon(selectedMarker, false));
@@ -1289,17 +1324,23 @@ TABS.mission_control.initialize = function (callback) {
 
                 selectedFeature.setStyle(getWaypointIcon(selectedMarker, true));
 
-                var altitudeMeters = app.ConvertCentimetersToMeters(selectedMarker.getAlt());
 
+                var altitudeMeters = app.ConvertCentimetersToMeters(selectedMarker.getAlt());
+                var z_num = selectedMarker.getNumber()+1; // internally 0-indexed, GUI for user is 1-indexed
+                //alert(x);
+                $('#pointNumber').val(z_num);
                 $('#altitudeInMeters').text(` ${altitudeMeters}m`);
-                $('#pointLon').val(Math.round(coord[0] * 10000000) / 10000000);
-                $('#pointLat').val(Math.round(coord[1] * 10000000) / 10000000);
-                $('#pointAlt').val(selectedMarker.getAlt());
-                $('#pointType').val(selectedMarker.getAction());
-                // Change SpeedValue to Parameter1, 2, 3
-                $('#pointP1').val(selectedMarker.getP1());
-                $('#pointP2').val(selectedMarker.getP2());
-                $('#pointP3').val(selectedMarker.getP3());
+                var z_lon = Math.round(coord[0] * 10000000) / 10000000;
+                var z_lat = Math.round(coord[1] * 10000000) / 10000000;
+                var z_alt = selectedMarker.getAlt();
+                var z_type= selectedMarker.getAction();
+                var z_p1  = selectedMarker.getP1();
+                var z_p2  = selectedMarker.getP2();
+                var z_p3  = selectedMarker.getP3()
+                fillEditForm(z_num,z_lat,z_lon,z_alt,z_p1,z_p2,z_p3,` ${altitudeMeters}m`);
+                  
+                  
+
                 // Selection box update depending on choice of type of waypoint
                 for (var j in dictOfLabelParameterPoint[selectedMarker.getAction()]) {
                     if (dictOfLabelParameterPoint[selectedMarker.getAction()][j] != '') {
@@ -1336,7 +1377,7 @@ TABS.mission_control.initialize = function (callback) {
                 cleanLayers();
                 redrawLayers();
             }
-            //mission.missionDisplayDebug();
+            mission.missionDisplayDebug();
         });
 
         //////////////////////////////////////////////////////////////////////////
@@ -1429,6 +1470,9 @@ TABS.mission_control.initialize = function (callback) {
         /////////////////////////////////////////////
         // Callback for Waypoint edition
         /////////////////////////////////////////////
+
+        //$('#pointType').
+
         $('#pointType').change(function () {
             if (selectedMarker) {
                 selectedMarker.setAction($('#pointType').val());
@@ -1469,7 +1513,100 @@ TABS.mission_control.initialize = function (callback) {
                 redrawLayer();
             }
         });
+
+        $('#pointNumber').on('keypress', function (event) {
+            if (selectedMarker && event.which == 13) {
+                //selectedMarker.setNumber(Number($('#pointNumber').val()));
+                //mission.updateWaypoint(selectedMarker);
+                //mission.update();
+                //redrawLayer();
+                
+            }
+        }); 
+
+        $('a.wp-down').on('click', function (event) {
+            if ( tempMarker === undefined) {
+                console.log("unhandled error, sorry, select a WP on the map to continue.");
+                return;
+            }
+            if (tempMarker.number >= 0)
+                tempMarker.number=tempMarker.number-1;
+            selectedMarker = mission.getWaypoint(tempMarker.number);
+            if ( selectedMarker === undefined) {
+                tempMarker.number=0; // rewind it
+                console.log('cant go down past start of mission',tempMarker.number+1);
+                return; // after changing the wp number, it might not exist in the mission
+            }
+            console.log('down',tempMarker.number+1);
+            selectedFeature.setStyle(getWaypointIcon(selectedMarker, true));
+            // redrawLayer();
+
+            selectedMarker = renderWaypointOptionsTable(selectedMarker);
+            $('#MPeditPoint').fadeIn(300);
+
+            mission.update();
+            cleanLayers();
+            redrawLayers();
+
+            selectedFeature = markers[selectedMarker.getLayerNumber()].getSource().getFeatures()[0];
+            selectedFeature.setStyle(getWaypointIcon(selectedMarker, true));
+
+            var altitudeMeters = app.ConvertCentimetersToMeters(selectedMarker.getAlt());
+            var z_num = selectedMarker.getNumber()+1; // internally 0-indexed, GUI for user is 1-indexed
+            //alert(x);
+            $('#pointNumber').val(z_num);
+            $('#altitudeInMeters').text(` ${altitudeMeters}m`);
+            var z_lon = selectedMarker.getLonMap();//Math.round(coord[0] * 10000000) / 10000000;
+            var z_lat = selectedMarker.getLatMap();//Math.round(coord[1] * 10000000) / 10000000;
+            var z_alt = selectedMarker.getAlt();
+            var z_type= selectedMarker.getAction();
+            var z_p1  = selectedMarker.getP1();
+            var z_p2  = selectedMarker.getP2();
+            var z_p3  = selectedMarker.getP3()
+            fillEditForm(z_num,z_lat,z_lon,z_alt,z_p1,z_p2,z_p3,` ${altitudeMeters}m`);
+        });
+        $('a.wp-up').on('click', function (event) {
+            if ( tempMarker == undefined) {
+                console.log("unhandled error, sorry, select a WP on the map to continue.");
+                return;
+            }
+            tempMarker.number=tempMarker.number+1;
         
+            selectedMarker = mission.getWaypoint(tempMarker.number);
+            if ( selectedMarker === undefined) {
+                tempMarker.number=tempMarker.number-1; // rewind it
+                console.log('cant go up past end of mission',tempMarker.number+1); //gui offset
+                return; // after changing the wp number, it might not exist in the mission
+            }
+            console.log('up',tempMarker.number+1); //gui offset
+
+             selectedFeature.setStyle(getWaypointIcon(selectedMarker, true));
+            // redrawLayers();
+
+            selectedMarker = renderWaypointOptionsTable(selectedMarker);
+            $('#MPeditPoint').fadeIn(300);
+
+            mission.update();
+            cleanLayers();
+            redrawLayers();
+            selectedFeature = markers[selectedMarker.getLayerNumber()].getSource().getFeatures()[0];
+            selectedFeature.setStyle(getWaypointIcon(selectedMarker, true));
+
+            var altitudeMeters = app.ConvertCentimetersToMeters(selectedMarker.getAlt());
+            var z_num = selectedMarker.getNumber()+1; // internally 0-indexed, GUI for user is 1-indexed
+            //alert(x);
+            $('#pointNumber').val(z_num);
+            $('#altitudeInMeters').text(` ${altitudeMeters}m`);
+            var z_lon = selectedMarker.getLonMap();//Math.round(coord[0] * 10000000) / 10000000;
+            var z_lat = selectedMarker.getLatMap();//Math.round(coord[1] * 10000000) / 10000000;
+            var z_alt = selectedMarker.getAlt();
+            var z_type= selectedMarker.getAction();
+            var z_p1  = selectedMarker.getP1();
+            var z_p2  = selectedMarker.getP2();
+            var z_p3  = selectedMarker.getP3()
+            fillEditForm(z_num,z_lat,z_lon,z_alt,z_p1,z_p2,z_p3,` ${altitudeMeters}m`);
+        });
+
         $('#pointP1').on('keypress', function (event) {
             if (selectedMarker && event.which == 13) {
                 selectedMarker.setP1(Number($('#pointP1').val()));

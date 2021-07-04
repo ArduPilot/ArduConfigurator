@@ -187,9 +187,26 @@ var level_accel_cal = function ( target_system,target_component ) {
         }   
 
     }
-);
-
+    );
 }
+
+// list of the sorts of waypoint or mission_command/s we can do...
+//MAV_CMD_NAV_  => see mission_control.js 
+
+var nav_commands = {};
+// find all attrs that start with MAV_CMD_NAV_;
+for (attr in mavlink20 ) {  
+    //MAV_CMD_NAV_WAYPOINT etc
+    if (attr.startsWith('MAV_CMD_NAV_') ) {
+        var shortname = attr.replace('MAV_CMD_NAV_','');//drop long prefix
+        // for now, lets leave out the FENCE_* stuff...
+        if (! attr.startsWith('MAV_CMD_NAV_FENCE_') ) {
+        nav_commands[shortname] = mavlink20[attr]; 
+        }
+    }
+}
+
+
 
 // start  = 42424 / 0,1,1,0,0,0,0
 // accept = 42425 / 0,0,1,0,0,0,0
