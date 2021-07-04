@@ -440,15 +440,23 @@ TABS.mission_control.initialize = function (callback) {
         $('#missionDistance').text(0);
         $('#MPeditPoint').fadeOut(300);
     }
-    function fillEditForm(a,b,c,d,e,f,g,h) {
-        $('#pointNumber').val(a);
-        $('#pointLat').val(b);
-        $('#pointLon').val(c);
-        $('#pointAlt').val(d);
-        $('#pointP1').val(e);
-        $('#pointP2').val(f);
-        $('#pointP3').val(g);
-        $('#missionDistance').text(h);
+    function fillEditForm(selectedMarker,mdist){
+        var z_num = selectedMarker.getNumber()+1; // internally 0-indexed, GUI for user is 1-indexed
+        var z_lon = selectedMarker.getLonMap();//Math.round(coord[0] * 10000000) / 10000000;
+        var z_lat = selectedMarker.getLatMap();//Math.round(coord[1] * 10000000) / 10000000;
+        var z_alt = selectedMarker.getAlt();
+        var z_type= selectedMarker.getAction();
+        var z_p1  = selectedMarker.getP1();
+        var z_p2  = selectedMarker.getP2();
+        var z_p3  = selectedMarker.getP3()
+        $('#pointNumber').val(z_num);
+        $('#pointLat').val(z_lat);
+        $('#pointLon').val(z_lon);
+        $('#pointAlt').val(z_alt);
+        $('#pointP1').val(z_p1);
+        $('#pointP2').val(z_p2);
+        $('#pointP3').val(z_p3);
+        $('#missionDistance').text(mdist);
         $('#MPeditPoint').fadeIn(300);
     }
     
@@ -1332,15 +1340,12 @@ TABS.mission_control.initialize = function (callback) {
                 $('#altitudeInMeters').text(` ${altitudeMeters}m`);
                 var z_lon = Math.round(coord[0] * 10000000) / 10000000;
                 var z_lat = Math.round(coord[1] * 10000000) / 10000000;
-                var z_alt = selectedMarker.getAlt();
-                var z_type= selectedMarker.getAction();
-                var z_p1  = selectedMarker.getP1();
-                var z_p2  = selectedMarker.getP2();
-                var z_p3  = selectedMarker.getP3()
-                fillEditForm(z_num,z_lat,z_lon,z_alt,z_p1,z_p2,z_p3,` ${altitudeMeters}m`);
-                  
-                  
+                selectedMarker.setLat(z_lat* 10000000);
+                selectedMarker.setLon(z_lon* 10000000);
 
+                fillEditForm(selectedMarker,` ${altitudeMeters}m`);
+                  
+                  
                 // Selection box update depending on choice of type of waypoint
                 for (var j in dictOfLabelParameterPoint[selectedMarker.getAction()]) {
                     if (dictOfLabelParameterPoint[selectedMarker.getAction()][j] != '') {
@@ -1552,18 +1557,11 @@ TABS.mission_control.initialize = function (callback) {
             selectedFeature.setStyle(getWaypointIcon(selectedMarker, true));
 
             var altitudeMeters = app.ConvertCentimetersToMeters(selectedMarker.getAlt());
-            var z_num = selectedMarker.getNumber()+1; // internally 0-indexed, GUI for user is 1-indexed
             //alert(x);
+            var z_num = selectedMarker.getNumber()+1; // internally 0-indexed, GUI for user is 1-indexed
             $('#pointNumber').val(z_num);
             $('#altitudeInMeters').text(` ${altitudeMeters}m`);
-            var z_lon = selectedMarker.getLonMap();//Math.round(coord[0] * 10000000) / 10000000;
-            var z_lat = selectedMarker.getLatMap();//Math.round(coord[1] * 10000000) / 10000000;
-            var z_alt = selectedMarker.getAlt();
-            var z_type= selectedMarker.getAction();
-            var z_p1  = selectedMarker.getP1();
-            var z_p2  = selectedMarker.getP2();
-            var z_p3  = selectedMarker.getP3()
-            fillEditForm(z_num,z_lat,z_lon,z_alt,z_p1,z_p2,z_p3,` ${altitudeMeters}m`);
+            fillEditForm(selectedMarker,` ${altitudeMeters}m`);
         });
         $('a.wp-up').on('click', function (event) {
             if ( tempMarker == undefined) {
@@ -1597,14 +1595,7 @@ TABS.mission_control.initialize = function (callback) {
             //alert(x);
             $('#pointNumber').val(z_num);
             $('#altitudeInMeters').text(` ${altitudeMeters}m`);
-            var z_lon = selectedMarker.getLonMap();//Math.round(coord[0] * 10000000) / 10000000;
-            var z_lat = selectedMarker.getLatMap();//Math.round(coord[1] * 10000000) / 10000000;
-            var z_alt = selectedMarker.getAlt();
-            var z_type= selectedMarker.getAction();
-            var z_p1  = selectedMarker.getP1();
-            var z_p2  = selectedMarker.getP2();
-            var z_p3  = selectedMarker.getP3()
-            fillEditForm(z_num,z_lat,z_lon,z_alt,z_p1,z_p2,z_p3,` ${altitudeMeters}m`);
+            fillEditForm(selectedMarker,` ${altitudeMeters}m`);
         });
 
         $('#pointP1').on('keypress', function (event) {
