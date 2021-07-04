@@ -20,6 +20,8 @@ var set_stream_rates = function(rate,target_system,target_component) {
     if (target_system == undefined )target_system = SYSID;
     if (target_component == undefined )target_component = COMPID;
 
+    if (rate == undefined )rate = 4;
+
     var packet = new mavlink20.messages.request_data_stream(target_system,target_component,
                                 mavlink20.MAV_DATA_STREAM_ALL,rate, 1);
 

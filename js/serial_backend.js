@@ -265,7 +265,7 @@ function onOpen(openInfo) {
         // move this fron onOpen() to read: function (readInfo) in mavsp.js ...
         // BUT ...  without it HERE  the mav serial stream may not autopromote to mav .V2
         send_heartbeat_handler(); // shrow a heartbeat first, blindly
-        set_stream_rates(); //buzz?
+        set_stream_rates(4); //buzz?
 
         ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
 
@@ -277,7 +277,7 @@ function onOpen(openInfo) {
 
         //onValidFirmware(); //buzz todo we need CONFIG.boardIdentifier and CONFIG.boardVersion set b4 calling this
 
-        
+
 
 
     } else {
