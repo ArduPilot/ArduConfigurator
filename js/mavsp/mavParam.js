@@ -164,6 +164,10 @@ MavParam.prototype.set = function(name, value, retries) {
         }
         
     }, retries);
+
+    // WARNING/todo:  this doesn't actually return info back to the caller about wether it was succfully sent-and-acknowleged, or ..
+    //             .. if it was attempted repeatedly until timeout and the timeoutWatcher cancelled it.
+    //          I think we need an 'anync' wrapper around it like the mission .. 'const resolves_after_mission_fetched = async () => {' .. }
 }
 
 MavParam.prototype.get = function(name) {
