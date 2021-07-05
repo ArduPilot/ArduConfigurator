@@ -204,7 +204,8 @@ function mavFlightModes_rehook() {
             console.log(`\n--Got a ARMING-CHANGE message `);
             console.log(`... with armed-state: ${state.armed} and sysid: ${state.sysid} and mode: ${state.mode}`);
             var armstr = state.armed==true?"ARMED":"DISARMED";
-            $(".firmware_version").text("Mode:"+state.mode+" "+armstr);
+            var modestr = state.mode===undefined?"not-yet-known":state.mode;
+            $(".firmware_version").text("Mode:"+modestr+" "+armstr);
             if ( state.armed==true ) {
                 $(".firmware_version").css("color","red");
             } else {

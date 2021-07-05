@@ -90,20 +90,35 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
         // else ignore data for other sysids than the one we are interested in.
         if ( heartbeat._header.srcSystem != sysid ) return; 
 
-       
 		// Translate the bitfields for use in the client.
         //copter or plane or something else?
-        if (heartbeat.type == mavlink20.MAV_TYPE_FIXED_WING ) {
+        if (heartbeat.type == mavlink20.MAV_TYPE_FIXED_WING ) { //1
             // arduplane uses packet.custom_mode to index into mode_mapping_apm 
             self.newState.mode = mode_mapping_apm[heartbeat.custom_mode]; 
+            //MIXER_CONFIG.platformType = PLATFORM_AIRPLANE ; // set in mavsp.js heartbeat_handler
         }
-        if (heartbeat.type == mavlink20.MAV_TYPE_QUADROTOR ) {
+        if (heartbeat.type == mavlink20.MAV_TYPE_QUADROTOR ) { //2
+            // arducopter uses packet.custom_mode to index into mode_mapping_acm 
+            self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
+            //MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR ; // set in mavsp.js heartbeat_handler
+        }
+        if (heartbeat.type == mavlink20.MAV_TYPE_COAXIAL ) { //3
+            // arducopter uses packet.custom_mode to index into mode_mapping_acm 
+            self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
+        } 
+        if (heartbeat.type == mavlink20.MAV_TYPE_HELICOPTER ) { //4
             // arducopter uses packet.custom_mode to index into mode_mapping_acm 
             self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
         }
+        if ( heartbeat.type  > 4 ) {
+
+            console.log("unknown ardupilot vehicle type, not a plane,copter,heli, sorry",heartbeat.type);
+        }
 
         //console.log("ardumode:"+self.newState.mode);
-		self.newState.armed = ( mavlink20.MAV_MODE_FLAG_SAFETY_ARMED & heartbeat.base_mode ) ? true : false;		
+		self.newState.armed = ( mavlink20.MAV_MODE_FLAG_SAFETY_ARMED & heartbeat.base_mode ) ? true : false;	
+        
+        //console.log(self.newState);
 
         if (self.newState.mode != self.state.mode ) {
             self.newState.sysid = self.sysid; // embed self for the callback to know our sysid as well
