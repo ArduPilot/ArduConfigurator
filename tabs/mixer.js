@@ -486,7 +486,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         });
 
         $('#load-mixer-button').click(function () {
-            const presetId = parseInt($mixerPreset.val(), 10);
+            const presetId = parseInt($mixerPreset.val(), 10); // eg presetID=3 means 'Quad X' ( see model.js /  id: 3 => name: 'Quad X', )
             currentMixerPreset = helper.mixer.getById(presetId);
 
             helper.mixer.loadServoRules(currentMixerPreset);
