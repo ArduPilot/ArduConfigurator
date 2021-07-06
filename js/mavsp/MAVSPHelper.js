@@ -197,7 +197,7 @@ function mavFlightModes_rehook() {
             console.log(`... with armed-state: ${state.armed} and sysid: ${state.sysid} and mode: ${state.mode}`);
 
             var armstr = state.armed==true?"ARMED":"DISARMED";
-            $(".firmware_version").text("Mode:"+state.mode+" "+armstr);
+            $(".mode_arming_info").text("Mode:"+state.mode+" "+armstr);
 
         });
         m.on('armingchange', function(state) {
@@ -205,11 +205,11 @@ function mavFlightModes_rehook() {
             console.log(`... with armed-state: ${state.armed} and sysid: ${state.sysid} and mode: ${state.mode}`);
             var armstr = state.armed==true?"ARMED":"DISARMED";
             var modestr = state.mode===undefined?"not-yet-known":state.mode;
-            $(".firmware_version").text("Mode:"+modestr+" "+armstr);
+            $(".mode_arming_info").text("Mode:"+modestr+" "+armstr);
             if ( state.armed==true ) {
-                $(".firmware_version").css("color","red");
+                $(".mode_arming_info").css("color","red");
             } else {
-                $(".firmware_version").css("color","green");
+                $(".mode_arming_info").css("color","green");
             }
         });
 
@@ -318,6 +318,29 @@ var mspHelper = (function (gui) {
 
                 // buzz todo
                 break;
+                case mavlink20.MAVLINK_MSG_ID_AUTOPILOT_VERSION:
+                    // borrowed from here https://github.com/ArduPilot/APWeb
+                    var flight_sw_version = mavmsg.flight_sw_version;
+                    var major_version = flight_sw_version >> 24;
+                    var min_version = (flight_sw_version >> 16) & 0xFF;
+                    var patch_version = (flight_sw_version >> 8) & 0xFF;
+                    var version_type = flight_sw_version & 0xFF;
+                    if (version_type >= 255) {
+                        version_type = '';
+                    } else if (version_type >= 192) {
+                        version_type = 'RC' + (version_type-191);
+                    } else if (version_type >= 128) {
+                        version_type = 'beta' + (version_type-127);
+                    } else if (version_type >= 64) {
+                        version_type = 'alpha' + (version_type-63);
+                    } else {
+                        version_type = 'dev';
+                    }
+
+                    var ver_string = major_version + "." + min_version + "." + patch_version + "-" + version_type;
+
+                   CONFIG.flightControllerVersion = ver_string + " (" + mavmsg.flight_custom_version + ") " ;
+                   break;
             case mavlink20.MAVLINK_MSG_ID_TIMESYNC:
                 /*  ["tc1", "ts1"]
                 tc1: (3) [0, 0, false]

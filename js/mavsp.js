@@ -30,6 +30,12 @@ var set_stream_rates = function(rate,target_system,target_component) {
 
 }
 
+var autopilot_version_request = function(target_system,target_component){
+    if (target_system == undefined )target_system = SYSID;
+    if (target_component == undefined )target_component = COMPID;
+    mavParserObj.send(new mavlink20.messages.autopilot_version_request(target_system,target_component));
+}
+
 var preflight_accel_cal = function(target_system,target_component) {
 
     if (target_system == undefined )target_system = SYSID;
@@ -290,6 +296,25 @@ var heartbeat_handler =  function(message) {
 }
 mavParserObj.on('HEARTBEAT', heartbeat_handler);
 
+var autopilot_version_handler = function(message){
+    console.log(`AUTOPILOT_VERSION received`);
+    //console.log(message);
+    
+    // don't allow messages that appear to come from 255 to be handled.
+    if (message._header.srcSystem == 255 ) { return; }
+
+    if (SYSID == undefined ) { return;} // haven't set the sysid global yet, elsewhere.
+
+    if (FC.curr_mav_state['AUTOPILOT_VERSION'] == undefined ) { 
+        autopilot_version_request(); // hack to trigger it again so it updates FIXME
+        return;
+    } // the other handler/s haven't run yet, delay this one
+
+    updateFirmwareVersion();
+}
+
+mavParserObj.on('AUTOPILOT_VERSION', autopilot_version_handler);
+
 // Attach an event handler for any valid MAVLink message - we use this mostly for unknown packet types, console.log and debug messages. 
 // the majority of specific responses to specifc messages are not handled in the 'generic' handler, but in specific message handlers for each 
 // type of message.   eg mavlinkParser1.on('HEATBEAT') is better than here, as this 'generic' block might go away at some point.
@@ -527,7 +552,7 @@ var MSP = {
             set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
             this.streamrate = 4; 
             ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
-
+            autopilot_version_request();
         }
 
         // some form of valid mavlink means we can consider ourselves connected as far as the GUI is concerned
