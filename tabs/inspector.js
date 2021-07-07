@@ -121,7 +121,7 @@ TABS.inspector.initialize = function (callback, scrollPosition) {
                     console.log(t[0],t[1],t[2]);
                     t = "["+t[0]+","+t[1]+","+t[2]+"]"; // array of length 3 for 64bit stuff lower,upper,signedbool
                 }
-                var displayme = z + "&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp;&nbsp;&nbsp;<span id='"+z+"'>" +  t +"</span>";
+                var displayme = z + "&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp;&nbsp;&nbsp;<span id='insp_"+i+"_"+z+"'>" +  t +"</span>";
                 var row_f =  $('<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + displayme  + '</li>'); // hidden buttons to start with
                 $('#blerg').before(row_f);
 
@@ -186,8 +186,7 @@ TABS.inspector.initialize = function (callback, scrollPosition) {
                     }
                    // var displayme = z + "&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp;&nbsp;&nbsp;<span id='"+z+"'>" +  obj[z] +"</span>";
                     //var row_f =  $('<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + displayme  + '</li>'); // hidden buttons to start with
-                    $('#'+z).html(t);
-    
+                    $('#insp_'+i+'_'+z).html(t);
                 }
     
                // var row_e =  $('</ul></li>'); // hidden buttons to start with
