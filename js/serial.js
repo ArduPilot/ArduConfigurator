@@ -13,6 +13,8 @@ var serial = {
     connectionType:  'serial', // 'serial' or 'tcp' or 'udp'
     connectionIP:    '127.0.0.1',
     connectionPort:  2323,
+    remoteAddress:   0, // used for udp
+    remotePort:      0, // used for udp
 
     transmitting:   false,
     outputBuffer:  [],
@@ -252,6 +254,8 @@ var serial = {
         self.connectionPort = parseInt(self.connectionPort);
         self.connectionType = 'udp';
         self.logHead = 'SERIAL-UDP: ';
+        self.remoteAddress = 0 ;
+        self.remotePort = 0 ;
 
         console.log('connect to raw udp:', ip + ':' + port)
         chrome.sockets.udp.create({}, function(createInfo) {
@@ -274,6 +278,10 @@ var serial = {
                 if(result == 0) {
                     self.onReceive.addListener(function log_bytesReceived(info) {
                         if (info.socketId != self.connectionId) return;
+                        if (self.connectionType == 'udp' && self.remoteAddress == 0 ){
+                            self.remoteAddress = info.remoteAddress ;
+                            self.remotePort = info.remotePort ;
+                        }
                         self.bytesReceived += info.data.byteLength;
                     });
                     self.onReceiveError.addListener(function watch_for_on_receive_errors(info) {
