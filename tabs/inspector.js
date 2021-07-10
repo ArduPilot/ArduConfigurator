@@ -132,9 +132,7 @@ TABS.inspector.initialize = function (callback, scrollPosition) {
 
         }
 
-        $('a.writeOneParam').click(function () {
-
-        });
+    
 
         $('input.inspector').on('input',function() {
 
