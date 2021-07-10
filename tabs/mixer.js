@@ -17,7 +17,7 @@ function buzz_veh_sels() {
 
     $platformSelect.find("*").remove();
 
-    let platforms = platformList;
+    let platforms = platformList; // airplane,multirotor,rover, etc
 
     for (let i in platforms) {
         if (platforms.hasOwnProperty(i)) {
@@ -82,6 +82,36 @@ function buzz_veh_sels() {
         currentMixerPreset = helper.mixer.getById(presetId);
 
         MIXER_CONFIG.appliedMixerPreset = presetId; // buzz 3d chooser
+
+        // in the 'mixer-preset' drop-down, the options are 'Quad X', 'Quad +' , Hex X',  etc
+        // presetId is the X for model.js -> mixerList[X]
+
+        // doese this 'model.js' template from mixerlist have a frame_class and/or frame_type?
+        var parm_tbl = ParamsObj.get_param_table();
+
+        var Fclass = parm_tbl['FRAME_CLASS'].param_value;
+        var Ftype = parm_tbl['FRAME_TYPE'].param_value;
+
+        if (currentMixerPreset.frame_class ) {
+            console.log("This model requres a FRAME_CLASS of ",currentMixerPreset.frame_class);
+            if (ardu_frame_classes[Fclass] != currentMixerPreset.frame_class ) {
+                // setting vehicle's FRAME_CLASS..
+                var paramname = 'FRAME_CLASS';
+                var paramvalue = Fclass; 
+                console.log("setting param:"+paramname+" to:"+paramvalue);
+                ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+            }  
+        }
+        if (currentMixerPreset.frame_type ) {
+            console.log("This model requres a FRAME_TYPE of ",currentMixerPreset.frame_type);
+            if (ardu_frame_types[Ftype] != currentMixerPreset.frame_type ) {
+                // setting vehicle's FRAME_TYPE..
+                var paramname = 'FRAME_TYPE';
+                var paramvalue = Ftype; 
+                console.log("setting param:"+paramname+" to:"+paramvalue);
+                ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+            }  
+        }
 
         // if (currentMixerPreset.id == 3) {
         //     $wizardButton.parent().removeClass("is-hidden");
