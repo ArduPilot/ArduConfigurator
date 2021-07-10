@@ -205,10 +205,11 @@ for (attr in mavlink20 ) {
     //MAV_CMD_NAV_WAYPOINT etc
     if (attr.startsWith('MAV_CMD_NAV_') ) {
         var shortname = attr.replace('MAV_CMD_NAV_','');//drop long prefix
-        // for now, lets leave out the FENCE_* stuff...
-        if (! attr.startsWith('MAV_CMD_NAV_FENCE_') ) {
+        // for now, lets leave out the FENCE_* stuff and _LOCAL
+        if ( attr.startsWith('MAV_CMD_NAV_FENCE_') ) { continue; } // skip this
+        if ( attr.endsWith('_LOCAL') ) { continue; } // skip this
         nav_commands[shortname] = mavlink20[attr]; 
-        }
+        
     }
 }
 
