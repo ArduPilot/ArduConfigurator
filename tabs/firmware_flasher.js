@@ -34,20 +34,20 @@ TABS.firmware_flasher.initialize = function (callback) {
             worker.postMessage(str);
         }
 
-        function parseFilename(filename) {
-            //var targetFromFilenameExpression = /ARDUPILOT_([\d.]+)?_?([^.]+)\.(.*)/;
-            var targetFromFilenameExpression = /ARDUPILOT_([\d.]+(?:-rc\d+)?)?_?([^.]+)\.(.*)/;
-            var match = targetFromFilenameExpression.exec(filename);
+        // function parseFilename(filename) {
+        //     //var targetFromFilenameExpression = /ARDUPILOT_([\d.]+)?_?([^.]+)\.(.*)/;
+        //     var targetFromFilenameExpression = /ARDUPILOT_([\d.]+(?:-rc\d+)?)?_?([^.]+)\.(.*)/;
+        //     var match = targetFromFilenameExpression.exec(filename);
 
-            if (!match) {
-                return null;
-            }
+        //     if (!match) {
+        //         return null;
+        //     }
 
-            return {
-                target: match[2].replace("_", " "),
-                format: match[3],
-            };
-        }
+        //     return {
+        //         target: match[2].replace("_", " "),
+        //         format: match[3],
+        //     };
+        // }
 
         $('input.show_development_releases').click(function(){
             buildBoardOptions();
@@ -62,64 +62,117 @@ TABS.firmware_flasher.initialize = function (callback) {
             var versions_e = $('select[name="firmware_version"]').empty();
             versions_e.append($("<option value='0'>{0}</option>".format(chrome.i18n.getMessage('firmwareFlasherOptionLabelSelectFirmwareVersion'))));
 
+            //  {
+//             "mav-type": "ANTENNA_TRACKER",
+//             "vehicletype": "AntennaTracker",
+//             "mav-firmware-version-minor": "1",
+//             "format": "ELF",
+//             "url": "https://firmware.ardupilot.org/AntennaTracker/stable-1.1.0/edge/antennatracker",
+//             "mav-firmware-version-type": "STABLE-1.1.0",
+//             "mav-firmware-version-patch": "0",
+//             "mav-autopilot": "ARDUPILOTMEGA",
+//             "platform": "edge",
+//             "mav-firmware-version": "1.1.0",
+//             "git-sha": "e22170628d5a03a18c0445c5af2d3f3688c37ed4",
+//             "mav-firmware-version-major": "1",
+//             "latest": 0
+//         },
+
+//          {
+//             "board_id": 136,
+//             "mav-type": "FIXED_WING",
+//             "vehicletype": "Plane",
+//             "mav-firmware-version-minor": "1",
+//             "format": "apj",
+//             "url": "https://firmware.ardupilot.org/Plane/beta/mRoX21-777/arduplane.apj",
+//             "mav-firmware-version-type": "BETA",
+//             "brand_name": "mRo X2.1-777",
+//             "mav-firmware-version-patch": "0",
+//             "mav-autopilot": "ARDUPILOTMEGA",
+//             "USBID": [
+//                 "0x1209/0x5740"
+//             ],
+//             "platform": "mRoX21-777",
+//             "mav-firmware-version": "4.1.0",
+//             "image_size": 1590472,
+//             "bootloader_str": [
+//                 "mRoX21-777-BL"
+//             ],
+//             "git-sha": "db37898e362cc987dfb5a871185009203423c8b9",
+//             "mav-firmware-version-major": "4",
+//             "manufacturer": "mRobotics",
+//             "latest": 0
+//         },
+
             var releases = {};
             var sortedTargets = [];
             var unsortedTargets = [];
             TABS.firmware_flasher.releasesData.forEach(function(release){
-                release.assets.forEach(function(asset){
-                    var result = parseFilename(asset.name);
+                //release.assets.forEach(function(asset){
+                    var result = release.url;
 
-                    if ((!showDevReleases && release.prerelease) || !result) {
-                        return;
-                    }
-                    if($.inArray(result.target, unsortedTargets) == -1) {
-                        unsortedTargets.push(result.target);
-                    }
-                });
-                sortedTargets = unsortedTargets.sort();
+                    var board_type = release.platform;
+
+                    // if ((!showDevReleases && release.prerelease) || !result) {
+                    //     return;
+                    // }
+                     if($.inArray(board_type, unsortedTargets) == -1) {
+                         unsortedTargets.push(board_type);
+                     }
+                //});
             });
+            sortedTargets = unsortedTargets.sort();
+
             sortedTargets.forEach(function(release) {
                 releases[release] = [];
             });
 
             TABS.firmware_flasher.releasesData.forEach(function(release){
 
-                var versionFromTagExpression = /v?(.*)/;
-                var matchVersionFromTag = versionFromTagExpression.exec(release.tag_name);
-                var version = matchVersionFromTag[1];
+               // var versionFromTagExpression = /v?(.*)/;
+               // var matchVersionFromTag = versionFromTagExpression.exec(release.tag_name);
+                var version = release['mav-firmware-version'];//matchVersionFromTag[1];
 
-                release.assets.forEach(function(asset){
-                    var result = parseFilename(asset.name);
-                    if ((!showDevReleases && release.prerelease) || !result) {
-                        return;
+                //release.assets.forEach(function(asset){
+                    //var result = release.url;
+                    // if ((!showDevReleases && release.prerelease) || !result) {
+                    //     return;
+                    // }
+
+                    //  if (release.format != 'hex') { // or .apj   
+                    //      return; // buzz todo. for now we use only firmwares that are _bl.hex files that can be flashed with dfu
+                    //  }
+
+                     if (! release.url.endsWith('_with_bl.hex')) { 
+                        return; // buzz todo. for now we use only firmwares that are _bl.hex files that can be flashed with dfu
                     }
 
-                    if (result.format != 'hex') {
-                        return;
-                    }
-
-                    var date = new Date(release.published_at);
-                    var formattedDate = "{0}-{1}-{2} {3}:{4}".format(
-                            date.getFullYear(),
-                            date.getMonth() + 1,
-                            date.getDate(),
-                            date.getUTCHours(),
-                            date.getMinutes()
-                    );
+                    // var date = new Date("2001-01-01"); // buzz hack, no date data in ardu json
+                    // var formattedDate = "{0}-{1}-{2} {3}:{4}".format(
+                    //         date.getFullYear(),
+                    //         date.getMonth() + 1,
+                    //         date.getDate(),
+                    //         date.getUTCHours(),
+                    //         date.getMinutes()
+                    // );
 
                     var descriptor = {
-                        "releaseUrl": release.html_url,
-                        "name"      : semver.clean(release.name),
-                        "version"   : release.tag_name,
-                        "url"       : asset.browser_download_url,
-                        "file"      : asset.name,
-                        "target"    : result.target,
-                        "date"      : formattedDate,
-                        "notes"     : release.body,
-                        "status"    : release.prerelease ? "release-candidate" : "stable"
+                        "releaseUrl": release.url,
+                        "name"      : version,//semver.clean(release.name),
+                       // "version"   : release.tag_name,
+                        "url"       : release.url,
+                        "file"      : release.platform,
+                        "target"    : release.platform,
+                        "date"      : release['mav-type'],//formattedDate,
+                        "notes"     : "",//release.body,
+                        "status"    : release['mav-firmware-version-type'],
+                                    // UID = name~target~date~status
+                        "filename"  : release.url.replace("https://firmware.ardupilot.org/",''), // strip leading url part, leave file path+name
+                        "uid"       : version+"~"+release.platform+"~"+release['mav-type']+"~"+release['mav-firmware-version-type']+"~"
                     };
-                    releases[result.target].push(descriptor);
-                });
+                    //releases[descriptor['uid']].push(descriptor);
+                    releases[release.platform].push(descriptor);
+                //});
             });
             var selectTargets = [];
             Object.keys(releases)
@@ -140,8 +193,13 @@ TABS.firmware_flasher.initialize = function (callback) {
             TABS.firmware_flasher.releases = releases;
         };
 
-        $.get('https://api.github.com/repos/ArduPilot/ardupilot/releases?per_page=10', function (releasesData){
-            TABS.firmware_flasher.releasesData = releasesData;
+
+       // https://firmware.oborne.me/manifest.json.gz
+       // https://firmware.ardupilot.org/manifest.json.gz
+       
+
+        $.get('https://firmware.ardupilot.org/manifest.json', function (releasesData){
+            TABS.firmware_flasher.releasesData = releasesData.firmware;
             buildBoardOptions();
 
             // bind events
@@ -165,12 +223,17 @@ TABS.firmware_flasher.initialize = function (callback) {
                     }
 
                     TABS.firmware_flasher.releases[target].forEach(function(descriptor) {
+
+                        if ( descriptor.date.startsWith("ANTENNA")) return; // skip all antenna_trackers
+
                         var select_e =
-                                $("<option value='{0}'>{0} - {1} - {2} ({3})</option>".format(
-                                        descriptor.version,
+                                $("<option value='{0}'>{1} - {2} - {3} ({4})- {5}</option>".format(
+                                        descriptor.uid,
+                                        descriptor.name,
                                         descriptor.target,
                                         descriptor.date,
-                                        descriptor.status
+                                        descriptor.status,
+                                        descriptor.filename
                                 )).data('summary', descriptor);
 
                         versions_e.append(select_e);
