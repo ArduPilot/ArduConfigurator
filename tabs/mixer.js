@@ -89,8 +89,11 @@ function buzz_veh_sels() {
         // doese this 'model.js' template from mixerlist have a frame_class and/or frame_type?
         var parm_tbl = ParamsObj.get_param_table();
 
-        var Fclass = parm_tbl['FRAME_CLASS'].param_value;
-        var Ftype = parm_tbl['FRAME_TYPE'].param_value;
+        if (parm_tbl == undefined ) return; 
+        if (parm_tbl['FRAME_CLASS'] == undefined ) return; 
+
+        var Fclass = parm_tbl['FRAME_CLASS'].param_value??'';
+        var Ftype = parm_tbl['FRAME_TYPE'].param_value??'';
 
         if (currentMixerPreset.frame_class ) {
             console.log("This model requres a FRAME_CLASS of ",currentMixerPreset.frame_class);
