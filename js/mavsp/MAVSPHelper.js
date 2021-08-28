@@ -355,7 +355,7 @@ var mspHelper = (function (gui) {
                 Vcc: 5122
                 */
                 CONFIG.i2cError = mavmsg.I2Cerr;
-                ANALOG.voltage = mavmsg.Vcc / 1000.0;  // cpu volts
+                ANALOG.board_vcc = mavmsg.Vcc / 1000.0;  // cpu volts
                 // buzz todo
                 break;
             case mavlink20.MAVLINK_MSG_ID_MOUNT_STATUS:
