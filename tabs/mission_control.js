@@ -315,7 +315,7 @@ TABS.mission_control.initialize = function (callback) {
                 breadCrumbLS.setCoordinates(coords);
               }
 
-              curPosStyle.getImage().setRotation((SENSOR_DATA.kinematics[2]/360.0) * 6.28318);
+              curPosStyle.getImage().setRotation(((SENSOR_DATA.kinematics[2]+180)/360.0) * 6.28318);
 
               //update data text
               textGeom.setCoordinates(map.getCoordinateFromPixel([0,0]));
