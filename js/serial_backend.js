@@ -233,6 +233,23 @@ function onInvalidFirmwareVersion()
     $('#tabs .tab_cli a').click();
 }
 
+function waitSendMavlinkMessages(timeout){
+    helper.timeout.add('waitForValidConnection', function () {
+    if (!FC.curr_mav_state['SYS_STATUS']) {
+        if (mspHelper.INIT_CONNECTION_ATTEMPTS < 6){
+                    waitSendMavlinkMessages(1000);
+                    mspHelper.INIT_CONNECTION_ATTEMPTS++;
+                }
+            } else {
+                ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
+
+                update_dataflash_global();
+        
+                autopilot_version_request(); 
+            }
+    }, timeout);   
+}
+
 function onOpen(openInfo) {
     if (openInfo) {
         // update connected_to
@@ -276,14 +293,10 @@ function onOpen(openInfo) {
         // the following stuff happens once, when the serial port is iopened.  for now, we would/could actually 
         // move this fron onOpen() to read: function (readInfo) in mavsp.js ...
         // BUT ...  without it HERE  the mav serial stream may not autopromote to mav .V2
-        send_heartbeat_handler(); // shrow a heartbeat first, blindly
-        set_stream_rates(4); //buzz?
-
-        ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
-
-        update_dataflash_global();
-
-        autopilot_version_request(); 
+        //send_heartbeat_handler(); // shrow a heartbeat first, blindly
+        //set_stream_rates(4); //buzz?
+        
+        waitSendMavlinkMessages(1000);
         // buzz todo populdate these before posting
         //googleAnalytics.sendEvent('Firmware', 'Variant', CONFIG.flightControllerIdentifier + ',' + CONFIG.flightControllerVersion);
 

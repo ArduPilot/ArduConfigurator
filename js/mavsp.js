@@ -10,7 +10,7 @@ var send_heartbeat_handler = function() {
           heartbeat.system_status = 218; // fieldtype: uint8_t  isarray: False 
           heartbeat.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
     
-          mavParserObj.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
+          mavParserObj.send(heartbeat,SYSID ? SYSID : 255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
 }
     
 var set_stream_rates = function(rate,target_system,target_component) {
@@ -552,8 +552,8 @@ var MSP = {
             send_heartbeat_handler(); // throw a heartbeat first, blindly?
             set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
             this.streamrate = 4; 
-            ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
-            autopilot_version_request();
+        //    ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
+        //    autopilot_version_request();
         }
 
         // some form of valid mavlink means we can consider ourselves connected as far as the GUI is concerned

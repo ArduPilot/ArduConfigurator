@@ -234,6 +234,8 @@ var testing = 0;
 //----------------------------------------------------------------------------------------------------
 var mspHelper = (function (gui) {
     var self = {};
+    
+    self.INIT_CONNECTION_ATTEMPTS = 0;
 
     self.BAUD_RATES_post1_6_3 = [
         'AUTO',
