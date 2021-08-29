@@ -267,6 +267,7 @@ var FC = {
         MISSION_PLANER = new WaypointCollection();
 
         ANALOG = {
+            board_vcc: 0,
             voltage: 0,
             mAhdrawn: 0,
             mWhdrawn: 0,

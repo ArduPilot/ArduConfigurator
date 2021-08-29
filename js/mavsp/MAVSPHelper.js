@@ -355,7 +355,7 @@ var mspHelper = (function (gui) {
                 Vcc: 5122
                 */
                 CONFIG.i2cError = mavmsg.I2Cerr;
-                ANALOG.voltage = mavmsg.Vcc / 1000.0;  // cpu volts
+                ANALOG.board_vcc = mavmsg.Vcc / 1000.0;  // cpu volts
                 // buzz todo
                 break;
             case mavlink20.MAVLINK_MSG_ID_MOUNT_STATUS:
@@ -449,7 +449,7 @@ var mspHelper = (function (gui) {
                 */
                 ANALOG.battery_full_when_plugged_in = true; // buzz hardcoded hack to match ardu
                 ANALOG.cell_count = 4; // buzz
-                ANALOG.voltage =  mavmsg.voltages[0] / 100.0; // buzz?
+                ANALOG.voltage =  mavmsg.voltages[0] / 1000.0; // showing voltage from first battery only
                 ANALOG.amperage = mavmsg.current_battery / 100.0; //?
                 ANALOG.mAhdrawn = mavmsg.current_consumed; 
                 ANALOG.battery_remaining_capacity = mavmsg.battery_remaining; //one of these is 

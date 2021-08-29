@@ -2133,6 +2133,7 @@ var ALLSETTINGS = {
   },
   "MISSION_PLANER": {},
   "ANALOG": {
+    "board_vcc": 0,
     "voltage": 0,
     "mAhdrawn": 5,
     "mWhdrawn": 0,
