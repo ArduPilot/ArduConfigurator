@@ -1274,6 +1274,8 @@ var mspHelper = (function (gui) {
             // 
             //     // buzz todo 
             //     break; 
+            case mavlink20.MAVLINK_MSG_ID_RADIO_STATUS:
+                break;
             
             case mavlink20.MAVLINK_MSG_ID_BAD_DATA:
                 break;
