@@ -1278,6 +1278,16 @@ var mspHelper = (function (gui) {
             case mavlink20.MAVLINK_MSG_ID_BAD_DATA:
                 break;
 
+            case mavlink20.MAVLINK_MSG_ID_ESC_TELEMETRY_1_TO_4:
+                break;
+
+            case mavlink20.MAVLINK_MSG_ID_ESC_TELEMETRY_5_TO_8:
+                break;
+    
+            case mavlink20.MAVLINK_MSG_ID_FILE_TRANSFER_PROTOCOL:
+                //todo
+                break;
+
             default:
                 // todo
 
