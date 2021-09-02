@@ -397,10 +397,15 @@ MavMission.prototype.DroneToMission = async function(filename) {
 // convert them to items, and send them...  'miss' comes from var miss = require("./gotmission.txt.js");
 MavMission.prototype.MissionToDrone = async function(miss) {
     var self = this;
+    
+    //save current home
+    var home = this.missionItems[0];
 
     // clear the internal list
     this.missionItems = [];
 
+    //re-set home
+    this.missionItems[0] = home ;
     // fallback to the default/demo mission
     if (miss == undefined ) { console.log("MISSION - sending default/demo mission as no number given."); miss = soccerFieldFlight;   }
 
