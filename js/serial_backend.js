@@ -293,10 +293,17 @@ function onOpen(openInfo) {
         // the following stuff happens once, when the serial port is iopened.  for now, we would/could actually 
         // move this fron onOpen() to read: function (readInfo) in mavsp.js ...
         // BUT ...  without it HERE  the mav serial stream may not autopromote to mav .V2
-        //send_heartbeat_handler(); // shrow a heartbeat first, blindly
-        //set_stream_rates(4); //buzz?
-        
-        waitSendMavlinkMessages(1000);
+        if(GUI.connected_to == "manual"){
+            waitSendMavlinkMessages(1000);
+        }else{
+            send_heartbeat_handler(); // shrow a heartbeat first, blindly
+            set_stream_rates(4); //buzz?
+            ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
+
+            update_dataflash_global();
+    
+            autopilot_version_request(); 
+        }
         // buzz todo populdate these before posting
         //googleAnalytics.sendEvent('Firmware', 'Variant', CONFIG.flightControllerIdentifier + ',' + CONFIG.flightControllerVersion);
 
