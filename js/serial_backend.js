@@ -126,6 +126,19 @@ $(document).ready(function () {
             if (selected_port === 'DFU') {
                 GUI.log(chrome.i18n.getMessage('dfu_connect_message'));
             }
+            else if (selected_port === 'manual') {
+                if (!clicks) {
+                    console.log('Connecting to: ' + selected_port);
+                    GUI.connecting_to = selected_port;
+
+                    // lock port select & baud while we are connecting / connected
+                    $('#port, #baud, #delay').prop('disabled', true);
+                    $('div.connect_controls a.connect_state').text(chrome.i18n.getMessage('connecting'));
+                    selected_port = $('#port-override')[0].value ;
+                    serial.connect(selected_port, {bitrate: selected_baud}, onOpen);
+                }
+            
+            }
             else if (selected_port != '0') {
                 if (!clicks) {
                     console.log('Connecting to: ' + selected_port);
@@ -134,7 +147,6 @@ $(document).ready(function () {
                     // lock port select & baud while we are connecting / connected
                     $('#port, #baud, #delay').prop('disabled', true);
                     $('div.connect_controls a.connect_state').text(chrome.i18n.getMessage('connecting'));
-
                     serial.connect(selected_port, {bitrate: selected_baud}, onOpen);
                 } else {
                     var wasConnected = CONFIGURATOR.connectionValid;

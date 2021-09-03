@@ -10,7 +10,7 @@ var serial = {
     bytesReceived:   0,
     bytesSent:       0,
     failed:          0,
-    connectionType:  'serial', // 'serial' or 'tcp'
+    connectionType:  'serial', // 'serial' or 'tcp' or 'udp'
     connectionIP:    '127.0.0.1',
     connectionPort:  2323,
 
@@ -21,9 +21,12 @@ var serial = {
 
     connect: function (path, options, callback) {
         var self = this;
-        var testUrl = path.match(/^tcp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
-        if (testUrl) {
-            self.connectTcp(testUrl[1], testUrl[2], options, callback);
+        var testTcp = path.match(/^tcp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
+        var testUdp = path.match(/^udp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
+        if (testTcp) {
+            self.connectTcp(testTcp[1], testTcp[2], options, callback);
+        }else if (testUdp) {
+            self.connectUdp(testUdp[1], testUdp[2], options, callback);
         } else {
             self.connectSerial(path, options, callback);
         }
@@ -228,11 +231,74 @@ var serial = {
                             }
                         });
 
-                        console.log(self.logHead + 'Connection opened with ID: ' + createInfo.socketId + ', url: ' + self.connectionIP + ':' + self.connectionPort);
+                        console.log(self.logHead + 'TCP Connection opened with ID: ' + createInfo.socketId + ', url: ' + self.connectionIP + ':' + self.connectionPort);
 
                         if (callback) callback(createInfo);
                     });
                 } else {
+                    self.openRequested = false;
+                    console.log(self.logHead + 'Failed to connect');
+                    if (callback) callback(false);
+                }
+
+            });
+        });
+    },
+    connectUdp: function (ip, port, options, callback) {
+        var self = this;
+        self.openRequested = true;
+        self.connectionIP = ip;
+        self.connectionPort = port || 14550;
+        self.connectionPort = parseInt(self.connectionPort);
+        self.connectionType = 'udp';
+        self.logHead = 'SERIAL-UDP: ';
+
+        console.log('connect to raw udp:', ip + ':' + port)
+        chrome.sockets.udp.create({}, function(createInfo) {
+            console.log('chrome.sockets.udp.create', createInfo)
+            if (createInfo && !self.openCanceled) {
+                self.connectionId = createInfo.socketId;
+                self.bitrate = 115200; // fake
+                self.bytesReceived = 0;
+                self.bytesSent = 0;
+                self.failed = 0;
+                self.openRequested = false;
+            }
+
+            chrome.sockets.udp.bind(createInfo.socketId, self.connectionIP, self.connectionPort, function (result){
+                if (chrome.runtime.lastError) {
+                    console.error('onConnectedCallback', chrome.runtime.lastError.message);
+                }
+
+                console.log('onConnectedCallback', result)
+                if(result == 0) {
+                    self.onReceive.addListener(function log_bytesReceived(info) {
+                        if (info.socketId != self.connectionId) return;
+                        self.bytesReceived += info.data.byteLength;
+                    });
+                    self.onReceiveError.addListener(function watch_for_on_receive_errors(info) {
+                        console.error(info);
+                        if (info.socketId != self.connectionId) return;
+
+                        // TODO: better error handle
+                        // error code: https://cs.chromium.org/chromium/src/net/base/net_error_list.h?sq=package:chromium&l=124
+                        switch (info.resultCode) {
+                            case -100: // CONNECTION_CLOSED
+                            case -102: // CONNECTION_REFUSED
+                                if (GUI.connected_to || GUI.connecting_to) {
+                                    $('a.connect').click();
+                                } else {
+                                    self.disconnect();
+                                }
+                                break;
+
+                        }
+                    });
+
+                    console.log(self.logHead + 'Connection opened with ID: ' + createInfo.socketId + ', url: ' + self.connectionIP + ':' + self.connectionPort);
+
+                    if (callback) callback(createInfo);
+            } else {
                     self.openRequested = false;
                     console.log(self.logHead + 'Failed to connect');
                     if (callback) callback(false);
@@ -257,7 +323,7 @@ var serial = {
             }
 
 //          chrome.serial.disconnect(this.connectionId, function (result) {
-            var disconnectFn = (self.connectionType == 'serial') ? chrome.serial.disconnect : chrome.sockets.tcp.close;
+            var disconnectFn = (self.connectionType == 'serial') ? chrome.serial.disconnect : ((self.connectionType == 'tcp') ? chrome.sockets.tcp.close : chrome.sockets.udp.close) ;
             disconnectFn(this.connectionId, function (result) {
 
                 if (chrome.runtime.lastError) {
@@ -296,7 +362,7 @@ var serial = {
         });
     },
     getInfo: function (callback) {
-        var chromeType = (this.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+        var chromeType = (this.connectionType == 'serial') ? chrome.serial : ((self.connectionType == 'tcp') ? chrome.sockets.tcp : chrome.sockets.udp) ;
         chromeType.getInfo(this.connectionId, callback);
     },
     getControlSignals: function (callback) {
@@ -314,8 +380,7 @@ var serial = {
             var data = self.outputBuffer[0].data,
                 callback = self.outputBuffer[0].callback;
 
-            var sendFn = (self.connectionType == 'serial') ? chrome.serial.send : chrome.sockets.tcp.send;
-
+            var sendFn = (self.connectionType == 'serial') ? chrome.serial.send : ((self.connectionType == 'tcp') ? chrome.sockets.tcp.send : chrome.sockets.udp.send) ;
             // binary:
             //sendFn(self.connectionId, binary, function (sendInfo) {
             //    console.log("TODO");
@@ -323,65 +388,120 @@ var serial = {
             // non-binary
             if (typeof sendFn === "function") { 
                 // safe to use the function
-           
-                sendFn(self.connectionId, data, function (sendInfo) {
-                    // tcp send error
-                    if (self.connectionType == 'tcp' && sendInfo.resultCode < 0) {
-                        var error = 'system_error';
-
-                        // TODO: better error handle
-                        // error code: https://cs.chromium.org/chromium/src/net/base/net_error_list.h?sq=package:chromium&l=124
-                        switch (sendInfo.resultCode) {
-                            case -100: // CONNECTION_CLOSED
-                            case -102: // CONNECTION_REFUSED
-                                error = 'disconnected';
-                                break;
-
-                        }
-                        if (callback) callback({
-                            bytesSent: 0,
-                            error: error
-                        });
-                        return;
-                    }
-
-                    // track sent bytes for statistics
-                    self.bytesSent += sendInfo.bytesSent;
-
-                    // fire callback
-                    if (callback) callback(sendInfo);
-
-                    // remove data for current transmission form the buffer
-                    self.outputBuffer.shift();
-
-                    // if there is any data in the queue fire send immediately, otherwise stop trasmitting
-                    if (self.outputBuffer.length) {
-                        // keep the buffer withing reasonable limits
-                        if (self.outputBuffer.length > 100) {
-                            var counter = 0;
-
-                            while (self.outputBuffer.length > 100) {
-                                self.outputBuffer.pop();
-                                counter++;
+            
+                if ( self.connectionType == 'udp' ){
+                    if (self.remoteAddress !== 0){
+                        sendFn(self.connectionId, data, self.remoteAddress, self.remotePort, function (sendInfo) {
+                            if (self.connectionType == 'udp' && sendInfo.resultCode < 0) {
+                                var error = 'system_error';
+            
+                                // TODO: better error handle
+                                // error code: https://cs.chromium.org/chromium/src/net/base/net_error_list.h?sq=package:chromium&l=124
+                                switch (sendInfo.resultCode) {
+                                    case -100: // CONNECTION_CLOSED
+                                    case -102: // CONNECTION_REFUSED
+                                        error = 'disconnected';
+                                        break;
+            
+                                }
+                                if (callback) callback({
+                                    bytesSent: 0,
+                                    error: error
+                                });
+                                return;
                             }
 
-                            console.log(self.logHead + 'Send buffer overflowing, dropped: ' + counter + ' entries');
+                            // track sent bytes for statistics
+                            self.bytesSent += sendInfo.bytesSent;
+
+                            // fire callback
+                            if (callback) callback(sendInfo);
+
+                            // remove data for current transmission form the buffer
+                            self.outputBuffer.shift();
+
+                            // if there is any data in the queue fire send immediately, otherwise stop trasmitting
+                            if (self.outputBuffer.length) {
+                                // keep the buffer withing reasonable limits
+                                if (self.outputBuffer.length > 100) {
+                                    var counter = 0;
+
+                                    while (self.outputBuffer.length > 100) {
+                                        self.outputBuffer.pop();
+                                        counter++;
+                                    }
+
+                                    console.log(self.logHead + 'Send buffer overflowing, dropped: ' + counter + ' entries');
+                                }
+
+                                send();
+                            } else {
+                                self.transmitting = false;
+                            }
+                        });
+                    }
+                } else {
+
+                    sendFn(self.connectionId, data, function (sendInfo) {
+                        // tcp send error
+                        if (self.connectionType == 'tcp' && sendInfo.resultCode < 0) {
+                            var error = 'system_error';
+
+                            // TODO: better error handle
+                            // error code: https://cs.chromium.org/chromium/src/net/base/net_error_list.h?sq=package:chromium&l=124
+                            switch (sendInfo.resultCode) {
+                                case -100: // CONNECTION_CLOSED
+                                case -102: // CONNECTION_REFUSED
+                                    error = 'disconnected';
+                                    break;
+
+                            }
+                            if (callback) callback({
+                                bytesSent: 0,
+                                error: error
+                            });
+                            return;
                         }
 
-                        send();
-                    } else {
-                        self.transmitting = false;
-                    }
-                });
+                        // track sent bytes for statistics
+                        self.bytesSent += sendInfo.bytesSent;
+
+                        // fire callback
+                        if (callback) callback(sendInfo);
+
+                        // remove data for current transmission form the buffer
+                        self.outputBuffer.shift();
+
+                        // if there is any data in the queue fire send immediately, otherwise stop trasmitting
+                        if (self.outputBuffer.length) {
+                            // keep the buffer withing reasonable limits
+                            if (self.outputBuffer.length > 100) {
+                                var counter = 0;
+
+                                while (self.outputBuffer.length > 100) {
+                                    self.outputBuffer.pop();
+                                    counter++;
+                                }
+
+                                console.log(self.logHead + 'Send buffer overflowing, dropped: ' + counter + ' entries');
+                            }
+
+                            send();
+                        } else {
+                            self.transmitting = false;
+                        }
+                    });
+                }
+
             }
         }
-
+    
         if (!this.transmitting) {
             this.transmitting = true;
             try {
             send();
             }catch (e) {
-                console.log('cant send riught now, transitional');
+                console.log('cant send right now, transitional');
             } 
         }
     },
@@ -389,12 +509,12 @@ var serial = {
         listeners: [],
 
         addListener: function (function_reference) {
-            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : ((self.connectionType == 'tcp') ? chrome.sockets.tcp : chrome.sockets.udp) ;
             chromeType.onReceive.addListener(function_reference);
             this.listeners.push(function_reference);
         },
         removeListener: function (function_reference) {
-            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : ((self.connectionType == 'tcp') ? chrome.sockets.tcp : chrome.sockets.udp);
             for (var i = (this.listeners.length - 1); i >= 0; i--) {
                 if (this.listeners[i] == function_reference) {
                     chromeType.onReceive.removeListener(function_reference);
@@ -409,12 +529,12 @@ var serial = {
         listeners: [],
 
         addListener: function (function_reference) {
-            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : ((self.connectionType == 'tcp') ? chrome.sockets.tcp : chrome.sockets.udp) ;
             chromeType.onReceiveError.addListener(function_reference);
             this.listeners.push(function_reference);
         },
         removeListener: function (function_reference) {
-            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : ((self.connectionType == 'tcp') ? chrome.sockets.tcp : chrome.sockets.udp) ;
             for (var i = (this.listeners.length - 1); i >= 0; i--) {
                 if (this.listeners[i] == function_reference) {
                     chromeType.onReceiveError.removeListener(function_reference);
