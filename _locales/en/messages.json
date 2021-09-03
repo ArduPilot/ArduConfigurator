@@ -1897,7 +1897,7 @@
         "message": "Loading..."
     },
     "firmwareFlasherFlashFirmware": {
-        "message": "Flash Firmware"
+        "message": "[DFU Only] Flash Firmware"
     },
     "firmwareFlasherGithubInfoHead": {
         "message": "Github Firmware Info"

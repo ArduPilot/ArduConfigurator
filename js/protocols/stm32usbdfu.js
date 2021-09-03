@@ -929,6 +929,8 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                             console.log('Programming: SUCCESSFUL');
                             $('span.progressLabel').text('Programming: SUCCESSFUL');
 
+                            $('.flash_on_connect').click(); // turn OFF the flash-on-connect to prevent reflash loop.
+
                             // update progress bar
                             self.progress_bar_e.addClass('valid');
 

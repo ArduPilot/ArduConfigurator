@@ -10,8 +10,8 @@ TABS.firmware_flasher.initialize = function (callback) {
     }
 
 
-    var intel_hex = false, // standard intel hex in string format
-        parsed_hex = false; // parsed raw hex in array format
+    var intel_hex = false; // standard intel hex in string format
+    var parsed_hex = false; // parsed raw hex in array format
 
     GUI.load("./tabs/firmware_flasher.html", function () {
         // translate to user-selected language
@@ -133,28 +133,23 @@ TABS.firmware_flasher.initialize = function (callback) {
                // var matchVersionFromTag = versionFromTagExpression.exec(release.tag_name);
                 var version = release['mav-firmware-version'];//matchVersionFromTag[1];
 
-                //release.assets.forEach(function(asset){
-                    //var result = release.url;
-                    // if ((!showDevReleases && release.prerelease) || !result) {
-                    //     return;
-                    // }
 
-                    //  if (release.format != 'hex') { // or .apj   
-                    //      return; // buzz todo. for now we use only firmwares that are _bl.hex files that can be flashed with dfu
-                    //  }
+                // tip: this file type is great for flashing with DFU: '_with_bl.hex'
+                // tip: this file type is great for flashing with DFU: '.apj'
 
-                     if (! release.url.endsWith('_with_bl.hex')) { 
-                        return; // buzz todo. for now we use only firmwares that are _bl.hex files that can be flashed with dfu
-                    }
+                if (  (release.url.endsWith('.apj')) || (release.url.endsWith('_with_bl.hex'))  ) { 
+                         // for now we use only firmwares that are .apj files that can be flashed with bootloader OR
+                         // _bl.hex files that can be flashed with dfu
+                   
 
-                    // var date = new Date("2001-01-01"); // buzz hack, no date data in ardu json
-                    // var formattedDate = "{0}-{1}-{2} {3}:{4}".format(
-                    //         date.getFullYear(),
-                    //         date.getMonth() + 1,
-                    //         date.getDate(),
-                    //         date.getUTCHours(),
-                    //         date.getMinutes()
-                    // );
+                    var date = new Date(release.published_at);
+                    var formattedDate = "{0}-{1}-{2} {3}:{4}".format(
+                            date.getFullYear(),
+                            date.getMonth() + 1,
+                            date.getDate(),
+                            date.getUTCHours(),
+                            date.getMinutes()
+                    );
 
                     var descriptor = {
                         "releaseUrl": release.url,
@@ -172,7 +167,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                     };
                     //releases[descriptor['uid']].push(descriptor);
                     releases[release.platform].push(descriptor);
-                //});
+                }
             });
             var selectTargets = [];
             Object.keys(releases)
@@ -251,7 +246,7 @@ TABS.firmware_flasher.initialize = function (callback) {
         $('a.load_file').on('click', function () {
 
             nwdialog.setContext(document);
-            nwdialog.openFileDialog('.hex', function(filename) {
+            nwdialog.openFileDialog('.apj', function(filename) { // buzz todo was .hex, not tested
                 const fs = require('fs');
                 
                 $('div.git_info').slideUp();
@@ -306,14 +301,20 @@ TABS.firmware_flasher.initialize = function (callback) {
                 return;
             }
 
-            function process_hex(data, summary) {
+            function process_hex(data, summary) { // data = .get from summary.url
                 intel_hex = data;
 
-                parse_hex(intel_hex, function (data) {
-                    parsed_hex = data;
+                // process_hex outsources most of this to parse_hex ( which is in a worker), but afterwards triggers an event/callback... 
 
-                    if (parsed_hex) {
+                parse_hex(intel_hex, function (data) {
+                    parsed_hex = data;  // come from hex_parser.js -> result{} object 
+
+                    console.log("process_hex/parse_hex completed...")
+
+                    if (parsed_hex) { //TABS.firmware_flasher.parsed_hex
                         var url;
+
+                        console.log(" parsed_hex = true =>"+ parsed_hex.bytes_total+' bytes')
 
                         googleAnalytics.sendEvent('Flashing', 'Firmware', 'online');
                         $('span.progressLabel').html('<a class="save_firmware" href="#" title="Save Firmware">Loaded Online Firmware: (' + parsed_hex.bytes_total + ' bytes)</a>');
@@ -364,6 +365,10 @@ TABS.firmware_flasher.initialize = function (callback) {
 
                         $('div.release_info').slideDown();
 
+                        // once u load a .hex, you probably don't need to see warning or notes any more.
+                        $('div.gui_warning').hide();
+                        $('div.gui_note').hide();
+
                     } else {
                         $('span.progressLabel').text(chrome.i18n.getMessage('firmwareFlasherHexCorrupted'));
                     }
@@ -376,17 +381,138 @@ TABS.firmware_flasher.initialize = function (callback) {
                 enable_load_online_button();
             }
 
+            function process_apj(data, summary) { // an apj is really a json file
+
+                // parse json, get bin blob out
+                var j = JSON.parse(data);
+
+                var binblob = j.image; // this is still base64 encoded
+                j.image = '';// remove it from json b4 display as its huge
+                console.log(j)// thte remainder of the json
+                
+                // at this point self.hex is a "string"
+
+                function _base64ToArrayBuffer(base64) {
+                    var binary_string = window.atob(base64);
+                    var len = binary_string.length;
+                    var bytes = new Uint8Array(len);
+                    for (var i = 0; i < len; i++) {
+                        bytes[i] = binary_string.charCodeAt(i);
+                    }
+                    //return bytes.buffer;
+                    return bytes;
+                }
+
+                var binblob2 = _base64ToArrayBuffer(binblob); // remove base64 encoding;  still zlib compressed
+
+
+                var binblob3 = pako.inflate(binblob2);//zlib.decompress(q);
+                
+                // at this point self.hex is a real Uint8Array()
+
+                /*
+                {board_id: 9,
+                USBID: "0x1209/0x5741"
+                board_id: 9
+                board_revision: 0
+                description: "Firmware for a STM32F427xx board"
+                git_identity: "0bb18a15"
+                image: "xxxxxxx"
+                image_size: 1009552
+                magic: "APJFWv1"
+                summary: "Pixhawk1-1M"
+                version: "0.1"
+                }
+                */
+
+                // for compat, shove a few things into parsed_hex  ( its the result format that hex_parser.js uses, but we don't use that parser here.
+                parsed_hex ={
+                    'bytes_total' : binblob3.length, 
+                    'data' : binblob3,
+                };
+
+                // todo basic check:
+                //if ( j.board_id != xxxx )
+
+                $('span.progressLabel').html('<a class="save_firmware" href="#" title="Save Firmware">Loaded Online Firmware: (' + parsed_hex.bytes_total + ' bytes)</a>');
+
+                $('a.flash_firmware').removeClass('disabled'); //for now we DONT want .apj to use this button
+                $('a.flash_firmware').hide(); // we need for .js to be able to trigger it, but don't want human to click it.
+
+                $('div.release_info .target').text(summary.target);
+                $('div.release_info .status').html(chrome.i18n.getMessage('firmwareFlasherReleaseStatusReleaseCandidate')).show();
+                $('div.release_info .name').text(summary.name).prop('href', summary.releaseUrl);
+                $('div.release_info .date').text(summary.date);
+                $('div.release_info .status').text(summary.status);
+                $('div.release_info .file').text(summary.file).prop('href', summary.url);
+
+                var formattedNotes = marked(summary.notes);
+                $('div.release_info .notes').html(formattedNotes);
+                // Make links in the release notes open in a new window
+                $('div.release_info .notes a').each(function () {
+                    $(this).attr('target', '_blank');
+                });
+
+                $('div.release_info').slideDown();
+
+                console.log(" parsed APJ = true =>"+ parsed_hex.bytes_total+' bytes')
+
+                // once u load a .apj, you probably don't need to see warning or notes any more.
+                $('div.gui_warning').hide();
+                $('div.gui_note').hide();
+
+            }
+
             var summary = $('select[name="firmware_version"] option:selected').data('summary');
             if (summary) { // undefined while list is loading or while running offline
-                $(".load_remote_file").text(chrome.i18n.getMessage('firmwareFlasherButtonLoading')).addClass('disabled');
+                //$(".load_remote_file").text(chrome.i18n.getMessage('firmwareFlasherButtonLoading')).addClass('disabled');
+                console.log("getting firmware from url:",summary.url);
                 $.get(summary.url, function (data) {
                     enable_load_online_button();
-                    process_hex(data, summary);
+
+                    if (  summary.url.endsWith('_with_bl.hex') ) { 
+                        console.log("PROCESS hex:",summary.url);
+                        process_hex(data, summary);
+                    }
+                    if (  summary.url.endsWith('.apj') ) { 
+                        console.log("PROCESS apj:",summary.url);
+                        process_apj(data, summary);
+                    }
+
                 }).fail(failed_to_load);
             } else {
                 $('span.progressLabel').text(chrome.i18n.getMessage('firmwareFlasherFailedToLoadOnlineFirmware'));
             }
         });
+
+        // $('a.flash_firmware2').click(function () { //Buzz2
+
+
+        //     //var port = "/dev/ttyACM0";
+
+        //     var port = String($('div#port-picker #port').val())
+
+        //     //(port, baud, hex,
+
+
+        //     //------------------
+
+        //     var up = new uploader(port,
+        //         115200,//args.baud_bootloader,
+        //         57600,//baud_flightstack,
+        //         115200,//args.baud_bootloader_flash,
+        //         1,//args.target_system,
+        //         1,//args.target_component,
+        //         255,//args.source_system,
+        //         0,//args.source_component
+        //         );
+    
+        //         //-----------
+
+        
+        // });
+
+        
 
         $('a.flash_firmware').click(function () {
             if (!$(this).hasClass('disabled')) {
@@ -425,9 +551,11 @@ TABS.firmware_flasher.initialize = function (callback) {
                                 if ($('input.flash_manual_baud').is(':checked')) {
                                     baud = parseInt($('#flash_manual_baud_rate').val());
                                 }
+                                // buzz todo, integrate ardu bootloader based on vid /pid detect?
 
 
-                                STM32.connect(port, baud, parsed_hex, options);
+                                //STM32.connect(port, baud, parsed_hex, options);
+                                APJ.connect(port, baud, parsed_hex, options);
                             } else {
                                 console.log('Please select valid serial port');
                                 GUI.log('<span style="color: red">Please select valid serial port</span>');
@@ -493,6 +621,8 @@ TABS.firmware_flasher.initialize = function (callback) {
                 $('.flash_on_connect_wrapper').show();
             } else {
                 $('input.updating').prop('checked', false);
+                $('.flash_on_connect_wrapper').show();// buzz hack to furce this feature ON for now.
+
             }
 
             // bind UI hook so the status is saved on change
@@ -544,7 +674,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             if (result.flash_on_connect) {
                 $('input.flash_on_connect').prop('checked', true);
             } else {
-                $('input.flash_on_connect').prop('checked', false);
+                $('input.flash_on_connect').prop('checked', true); // buzz hack to force it on  "flash_on_connect" works to get us into BL, "Flash firmware" button doesn't.
             }
 
             $('input.flash_on_connect').change(function () {
@@ -606,7 +736,9 @@ TABS.firmware_flasher.initialize = function (callback) {
 
         GUI.content_ready(callback);
     });
-};
+}
+
+ // ctrl-shift-pipe for matching jumping to matching brackets in vscode
 
 TABS.firmware_flasher.cleanup = function (callback) {
     PortHandler.flush_callbacks();
@@ -617,3 +749,4 @@ TABS.firmware_flasher.cleanup = function (callback) {
 
     if (callback) callback();
 };
+

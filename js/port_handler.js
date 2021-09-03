@@ -118,6 +118,7 @@ PortHandler.check = function () {
                 console.log('PortHandler - Found: ' + new_ports);
             } else {
                 console.log('PortHandler - Found: ' + new_ports[0]);
+                serial.newport = new_ports[0]; // remmber name of new port
             }
 
             self.update_port_select(current_ports);
@@ -155,7 +156,7 @@ PortHandler.check = function () {
         GUI.updateManualPortVisibility();
         setTimeout(function () {
             self.check();
-        }, 250);
+        }, 50); // buzz was 250
     });
 };
 

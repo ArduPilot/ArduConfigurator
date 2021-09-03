@@ -143,28 +143,28 @@ helper.mspQueue = (function (serial, MSP) {
             publicScope.setSoftLock();
             publicScope.setHardLock();
 
-            request.timer = setTimeout(function () {
-                console.log('MSP data request timed-out. code:' + request.code +" name:"+ request.name);
-                /*
-                 * Remove current callback
-                 */
-                //MSP.removeCallback(request.code); // remove all pending callbacks for the same packet type?
-                clearTimeout(request.timer); // just remove one
+            // request.timer = setTimeout(function () {
+            //     console.log('Serial data request timed-out. code:' + request.code +" name:"+ request.name);
+            //     /*
+            //      * Remove current callback
+            //      */
+            //     //MSP.removeCallback(request.code); // remove all pending callbacks for the same packet type?
+            //     clearTimeout(request.timer); // just remove one
 
 
-                /*
-                 * To prevent infinite retry situation, allow retry only while counter is positive
-                 */
-                if (request.retryCounter > 0) {
-                    request.retryCounter--;
+            //     /*
+            //      * To prevent infinite retry situation, allow retry only while counter is positive
+            //      */
+            //     if (request.retryCounter > 0) {
+            //         request.retryCounter--;
 
-                    /*
-                     * Create new entry in the queue
-                     */
-                    publicScope.put(request);
-                }
+            //         /*
+            //          * Create new entry in the queue
+            //          */
+            //         publicScope.put(request);
+            //     }
 
-            }, privateScope.getTimeout(request.code));
+            // }, privateScope.getTimeout(request.code));
 
             if (request.sentOn === null) {
                 request.sentOn = new Date().getTime();

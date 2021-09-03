@@ -7,26 +7,67 @@
                         <td><select name="board">
                                 <option value="0">Loading ...</option>
                         </select></td>
-                        <td><span class="description" i18n="firmwareFlasherOnlineSelectBoardDescription"></span></td>
+                        <td colspan=2><span class="description" i18n="firmwareFlasherOnlineSelectBoardDescription"></span></td>
                     </tr>
                     <tr>
                         <td><select name="firmware_version">
                                 <option value="0">Loading ...</option>
                         </select></td>
-                        <td><span class="description" i18n="firmwareFlasherOnlineSelectFirmwareVersionDescription"></span></td>
+                        <td colspan=2><span class="description" i18n="firmwareFlasherOnlineSelectFirmwareVersionDescription"></span></td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td><label> <input class="updating toggle" type="checkbox" /> <span
                                 i18n="firmwareFlasherNoReboot"></span>
                         </label></td>
                         <td><span class="description" i18n="firmwareFlasherNoRebootDescription"></span></td>
-                    </tr>
+                    </tr> -->
+
+                    <td colspan=2><span class="description" i18n="zzzz">Attempt to flash the board automatically (triggered by newly detected serial port).</span></td>
+
                     <tr class="option flash_on_connect_wrapper">
                         <td><label> <input class="flash_on_connect toggle" type="checkbox" /> <span
                                 i18n="firmwareFlasherFlashOnConnect"></span></label></td>
 
-                        <td><span class="description" i18n="firmwareFlasherFlashOnConnectDescription"></span></td>
+                        <td colspan=2><span class="description" i18n="firmwareFlasherFlashOnConnectDescription"></span></td>
                     </tr>
+                    <tr><td colspan=3><span style="text-align: center;font-size:large; ">&nbsp;</span></td></tr>
+                    <td style="vertical-align:top"> 
+                        <span style="text-align: center;font-size:large; ">Flashing APJ  / .apj files </span>
+                        <ol>
+                        <li>Remember, only '.apj' files can be flashed by the following steps:</li>
+                        <li>If connected to mavlink,etc. Disconnect.[blue circle top-right] </li>
+                        <li>choose you board type in first dropdown.[above]</li>
+                        <li>Choose one of the options ending in .apj from the second drop-down. [above]</li>
+                        <li>Ensure 'Flash on Connect' is enabled. [above]</li>
+                        <li>Press [Load Firmware [Online] from bottom of page. Release info should display. [below]</li>
+                        <!-- <li>(TIP: Do NOT NOT NOT Press 'Flash Firmware' for .apj file/s)</li> -->
+                        <!-- <li>Unplug USB from your board, and plug it back in.[If using DFU mode, hold down tiny button on board while plugging in]</li> -->
+                        <li>Unplug USB from your board, and plug it back in.[This uses your a bootloader, no need to hold button]</li>
+                        <li>Watch the grey progress bar. it should progress thru 'Erase' -> 'Write' -> 'Verify' ->'Success'[below]</li>
+                        <li>You might needs to Unplug USB from your board, and plug it back in, a second time.[sorry]</li>
+                        <li>Connect to mavlink,etc. Connect.[blue circle top-right] </li>
+                        <li>If APJ flashing doesn't work, it might be that you don't have a bootloader, so try DFU instructions with a _with_bl.hex file , just once.</li>
+                        </ol>
+                    </td> 
+                    <td width=3%>&nbsp;</td>
+                    <td style="vertical-align:top">
+                        <span style="text-align: center;font-size:large; ">Flashing DFU / _with_bl.hex files.</span>
+                        <ol>
+                        <li>Remember, only '_with_bl.hex' files can be flashed by the following steps:</li>
+                        <li>If connected to mavlink,etc. Disconnect.[blue circle top-right] </li>
+                        <li>choose you board type in first dropdown.[above]</li>
+                        <li>Choose one of the options ending in _with_bl.hex from the second drop-down. [above]</li>
+                        <li>Ensure 'Flash on Connect' is enabled. [above]</li>
+                        <li>Press Load Firmware [Online] from bottom of page. Release info should display. [below]</li>
+                        <li>Unplug USB from your board, hold down DfU/boot button, and and plug it back in. [This uses DFU mode, so u MUST hold down tiny button on board while plugging in]</li>
+                        <li>Press '[DFU Only] Flash Firmware' ( only for _with_bl.hex file/s)</li>
+                        <!-- <li>Unplug USB from your board, and plug it back in.[If you have a bootloader, no need to hold button]</li> -->
+                        <li>Watch the grey progress bar. it should progress thru 'Erasing' -> 'Flashing' -> 'Verifying' ->'Programming SUCCESSFUL'[below]</li>
+                        <li>You might needs to Unplug USB from your board, and plug it back in, a second time.[sorry]</li>
+                        <li>Connect to mavlink,etc. Connect.[blue circle top-right] </li>
+                        </ol>
+                    </td>  
+                    <!-- 
                     <tr class="option">
                         <td><label> <input class="erase_chip toggle" type="checkbox" /> <span
                                 i18n="firmwareFlasherFullChipErase"></span>
@@ -55,7 +96,8 @@
                                 i18n="firmwareFlasherShowDevelopmentReleases"></span>
                         </label></td>
                         <td><span class="description" i18n="firmwareFlasherShowDevelopmentReleasesDescription"></span></td>
-                    </tr>
+                    </tr> -->
+
                 </table>
             </div>
         </div>
@@ -123,5 +165,8 @@
         <div class="btn">
             <a class="flash_firmware disabled" href="#progressbar" i18n="firmwareFlasherFlashFirmware"></a>
         </div>
+        <!-- <div class="btn">
+            <a class="flash_firmware2 " href="#buzz2">Buzz2</a>
+        </div> -->
     </div>
 </div>

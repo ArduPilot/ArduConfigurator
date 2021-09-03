@@ -52,7 +52,7 @@ var serial = {
                 });
 
                 self.onReceiveError.addListener(function watch_for_on_receive_errors(info) {
-                    console.error(info);
+                    console.log(info);
                     googleAnalytics.sendException('Serial: ' + info.error, false);
 
                     switch (info.error) {
@@ -261,7 +261,7 @@ var serial = {
             disconnectFn(this.connectionId, function (result) {
 
                 if (chrome.runtime.lastError) {
-                    console.error(chrome.runtime.lastError.message);
+                    console.log(chrome.runtime.lastError.message);
                 }
 
                 result = result || self.connectionType == 'tcp';
@@ -282,7 +282,7 @@ var serial = {
         } else {
             // connection wasn't opened, so we won't try to close anything
             // instead we will rise canceled flag which will prevent connect from continueing further after being canceled
-            self.openCanceled = true;
+            //self.openCanceled = true;
         }
     },
     getDevices: function (callback) {
@@ -315,60 +315,74 @@ var serial = {
                 callback = self.outputBuffer[0].callback;
 
             var sendFn = (self.connectionType == 'serial') ? chrome.serial.send : chrome.sockets.tcp.send;
-            sendFn(self.connectionId, data, function (sendInfo) {
-                // tcp send error
-                if (self.connectionType == 'tcp' && sendInfo.resultCode < 0) {
-                    var error = 'system_error';
 
-                    // TODO: better error handle
-                    // error code: https://cs.chromium.org/chromium/src/net/base/net_error_list.h?sq=package:chromium&l=124
-                    switch (sendInfo.resultCode) {
-                        case -100: // CONNECTION_CLOSED
-                        case -102: // CONNECTION_REFUSED
-                            error = 'disconnected';
-                            break;
+            // binary:
+            //sendFn(self.connectionId, binary, function (sendInfo) {
+            //    console.log("TODO");
+            //});
+            // non-binary
+            if (typeof sendFn === "function") { 
+                // safe to use the function
+           
+                sendFn(self.connectionId, data, function (sendInfo) {
+                    // tcp send error
+                    if (self.connectionType == 'tcp' && sendInfo.resultCode < 0) {
+                        var error = 'system_error';
 
+                        // TODO: better error handle
+                        // error code: https://cs.chromium.org/chromium/src/net/base/net_error_list.h?sq=package:chromium&l=124
+                        switch (sendInfo.resultCode) {
+                            case -100: // CONNECTION_CLOSED
+                            case -102: // CONNECTION_REFUSED
+                                error = 'disconnected';
+                                break;
+
+                        }
+                        if (callback) callback({
+                            bytesSent: 0,
+                            error: error
+                        });
+                        return;
                     }
-                    if (callback) callback({
-                         bytesSent: 0,
-                         error: error
-                    });
-                    return;
-                }
 
-                // track sent bytes for statistics
-                self.bytesSent += sendInfo.bytesSent;
+                    // track sent bytes for statistics
+                    self.bytesSent += sendInfo.bytesSent;
 
-                // fire callback
-                if (callback) callback(sendInfo);
+                    // fire callback
+                    if (callback) callback(sendInfo);
 
-                // remove data for current transmission form the buffer
-                self.outputBuffer.shift();
+                    // remove data for current transmission form the buffer
+                    self.outputBuffer.shift();
 
-                // if there is any data in the queue fire send immediately, otherwise stop trasmitting
-                if (self.outputBuffer.length) {
-                    // keep the buffer withing reasonable limits
-                    if (self.outputBuffer.length > 100) {
-                        var counter = 0;
+                    // if there is any data in the queue fire send immediately, otherwise stop trasmitting
+                    if (self.outputBuffer.length) {
+                        // keep the buffer withing reasonable limits
+                        if (self.outputBuffer.length > 100) {
+                            var counter = 0;
 
-                        while (self.outputBuffer.length > 100) {
-                            self.outputBuffer.pop();
-                            counter++;
+                            while (self.outputBuffer.length > 100) {
+                                self.outputBuffer.pop();
+                                counter++;
+                            }
+
+                            console.log(self.logHead + 'Send buffer overflowing, dropped: ' + counter + ' entries');
                         }
 
-                        console.log(self.logHead + 'Send buffer overflowing, dropped: ' + counter + ' entries');
+                        send();
+                    } else {
+                        self.transmitting = false;
                     }
-
-                    send();
-                } else {
-                    self.transmitting = false;
-                }
-            });
+                });
+            }
         }
 
         if (!this.transmitting) {
             this.transmitting = true;
+            try {
             send();
+            }catch (e) {
+                console.log('cant send riught now, transitional');
+            } 
         }
     },
     onReceive: {

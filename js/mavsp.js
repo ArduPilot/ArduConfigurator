@@ -256,7 +256,7 @@ var mag_cal_cancel = function ( target_system,target_component ) {
 
 //     specific msg handler, for flight mode/s and sysid record keeping
 var heartbeat_handler =  function(message) {
-    //console.log(message);
+    console.log(message);
     var tmp_sysid = message._header.srcSystem;
 
     // don't allow messages that appear to come from 255 to be handled.

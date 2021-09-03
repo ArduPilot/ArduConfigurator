@@ -77,6 +77,8 @@ sources.Js = [
     './js/libraries/jbox/jBox.min.js',
     './js/libraries/switchery/switchery.js',
     './js/libraries/jquery.ba-throttle-debounce.js',
+    './js/libraries/pako.js',
+   // './js/uploader.js', no worky, see apj.js
     './js/helpers.js',
     './node_modules/inflection/inflection.min.js',
     './node_modules/bluebird/js/browser/bluebird.min.js',
@@ -120,6 +122,7 @@ sources.Js = [
     './js/mavsp.js', //buzz
     './js/protocols/stm32.js',
     './js/protocols/stm32usbdfu.js',
+    './js/protocols/apj.js', // kinda ripped off some bits from from stm32.js
     './js/localization.js',
     './js/boards.js',
     './js/servoMixerRuleCollection.js',
