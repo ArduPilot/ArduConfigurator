@@ -163,6 +163,10 @@ TABS.mission_control.initialize = function (callback) {
       
         function update_gpsTrack() {
 
+
+          if ( GPS_DATA == undefined ) {
+                return;
+          }
           if ( GPS_DATA.lat == undefined ) {
                 return;
           }
