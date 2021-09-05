@@ -60,11 +60,14 @@
                         <li>Ensure 'Flash on Connect' is enabled. [above]</li>
                         <li>Press Load Firmware [Online] from bottom of page. Release info should display. [below]</li>
                         <li>Unplug USB from your board, hold down DfU/boot button, and and plug it back in. [This uses DFU mode, so u MUST hold down tiny button on board while plugging in]</li>
+                        <li>At this point the Serial-select drop-down MUST be displaying 'DFU' to continue.[top right near 'Connect']</li>
                         <li>Press '[DFU Only] Flash Firmware' ( only for _with_bl.hex file/s)</li>
                         <!-- <li>Unplug USB from your board, and plug it back in.[If you have a bootloader, no need to hold button]</li> -->
                         <li>Watch the grey progress bar. it should progress thru 'Erasing' -> 'Flashing' -> 'Verifying' ->'Programming SUCCESSFUL'[below]</li>
                         <li>You might needs to Unplug USB from your board, and plug it back in, a second time.[sorry]</li>
                         <li>Connect to mavlink,etc. Connect.[blue circle top-right] </li>
+                        <li>If this DFU process does not work for you, you might need to add udev rules and the user to plugdev group as <a href='https://github.com/martinbudden/betaflight/blob/master/docs/USB%20Flashing.md'>described here: https://github.com/martinbudden/betaflight/blob/master/docs/USB%20Flashing.md </a></li>
+                            </li>
                         </ol>
                     </td>  
                     <!-- 
@@ -163,7 +166,7 @@
             <a class="load_remote_file disabled" href="#" i18n="firmwareFlasherButtonLoadOnline"></a>
         </div>
         <div class="btn">
-            <a class="flash_firmware disabled" href="#progressbar" i18n="firmwareFlasherFlashFirmware"></a>
+            <a class="flash_firmware disabled" href="#progressbar3" i18n="firmwareFlasherFlashFirmware"></a>
         </div>
         <!-- <div class="btn">
             <a class="flash_firmware2 " href="#buzz2">Buzz2</a>

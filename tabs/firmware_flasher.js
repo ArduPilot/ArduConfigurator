@@ -730,7 +730,7 @@ TABS.firmware_flasher.initialize = function (callback) {
         $(document).keypress(function (e) {
             if (e.which == 13) { // enter
                 // Trigger regular Flashing sequence
-                $('a.flash_firmware').click();
+               // $('a.flash_firmware').click();
             }
         });
 
