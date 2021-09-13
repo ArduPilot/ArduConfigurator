@@ -136,6 +136,51 @@ $(document).ready(function () {
                     $('div.connect_controls a.connect_state').text(chrome.i18n.getMessage('connecting'));
                     selected_port = $('#port-override')[0].value ;
                     serial.connect(selected_port, {bitrate: selected_baud}, onOpen);
+                }else {
+                    var wasConnected = CONFIGURATOR.connectionValid;
+
+                    helper.timeout.killAll();
+                    helper.interval.killAll(['global_data_refresh', 'msp-load-update']);
+                    helper.mspBalancedInterval.flush();
+
+                    GUI.tab_switch_cleanup();
+                    GUI.tab_switch_in_progress = false;
+                    CONFIGURATOR.connectionValid = false;
+                    GUI.connected_to = false;
+                    GUI.allowedTabs = GUI.defaultAllowedTabsWhenDisconnected.slice();
+
+                    /*
+                     * Flush
+                     */
+                    helper.mspQueue.flush();
+                    helper.mspQueue.freeHardLock();
+                    helper.mspQueue.freeSoftLock();
+
+                    serial.disconnect(onClosed);
+                    MSP.disconnect_cleanup();
+
+                    // Reset various UI elements
+                    $('span.i2c-error').text(0);
+                    $('span.cycle-time').text(0);
+                    $('span.cpu-load').text('');
+
+                    // unlock port select & baud
+                    $port.prop('disabled', false);
+                    $baud.prop('disabled', false);
+
+                    // reset connect / disconnect button
+                    $('div.connect_controls a.connect').removeClass('active');
+                    $('div.connect_controls a.connect_state').text(chrome.i18n.getMessage('connect'));
+
+                    // reset active sensor indicators
+                    sensor_status(0);
+
+                    if (wasConnected) {
+                        // detach listeners and remove element data
+                        $('#content').empty();
+                    }
+
+                    $('#tabs .tab_landing a').click();
                 }
             
             }
@@ -194,9 +239,8 @@ $(document).ready(function () {
 
                     $('#tabs .tab_landing a').click();
                 }
-
-                $(this).data("clicks", !clicks);
             }
+            $(this).data("clicks", !clicks);
         }
     });
 
