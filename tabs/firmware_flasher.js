@@ -246,7 +246,7 @@ TABS.firmware_flasher.initialize = function (callback) {
         $('a.load_file').on('click', function () {
 
             nwdialog.setContext(document);
-            nwdialog.openFileDialog('.apj', function(filename) { // buzz todo was .hex, not tested
+            nwdialog.openFileDialog('.apj,.hex', function(filename) { // buzz todo was .hex, not tested
                 const fs = require('fs');
                 
                 $('div.git_info').slideUp();
@@ -261,7 +261,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                     }
 
                     console.log('File loaded');
-
+                    if (filename.endsWith('.hex')){
                     parse_hex(data.toString(), function (data) {
                         parsed_hex = data;
 
@@ -274,6 +274,10 @@ TABS.firmware_flasher.initialize = function (callback) {
                             $('span.progressLabel').text(chrome.i18n.getMessage('firmwareFlasherHexCorrupted'));
                         }
                     });
+                }else if (filename.endsWith('.apj')){
+                    var summary = $('select[name="firmware_version"] option:selected').data('summary'); ;
+                    process_apj(data,summary);
+                }
                 });
 
             });
