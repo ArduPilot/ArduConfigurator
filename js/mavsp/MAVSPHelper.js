@@ -628,19 +628,19 @@ var mspHelper = (function (gui) {
                 RC.channels[1] = mavmsg.chan2_raw;     // etc..
                 RC.channels[2] = mavmsg.chan3_raw;
                 RC.channels[3] = mavmsg.chan4_raw;
-                RC.channels[4] = mavmsg.chan5_raw+1000+testing;
-                RC.channels[5] = mavmsg.chan6_raw+1200+testing*2;
-                RC.channels[6] = mavmsg.chan7_raw+1300+testing*0.2;
-                RC.channels[7] = mavmsg.chan8_raw+1400+testing*3;
-                RC.channels[8] = mavmsg.chan9_raw+1500+testing*0.3;
-                RC.channels[9] = mavmsg.chan10_raw+1600+testing*4;
-                RC.channels[10] = mavmsg.chan11_raw+1700+testing*0.4;
-                RC.channels[11] = mavmsg.chan12_raw+1800+testing*5;
-                RC.channels[12] = mavmsg.chan13_raw+1900+testing*.5;
-                RC.channels[13] = mavmsg.chan14_raw+2000+testing*6;
-                RC.channels[14] = mavmsg.chan15_raw+2100+testing*.6;
-                RC.channels[15] = mavmsg.chan16_raw+2200+testing*7;
-                testing = testing+100;  if( testing > 1000 ) testing = 10;
+                RC.channels[4] = mavmsg.chan5_raw;
+                RC.channels[5] = mavmsg.chan6_raw;
+                RC.channels[6] = mavmsg.chan7_raw;
+                RC.channels[7] = mavmsg.chan8_raw;
+                RC.channels[8] = mavmsg.chan9_raw;
+                RC.channels[9] = mavmsg.chan10_raw;
+                RC.channels[10] = mavmsg.chan11_raw;
+                RC.channels[11] = mavmsg.chan12_raw;
+                RC.channels[12] = mavmsg.chan13_raw;
+                RC.channels[13] = mavmsg.chan14_raw;
+                RC.channels[14] = mavmsg.chan15_raw;
+                RC.channels[15] = mavmsg.chan16_raw;
+               // testing = testing+100;  if( testing > 1000 ) testing = 10;
                // RC.channels[16] = mavmsg.chan17_raw+1300;
                // RC.channels[17] = mavmsg.chan18_raw+1400;
 
