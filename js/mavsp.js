@@ -357,7 +357,7 @@ var generic_message_handler = function(message) {
             'FILE_TRANSFER_PROTOCOL', 'MOUNT_STATUS','AUTOPILOT_VERSION_REQUEST',
             'REQUEST_DATA_STREAM', 'PARAM_REQUEST_READ', 'COMMAND_LONG', 'PARAM_REQUEST_LIST',
             'SETUP_SIGNING', 'SET_MODE',  'MISSION_REQUEST_INT', 'FILE_TRANSFER_PROTOCOL', 'MISSION_REQUEST_LIST',
-            'PARAM_SET', 'PARAM_VALUE',
+            'PARAM_SET', 'PARAM_VALUE','RADIO_STATUS',
             'TERRAIN_DATA', 'MAG_CAL_PROGRESS','MAG_CAL_REPORT',
             ].includes(message._name) ) { 
             
