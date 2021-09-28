@@ -2,6 +2,7 @@
   "name": "ARDUPILOT-configurator",
   "description": "ARDUPILOT Configurator",
   "version": "0.0.1",
+  "node-main": "pre-startup.js",
   "main": "main.html",
   "default_locale": "en",
   "scripts": {
@@ -34,6 +35,7 @@
   "dependencies": {
     "jspack": "file:js/mavsp/local_modules/jspack",
     "long": "file:js/mavsp/local_modules/long",
+    "serialport": "^9.0.2",
     "archiver": "^2.0.3",
     "bluebird": "3.4.1",
     "del": "^3.0.0",
