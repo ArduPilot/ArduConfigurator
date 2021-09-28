@@ -444,10 +444,12 @@ TABS.firmware_flasher.initialize = function (callback) {
                     if (  filename.endsWith('_with_bl.hex') ) { 
                         console.log("PROCESS hex:",summary.url);
                         process_hex(data, summary);
-                    }
-                    if (  filename.endsWith('.apj') ) { 
+                    } else if (  filename.endsWith('.apj') ) { 
                         console.log("PROCESS apj:",summary.url);
                         process_apj(data, summary);
+                    } else {
+                        console.log("Unable to process:",filename);
+                        $('span.progressLabel').text('Unable to process local file. (requires "_with_bl.hex" or ".apj")');
                     }
 
                 });
