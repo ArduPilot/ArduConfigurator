@@ -1,6 +1,8 @@
 //-------------------------------------------------------------
 //
-const SerialPort = require('serialport')
+//const SerialPort = require('serialport')
+const SerialPort = require("chrome-apps-serialport").SerialPort;
+
 
 // we get object types, but don't instantiate here.
 var {mavlink20, MAVLink20Processor} = require("./mav_v2.js"); 
