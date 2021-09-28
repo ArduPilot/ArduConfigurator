@@ -243,65 +243,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             $('select[name="release"]').empty().append('<option value="0">Offline</option>');
         });
 
-        $('a.load_file').on('click', function () {
-
-            nwdialog.setContext(document);
-            nwdialog.openFileDialog('.apj', function(filename) { // buzz todo was .hex, not tested
-                const fs = require('fs');
-                
-                $('div.git_info').slideUp();
-
-                console.log('Loading file from: ' + filename);
-
-                fs.readFile(filename, (err, data) => {
-
-                    if (err) {
-                        console.log("Error loading local file", err);
-                        return;
-                    }
-
-                    console.log('File loaded');
-
-                    parse_hex(data.toString(), function (data) {
-                        parsed_hex = data;
-
-                        if (parsed_hex) {
-                            googleAnalytics.sendEvent('Flashing', 'Firmware', 'local');
-                            $('a.flash_firmware').removeClass('disabled');
-
-                            $('span.progressLabel').text('Loaded Local Firmware: (' + parsed_hex.bytes_total + ' bytes)');
-                        } else {
-                            $('span.progressLabel').text(chrome.i18n.getMessage('firmwareFlasherHexCorrupted'));
-                        }
-                    });
-                });
-
-            });
-
-        });
-
-        /**
-         * Lock / Unlock the firmware download button according to the firmware selection dropdown.
-         */
-        $('select[name="firmware_version"]').change(function(evt){
-            $('div.release_info').slideUp();
-            $('a.flash_firmware').addClass('disabled');
-            if (evt.target.value=="0") {
-                $("a.load_remote_file").addClass('disabled');
-            }
-            else {
-                enable_load_online_button();
-            }
-        });
-
-        $('a.load_remote_file').click(function (evt) {
-
-            if ($('select[name="firmware_version"]').val() == "0") {
-                GUI.log("<b>No firmware selected to load</b>");
-                return;
-            }
-
-            function process_hex(data, summary) { // data = .get from summary.url
+        function process_hex(data, summary) { // data = .get from summary.url
                 intel_hex = data;
 
                 // process_hex outsources most of this to parse_hex ( which is in a worker), but afterwards triggers an event/callback... 
@@ -320,6 +262,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                         $('span.progressLabel').html('<a class="save_firmware" href="#" title="Save Firmware">Loaded Online Firmware: (' + parsed_hex.bytes_total + ' bytes)</a>');
 
                         $('a.flash_firmware').removeClass('disabled');
+                        $('a.flash_firmware').show(); // we need for human to click it for .hex file/s only.      
 
                         if (summary.commit) {
                             $.get('https://api.github.com/repos/ArduPilot/ardupilot/commits/' + summary.commit, function (data) {
@@ -373,15 +316,9 @@ TABS.firmware_flasher.initialize = function (callback) {
                         $('span.progressLabel').text(chrome.i18n.getMessage('firmwareFlasherHexCorrupted'));
                     }
                 });
-            }
+        }
 
-            function failed_to_load() {
-                $('span.progressLabel').text(chrome.i18n.getMessage('firmwareFlasherFailedToLoadOnlineFirmware'));
-                $('a.flash_firmware').addClass('disabled');
-                enable_load_online_button();
-            }
-
-            function process_apj(data, summary) { // an apj is really a json file
+        function process_apj(data, summary) { // an apj is really a json file
 
                 // parse json, get bin blob out
                 var j = JSON.parse(data);
@@ -411,7 +348,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                 // at this point self.hex is a real Uint8Array()
 
                 /*
-                {board_id: 9,
+                j = {board_id: 9,
                 USBID: "0x1209/0x5741"
                 board_id: 9
                 board_revision: 0
@@ -424,6 +361,10 @@ TABS.firmware_flasher.initialize = function (callback) {
                 version: "0.1"
                 }
                 */
+
+                // we can optionally display from the metadata inside teh apj if we want.. for now lets dump the apj contents
+                // into the eend of the notes section
+                summary.notes = summary.notes + "<br>\n"+ JSON.stringify(j);
 
                 // for compat, shove a few things into parsed_hex  ( its the result format that hex_parser.js uses, but we don't use that parser here.
                 parsed_hex ={
@@ -461,6 +402,85 @@ TABS.firmware_flasher.initialize = function (callback) {
                 $('div.gui_warning').hide();
                 $('div.gui_note').hide();
 
+        }
+
+        $('a.load_file').on('click', function () {
+
+            nwdialog.setContext(document);
+            nwdialog.openFileDialog('.apj,.hex', function(filename) { 
+                const fs = require('fs');
+                
+                $('div.git_info').slideUp();
+
+                console.log('Loading file from: ' + filename);
+
+                fs.readFile(filename, (err, data) => {
+
+                    if (err) {
+                        console.log("Error loading local file", err);
+                        return;
+                    }
+
+                    console.log('File loaded');
+
+                    data = data.toString() // from binary to string, as the rest of the codebase excpects it stringy
+                  
+                    googleAnalytics.sendEvent('Flashing', 'Firmware', 'local');
+                    $('a.flash_firmware').removeClass('disabled');
+                    $('span.progressLabel').text('Loaded Local Firmware: (' + parsed_hex.bytes_total + ' bytes)');
+                
+                    // when we pull this from the internet, we get this metdata... but when loaded from file, we make it up..
+                    var summary = {
+                        target: 'Fishy',
+                        name: 'Unknown chip',
+                        releaseUrl: 'http://localhost/',
+                        url: 'http://localhost/',
+                        date: '01/01/1970',
+                        status: 'obvious',
+                        notes: 'We cant protect u if you get it wrong using your own file from on-disk',
+                        file: 'Number-5 is alive, but your board might not survive this.', 
+                    };
+
+                    if (  filename.endsWith('_with_bl.hex') ) { 
+                        console.log("PROCESS hex:",summary.url);
+                        process_hex(data, summary);
+                    }
+                    if (  filename.endsWith('.apj') ) { 
+                        console.log("PROCESS apj:",summary.url);
+                        process_apj(data, summary);
+                    }
+
+                });
+
+            });
+
+        });
+
+        /**
+         * Lock / Unlock the firmware download button according to the firmware selection dropdown.
+         */
+        $('select[name="firmware_version"]').change(function(evt){
+            $('div.release_info').slideUp();
+            $('a.flash_firmware').addClass('disabled');
+            if (evt.target.value=="0") {
+                $("a.load_remote_file").addClass('disabled');
+            }
+            else {
+                enable_load_online_button();
+            }
+        });
+
+        $('a.load_remote_file').click(function (evt) {
+
+            if ($('select[name="firmware_version"]').val() == "0") {
+                GUI.log("<b>No firmware selected to load</b>");
+                return;
+            }
+
+            function failed_to_load() {
+                $('span.progressLabel').text(chrome.i18n.getMessage('firmwareFlasherFailedToLoadOnlineFirmware'));
+                $('a.flash_firmware').addClass('disabled');
+                enable_load_online_button();
             }
 
             var summary = $('select[name="firmware_version"] option:selected').data('summary');
@@ -485,34 +505,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             }
         });
 
-        // $('a.flash_firmware2').click(function () { //Buzz2
 
-
-        //     //var port = "/dev/ttyACM0";
-
-        //     var port = String($('div#port-picker #port').val())
-
-        //     //(port, baud, hex,
-
-
-        //     //------------------
-
-        //     var up = new uploader(port,
-        //         115200,//args.baud_bootloader,
-        //         57600,//baud_flightstack,
-        //         115200,//args.baud_bootloader_flash,
-        //         1,//args.target_system,
-        //         1,//args.target_component,
-        //         255,//args.source_system,
-        //         0,//args.source_component
-        //         );
-    
-        //         //-----------
-
-        
-        // });
-
-        
 
         $('a.flash_firmware').click(function () {
             if (!$(this).hasClass('disabled')) {
