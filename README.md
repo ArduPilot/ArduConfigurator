@@ -70,6 +70,14 @@ for the Windows app. If you don't have Wine installed you can create a release b
 
 Quick start ( Devs use linux , so other platforms YMMV):
 'npm run dev' to run it from the source folder without bundling any resources, great for debug and code hacking. Its also the only way the code runs right this instant., sorry, we haven't got any release ready yet. 'npm start' is very similar, but uses a 'bundled' main.html
+If the app starts-up for you, but right-click doesnn't allow you to use chrome-dev-tools or inspect stuff, then you don't have the 'sdk' version of NW installed.  The command/s to try to remedy that are (one or more of these might help):  
+`nvm deactivate`
+`mv ~/.npmrc ~/.npmrc.bak`
+`rm -rf node_modules/nw`
+`rm package-lock.json`
+`npm install --save nw@0.50.3-sdk`
+`npm install --save nw@0.50.3-sdk -g`
+`export NWJS_BUILD_TYPE=sdk; npm install`
 
 Bundling/releasing not working properly just now, but when it's working it will run like this:
 'npm run gulp dist' to bundle it.
