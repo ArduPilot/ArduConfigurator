@@ -33,8 +33,8 @@
   "author": "davidbuzz",
   "license": "GPL-3.0",
   "dependencies": {
-    "jspack": "file:js/mavsp/local_modules/jspack",
-    "long": "file:js/mavsp/local_modules/long",
+    "jspack": "file:backend/jspack",
+    "long": "file:backend/long",
     "chrome-apps-serialport": "^1.0.8",
     "archiver": "^2.0.3",
     "bluebird": "3.4.1",
