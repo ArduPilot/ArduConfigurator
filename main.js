@@ -122,7 +122,7 @@ $(document).ready( function () {
 
     // log library versions in console to make version tracking easier
     console.log('Libraries: jQuery - ' + $.fn.jquery + ', d3 - ' + d3.version + ', three.js - ' + THREE.REVISION);
-    //console.log('Libraries: '+process.versions['nw-flavor']); // returns 'sdk'
+    console.log('Libraries: NW-flavour:'+process.versions['nw-flavor']); // returns 'sdk'
 
     googleAnalytics.sendEvent('Setting','OS' , GUI.operating_system );
     googleAnalytics.sendEvent('Setting','Chrome' , window.navigator.appVersion.replace(/.*Chrome\/([0-9.]*).*/, "$1") );
