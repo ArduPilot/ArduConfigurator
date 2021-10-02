@@ -6,10 +6,10 @@ Generated from: ardupilotmega.xml,common.xml,uAvionix.xml,icarous.xml,minimal.xm
 Note: this file has been auto-generated. DO NOT EDIT
 */
 
-jspack = require("jspack").jspack,
-    _ = require("underscore"),
-    events = require("events"), // for .emit(..), MAVLink20Processor inherits from events.EventEmitter
-    util = require("util");
+jspack = require("jspack").jspack;
+_ = require("underscore");
+events = require("events"); // for .emit(..), MAVLink20Processor inherits from events.EventEmitter
+util = require("util");
 
 var Long = require('long');
 
@@ -16259,7 +16259,10 @@ MAVLink20Processor.prototype.decode = function(msgbuf) {
     return m;
 }
 
+// allow loading as both common.js (Node), and/or vanilla javascript in-browser
+if(typeof module === "object" && module.exports) {
+    module.exports = {mavlink20, MAVLink20Processor};
+}
 
 // Expose this code as a module
-module.exports = {mavlink20, MAVLink20Processor};
 

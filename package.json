@@ -35,6 +35,7 @@
   "dependencies": {
     "jspack": "file:backend/jspack",
     "long": "file:backend/long",
+    "mavlink": "file:backend/mavlink_ardupilotmega_v2.0",
     "chrome-apps-serialport": "^1.0.8",
     "archiver": "^2.0.3",
     "bluebird": "3.4.1",
