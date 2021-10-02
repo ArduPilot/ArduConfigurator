@@ -33,6 +33,7 @@
   "author": "davidbuzz",
   "license": "GPL-3.0",
   "dependencies": {
+    "backbone": "^1.4.0",
     "jspack": "file:backend/jspack",
     "long": "file:backend/long",
     "mavlink": "file:backend/mavlink_ardupilotmega_v2.0",

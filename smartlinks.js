@@ -5,7 +5,9 @@ const SerialPort = require("chrome-apps-serialport").SerialPort;
 
 
 // we get object types, but don't instantiate here.
-var {mavlink20, MAVLink20Processor} = require("./mav_v2.js"); 
+//var {mavlink20, MAVLink20Processor} = require("./mav_v2.js"); 
+var {mavlink20, MAVLink20Processor} = require("./backend/mavlink_ardupilotmega_v2.0/mavlink.js"); 
+
 
 // set one of these true when we see some sort of mavlink, either via tcp:localhost:5760 or as incoming udp stream
 // once UDP is successful, then the other connection/s can stop re-trying etc.
