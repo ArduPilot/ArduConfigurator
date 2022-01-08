@@ -1,52 +1,52 @@
-# ARDUPILOT Configurator
+# ArduPilot Configurator
 
-ARDUPILOT Configurator is a crossplatform configuration tool for the [ARDUPILOT](https://github.com/ArduPilot/ardupilot) flight control system.
+ArduPilot Configurator is a crossplatform configuration tool for the [ArduPilot](https://github.com/ArduPilot/ardupilot) flight control system.
 
-It runs as an app within Google Chrome and allows you to configure the ARDUPILOT software running on any supported ARDUPILOT target.
+It runs as an app within Google Chrome and allows you to configure the ArduPilot software running on any supported ArduPilot target.
 
-Various types of aircraft are supported by the tool and by ARDUPILOT, e.g. quadcopters, hexacopters, octocopters and fixed-wing aircraft.
+Various types of aircraft are supported by the tool and by ArduPilot, e.g. quadcopters, hexacopters, octocopters and fixed-wing aircraft.
 
-![pic1](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator1.png?raw=true)
-![pic2](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator2.png?raw=true)
-![pic3](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator3.png?raw=true)
-![pic4](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator4.png?raw=true)
-![pic5](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator5.png?raw=true)
-![pic6](https://github.com/davidbuzz/ardu-configurator/blob/master/configurator6.png?raw=true)
+![pic1](https://github.com/ArduPilot/ArduConfigurator/blob/master/configurator1.png?raw=true)
+![pic2](https://github.com/ArduPilot/ArduConfigurator/blob/master/configurator2.png?raw=true)
+![pic3](https://github.com/ArduPilot/ArduConfigurator/blob/master/configurator3.png?raw=true)
+![pic4](https://github.com/ArduPilot/ArduConfigurator/blob/master/configurator4.png?raw=true)
+![pic5](https://github.com/ArduPilot/ArduConfigurator/blob/master/configurator5.png?raw=true)
+![pic6](https://github.com/ArduPilot/ArduConfigurator/blob/master/configurator6.png?raw=true)
 
 
 ## Installation
 
-Depending on target operating system, _ARDUPILOT Configurator_ is distributed as _standalone_ application or Chrome App.
+Depending on target operating system, _ArduPilot Configurator_ is distributed as _standalone_ application or Chrome App.
 
 ### Windows
 
-1. Visit [release page](https://github.com/davidbuzz/ardu-configurator/releases)
+1. Visit [release page](https://github.com/ArduPilot/ArduConfigurator/releases)
 1. Download Configurator for Windows platform (win32 or win64 is present)
 1. Extract ZIP archive
-1. Run ARDUPILOT Configurator app from unpacked folder
+1. Run ArduPilot Configurator app from unpacked folder
 1. Configurator is not signed, so you have to allow Windows to run untrusted application. There might be a monit for it during first run 
 
 ### Linux
 
-1. Visit [release page](https://github.com/davidbuzz/ardu-configurator/releases)
+1. Visit [release page](https://github.com/ArduPilot/ArduConfigurator/releases)
 1. Download Configurator for Linux platform (linux32 and linux64 are present)
 1. Extract tar.gz archive
-1. Make the ARDUPILOT-configurator file executable (chmod +x ARDUPILOT-configurator)
+1. Make the ArduPilot-configurator file executable (chmod +x ArduPilot-configurator)
 1. Run ARDUPILOT Configurator app from unpacked folder
 
 ### Mac
 
-1. Visit [release page](https://github.com/davidbuzz/ardu-configurator/releases)
+1. Visit [release page](https://github.com/ArduPilot/ArduConfigurator/releases)
 1. Download Configurator for Mac platform
 1. Extract ZIP archive
-1. Run ARDUPILOT Configurator
+1. Run ArduPilot Configurator
 1. Configurator is not signed, so you have to allow Mac to run untrusted application. There might be a monit for it during first run 
 
 ### ChromeOS
 
-**ARDUPILOT Configurator** form ChromeOS is available in [Chrome Web Store](https://chrome.google.com/webstore/detail/ARDUPILOT-configurator/fmaidjmgkdkpafmbnmigkpdnpdhopgel)
+**ArduPilot Configurator** form ChromeOS is available in [Chrome Web Store](https://chrome.google.com/webstore/detail/ArduPilot-configurator/fmaidjmgkdkpafmbnmigkpdnpdhopgel)
 
-### Building and running ARDUPILOT Configurator locally (for development or Linux users)
+### Building and running ArduPilot Configurator locally (for development or Linux users)
 
 For local development, **node.js** build system is used.
 
@@ -77,12 +77,12 @@ Bundling/releasing not working properly just now, but when it's working it will 
 
 ## BUGs?  absolutely.
 
-See [BUGS page](https://github.com/davidbuzz/ardu-configurator/blob/master/BUGS.md)
+See [BUGS page](https://github.com/ArduPilot/ArduConfigurator/blob/master/BUGS.md)
 
 
 ## Different MAP providers? 
 
-See [MAPS page](https://github.com/davidbuzz/ardu-configurator/blob/master/MAPS.md)
+See [MAPS page](https://github.com/ArduPilot/ArduConfigurator/blob/master/MAPS.md)
 
 
 ## Notes
@@ -107,11 +107,11 @@ everything, hardware is not working or have any other _support_ problem, please 
 
 ## Issue trackers
 
-For ARDUPILOT configurator issues raise them here
+For ArduPilot configurator issues raise them here
 
-https://github.com/davidbuzz/ardu-configurator/issues
+https://github.com/ArduPilot/ArduConfigurator/issues
 
-For ARDUPILOT firmware issues raise them here
+For ArduPilot firmware issues raise them here
 
 https://github.com/ArduPilot/ardupilot/issues
 
