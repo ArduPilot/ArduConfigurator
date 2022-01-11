@@ -2,8 +2,7 @@
   "name": "ARDUPILOT-configurator",
   "description": "ARDUPILOT Configurator",
   "version": "0.0.1",
-  "node-main": "pre-startup.js",
-  "main": "main.html",
+  "main": "pre-startup.js",
   "default_locale": "en",
   "scripts": {
     "__comment0__": " npm run gulp build",

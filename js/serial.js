@@ -21,9 +21,13 @@ var serial = {
 
     connect: function (path, options, callback) {
         var self = this;
-        var testUrl = path.match(/^tcp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
-        if (testUrl) {
-            self.connectTcp(testUrl[1], testUrl[2], options, callback);
+        var testUrlTCP = path.match(/^tcp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
+        var testUrlUDP = path.match(/^udp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
+
+        if (testUrlTCP) {
+            self.connectTcp(testUrlTCP[1], testUrlTCP[2], options, callback);
+        }else if (testUrlUDP) {
+            self.connectUdp(testUrlUDP[1], testUrlUDP[2], options, callback);
         } else {
             self.connectSerial(path, options, callback);
         }
@@ -241,6 +245,70 @@ var serial = {
             });
         });
     },
+    // this is a fake/minimal udp impl that's mostly implemented in Node.js pre-start.js before the gui even starts
+    connectUdp: function (ip, port, options, callback) {
+        var self = this;
+        self.openRequested = true;
+        self.connectionIP = ip;
+        self.connectionPort = port || 2323;
+        self.connectionPort = parseInt(self.connectionPort);
+        self.connectionType = 'udp';
+        self.logHead = 'SERIAL-UDP: ';
+
+        console.log('connect to raw udp:', ip + ':' + port)
+
+        self.connectionId = 1; //createInfo.socketId;
+        self.bitrate = 115200; // fake
+        self.bytesReceived = 0;
+        self.bytesSent = 0;
+        self.failed = 0;
+        self.openRequested = false;
+
+        // fake connection info, looks like serial  
+        var connectionInfo = {
+            bitrate: 115200,
+            bufferSize: 4096,
+            connectionId: 1,
+            ctsFlowControl: false,
+            dataBits: "eight",
+            name: "",
+            parityBit: "no",
+            paused: false,
+            persistent: false,
+            receiveTimeout: 0,
+            sendTimeout: 0,
+            stopBits: "one",
+        };
+
+        if (chrome.runtime.lastError) {
+            console.error('connectUdp', chrome.runtime.lastError.message);
+        }
+
+        if (callback) callback(connectionInfo);
+
+        self.onReceive.addListener(function log_bytesReceived(info) {
+            self.bytesReceived += info.data.byteLength;
+            if (chrome.runtime.lastError) {
+                console.error('connectUdp2', chrome.runtime.lastError.message);
+            }
+        });
+        self.onReceiveError.addListener(function watch_for_on_receive_errors(info) {
+            console.error(info);
+            
+
+                    if (chrome.runtime.lastError) {
+                        console.error('connectUdp3', chrome.runtime.lastError.message);
+                    }
+                
+        });
+
+        console.log(self.logHead + 'Connection opened with ID: ' + self.connectionId + ', url: ' + self.connectionIP + ':' + self.connectionPort);
+
+
+    },
+
+
+
     disconnect: function (callback) {
         var self = this;
 
@@ -257,12 +325,29 @@ var serial = {
             }
 
 //          chrome.serial.disconnect(this.connectionId, function (result) {
-            var disconnectFn = (self.connectionType == 'serial') ? chrome.serial.disconnect : chrome.sockets.tcp.close;
+            var disconnectFn = null;
+            if (self.connectionType == 'serial') {
+                disconnectFn = chrome.serial.disconnect ;
+            }
+            if (self.connectionType == 'tcp') {
+                disconnectFn = chrome.sockets.tcp.close;
+            }
+            if (self.connectionType == 'udp') {
+                disconnectFn = chrome.sockets.tcp.close; // udp is connection-less, use tcp handler and ignore it
+            }
             disconnectFn(this.connectionId, function (result) {
 
+                // this is tcp handling
                 if (chrome.runtime.lastError) {
-                    console.log(chrome.runtime.lastError.message);
+                    console.log("3333333",chrome.runtime.lastError.message);
                 }
+                
+                // this is minimal udp handling
+                if (chrome.runtime.lastError.message == 'Socket not found') { 
+                    console.log(self.logHead + 'Connection with ID: ' + self.connectionId + ' closed, Sent: ' + self.bytesSent + ' bytes, Received: ' + self.bytesReceived + ' bytes');
+                    return;
+                }
+                
 
                 result = result || self.connectionType == 'tcp';
                 if (result) {
@@ -342,6 +427,9 @@ var serial = {
                             bytesSent: 0,
                             error: error
                         });
+                        return;
+                    }
+                    if (self.connectionType == 'udp') {
                         return;
                     }
 

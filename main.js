@@ -1,6 +1,7 @@
 /*global $, chrome, analytics*/
 //'use strict';
 
+
 // Google Analytics
 var googleAnalyticsService = analytics.getService('ArduConfigurator');
 var googleAnalytics = googleAnalyticsService.getTracker("UA-201128261-1");
@@ -17,6 +18,35 @@ let globalSettings = {
     proxyURL: null,
     proxyLayer: null
 };
+
+
+// this event listner's job is to get mavlink UDP stream from Node backend and pass it throgh to frontend/gui
+window.addEventListener('message', function(event) {
+    // ignore 'false' silently
+    if (event.data == false) return;
+
+    // event.data is JSON-as-string    
+    var data = JSON.parse(event.data);
+
+    //if ( data.udpmavlink == false) return;// this is all we handle here, rest handled elsewhere
+    if ( ! data.udpmavlink == true) return;// this is all we handle here, rest handled elsewhere
+
+    //console.log("window got mavlink:",event.data);// show raw string, not parsed json
+
+    if ( data.pkt == "") return;// dont pass-on empty packet
+    if ( data.pkt == undefined) return;// dont pass-on empty packet
+
+    var message = data.pkt;
+
+    //console.log("window got mavlink:",message);
+
+    // we're "emit"-ing the packets here lust like MAVLink20Processor.prototype.parseChar
+     // this is the FRONTEND generic_message_handler in js/mavsp.js
+    mpo.emit('message',message); // this is the FRONTEND generic_message_handler in js/mavsp.js  - generic_message_handler(message);
+    mpo.emit(message._name,message);// nad the by-name re-emit of backend packet to frontend using MAVLink20Processor instance
+
+    //alert(data);
+}, false);
 
  
 $(document).ready( function () {

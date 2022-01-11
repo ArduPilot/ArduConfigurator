@@ -4,6 +4,10 @@
 // result = if hex file is valid, result is an object
 //          if hex file wasn't valid (crc check failed on any of the lines), result will be false
 function read_hex_file(data) {
+
+    if (data == undefined ) { return false; }
+    if (! data ) { return false; } // false
+    console.log('data',data);
     data = data.split("\n");
 
     // check if there is an empty line in the end of hex file, if there is, remove it
@@ -87,8 +91,10 @@ function read_hex_file(data) {
 
     if (result.end_of_file && hexfile_valid) {
         postMessage(result);
+        return true;
     } else {
         postMessage(false);
+        return false;
     }
 }
 
@@ -98,12 +104,22 @@ function microtime() {
     return now;
 }
 
+// a filename sent as a message is captured by 'onmessage'
 onmessage = function(event) {
+
+    // skip spurious non-hex-handling messages:
+    if ( event.isTrusted == true) return;
+    var data = JSON.parse(event.data);//
+    if ( data.udpmavlink == true) return;// handled elsewhere, not a .hex file
+
+    console.log("hex event reciever",JSON.stringify(event));
+
     var time_parsing_start = microtime(); // track time
 
-    read_hex_file(event.data);
+    if (read_hex_file(event.data)){
 
-    console.log('HEX_PARSER - File parsed in: ' + (microtime() - time_parsing_start).toFixed(4) + ' seconds');
+        console.log('HEX_PARSER - File parsed in: ' + (microtime() - time_parsing_start).toFixed(4) + ' seconds');
+    }
 
     // terminate worker
     close();

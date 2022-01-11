@@ -256,7 +256,7 @@ var mag_cal_cancel = function ( target_system,target_component ) {
 
 //     specific msg handler, for flight mode/s and sysid record keeping
 var heartbeat_handler =  function(message) {
-    console.log(message);
+    //console.log(message);
     var tmp_sysid = message._header.srcSystem;
 
     // don't allow messages that appear to come from 255 to be handled.
@@ -265,6 +265,11 @@ var heartbeat_handler =  function(message) {
     if (SYSID == undefined ) { return;  } // haven't set the sysid global yet, elsewhere.
 
     if (FC.curr_mav_state['HEARTBEAT'] == undefined ) { return;} // the other handler/s haven't run yet, delay this one
+
+    // weird work-around for UDP packets that come in before the GUI is ready for them..
+    if (CONFIG == undefined ) {
+        return;
+    }
 
     // alight ardupilot vehicle 'type' with inav 'platformType'
     if ( FC.curr_mav_state['HEARTBEAT'].type ==  mavlink20.MAV_TYPE_FIXED_WING ) 
@@ -333,6 +338,8 @@ var generic_message_handler = function(message) {
         /*console.log('--out sending:',message._name); */
          mpo.send(message);   
     } 
+
+    //console.log("message",message);
 
     // record src system's ID's so we know where to reply to later - only supports one sysid right now. buzz todo
     if( message._header.srcSystem != 255 ) {

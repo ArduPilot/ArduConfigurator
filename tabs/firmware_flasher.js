@@ -30,8 +30,8 @@ TABS.firmware_flasher.initialize = function (callback) {
                 callback(event.data);
             };
 
-            // send data/string over for processing
-            worker.postMessage(str);
+            // send data/string over for processing, but label it so other mgs from tother windows aren't confused
+            worker.postMessage("parse_hex",str);
         }
 
         // function parseFilename(filename) {
@@ -247,7 +247,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                 intel_hex = data;
 
                 // process_hex outsources most of this to parse_hex ( which is in a worker), but afterwards triggers an event/callback... 
-
+                // function parse_hex is elsewhere, it takes 2 params, the 'data' and the callback, which is below.
                 parse_hex(intel_hex, function (data) {
                     parsed_hex = data;  // come from hex_parser.js -> result{} object 
 

@@ -486,7 +486,7 @@ class SmartTCPLink extends net.Socket {
 
             if (this.last_error != error.toString()) {
               this.last_error = error.toString();
-              console.log('[TCP Client]' + error + " - retrying...");
+              //console.log('[TCP Client]' + error + " - retrying...");
             }
 
             this.connect({
