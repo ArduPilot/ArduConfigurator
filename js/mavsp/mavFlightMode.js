@@ -110,7 +110,11 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
             // arducopter uses packet.custom_mode to index into mode_mapping_acm 
             self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
         }
-        if ( heartbeat.type  > 4 ) {
+        if (heartbeat.type == mavlink20.MAV_TYPE_GROUND_ROVER ) { //10
+            // arducopter uses packet.custom_mode to index into mode_mapping_acm 
+            self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
+        }
+        if ( heartbeat.type  > 4 && !(heartbeat.type == 10)) {
 
             console.log("unknown ardupilot vehicle type, not a plane,copter,heli, sorry",heartbeat.type);
         }
