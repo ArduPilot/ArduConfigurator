@@ -67,6 +67,8 @@ var generic_message_handler = function(message) {
     // for packets arriving in from a --out target, their target sysid is NOT us...
     if (message.target_system < 250 ) { /*console.log('--out sending:',message._name); */ mpo.send(message);   } 
 
+    if (! newWindow) return;// don't try to post to new window till its real.
+
     // push packed into GUI part of the application.... through "postMessage()"   the GUI/frontend app recieves it in main.js window.addEventListener
     //console.log("eep",JSON.stringify(message));
     newWindow.window.postMessage(JSON.stringify({ 'udpmavlink': true, 'pkt':message }), "*"); //the second parameter specifies the message origin. afaik, this is merely a string and has no effect beyond being there
