@@ -1,0 +1,50 @@
+Here's some guidance on how to create the 3d models for setup tab and/or what program to use..?
+
+ - see resources/models/*.gltf
+ - its called "glTF 2.0" format.
+ -  .gltf format is designed/optimised for 3d rendering in-the-browser like this.
+ - blender can "import" and export .gltf files.    File menu -> Emport -> gltf2.0 -> "glTF Embedded(.gltf)" -> blah.gltf
+ - find free, and "open" sources of well-known aircraft models on the internet in some digital format, check they are either public domain, or unlicensed, as licensed files are harder to deal with. - right now we deliberately do NOT have any licensed models that im aware of.  exact source file format doesn't matter too much so long as blender can read it, or some other conversion tool can , to get it into blender.   eg .fbx or .obj or .igs or .glb or .gltf or .blend or whatever.
+ - be sure you can save-it to a .gltf (embedded) .
+ - rotate and then scale it so that it points the same 3d orientation in blender  as everything else (use one of the existing ones as ref ), and is about the right size .( details below )
+
+file->import->gltf 2.0 -> [select .gltf file of choice] ->
+
+blender , press 'n' to show dimensions.
+
+'scale' vehicle obj in blender so its largest dimension is 1m(copters)-1.2m(wingspan) . click 'scale' tool, click object, drag from inside WHITE circle, ( but NOT one of the red,green,blue squares ) to scale all 3 dims together, till largest is 1m-1.2m
+
+
+move obj to origin / move obj's centre-of-rotation to centre-of-geometry :
+click model -> shift-S -> 'cursor to world origin'
+click model -> shift-S -> 'selection to cursor'
+click model -> right click model -> set origin -> 'origin to geometry'
+click model -> shift-S -> 'selection to cursor' / 'selection to grid'
+
+point "NOSE/front" end of vehicle out from origin along the positive Y axis ( "front" toward Green arrow on 'move' selector)
+
+in 'scene' collection' , it will probably have Camera, Light, and a third thing... rename the third thing to the model name, eg 'spitfire', and delete both the camera and light source. ( optional, but helpful).  If there's just a BUNCH of "mesh" elements here, then u need to join them..
+
+[otional join]
+be sure you have deleted the 'camera' and 'light source' parts above, whats left should just be a list of meshes..
+press 'a' ( selects all of them)
+click [Object] box in top-left of view window ( next to 'Object Mode' drop-down, ie [View][Select][Add][Object] boxes ...... ) ->
+ -> Join -> double-click the now '1' mesh to vehicle name, eg 'cub'..
+
+Fiunally, and this one is important... "Apply" the scale/rotation/transforms..
+click model ->
+click [Object] box in top-left of view window ( next to 'Object Mode' drop-down, ie [View][Select][Add][Object] boxes ...... ) ->
+ -> Apply -> 'All Transforms' 
+(  if 'transform' box not  already visible, press 'n' to show it, and you will note that all 'Location', 'Rotation','Scale' X,Y,Z co-ordinates have gone to 0 or 1.  R->W = 1 is ok, and scale XYZ should be all-ones. )
+https://youtu.be/vuZf9FXJ5Sc?t=65
+
+if you need to re-rotate the object to get it pointing the right way in Chrome, you must re-do the 'Apply -> 'All Transforms' bit after.
+
+// optional texture fixes here:
+  https://all3dp.com/2/blender-how-to-add-a-texture/
+
+file->export->gltf 2.0 -> Set 'format' = "glTF Embedded (.gltf)".
+ On Export screen , defaults are OK apart from :
+- using 'embedded' gltf.
+ - Under 'Transform' ->  DO tick / select '+Y up'.
+
