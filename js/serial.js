@@ -25,9 +25,10 @@ var serial = {
         var testUrlUDP = path.match(/^udp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
 
         if (testUrlTCP) {
-            self.connectTcp(testUrlTCP[1], testUrlTCP[2], options, callback);
+            //self.connectTcp(testUrlTCP[1], testUrlTCP[2], options, callback);
+            self.connectUdp(testUrlTCP[1], testUrlTCP[2], options, callback,'tcp');
         }else if (testUrlUDP) {
-            self.connectUdp(testUrlUDP[1], testUrlUDP[2], options, callback);
+            self.connectUdp(testUrlUDP[1], testUrlUDP[2], options, callback,'udp');
         } else {
             self.connectSerial(path, options, callback);
         }
@@ -171,6 +172,7 @@ var serial = {
             }
         });
     },
+    /*
     connectTcp: function (ip, port, options, callback) {
         var self = this;
         self.openRequested = true;
@@ -245,17 +247,18 @@ var serial = {
             });
         });
     },
+    */
     // this is a fake/minimal udp impl that's mostly implemented in Node.js pre-start.js before the gui even starts
-    connectUdp: function (ip, port, options, callback) {
+    connectUdp: function (ip, port, options, callback, nettype) {
         var self = this;
         self.openRequested = true;
         self.connectionIP = ip;
         self.connectionPort = port || 2323;
         self.connectionPort = parseInt(self.connectionPort);
-        self.connectionType = 'udp';
-        self.logHead = 'SERIAL-UDP: ';
+        self.connectionType = nettype;//'udp';
+        self.logHead = 'SERIAL-nettype: ';
 
-        console.log('connect to raw udp:', ip + ':' + port)
+        console.log('connect to raw nettype ... '+nettype+':'+ ip + ':' + port)
 
         self.connectionId = 1; //createInfo.socketId;
         self.bitrate = 115200; // fake
@@ -283,6 +286,10 @@ var serial = {
         if (chrome.runtime.lastError) {
             console.error('connectUdp', chrome.runtime.lastError.message);
         }
+
+        // send info to the backend
+        var msg = JSON.stringify({ 'connectNode': true, 'ip': ip , 'port': port , 'type':self.connectionType }); //self.connectionType= 'udp'
+        window.opener.postMessage(msg, "*");
 
         if (callback) callback(connectionInfo);
 
@@ -399,8 +406,16 @@ var serial = {
             var data = self.outputBuffer[0].data,
                 callback = self.outputBuffer[0].callback;
 
-            var sendFn = (self.connectionType == 'serial') ? chrome.serial.send : chrome.sockets.tcp.send;
-
+            var sendFn = null;
+            if (self.connectionType == 'serial') { 
+                sendFn=chrome.serial.send;
+            }
+            if (self.connectionType == 'tcp') { 
+                sendFn=chrome.sockets.tcp.send;
+            }
+            if (self.connectionType == 'udp') { 
+                sendFn=chrome.sockets.udp.send;
+            }
             // binary:
             //sendFn(self.connectionId, binary, function (sendInfo) {
             //    console.log("TODO");
@@ -411,6 +426,7 @@ var serial = {
            
                 sendFn(self.connectionId, data, function (sendInfo) {
                     // tcp send error
+                    
                     if (self.connectionType == 'tcp' && sendInfo.resultCode < 0) {
                         var error = 'system_error';
 
@@ -429,9 +445,13 @@ var serial = {
                         });
                         return;
                     }
-                    if (self.connectionType == 'udp') {
-                        return;
-                    }
+                    
+                    // if (self.connectionType == 'udp') {
+                    //     return;
+                    // }
+                    // if (self.connectionType == 'tcp') {
+                    //     return;
+                    // }
 
                     // track sent bytes for statistics
                     self.bytesSent += sendInfo.bytesSent;
