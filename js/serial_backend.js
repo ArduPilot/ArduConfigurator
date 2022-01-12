@@ -119,10 +119,12 @@ $(document).ready(function () {
 
             var clicks = $(this).data('clicks');
             var selected_baud = parseInt($baud.val());
-            //if ($port.find('option:selected').data() ) { var is_manual = $port.find('option:selected').data().is_manual??0;}
-            var selected_port = //$port.find('option:selected').data().isManual ?
-                   // $portOverride.val() //:
+            // uses 'port' from main drop-down  first, but if 'Manual' is selected, the uses port-override from other box
+            if ($port.find('option:selected').data() ) { var is_manual = $port.find('option:selected').data().is_manual??0;}
+            var selected_port = $port.find('option:selected').data().isManual ?
+                    $portOverride.val() :
                     String($port.val());
+
             if (selected_port === 'DFU') {
                 GUI.log(chrome.i18n.getMessage('dfu_connect_message'));
             }

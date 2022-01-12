@@ -2,7 +2,7 @@
   "name": "ARDUPILOT-configurator",
   "description": "ARDUPILOT Configurator",
   "version": "0.0.1",
-  "main": "main.html",
+  "main": "pre-startup.js",
   "default_locale": "en",
   "scripts": {
     "__comment0__": " npm run gulp build",
@@ -32,8 +32,11 @@
   "author": "davidbuzz",
   "license": "GPL-3.0",
   "dependencies": {
-    "jspack": "file:js/mavsp/local_modules/jspack",
-    "long": "file:js/mavsp/local_modules/long",
+    "backbone": "^1.4.0",
+    "jspack": "file:backend/jspack",
+    "long": "file:backend/long",
+    "mavlink": "file:backend/mavlink_ardupilotmega_v2.0",
+    "chrome-apps-serialport": "^1.0.8",
     "archiver": "^2.0.3",
     "bluebird": "3.4.1",
     "del": "^3.0.0",

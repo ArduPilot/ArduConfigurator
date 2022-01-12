@@ -303,6 +303,11 @@ var mspHelper = (function (gui) {
 
         //console.log(mavmsg._name);
 
+        // weird work-around for UDP packets that come in before the GUI is ready for them..
+        if (CONFIG == undefined ) {
+            return;
+        }
+
         // packet-specific stuff
         switch (mavmsg._id ) {
 
@@ -354,6 +359,8 @@ var mspHelper = (function (gui) {
                 I2Cerr: 0
                 Vcc: 5122
                 */
+                //console.log("CONFIG",CONFIG);
+                //console.log("ANALOG",ANALOG);
                 CONFIG.i2cError = mavmsg.I2Cerr;
                 ANALOG.board_vcc = mavmsg.Vcc / 1000.0;  // cpu volts
                 // buzz todo
@@ -4432,6 +4439,7 @@ var mspHelper = (function (gui) {
         if (ALLSETTINGS[name]) {
                return ALLSETTINGS[name];
         }
+        console.log("MAVSPHelper.js failed to get setting",name);
         //this.makeNewSetting(name); // make it first, then return it
         return null; //ALLSETTINGS[name];
     }
