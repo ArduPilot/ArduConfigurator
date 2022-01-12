@@ -47,7 +47,7 @@ var {SmartSerialLink,SmartUDPInLink,SmartUDPOutLink,SmartTCPLink,mpo} = require(
 var mavParserObj = mpo;
 
 //----------------------------------------------------------------------------------
-console.log("LISTENING FOR UDP IN udpin:0.0.0.0:14550")
+//console.log("LISTENING FOR UDP IN udpin:0.0.0.0:14550")
 mpo.add_link('udpin:0.0.0.0:14550'); //u-in
 //console.log("TRYING TCP TO tcp:localhost:5760 till one of them succeeds")
 mpo.add_link('tcp:localhost:5760'); // to/from sitl
@@ -74,6 +74,37 @@ var generic_message_handler = function(message) {
     newWindow.window.postMessage(JSON.stringify({ 'udpmavlink': true, 'pkt':message }), "*"); //the second parameter specifies the message origin. afaik, this is merely a string and has no effect beyond being there
 
 }
+
+// 
+window.addEventListener('message', function(event) {
+  // ignore 'false' silently
+  if (event.data == false) return;
+
+  // event.data is JSON-as-string    
+  var data = JSON.parse(event.data);  
+
+  if ( !data.connectNode  ) return; // ignore anything except these. tcp/udp only
+
+  close_all_links();
+
+  //'connectUdp': true, 'ip': $ip , 'port': $port 
+  var ip = data.ip;
+  var port = data.port;
+  var type = data.type;
+
+  console.log("GOT msg from frontend!!!!!!!!!!!!!",event,ip,port,type);
+
+  if ( type == 'udp') {
+    mpo.add_link('udpin:'+ip+':'+port); // eg 'udpin:0.0.0.0:14550'
+  }
+  // if ( type == 'udpout') {
+  //   mpo.add_link('udpout:'+ip+':'+port); // eg 'udpin:0.0.0.0:14550'
+  // }
+  if ( type == 'tcp') {
+    mpo.add_link('tcp:'+ip+':'+port);   //eg 'tcp:localhost:5760'
+  }
+
+});
 
 // // Attach the event handler for any valid MAVLink message in either stream, its agnostic at this stage
 mavParserObj.on('message', generic_message_handler);

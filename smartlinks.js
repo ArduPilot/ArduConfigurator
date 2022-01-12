@@ -9,14 +9,6 @@ const SerialPort = require("chrome-apps-serialport").SerialPort;
 var {mavlink20, MAVLink20Processor} = require("./backend/mavlink_ardupilotmega_v2.0/mavlink.js"); 
 
 
-// set one of these true when we see some sort of mavlink, either via tcp:localhost:5760 or as incoming udp stream
-// once UDP is successful, then the other connection/s can stop re-trying etc.
-//var ISUDPINCONNECTED = false; 
-//var ISUDPOUTCONNECTED = false; 
-//var ISTCPCONNECTED = false; 
-//var ISSERIALCONNECTED = false;
-
-
 var broadcast_ip_address = {'ip':'127.0.0.1', 'port':'something', 'type':'else' }; 
 var sysid_to_ip_address = {};
 
@@ -28,14 +20,12 @@ var get_broadip_table = function() { return broadcast_ip_address; }
 var get_sys_to_ip_table = function() { return sysid_to_ip_address; }
 
 
-
 // either 'serial' or 'udpin' or 'serial:/dev/ttyACM0', or 'udpin:irrelevant:port' or 'udpout:1.2.3.4:port'
 // for serial, there's at most 2 parts ':' separated
 // for tcp and/or udp, there MUST be three parts ':' separated xxx:host:port
 add_link = function(thingname) {
-
+    console.log("opening LINK:",thingname);
     var words = thingname.split(':'); 
-
     if (words[0] == 'serial')  link_list.push(new SmartSerialLink(words[1]));
     if (words[0]  == 'tcp')    link_list.push(new SmartTCPLink(words[1],words[2]));
     if (words[0]  == 'udpin')  link_list.push(new SmartUDPInLink(words[2]));
@@ -43,15 +33,34 @@ add_link = function(thingname) {
 
 }
 
+close_all_links = function() {
+    for ( l in link_list){
+        var lll= link_list[l];
+        console.log("closing LINK:",lll);
+        //lll.end(); // 1/2 closes by sending send FIN pkt and waitin for remote server to also send FIN back, which might trigger socket.on('close',...)
+        lll.destroy(); /// aggressive and not polite
+    }
+    link_list = [];
+}
+
 add_out = function(thingname) {
-
+    console.log("opening OUT: ",thingname);
     var words = thingname.split(':'); 
-
     if (words[0] == 'serial')  out_list.push(new SmartSerialLink(words[1],true));
     if (words[0]  == 'tcp')    out_list.push(new SmartTCPLink(words[1],words[2],true));
     if (words[0]  == 'udpin')  out_list.push(new SmartUDPInLink(words[2]),true);
     if (words[0]  == 'udpout') out_list.push(new SmartUDPOutLink(words[1],words[2],true));
 
+}
+
+close_all_outs = function() {
+    for ( o in out_list){
+        var ooo= out_list[o];
+        console.log("closing OUT: ",ooo);
+        //ooo.end(); // 1/2 closes by sending send FIN pkt and waitin for remote server to also send FIN back, which might trigger socket.on('close',...)
+        ooo.destroy(); /// aggressive and not polite
+    }
+    out_list = [];
 }
 
 // create the output hooks for the parser/s
@@ -61,8 +70,6 @@ generic_link_sender = function(mavmsg,sysid) {
     //console.log("generic send");
     // this is really just part of the original send()
     buf = mavmsg.pack(this);
-
-    //console.log("which is connected? udpin.",this.ISUDPINCONNECTED,"udpout.",this.ISUDPOUTCONNECTED,"tcp.",this.ISTCPCONNECTED,"serial.",this.ISSERIALCONNECTED);
 
     // a pretty dumb solution here to try to send it out all active uplinks that are reporting is_connected()
     for ( l in link_list){
@@ -154,24 +161,21 @@ class SmartSerialLink extends SerialPort {
         this.streamrate = undefined;
         this.is_output = is_output;
 
-        this.ISUDPINCONNECTED = false; 
-        this.ISUDPOUTCONNECTED = false; 
-        this.ISTCPCONNECTED = false; 
         this.ISSERIALCONNECTED = false;
 
         console.log('[SerialPort] initialised.\n');
 
         this.eventsetup();
 
-    //    this.on('open',function(){ console.log('default open event'); } )
-            //   this.on('error',function(){ console.log('default error event'); } )
-     //   this.on('close',function(){ console.log('default close event'); } )
-
-
 
     }
 
     is_connected() { return this.ISSERIALCONNECTED; }
+
+    destroy () {
+        this.close(); //
+        this.ISSERIALCONNECTED = false; 
+    }
 
     // serials are sent with the write()
     ZZsend(data) {
@@ -327,25 +331,9 @@ class SmartSerialLink extends SerialPort {
        //console.log("HEARTBEAT");
        if ( ! this.ISSERIALCONNECTED ) return ;
        //don't send unless we are connected, probably dont need all of these..
-    //   if (this.connecting == true ) {return; } // when other end wasnt there to start with
-   //    if (this.readable == false ) {
-            //console.log("tcp not readable");
-     //       this.emit('error', 'serialport not readable'); // tell the error handler that will try re-connecting.
-     //       return; 
-     //   }// when other end goes-away unexpectedly
+
         send_heartbeat_handler();
     }
-       // this.send_heartbeat = serialport_send_heartbeat; // allow access as a method in the object too.
-
-
-        //serialport.write('ROBOT POWER ON\n')
-
-
-        // serialport.isOpen boolean
-
-        //SerialPort Stream object is a Node.js transform stream and implements the standard data and 
-        //          error events in addition to a few others:open,error,close,data,drain
-
 
 
 }
@@ -366,10 +354,7 @@ class SmartTCPLink extends net.Socket {
         this.remote_port = port;//5760;
         this.is_output = is_output;
 
-        this.ISUDPINCONNECTED = false; 
-        this.ISUDPOUTCONNECTED = false; 
         this.ISTCPCONNECTED = false; 
-        this.ISSERIALCONNECTED = false;
 
         this.connect({
           host:this.remote_ip,
@@ -378,6 +363,18 @@ class SmartTCPLink extends net.Socket {
 
         this.eventsetup();
 
+    }
+
+    // tip, as we inherit from net.Socket 'destroy()' already works in parent class
+    destroy() {
+   
+        super.end(); //Half-closes the socket. i.e., it sends a FIN packet
+        super.destroy(); 
+        this.ISTCPCONNECTED = false; 
+        this.on('connect',function(){}); // clear it so we don't get the events 
+        this.on('data',function(msg){}); // and here
+        this.on('error',function(error){}); // etc
+        clearInterval(this.heartbeat_interval); // cancells the 'setInterval' stuff
     }
 
     is_connected() { return this.ISTCPCONNECTED; }
@@ -407,16 +404,16 @@ class SmartTCPLink extends net.Socket {
 
             this.ISTCPCONNECTED = true; 
 
-            console.log('Client: connection established with TCP server');
+            console.log('TCPClient: connection established with TCP server');
 
             console.log('---------client details -----------------');
             var address = this.address();
             var port = address.port;
             var family = address.family;
             var ipaddr = address.address;
-            console.log('Client is connected and recieving on local port: ' + port);
-            console.log('Client ip :' + ipaddr);
-            console.log('Client is IP4/IP6 : ' + family);
+            console.log('TCPClient is connected and recieving on local port: ' + port);
+            console.log('TCPClient ip :' + ipaddr);
+            console.log('TCPClient is IP4/IP6 : ' + family);
 
             // we know we can reply here, even without knowing the sysid...
             broadcast_ip_address = {'ip':ipaddr, 'port':port, 'type':'tcp' }; 
@@ -478,10 +475,6 @@ class SmartTCPLink extends net.Socket {
             // if u have a serial conenction, then its ok not to have tcp, so don't complain about it or retry tcp.
             if (this.ISSERIALCONNECTED)  {  return;  }  // dont tear-down the serial here either
 
-            // if u have a tcp connection to , say SITL, and that link goes away, its more important 
-            // than the udp-out, and udp out doesn't really 'disconnect' we just bbroadcast into the ether..
-            // not needed: if (this.ISUDPOUTCONNECTED)  {  this.ISUDPOUTCONNECTED=false; } 
-
             this.ISTCPCONNECTED = false; 
 
             if (this.last_error != error.toString()) {
@@ -501,8 +494,6 @@ class SmartTCPLink extends net.Socket {
         this.heartbeat_interval = setInterval( function(){
           //console.log('client interval');
           t.heartbeat(); // types '>' on console 
-          //if (udp_server != undefined ) udp_server.send_heartbeat(); // types '>' on console 
-          //if (serialport != undefined ) serialport.send_heartbeat(); // types '>' on console 
           t.last_error = undefined;
           if (this.ISTCPCONNECTED ) show_stream_rates('client',2)
         },1000);
@@ -528,12 +519,7 @@ class SmartUDPOutLink extends dgram.Socket {
     constructor (ip, portnum,is_output) {
         super('udp4')
 
-       // this.have_we_recieved_anything_yet  = undefined;
-
-        this.ISUDPINCONNECTED = false; 
         this.ISUDPOUTCONNECTED = false; 
-        this.ISTCPCONNECTED = false; 
-        this.ISSERIALCONNECTED = false;
 
         this.is_output = is_output;
         this.eventsetup();
@@ -542,7 +528,6 @@ class SmartUDPOutLink extends dgram.Socket {
 
         this._ip = ip;
         this._portnum = portnum;
-//console.log("udp client construcrted");
 
 
       this.ISUDPOUTCONNECTED = true; // in constructor, before sending anything, assume the first send will be ok
@@ -573,6 +558,20 @@ class SmartUDPOutLink extends dgram.Socket {
 
     }
 
+    // matches name used by net.Socket
+    destroy() {
+        //https://nodejs.org/api/dgram.html#socketdisconnect
+        //ERR_SOCKET_DGRAM_NOT_CONNECTED
+        try {
+        this.disconnect(); //disassociates a connected dgram.Socket from its remote address
+        } catch (e) {
+            console.log("no-biggie...",e);
+        } 
+        this.close(); //close the underlying socket and stop listening for data on it. 
+        this.ISUDPOUTCONNECTED = false; 
+
+    }
+
     // udpout
     ZZsend(data){
         data = new Buffer.from(data);
@@ -591,20 +590,16 @@ class SmartUDPOutLink extends dgram.Socket {
 
     eventsetup(){
 
-//console.log("udp client eventsertup");
 
         // hook udp listener events to actions:
         this.on('error', (err) => {
             //this.ISUDPOUTCONNECTED = false; 
             console.log(`udpout error:\n${err.stack}`);
-//console.log("udp client err");
         });
 
         // this is a upd-server heartbeat handler at 1hz
         var tto = this;
         this.heartbeat_interval = setInterval(function(){
-//console.log("udp out hb1",tto);
-          //if (client != undefined ) client.send_heartbeat(); // types '>' on console 
           if (tto != undefined ) tto.heartbeat(); // types '>' on console 
           //if (serialport != undefined ) serialport.send_heartbeat(); // types '>' on console 
           //last_error = undefined;
@@ -612,27 +607,16 @@ class SmartUDPOutLink extends dgram.Socket {
         },1000);
 
 
-//...
-        //buffer msg
-   //     var data = Buffer.from('siddheshrane');
-
         this.on('message',function(msg,rinfo){
 
 
             if (this.is_output === undefined ) generic_out_sender(msg); // also forward the packet to all --outputs
-
-//console.log("udp client message");
-     //     console.log('Data received from server : ' + msg.toString());
-     //     console.log('Received %d bytes from %s:%d\n',msg.length, info.address, info.port);
 
 //-------------------------------------------------------
     // we don't know its sysid yet, but this means we can at least send broadcast/s like heartbeat
             broadcast_ip_address = {'ip':rinfo.address,'port':rinfo.port, 'type':'udpout' }; 
 
             this.ISUDPOUTCONNECTED = true; 
-
-            // first time thru:
-          //  if (this.have_we_recieved_anything_yet == undefined ) { this.have_we_recieved_anything_yet = true } 
 
             var array_of_chars = Uint8Array.from(msg) // from Buffer to byte array
 
@@ -660,19 +644,6 @@ class SmartUDPOutLink extends dgram.Socket {
 
     }
 
-    // sending to the pre-canned ip and port from the constructor
-/*    send2(data){
-console.log("udp client send");
-         this.send(data,this._portnum,this._ip,function(error){
-              if(error){
-                client.close();
-              }else{
-                console.log('udp client Data sent !!!');
-              }
-
-        });
-    }
-*/
 
 }
 
@@ -684,12 +655,7 @@ class SmartUDPInLink extends dgram.Socket {
 
         this.bind(portnum);
 
-   //     this.have_we_recieved_anything_yet  = undefined;
-
         this.ISUDPINCONNECTED = false; 
-        this.ISUDPOUTCONNECTED = false; 
-        this.ISTCPCONNECTED = false; 
-        this.ISSERIALCONNECTED = false;
 
         this.is_output = is_output;
         this.last_rinfo = undefined;
@@ -697,6 +663,19 @@ class SmartUDPInLink extends dgram.Socket {
     }
 
     is_connected() { return this.ISUDPINCONNECTED; }
+
+    // matches name used by net.Socket
+    destroy() {
+        //https://nodejs.org/api/dgram.html#socketdisconnect
+        //ERR_SOCKET_DGRAM_NOT_CONNECTED
+        try {
+        this.disconnect(); //disassociates a connected dgram.Socket from its remote address
+        } catch (e) {
+            console.log("no-biggie...",e);
+        } 
+        this.close(); //close the underlying socket and stop listening for data on it. 
+        this.ISUDPINCONNECTED = false; 
+    }
 
   // basic checks of udp link before trying to send
     heartbeat() {
@@ -728,16 +707,11 @@ class SmartUDPInLink extends dgram.Socket {
              if (this.is_output === undefined ) generic_out_sender(msg); // also forward the packet to all --outputs
 
             this.last_rinfo = rinfo;
-            //console.log(this.have_we_recieved_anything_yet);
-            //console.log(rinfo);
 
             // we don't know its sysid yet, but this means we can at least send broadcast/s like heartbeat
             broadcast_ip_address = {'ip':rinfo.address,'port':rinfo.port, 'type':'udp' }; 
 
             this.ISUDPINCONNECTED = true; 
-
-            // first time thru:
-      //      if (this.have_we_recieved_anything_yet == undefined ) { this.have_we_recieved_anything_yet = true } 
 
             var array_of_chars = Uint8Array.from(msg) // from Buffer to byte array
 
