@@ -87,7 +87,8 @@ function MavFlightMode(mavlinkObject, mavlinkParserObject, uavConnectionObject, 
     this.sysid = passed_sysid;
     this.state = {};
     this.newState = {};
-	this.attachHandlers(passed_sysid,mavlinkObject,mavlinkParserObject); // handler only wants this sysid data
+    this.vehicleType = mavlink20.MAV_TYPE_GENERIC;
+    this.attachHandlers(passed_sysid,mavlinkObject,mavlinkParserObject); // handler only wants this sysid data
     this.v = mavlinkObject.WIRE_PROTOCOL_VERSION; // = "1.0";
     //console.log(`MavFlightMode is looking for mode/arming changes with sysid: ${this.sysid} and mav type ${this.v}`);
 }
@@ -104,6 +105,8 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
 
         // else ignore data for other sysids than the one we are interested in.
         if ( heartbeat._header.srcSystem != sysid ) return; 
+
+        self.vehicleType = heartbeat.type;
 
 		// Translate the bitfields for use in the client.
         //copter or plane or something else?
@@ -170,15 +173,26 @@ MavFlightMode.prototype.getState = function() {
 };
 
 MavFlightMode.prototype.mode_mapping = function() {
-	return mode_mapping_apm;
+	if (self.vehicleType == mavlink20.MAV_TYPE_FIXED_WING){
+        return mode_mapping_apm;
+    }
+    if ((self.vehicleType == mavlink20.MAV_TYPE_QUADROTOR)
+        ||(self.vehicleType == mavlink20.MAV_TYPE_COAXIAL)
+        ||(self.vehicleType == mavlink20.MAV_TYPE_HELICOPTER)){
+            return mode_mapping_acm;
+    }
+    if (self.vehicleType == mavlink20.MAV_TYPE_GROUND_ROVER){
+        return mode_mapping_ar;
+    }
+    return {};
 };
 
 MavFlightMode.prototype.mode_mapping_inv = function() {
-
+    var mode_map = self.mode_mapping();
     var result = {};   // empty object to contain reversed key/value paris
-    var keys = Object.keys(mode_mapping_apm);   // first get all keys in an array
+    var keys = Object.keys(mode_map);   // first get all keys in an array
     keys.forEach(function(key){
-      var val = mode_mapping_apm[key];   // get the value for the current key
+      var val = mode_map[key];   // get the value for the current key
       result[val] = key;                 // reverse is done here
     });
 
