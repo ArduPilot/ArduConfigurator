@@ -62,6 +62,21 @@ var mode_mapping_acm = {
     23 : 'FOLLOW',
 };
 
+//https://github.com/ArduPilot/ardupilot/blob/master/Rover/mode.h
+var mode_mapping_ar = {
+    0 : 'MANUAL',
+    1 : 'ACRO',
+    3 : 'STEERING',
+    4 : 'HOLD',
+    5 : 'LOITER',
+    6 : 'FOLLOW',
+    7 : 'SIMPLE',
+    10 : 'AUTO',
+    11 : 'RTL',
+    12 : 'SMART_RTL',
+    15 : 'GUIDED',
+    16 : 'INITIALISING',
+};
 
 function MavFlightMode(mavlinkObject, mavlinkParserObject, uavConnectionObject, logger,passed_sysid) {
     //console.log(JSON.stringify(mavlinkObject));
@@ -112,7 +127,7 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
         }
         if (heartbeat.type == mavlink20.MAV_TYPE_GROUND_ROVER ) { //10
             // arducopter uses packet.custom_mode to index into mode_mapping_acm 
-            self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
+            self.newState.mode = mode_mapping_ar[heartbeat.custom_mode]; 
         }
         if ( heartbeat.type  > 4 && !(heartbeat.type == 10)) {
 
