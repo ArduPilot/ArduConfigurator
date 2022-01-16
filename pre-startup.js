@@ -40,7 +40,7 @@ nw.Window.open('main.html', {}, win => {
 
 // mavlink 2 related stuff:
 
-var {mavlink20, MAVLink20Processor} = require("./backend/mavlink_ardupilotmega_v2.0/mavlink.js"); 
+var {mavlink20, MAVLink20Processor} = require("./backend/local_modules/mavlink_ardupilotmega_v2.0/mavlink.js"); 
 
 var {SmartSerialLink,SmartUDPInLink,SmartUDPOutLink,SmartTCPLink,mpo} = require("./smartlinks.js");
 

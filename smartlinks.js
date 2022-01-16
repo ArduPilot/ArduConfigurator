@@ -6,7 +6,7 @@ const SerialPort = require("chrome-apps-serialport").SerialPort;
 
 // we get object types, but don't instantiate here.
 //var {mavlink20, MAVLink20Processor} = require("./mav_v2.js"); 
-var {mavlink20, MAVLink20Processor} = require("./backend/mavlink_ardupilotmega_v2.0/mavlink.js"); 
+var {mavlink20, MAVLink20Processor} = require("./backend/local_modules/mavlink_ardupilotmega_v2.0/mavlink.js"); 
 
 
 var broadcast_ip_address = {'ip':'127.0.0.1', 'port':'something', 'type':'else' }; 
