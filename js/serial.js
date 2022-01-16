@@ -25,10 +25,9 @@ var serial = {
         var testUrlUDP = path.match(/^udp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
 
         if (testUrlTCP) {
-            //self.connectTcp(testUrlTCP[1], testUrlTCP[2], options, callback);
-            self.connectUdp(testUrlTCP[1], testUrlTCP[2], options, callback,'tcp');
+            self.connectTcporUdp(testUrlTCP[1], testUrlTCP[2], options, callback,'tcp');
         }else if (testUrlUDP) {
-            self.connectUdp(testUrlUDP[1], testUrlUDP[2], options, callback,'udp');
+            self.connectTcporUdp(testUrlUDP[1], testUrlUDP[2], options, callback,'udp');
         } else {
             self.connectSerial(path, options, callback);
         }
@@ -172,84 +171,9 @@ var serial = {
             }
         });
     },
-    /*
-    connectTcp: function (ip, port, options, callback) {
-        var self = this;
-        self.openRequested = true;
-        self.connectionIP = ip;
-        self.connectionPort = port || 2323;
-        self.connectionPort = parseInt(self.connectionPort);
-        self.connectionType = 'tcp';
-        self.logHead = 'SERIAL-TCP: ';
-
-        console.log('connect to raw tcp:', ip + ':' + port)
-        chrome.sockets.tcp.create({}, function(createInfo) {
-            console.log('chrome.sockets.tcp.create', createInfo)
-            if (createInfo && !self.openCanceled) {
-                self.connectionId = createInfo.socketId;
-                self.bitrate = 115200; // fake
-                self.bytesReceived = 0;
-                self.bytesSent = 0;
-                self.failed = 0;
-                self.openRequested = false;
-            }
-
-            chrome.sockets.tcp.connect(createInfo.socketId, self.connectionIP, self.connectionPort, function (result){
-                if (chrome.runtime.lastError) {
-                    console.error('onConnectedCallback', chrome.runtime.lastError.message);
-                }
-
-                console.log('onConnectedCallback', result)
-                if(result == 0) {
-                    chrome.sockets.tcp.setNoDelay(createInfo.socketId, true, function (noDelayResult){
-                        if (chrome.runtime.lastError) {
-                            console.error('setNoDelay', chrome.runtime.lastError.message);
-                        }
-
-                        console.log('setNoDelay', noDelayResult)
-                        if(noDelayResult != 0) {
-                            self.openRequested = false;
-                            console.log(self.logHead + 'Failed to setNoDelay');
-                        }
-                        self.onReceive.addListener(function log_bytesReceived(info) {
-                            if (info.socketId != self.connectionId) return;
-                            self.bytesReceived += info.data.byteLength;
-                        });
-                        self.onReceiveError.addListener(function watch_for_on_receive_errors(info) {
-                            console.error(info);
-                            if (info.socketId != self.connectionId) return;
-
-                            // TODO: better error handle
-                            // error code: https://cs.chromium.org/chromium/src/net/base/net_error_list.h?sq=package:chromium&l=124
-                            switch (info.resultCode) {
-                                case -100: // CONNECTION_CLOSED
-                                case -102: // CONNECTION_REFUSED
-                                    if (GUI.connected_to || GUI.connecting_to) {
-                                        $('a.connect').click();
-                                    } else {
-                                        self.disconnect();
-                                    }
-                                    break;
-
-                            }
-                        });
-
-                        console.log(self.logHead + 'Connection opened with ID: ' + createInfo.socketId + ', url: ' + self.connectionIP + ':' + self.connectionPort);
-
-                        if (callback) callback(createInfo);
-                    });
-                } else {
-                    self.openRequested = false;
-                    console.log(self.logHead + 'Failed to connect');
-                    if (callback) callback(false);
-                }
-
-            });
-        });
-    },
-    */
+   
     // this is a fake/minimal udp impl that's mostly implemented in Node.js pre-start.js before the gui even starts
-    connectUdp: function (ip, port, options, callback, nettype) {
+    connectTcporUdp: function (ip, port, options, callback, nettype) {
         var self = this;
         self.openRequested = true;
         self.connectionIP = ip;
@@ -284,7 +208,7 @@ var serial = {
         };
 
         if (chrome.runtime.lastError) {
-            console.error('connectUdp', chrome.runtime.lastError.message);
+            console.error('connectTcporUdp', chrome.runtime.lastError.message);
         }
 
         // send info to the backend
@@ -296,7 +220,7 @@ var serial = {
         self.onReceive.addListener(function log_bytesReceived(info) {
             self.bytesReceived += info.data.byteLength;
             if (chrome.runtime.lastError) {
-                console.error('connectUdp2', chrome.runtime.lastError.message);
+                console.error('connectTcporUdp2', chrome.runtime.lastError.message);
             }
         });
         self.onReceiveError.addListener(function watch_for_on_receive_errors(info) {
@@ -304,7 +228,7 @@ var serial = {
             
 
                     if (chrome.runtime.lastError) {
-                        console.error('connectUdp3', chrome.runtime.lastError.message);
+                        console.error('connectTcporUdp3', chrome.runtime.lastError.message);
                     }
                 
         });

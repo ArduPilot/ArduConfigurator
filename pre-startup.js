@@ -87,7 +87,7 @@ window.addEventListener('message', function(event) {
 
   close_all_links();
 
-  //'connectUdp': true, 'ip': $ip , 'port': $port 
+  //'connectTcporUdp': true, 'ip': $ip , 'port': $port 
   var ip = data.ip;
   var port = data.port;
   var type = data.type;
