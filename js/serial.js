@@ -426,8 +426,10 @@ var serial = {
            
                 sendFn(self.connectionId, data, function (sendInfo) {
                     // tcp send error
+
                     
-                    if (self.connectionType == 'tcp' && sendInfo.resultCode < 0) {
+                    
+                    if (self.connectionType == 'tcp' && sendInfo && sendInfo.resultCode < 0) {
                         var error = 'system_error';
 
                         // TODO: better error handle
@@ -454,10 +456,13 @@ var serial = {
                     // }
 
                     // track sent bytes for statistics
-                    self.bytesSent += sendInfo.bytesSent;
 
-                    // fire callback
-                    if (callback) callback(sendInfo);
+                    if ( sendInfo){
+                        self.bytesSent += sendInfo.bytesSent;
+
+                        // fire callback
+                        if (callback) callback(sendInfo);
+                    }
 
                     // remove data for current transmission form the buffer
                     self.outputBuffer.shift();

@@ -657,6 +657,25 @@ var mspHelper = (function (gui) {
 
                 // buzz todo
                 break;
+
+            case mavlink20.MAVLINK_MSG_ID_RC_CHANNELS_SCALED:  // rover uses this, todo handle it
+                /*
+                fieldnames: (11) ["time_boot_ms", "port", "chan1_scaled", "chan2_scaled", "chan3_scaled", "chan4_scaled", "chan5_scaled", "chan6_scaled", "chan7_scaled", "chan8_scaled", "rssi"]
+
+                chan1_scaled: 0
+                chan2_scaled: 0
+                chan3_scaled: 0
+                chan4_scaled: 0
+                chan5_scaled: 0
+                chan6_scaled: 0
+                chan7_scaled: 0
+                chan8_scaled: 0
+                port: 0
+                rssi: 255
+                time_boot_ms: 69299
+                */
+                break;
+
             case mavlink20.MAVLINK_MSG_ID_SERVO_OUTPUT_RAW: // tis one
                 /* ["time_usec", "port", "servo1_raw", "servo2_raw", "servo3_raw", "servo4_raw", "servo5_raw", "servo6_raw", "servo7_raw", "servo8_raw", "servo9_raw", "servo10_raw", "servo11_raw", "servo12_raw", "servo13_raw", "servo14_raw", "servo15_raw", "servo16_raw"]
                 port: 0

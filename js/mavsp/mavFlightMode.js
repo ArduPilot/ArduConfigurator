@@ -132,7 +132,14 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
             // arducopter uses packet.custom_mode to index into mode_mapping_acm 
             self.newState.mode = mode_mapping_ar[heartbeat.custom_mode]; 
         }
-        if ( heartbeat.type  > 4 && !(heartbeat.type == 10)) {
+        // add more vehicles here as support is added elsewhere.
+        var known_types = [ mavlink20.MAV_TYPE_FIXED_WING,
+                            mavlink20.MAV_TYPE_QUADROTOR,
+                            mavlink20.MAV_TYPE_COAXIAL,
+                            mavlink20.MAV_TYPE_HELICOPTER,
+                            mavlink20.MAV_TYPE_GROUND_ROVER,
+                        ];
+        if ( ! known_types.includes(heartbeat.type) ) {
 
             console.log("unknown ardupilot vehicle type, not a plane,copter,heli,rover sorry",heartbeat.type);
         }

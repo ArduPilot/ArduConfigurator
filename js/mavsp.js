@@ -366,6 +366,7 @@ var generic_message_handler = function(message) {
             'SETUP_SIGNING', 'SET_MODE',  'MISSION_REQUEST_INT', 'FILE_TRANSFER_PROTOCOL', 'MISSION_REQUEST_LIST',
             'PARAM_SET', 'PARAM_VALUE','RADIO_STATUS',
             'TERRAIN_DATA', 'MAG_CAL_PROGRESS','MAG_CAL_REPORT',
+            'RC_CHANNELS_SCALED'
             ].includes(message._name) ) { 
             
 	console.log('unhandled msg type - please add it to the list....:');
