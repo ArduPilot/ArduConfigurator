@@ -188,6 +188,7 @@ let test_mount_status = function () {
       test_mount_status.pointing_c = (new Int32Array([963497880]))[0]; // fieldtype: int32_t  isarray: False 
       test_mount_status.target_system = 41; // fieldtype: uint8_t  isarray: False 
       test_mount_status.target_component = 108; // fieldtype: uint8_t  isarray: False 
+      test_mount_status.mount_mode = 175; // fieldtype: uint8_t  isarray: False 
  //var t = new Buffer.from([])
 ; //mount_status
  var t = new Buffer.from(test_mount_status.pack(mav));
@@ -680,6 +681,8 @@ let test_pid_tuning = function () {
       test_pid_tuning.I = 129.0; // fieldtype: float  isarray: False 
       test_pid_tuning.D = 157.0; // fieldtype: float  isarray: False 
       test_pid_tuning.axis = 77; // fieldtype: uint8_t  isarray: False 
+      test_pid_tuning.SRate = 192.0; // fieldtype: float  isarray: False 
+      test_pid_tuning.PDmod = 220.0; // fieldtype: float  isarray: False 
  //var t = new Buffer.from([])
 ; //pid_tuning
  var t = new Buffer.from(test_pid_tuning.pack(mav));
@@ -1133,6 +1136,22 @@ let test_water_depth = function () {
    return [test_water_depth,t]; // return an array of unpacked and packed options
 };
 exports.test_water_depth = test_water_depth; // expose in module
+
+let test_mcu_status = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:mcu_status'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:mcu_status          \r'); }
+   var test_mcu_status = new mavlink20.messages.mcu_status(); 
+      test_mcu_status.MCU_temperature = (new Int16Array([17235]))[0]; // fieldtype: int16_t  isarray: False 
+      test_mcu_status.MCU_voltage = 17339; // fieldtype: uint16_t  isarray: False 
+      test_mcu_status.MCU_voltage_min = 17443; // fieldtype: uint16_t  isarray: False 
+      test_mcu_status.MCU_voltage_max = 17547; // fieldtype: uint16_t  isarray: False 
+      test_mcu_status.id = 29; // fieldtype: uint8_t  isarray: False 
+ //var t = new Buffer.from([])
+; //mcu_status
+ var t = new Buffer.from(test_mcu_status.pack(mav));
+   return [test_mcu_status,t]; // return an array of unpacked and packed options
+};
+exports.test_mcu_status = test_mcu_status; // expose in module
 
 let test_sys_status = function () {
    if ( verbose == 2 ) console.log('test creating and packing:sys_status'); 
@@ -2129,6 +2148,10 @@ let test_command_ack = function () {
    var test_command_ack = new mavlink20.messages.command_ack(); 
       test_command_ack.command = 17235; // fieldtype: uint16_t  isarray: False 
       test_command_ack.result = 139; // fieldtype: uint8_t  isarray: False 
+      test_command_ack.progress = 206; // fieldtype: uint8_t  isarray: False 
+      test_command_ack.result_param2 = (new Int32Array([963497672]))[0]; // fieldtype: int32_t  isarray: False 
+      test_command_ack.target_system = 29; // fieldtype: uint8_t  isarray: False 
+      test_command_ack.target_component = 96; // fieldtype: uint8_t  isarray: False 
  //var t = new Buffer.from([])
 ; //command_ack
  var t = new Buffer.from(test_command_ack.pack(mav));
@@ -3294,6 +3317,8 @@ let test_battery_status = function () {
       test_battery_status.time_remaining = (new Int32Array([963499336]))[0]; // fieldtype: int32_t  isarray: False 
       test_battery_status.charge_state = 125; // fieldtype: uint8_t  isarray: False 
       test_battery_status.voltages_ext = [19367, 19368, 19369, 19370]; // fieldtype: uint16_t  isarray: True 
+      test_battery_status.mode = 216; // fieldtype: uint8_t  isarray: False 
+      test_battery_status.fault_bitmask = 963500064; // fieldtype: uint32_t  isarray: False 
  //var t = new Buffer.from([])
 ; //battery_status
  var t = new Buffer.from(test_battery_status.pack(mav));
@@ -3911,6 +3936,8 @@ let test_storage_information = function () {
       test_storage_information.storage_id = 77; // fieldtype: uint8_t  isarray: False 
       test_storage_information.storage_count = 144; // fieldtype: uint8_t  isarray: False 
       test_storage_information.status = 211; // fieldtype: uint8_t  isarray: False 
+      test_storage_information.type = 22; // fieldtype: uint8_t  isarray: False 
+      test_storage_information.name = "CDEFGHIJKLMNOPQRSTUVWXYZABCDEFG"; // fieldtype: char  isarray: False 
  //var t = new Buffer.from([])
 ; //storage_information
  var t = new Buffer.from(test_storage_information.pack(mav));
@@ -4079,6 +4106,55 @@ let test_video_stream_status = function () {
 };
 exports.test_video_stream_status = test_video_stream_status; // expose in module
 
+let test_gimbal_device_information = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:gimbal_device_information'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:gimbal_device_information          \r'); }
+   var test_gimbal_device_information = new mavlink20.messages.gimbal_device_information(); 
+      test_gimbal_device_information.uid = wrap_long(Long.fromString("93372036854775807", true)); // fieldtype: uint64_t  isarray: False 
+      test_gimbal_device_information.time_boot_ms = 963497880; // fieldtype: uint32_t  isarray: False 
+      test_gimbal_device_information.firmware_version = 963498088; // fieldtype: uint32_t  isarray: False 
+      test_gimbal_device_information.hardware_version = 963498296; // fieldtype: uint32_t  isarray: False 
+      test_gimbal_device_information.roll_min = 157.0; // fieldtype: float  isarray: False 
+      test_gimbal_device_information.roll_max = 185.0; // fieldtype: float  isarray: False 
+      test_gimbal_device_information.pitch_min = 213.0; // fieldtype: float  isarray: False 
+      test_gimbal_device_information.pitch_max = 241.0; // fieldtype: float  isarray: False 
+      test_gimbal_device_information.yaw_min = 269.0; // fieldtype: float  isarray: False 
+      test_gimbal_device_information.yaw_max = 297.0; // fieldtype: float  isarray: False 
+      test_gimbal_device_information.cap_flags = 19523; // fieldtype: uint16_t  isarray: False 
+      test_gimbal_device_information.custom_cap_flags = 19627; // fieldtype: uint16_t  isarray: False 
+      test_gimbal_device_information.vendor_name = "WXYZABCDEFGHIJKLMNOPQRSTUVWXYZA"; // fieldtype: char  isarray: False 
+      test_gimbal_device_information.model_name = "CDEFGHIJKLMNOPQRSTUVWXYZABCDEFG"; // fieldtype: char  isarray: False 
+      test_gimbal_device_information.custom_name = "IJKLMNOPQRSTUVWXYZABCDEFGHIJKLM"; // fieldtype: char  isarray: False 
+ //var t = new Buffer.from([])
+; //gimbal_device_information
+ var t = new Buffer.from(test_gimbal_device_information.pack(mav));
+   return [test_gimbal_device_information,t]; // return an array of unpacked and packed options
+};
+exports.test_gimbal_device_information = test_gimbal_device_information; // expose in module
+
+let test_autopilot_state_for_gimbal_device = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:autopilot_state_for_gimbal_device'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:autopilot_state_for_gimbal_device          \r'); }
+   var test_autopilot_state_for_gimbal_device = new mavlink20.messages.autopilot_state_for_gimbal_device(); 
+      test_autopilot_state_for_gimbal_device.time_boot_us = wrap_long(Long.fromString("93372036854775807", true)); // fieldtype: uint64_t  isarray: False 
+      test_autopilot_state_for_gimbal_device.q = [73.0, 74.0, 75.0, 76.0]; // fieldtype: float  isarray: True 
+      test_autopilot_state_for_gimbal_device.q_estimated_delay_us = 963498712; // fieldtype: uint32_t  isarray: False 
+      test_autopilot_state_for_gimbal_device.vx = 213.0; // fieldtype: float  isarray: False 
+      test_autopilot_state_for_gimbal_device.vy = 241.0; // fieldtype: float  isarray: False 
+      test_autopilot_state_for_gimbal_device.vz = 269.0; // fieldtype: float  isarray: False 
+      test_autopilot_state_for_gimbal_device.v_estimated_delay_us = 963499544; // fieldtype: uint32_t  isarray: False 
+      test_autopilot_state_for_gimbal_device.feed_forward_angular_velocity_z = 325.0; // fieldtype: float  isarray: False 
+      test_autopilot_state_for_gimbal_device.estimator_status = 19731; // fieldtype: uint16_t  isarray: False 
+      test_autopilot_state_for_gimbal_device.target_system = 27; // fieldtype: uint8_t  isarray: False 
+      test_autopilot_state_for_gimbal_device.target_component = 94; // fieldtype: uint8_t  isarray: False 
+      test_autopilot_state_for_gimbal_device.landed_state = 161; // fieldtype: uint8_t  isarray: False 
+ //var t = new Buffer.from([])
+; //autopilot_state_for_gimbal_device
+ var t = new Buffer.from(test_autopilot_state_for_gimbal_device.pack(mav));
+   return [test_autopilot_state_for_gimbal_device,t]; // return an array of unpacked and packed options
+};
+exports.test_autopilot_state_for_gimbal_device = test_autopilot_state_for_gimbal_device; // expose in module
+
 let test_wifi_config_ap = function () {
    if ( verbose == 2 ) console.log('test creating and packing:wifi_config_ap'); 
    if ( verbose == 1) { process.stdout.write('test creating and packing:wifi_config_ap          \r'); }
@@ -4156,6 +4232,81 @@ let test_uavcan_node_info = function () {
    return [test_uavcan_node_info,t]; // return an array of unpacked and packed options
 };
 exports.test_uavcan_node_info = test_uavcan_node_info; // expose in module
+
+let test_param_ext_request_read = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:param_ext_request_read'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:param_ext_request_read          \r'); }
+   var test_param_ext_request_read = new mavlink20.messages.param_ext_request_read(); 
+      test_param_ext_request_read.param_index = (new Int16Array([17235]))[0]; // fieldtype: int16_t  isarray: False 
+      test_param_ext_request_read.target_system = 139; // fieldtype: uint8_t  isarray: False 
+      test_param_ext_request_read.target_component = 206; // fieldtype: uint8_t  isarray: False 
+      test_param_ext_request_read.param_id = "EFGHIJKLMNOPQRS"; // fieldtype: char  isarray: False 
+ //var t = new Buffer.from([])
+; //param_ext_request_read
+ var t = new Buffer.from(test_param_ext_request_read.pack(mav));
+   return [test_param_ext_request_read,t]; // return an array of unpacked and packed options
+};
+exports.test_param_ext_request_read = test_param_ext_request_read; // expose in module
+
+let test_param_ext_request_list = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:param_ext_request_list'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:param_ext_request_list          \r'); }
+   var test_param_ext_request_list = new mavlink20.messages.param_ext_request_list(); 
+      test_param_ext_request_list.target_system = 5; // fieldtype: uint8_t  isarray: False 
+      test_param_ext_request_list.target_component = 72; // fieldtype: uint8_t  isarray: False 
+ //var t = new Buffer.from([])
+; //param_ext_request_list
+ var t = new Buffer.from(test_param_ext_request_list.pack(mav));
+   return [test_param_ext_request_list,t]; // return an array of unpacked and packed options
+};
+exports.test_param_ext_request_list = test_param_ext_request_list; // expose in module
+
+let test_param_ext_value = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:param_ext_value'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:param_ext_value          \r'); }
+   var test_param_ext_value = new mavlink20.messages.param_ext_value(); 
+      test_param_ext_value.param_count = 17235; // fieldtype: uint16_t  isarray: False 
+      test_param_ext_value.param_index = 17339; // fieldtype: uint16_t  isarray: False 
+      test_param_ext_value.param_id = "EFGHIJKLMNOPQRS"; // fieldtype: char  isarray: False 
+      test_param_ext_value.param_value = "UVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQ"; // fieldtype: char  isarray: False 
+      test_param_ext_value.param_type = 193; // fieldtype: uint8_t  isarray: False 
+ //var t = new Buffer.from([])
+; //param_ext_value
+ var t = new Buffer.from(test_param_ext_value.pack(mav));
+   return [test_param_ext_value,t]; // return an array of unpacked and packed options
+};
+exports.test_param_ext_value = test_param_ext_value; // expose in module
+
+let test_param_ext_set = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:param_ext_set'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:param_ext_set          \r'); }
+   var test_param_ext_set = new mavlink20.messages.param_ext_set(); 
+      test_param_ext_set.target_system = 5; // fieldtype: uint8_t  isarray: False 
+      test_param_ext_set.target_component = 72; // fieldtype: uint8_t  isarray: False 
+      test_param_ext_set.param_id = "CDEFGHIJKLMNOPQ"; // fieldtype: char  isarray: False 
+      test_param_ext_set.param_value = "STUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNO"; // fieldtype: char  isarray: False 
+      test_param_ext_set.param_type = 59; // fieldtype: uint8_t  isarray: False 
+ //var t = new Buffer.from([])
+; //param_ext_set
+ var t = new Buffer.from(test_param_ext_set.pack(mav));
+   return [test_param_ext_set,t]; // return an array of unpacked and packed options
+};
+exports.test_param_ext_set = test_param_ext_set; // expose in module
+
+let test_param_ext_ack = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:param_ext_ack'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:param_ext_ack          \r'); }
+   var test_param_ext_ack = new mavlink20.messages.param_ext_ack(); 
+      test_param_ext_ack.param_id = "ABCDEFGHIJKLMNO"; // fieldtype: char  isarray: False 
+      test_param_ext_ack.param_value = "QRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLM"; // fieldtype: char  isarray: False 
+      test_param_ext_ack.param_type = 181; // fieldtype: uint8_t  isarray: False 
+      test_param_ext_ack.param_result = 248; // fieldtype: uint8_t  isarray: False 
+ //var t = new Buffer.from([])
+; //param_ext_ack
+ var t = new Buffer.from(test_param_ext_ack.pack(mav));
+   return [test_param_ext_ack,t]; // return an array of unpacked and packed options
+};
+exports.test_param_ext_ack = test_param_ext_ack; // expose in module
 
 let test_obstacle_distance = function () {
    if ( verbose == 2 ) console.log('test creating and packing:obstacle_distance'); 
@@ -4345,6 +4496,22 @@ let test_actuator_output_status = function () {
 };
 exports.test_actuator_output_status = test_actuator_output_status; // expose in module
 
+let test_tunnel = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:tunnel'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:tunnel          \r'); }
+   var test_tunnel = new mavlink20.messages.tunnel(); 
+      test_tunnel.payload_type = 17235; // fieldtype: uint16_t  isarray: False 
+      test_tunnel.target_system = 139; // fieldtype: uint8_t  isarray: False 
+      test_tunnel.target_component = 206; // fieldtype: uint8_t  isarray: False 
+      test_tunnel.payload_length = 17; // fieldtype: uint8_t  isarray: False 
+      test_tunnel.payload = new Buffer.from([84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211]).toString("binary"); // fieldtype: uint8_t  isarray: True 
+ //var t = new Buffer.from([])
+; //tunnel
+ var t = new Buffer.from(test_tunnel.pack(mav));
+   return [test_tunnel,t]; // return an array of unpacked and packed options
+};
+exports.test_tunnel = test_tunnel; // expose in module
+
 let test_wheel_distance = function () {
    if ( verbose == 2 ) console.log('test creating and packing:wheel_distance'); 
    if ( verbose == 1) { process.stdout.write('test creating and packing:wheel_distance          \r'); }
@@ -4377,6 +4544,20 @@ let test_winch_status = function () {
    return [test_winch_status,t]; // return an array of unpacked and packed options
 };
 exports.test_winch_status = test_winch_status; // expose in module
+
+let test_hygrometer_sensor = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:hygrometer_sensor'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:hygrometer_sensor          \r'); }
+   var test_hygrometer_sensor = new mavlink20.messages.hygrometer_sensor(); 
+      test_hygrometer_sensor.temperature = (new Int16Array([17235]))[0]; // fieldtype: int16_t  isarray: False 
+      test_hygrometer_sensor.humidity = 17339; // fieldtype: uint16_t  isarray: False 
+      test_hygrometer_sensor.id = 17; // fieldtype: uint8_t  isarray: False 
+ //var t = new Buffer.from([])
+; //hygrometer_sensor
+ var t = new Buffer.from(test_hygrometer_sensor.pack(mav));
+   return [test_hygrometer_sensor,t]; // return an array of unpacked and packed options
+};
+exports.test_hygrometer_sensor = test_hygrometer_sensor; // expose in module
 
 let test_uavionix_adsb_out_cfg = function () {
    if ( verbose == 2 ) console.log('test creating and packing:uavionix_adsb_out_cfg'); 
@@ -4435,6 +4616,76 @@ let test_uavionix_adsb_transceiver_health_report = function () {
    return [test_uavionix_adsb_transceiver_health_report,t]; // return an array of unpacked and packed options
 };
 exports.test_uavionix_adsb_transceiver_health_report = test_uavionix_adsb_transceiver_health_report; // expose in module
+
+let test_uavionix_adsb_out_cfg_registration = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:uavionix_adsb_out_cfg_registration'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:uavionix_adsb_out_cfg_registration          \r'); }
+   var test_uavionix_adsb_out_cfg_registration = new mavlink20.messages.uavionix_adsb_out_cfg_registration(); 
+      test_uavionix_adsb_out_cfg_registration.registration = "ABCDEFGH"; // fieldtype: char  isarray: False 
+ //var t = new Buffer.from([])
+; //uavionix_adsb_out_cfg_registration
+ var t = new Buffer.from(test_uavionix_adsb_out_cfg_registration.pack(mav));
+   return [test_uavionix_adsb_out_cfg_registration,t]; // return an array of unpacked and packed options
+};
+exports.test_uavionix_adsb_out_cfg_registration = test_uavionix_adsb_out_cfg_registration; // expose in module
+
+let test_uavionix_adsb_out_cfg_flightid = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:uavionix_adsb_out_cfg_flightid'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:uavionix_adsb_out_cfg_flightid          \r'); }
+   var test_uavionix_adsb_out_cfg_flightid = new mavlink20.messages.uavionix_adsb_out_cfg_flightid(); 
+      test_uavionix_adsb_out_cfg_flightid.flight_id = "ABCDEFGH"; // fieldtype: char  isarray: False 
+ //var t = new Buffer.from([])
+; //uavionix_adsb_out_cfg_flightid
+ var t = new Buffer.from(test_uavionix_adsb_out_cfg_flightid.pack(mav));
+   return [test_uavionix_adsb_out_cfg_flightid,t]; // return an array of unpacked and packed options
+};
+exports.test_uavionix_adsb_out_cfg_flightid = test_uavionix_adsb_out_cfg_flightid; // expose in module
+
+let test_uavionix_adsb_get = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:uavionix_adsb_get'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:uavionix_adsb_get          \r'); }
+   var test_uavionix_adsb_get = new mavlink20.messages.uavionix_adsb_get(); 
+      test_uavionix_adsb_get.ReqMessageId = 963497464; // fieldtype: uint32_t  isarray: False 
+ //var t = new Buffer.from([])
+; //uavionix_adsb_get
+ var t = new Buffer.from(test_uavionix_adsb_get.pack(mav));
+   return [test_uavionix_adsb_get,t]; // return an array of unpacked and packed options
+};
+exports.test_uavionix_adsb_get = test_uavionix_adsb_get; // expose in module
+
+let test_uavionix_adsb_out_control = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:uavionix_adsb_out_control'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:uavionix_adsb_out_control          \r'); }
+   var test_uavionix_adsb_out_control = new mavlink20.messages.uavionix_adsb_out_control(); 
+      test_uavionix_adsb_out_control.baroAltMSL = (new Int32Array([963497464]))[0]; // fieldtype: int32_t  isarray: False 
+      test_uavionix_adsb_out_control.squawk = 17443; // fieldtype: uint16_t  isarray: False 
+      test_uavionix_adsb_out_control.state = 151; // fieldtype: uint8_t  isarray: False 
+      test_uavionix_adsb_out_control.emergencyStatus = 218; // fieldtype: uint8_t  isarray: False 
+      test_uavionix_adsb_out_control.flight_id = "IJKLMNO"; // fieldtype: char  isarray: False 
+      test_uavionix_adsb_out_control.x_bit = 53; // fieldtype: uint8_t  isarray: False 
+ //var t = new Buffer.from([])
+; //uavionix_adsb_out_control
+ var t = new Buffer.from(test_uavionix_adsb_out_control.pack(mav));
+   return [test_uavionix_adsb_out_control,t]; // return an array of unpacked and packed options
+};
+exports.test_uavionix_adsb_out_control = test_uavionix_adsb_out_control; // expose in module
+
+let test_uavionix_adsb_out_status = function () {
+   if ( verbose == 2 ) console.log('test creating and packing:uavionix_adsb_out_status'); 
+   if ( verbose == 1) { process.stdout.write('test creating and packing:uavionix_adsb_out_status          \r'); }
+   var test_uavionix_adsb_out_status = new mavlink20.messages.uavionix_adsb_out_status(); 
+      test_uavionix_adsb_out_status.squawk = 17235; // fieldtype: uint16_t  isarray: False 
+      test_uavionix_adsb_out_status.state = 139; // fieldtype: uint8_t  isarray: False 
+      test_uavionix_adsb_out_status.NIC_NACp = 206; // fieldtype: uint8_t  isarray: False 
+      test_uavionix_adsb_out_status.boardTemp = 17; // fieldtype: uint8_t  isarray: False 
+      test_uavionix_adsb_out_status.fault = 84; // fieldtype: uint8_t  isarray: False 
+      test_uavionix_adsb_out_status.flight_id = "GHIJKLM"; // fieldtype: char  isarray: False 
+ //var t = new Buffer.from([])
+; //uavionix_adsb_out_status
+ var t = new Buffer.from(test_uavionix_adsb_out_status.pack(mav));
+   return [test_uavionix_adsb_out_status,t]; // return an array of unpacked and packed options
+};
+exports.test_uavionix_adsb_out_status = test_uavionix_adsb_out_status; // expose in module
 
 let test_icarous_heartbeat = function () {
    if ( verbose == 2 ) console.log('test creating and packing:icarous_heartbeat'); 
@@ -4557,6 +4808,7 @@ test_osd_param_show_config();
 test_osd_param_show_config_reply();
 test_obstacle_distance_3d();
 test_water_depth();
+test_mcu_status();
 test_sys_status();
 test_system_time();
 test_ping();
@@ -4711,10 +4963,17 @@ test_logging_data_acked();
 test_logging_ack();
 test_video_stream_information();
 test_video_stream_status();
+test_gimbal_device_information();
+test_autopilot_state_for_gimbal_device();
 test_wifi_config_ap();
 test_ais_vessel();
 test_uavcan_node_status();
 test_uavcan_node_info();
+test_param_ext_request_read();
+test_param_ext_request_list();
+test_param_ext_value();
+test_param_ext_set();
+test_param_ext_ack();
 test_obstacle_distance();
 test_odometry();
 test_isbd_link_status();
@@ -4724,11 +4983,18 @@ test_debug_float_array();
 test_smart_battery_info();
 test_generator_status();
 test_actuator_output_status();
+test_tunnel();
 test_wheel_distance();
 test_winch_status();
+test_hygrometer_sensor();
 test_uavionix_adsb_out_cfg();
 test_uavionix_adsb_out_dynamic();
 test_uavionix_adsb_transceiver_health_report();
+test_uavionix_adsb_out_cfg_registration();
+test_uavionix_adsb_out_cfg_flightid();
+test_uavionix_adsb_get();
+test_uavionix_adsb_out_control();
+test_uavionix_adsb_out_status();
 test_icarous_heartbeat();
 test_icarous_kinematic_bands();
 test_heartbeat();
