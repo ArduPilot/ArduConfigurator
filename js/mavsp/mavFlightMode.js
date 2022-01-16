@@ -62,6 +62,21 @@ var mode_mapping_acm = {
     23 : 'FOLLOW',
 };
 
+//https://github.com/ArduPilot/ardupilot/blob/master/Rover/mode.h
+var mode_mapping_ar = {
+    0 : 'MANUAL',
+    1 : 'ACRO',
+    3 : 'STEERING',
+    4 : 'HOLD',
+    5 : 'LOITER',
+    6 : 'FOLLOW',
+    7 : 'SIMPLE',
+    10 : 'AUTO',
+    11 : 'RTL',
+    12 : 'SMART_RTL',
+    15 : 'GUIDED',
+    16 : 'INITIALISING',
+};
 
 function MavFlightMode(mavlinkObject, mavlinkParserObject, uavConnectionObject, logger,passed_sysid) {
     //console.log(JSON.stringify(mavlinkObject));
@@ -72,7 +87,8 @@ function MavFlightMode(mavlinkObject, mavlinkParserObject, uavConnectionObject, 
     this.sysid = passed_sysid;
     this.state = {};
     this.newState = {};
-	this.attachHandlers(passed_sysid,mavlinkObject,mavlinkParserObject); // handler only wants this sysid data
+    this.vehicleType = mavlink20.MAV_TYPE_GENERIC;
+    this.attachHandlers(passed_sysid,mavlinkObject,mavlinkParserObject); // handler only wants this sysid data
     this.v = mavlinkObject.WIRE_PROTOCOL_VERSION; // = "1.0";
     //console.log(`MavFlightMode is looking for mode/arming changes with sysid: ${this.sysid} and mav type ${this.v}`);
 }
@@ -89,6 +105,8 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
 
         // else ignore data for other sysids than the one we are interested in.
         if ( heartbeat._header.srcSystem != sysid ) return; 
+
+        self.vehicleType = heartbeat.type;
 
 		// Translate the bitfields for use in the client.
         //copter or plane or something else?
@@ -110,9 +128,13 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
             // arducopter uses packet.custom_mode to index into mode_mapping_acm 
             self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
         }
-        if ( heartbeat.type  > 4 ) {
+        if (heartbeat.type == mavlink20.MAV_TYPE_GROUND_ROVER ) { //10
+            // arducopter uses packet.custom_mode to index into mode_mapping_acm 
+            self.newState.mode = mode_mapping_ar[heartbeat.custom_mode]; 
+        }
+        if ( heartbeat.type  > 4 && !(heartbeat.type == 10)) {
 
-            console.log("unknown ardupilot vehicle type, not a plane,copter,heli, sorry",heartbeat.type);
+            console.log("unknown ardupilot vehicle type, not a plane,copter,heli,rover sorry",heartbeat.type);
         }
 
         //console.log("ardumode:"+self.newState.mode);
@@ -151,15 +173,26 @@ MavFlightMode.prototype.getState = function() {
 };
 
 MavFlightMode.prototype.mode_mapping = function() {
-	return mode_mapping_apm;
+	if (self.vehicleType == mavlink20.MAV_TYPE_FIXED_WING){
+        return mode_mapping_apm;
+    }
+    if ((self.vehicleType == mavlink20.MAV_TYPE_QUADROTOR)
+        ||(self.vehicleType == mavlink20.MAV_TYPE_COAXIAL)
+        ||(self.vehicleType == mavlink20.MAV_TYPE_HELICOPTER)){
+            return mode_mapping_acm;
+    }
+    if (self.vehicleType == mavlink20.MAV_TYPE_GROUND_ROVER){
+        return mode_mapping_ar;
+    }
+    return {};
 };
 
 MavFlightMode.prototype.mode_mapping_inv = function() {
-
+    var mode_map = self.mode_mapping();
     var result = {};   // empty object to contain reversed key/value paris
-    var keys = Object.keys(mode_mapping_apm);   // first get all keys in an array
+    var keys = Object.keys(mode_map);   // first get all keys in an array
     keys.forEach(function(key){
-      var val = mode_mapping_apm[key];   // get the value for the current key
+      var val = mode_map[key];   // get the value for the current key
       result[val] = key;                 // reverse is done here
     });
 
