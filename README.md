@@ -50,14 +50,20 @@ Depending on target operating system, _ArduPilot Configurator_ is distributed as
 
 For local development, **node.js** build system is used.
 
-1. Install node.js
+1. Install the latest version of node.js. For instance on ubuntu:
+```
+sudo apt-get install nodejs
+sudo apt-get install npm
+sudo npm install -g n   # node version manager
+sudo n lts              # latest LTS version of node
+```
 1. From project folder run `npm install`
 1. To build the JS and CSS files and start the configurator:
     - With NW.js: Run `npm start`.
     - With Chrome: Run `npm run gulp`. Then open `chrome://extensions`, enable
-    the `Developer mode`, click on the `Load unpacked extension...` button and select the `ARDUPILOT-configurator` directory.
+    the `Developer mode`, click on the `Load unpacked extension...` button and select the `ArduConfigurator` directory.
 
-Other tasks are also defined in `gulpfile.js`. To run a task, use `./node_modules/gulp/bin/gulp.js task-name`. Available ones are:
+Other tasks are also defined in `gulpfile.js`. To run a task, use `npm run gulp task-name`. Available ones are:
 
 - **build**: Generate JS and CSS output files used by the configurator from their sources. It must be run whenever changes are made to any `.js` or `.css` files in order to have those changes appear
 in the configurator. If new files are added, they must be included in `gulpfile.js`. See the comments at the top of `gulpfile.js` to learn how to do so. See also the `watch` task.
@@ -103,6 +109,11 @@ Make sure Settings -> System -> "User hardware acceleration when available" is c
 
 1. Dont forget to add your user into dialout group "sudo usermod -aG dialout YOUR_USERNAME" for serial access
 2. If you have 3D model animation problems, enable "Override software rendering list" in Chrome flags chrome://flags/#ignore-gpu-blacklist
+
+### WSL2
+
+1. The configurator will run on WSL2 as long as you have X configured and an X server running without auth (e.g. XLaunch)
+2. WSL2 does not support USB so no direct communication with flight controllers is currently possible
 
 ## Support
 
