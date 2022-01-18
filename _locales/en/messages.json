@@ -173,7 +173,7 @@
         "message": "This firmware version is <span style=\"color: red\">not supported</span>. This version of Configurator supports firmware from $1 to $2 (excluded)"
     },
     "firmwareVariantNotSupported": {
-        "message": "This firmware variant is <span style=\"color: red\">not supported</span>. Please upgrade to ARDUPILOT firmware. Use CLI for backup before flashing.  CLI backup/restore procedure is in the documention."
+        "message": "This firmware variant is <span style=\"color: red\">not supported</span>. Please upgrade to ARDUPILOT firmware. Use CLI for backup before flashing.  CLI backup/restore procedure is in the documentation."
     },
 
     "tabSwitchConnectionRequired": {
