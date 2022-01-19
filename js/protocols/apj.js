@@ -217,7 +217,7 @@ APJ_protocol.prototype.connect = function (port, baud, hex, options, callback) {
                                         if (devices && devices.includes(port)) {
                                             // Serial port might briefly reappear on DFU devices while
                                             // the FC is rebooting, so we don't clear the interval
-                                            // until we succesfully connect.
+                                            // until we successfully connect.
                                             serial.connect(port, {bitrate: self.baud, parityBit: 'even', stopBits: 'one'}, function (openInfo) {
                                                 console.log("apj check_usb_devices -> serial.connect")
                                                 if (openInfo) {
@@ -842,10 +842,10 @@ APJ_protocol.prototype.upload_procedure = function (step) {
         case 7:
             // go
             // memory address = 4 bytes, 1st high byte, 4th low byte, 5th byte = checksum XOR(byte 1, byte 2, byte 3, byte 4)
-            console.log('Sending reBoOT command.');
+            console.log('Sending reboot command.');
 
             self.send([self.command.REBOOT, self.command.EOC], 0, function (reply) { 
-                //console.log("sent ok"); never trigered as ardupilot bootloader doesn't "ack" the reboot
+                //console.log("sent ok"); never triggered as ardupilot bootloader doesn't "ack" the reboot
             });
 
             // let gui know

@@ -123,7 +123,7 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                                         if (devices && devices.includes(port)) {
                                             // Serial port might briefly reappear on DFU devices while
                                             // the FC is rebooting, so we don't clear the interval
-                                            // until we succesfully connect.
+                                            // until we successfully connect.
                                             serial.connect(port, {bitrate: self.baud, parityBit: 'even', stopBits: 'one'}, function (openInfo) {
                                                 if (openInfo) {
                                                     clearInterval(interval);

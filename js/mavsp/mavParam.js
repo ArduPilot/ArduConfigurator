@@ -145,7 +145,7 @@ MavParam.prototype.set = function(name, value, retries) {
     if ( pendingcount > 800) param_retry_delay = 35000;
     if ( pendingcount > 1000) param_retry_delay = 40000;
 
-    // set a 'pending ack' that we can clear when its recieved
+    // set a 'pending ack' that we can clear when its received
     pendingAcks[name] = param_retry_delay;
 
     // Establish a handler to try and send the required packet every second until cancelled
@@ -165,7 +165,7 @@ MavParam.prototype.set = function(name, value, retries) {
         
     }, retries);
 
-    // WARNING/todo:  this doesn't actually return info back to the caller about wether it was succfully sent-and-acknowleged, or ..
+    // WARNING/todo:  this doesn't actually return info back to the caller about whether it was succfully sent-and-acknowledged, or ..
     //             .. if it was attempted repeatedly until timeout and the timeoutWatcher cancelled it.
     //          I think we need an 'anync' wrapper around it like the mission .. 'const resolves_after_mission_fetched = async () => {' .. }
 }
