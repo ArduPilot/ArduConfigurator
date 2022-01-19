@@ -105,7 +105,7 @@ FONT.initData = function () {
     FONT.data = {
         // default font file name
         loaded_font_file: 'default',
-        // array of arry of image bytes ready to upload to fc
+        // array of array of image bytes ready to upload to fc
         characters_bytes: [],
         // array of array of image bits by character
         characters: [],

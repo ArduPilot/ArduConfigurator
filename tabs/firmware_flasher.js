@@ -325,7 +325,7 @@ TABS.firmware_flasher.initialize = function (callback) {
 
                 var binblob = j.image; // this is still base64 encoded
                 j.image = '';// remove it from json b4 display as its huge
-                console.log(j)// thte remainder of the json
+                console.log(j)// the remainder of the json
                 
                 // at this point self.hex is a "string"
 
@@ -362,7 +362,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                 }
                 */
 
-                // we can optionally display from the metadata inside teh apj if we want.. for now lets dump the apj contents
+                // we can optionally display from the metadata inside the apj if we want.. for now lets dump the apj contents
                 // into the eend of the notes section
                 summary.notes = summary.notes + "<br>\n"+ JSON.stringify(j);
 
@@ -423,13 +423,13 @@ TABS.firmware_flasher.initialize = function (callback) {
 
                     console.log('File loaded');
 
-                    data = data.toString() // from binary to string, as the rest of the codebase excpects it stringy
+                    data = data.toString() // from binary to string, as the rest of the codebase expects it stringy
                   
                     googleAnalytics.sendEvent('Flashing', 'Firmware', 'local');
                     $('a.flash_firmware').removeClass('disabled');
                     $('span.progressLabel').text('Loaded Local Firmware: (' + parsed_hex.bytes_total + ' bytes)');
                 
-                    // when we pull this from the internet, we get this metdata... but when loaded from file, we make it up..
+                    // when we pull this from the internet, we get this metadata... but when loaded from file, we make it up..
                     var summary = {
                         target: 'Fishy',
                         name: 'Unknown chip',
