@@ -995,6 +995,10 @@ var mspHelper = (function (gui) {
                         // buzz todo, this is the acknowledgement of a mode-change request.
                         break;
 
+                    case mavlink20.MAV_CMD_GET_HOME_POSITION: // 410 
+                        console.log('receiving COMMAND_LONG MAV_CMD_GET_HOME_POSITION -->');console.log(mavmsg); 
+                        break;
+
                     default:
                         // emit detals about unknown COMMAND_LONG packets
                         console.log('receiving unhandled COMMAND_LONG -->');console.log(mavmsg); //BUZZ uncomment to see fully parsed arriving packets in all their glory
@@ -1161,7 +1165,11 @@ var mspHelper = (function (gui) {
                 y: 0
                 z: 0
                 */
+                // FC.curr_mav_state['HOME_POSITION'] contains this data
+                console.log('received HOME_POSITION');console.log(FC.curr_mav_state['HOME_POSITION']);
+
                 //console.log('receiving HOME_POSITION');console.log(mavmsg);
+
                 // buzz todo
                 break; 
 
@@ -1300,6 +1308,8 @@ var mspHelper = (function (gui) {
             // 
             //     // buzz todo 
             //     break; 
+            case mavlink20.MAV_CMD_GET_HOME_POSITION:
+                break;
             case mavlink20.MAVLINK_MSG_ID_RADIO_STATUS:
                 break;
             

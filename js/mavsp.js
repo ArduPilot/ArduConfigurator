@@ -36,6 +36,13 @@ var autopilot_version_request = function(target_system,target_component){
     mavParserObj.send(new mavlink20.messages.autopilot_version_request(target_system,target_component));
 }
 
+var get_home_position = function(target_system,target_component){
+    if (target_system == undefined )target_system = SYSID;
+    if (target_component == undefined )target_component = COMPID;
+    var command = mavlink20.MAV_CMD_GET_HOME_POSITION ;
+    mavParserObj.send(new mavlink20.messages.command_long(target_system,target_component,command));
+}
+
 var preflight_accel_cal = function(target_system,target_component) {
 
     if (target_system == undefined )target_system = SYSID;
