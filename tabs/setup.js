@@ -297,7 +297,7 @@ TABS.setup.initialize3D = function () {
         //scene.add(modelWrapper);
    // });
 
-    //buzz 3d gltf loader , as GLTF is a newer format thats supported going forward in newer Three.js vrsions.
+    //buzz 3d gltf loader , as GLTF is a newer format thats supported going forward in newer Three.js versions.
     // the 'key' here is from model.js mixerList[] that defines aircraft/subtypes/servos relationships
     var _3d_models = {
         // plane-like-things
@@ -341,7 +341,7 @@ TABS.setup.initialize3D = function () {
      function ( gltf ) {  // called when the resource is loaded
     
     
-            // pick model object as the first child in the scene, hopefull.y
+            // pick model object as the first child in the scene, hopefully.
             model = gltf.scene.children[sceneoffset];// first child in scene?
 
             //model.scale.set(1, 1, 1);

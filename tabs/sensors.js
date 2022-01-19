@@ -375,7 +375,7 @@ TABS.sensors.initialize = function (callback) {
                 // start polling data by triggering refresh rate change event
                 $('.tab-sensors .rate select:first').change();
             } else {
-                // start polling immediatly (as there is no configuration saved in the storage)
+                // start polling immediately (as there is no configuration saved in the storage)
                 $('.tab-sensors .rate select:first').change();
             }
         });

@@ -198,7 +198,7 @@ TABS.calibration.initialize = function (callback) {
             //  green=success                                                 blue                   blue                              green
             $('#mag_btn2').find('a').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
                 // Animation complete.
-                $('#mag_btn2').find('a').removeAttr('style'); // removeAttr removes all attribure styling, returning it 'stock'
+                $('#mag_btn2').find('a').removeAttr('style'); // removeAttr removes all attribute styling, returning it 'stock'
                 $('#mag_btn2').css('pointer-events', 'none').css('opacity', '0.4'); // make non-interactive
 
               }); 
@@ -219,7 +219,7 @@ TABS.calibration.initialize = function (callback) {
             //  green=success-fully cancellded                               blue                   blue                              green
             $('#mag_btn3').find('a').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
                 // Animation complete.
-                $('#mag_btn3').find('a').removeAttr('style'); // removeAttr removes all attribure styling, returning it 'stock'
+                $('#mag_btn3').find('a').removeAttr('style'); // removeAttr removes all attribute styling, returning it 'stock'
                 $('#mag_btn3').css('pointer-events', 'none').css('opacity', '0.4'); // make non-interactive
 
               }); 
