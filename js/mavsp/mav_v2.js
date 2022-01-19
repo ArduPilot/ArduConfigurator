@@ -89,7 +89,7 @@ mavlink20.message.prototype.set = function(args,verbose) {
     // non-underscore alternatave to the _.each
     foreach(this.fieldnames, function(e, i) {
         var num = parseInt(i,10);
-        if (this.hasOwnProperty(e) && isNaN(num)  ){ // asking for an attribure thats non-numeric is ok unless its already an attribute we have
+        if (this.hasOwnProperty(e) && isNaN(num)  ){ // asking for an attribute thats non-numeric is ok unless its already an attribute we have
             if ( verbose >= 1) { console.log("WARNING, overwriting an existing property is DANGEROUS:"+e+" ==>"+i+"==>"+args[i]+" -> "+JSON.stringify(this)); }
         }
     }, this);
@@ -1360,7 +1360,7 @@ mavlink20.GIMBAL_DEVICE_CAP_FLAGS_HAS_YAW_FOLLOW = 512 // Gimbal device supports
                         // (generally that's the default)
 mavlink20.GIMBAL_DEVICE_CAP_FLAGS_HAS_YAW_LOCK = 1024 // Gimbal device supports locking to an absolute heading (often this is
                         // an option available)
-mavlink20.GIMBAL_DEVICE_CAP_FLAGS_SUPPORTS_INFINITE_YAW = 2048 // Gimbal device supports yawing/panning infinetely (e.g. using slip
+mavlink20.GIMBAL_DEVICE_CAP_FLAGS_SUPPORTS_INFINITE_YAW = 2048 // Gimbal device supports yawing/panning infinitely (e.g. using slip
                         // disk).
 mavlink20.GIMBAL_DEVICE_CAP_FLAGS_ENUM_END = 2049 // 
 
@@ -1863,7 +1863,7 @@ mavlink20.MAV_BATTERY_MODE_ENUM_END = 3 //
 mavlink20.MAV_BATTERY_FAULT_DEEP_DISCHARGE = 1 // Battery has deep discharged.
 mavlink20.MAV_BATTERY_FAULT_SPIKES = 2 // Voltage spikes.
 mavlink20.MAV_BATTERY_FAULT_CELL_FAIL = 4 // One or more cells have failed. Battery should also report
-                        // MAV_BATTERY_CHARGE_STATE_FAILE (and should
+                        // MAV_BATTERY_CHARGE_STATE_FAILED (and should
                         // not be used).
 mavlink20.MAV_BATTERY_FAULT_OVER_CURRENT = 8 // Over-current fault.
 mavlink20.MAV_BATTERY_FAULT_OVER_TEMPERATURE = 16 // Over-temperature fault.
@@ -2128,7 +2128,7 @@ mavlink20.ZOOM_TYPE_CONTINUOUS = 1 // Continuous zoom up/down until stopped (-1 
                         // stop zooming)
 mavlink20.ZOOM_TYPE_RANGE = 2 // Zoom value as proportion of full camera range (a value between 0.0 and
                         // 100.0)
-mavlink20.ZOOM_TYPE_FOCAL_LENGTH = 3 // Zoom value/variable focal length in milimetres. Note that there is no
+mavlink20.ZOOM_TYPE_FOCAL_LENGTH = 3 // Zoom value/variable focal length in millimetres. Note that there is no
                         // message to get the valid zoom range of the
                         // camera, so this can type can only be used
                         // for cameras where the zoom range is known
@@ -2161,8 +2161,8 @@ mavlink20.PARAM_ACK_IN_PROGRESS = 3 // Parameter value received but not yet set/
                         // the final result will follow once operation
                         // is completed. This is returned immediately
                         // for parameters that take longer to set,
-                        // indicating taht the the parameter was
-                        // recieved and does not need to be resent.
+                        // indicating that the the parameter was
+                        // received and does not need to be resent.
 mavlink20.PARAM_ACK_ENUM_END = 4 // 
 
 // CAMERA_MODE
@@ -2272,7 +2272,7 @@ mavlink20.CELLULAR_STATUS_FLAG_ENUM_END = 13 //
 mavlink20.CELLULAR_NETWORK_FAILED_REASON_NONE = 0 // No error
 mavlink20.CELLULAR_NETWORK_FAILED_REASON_UNKNOWN = 1 // Error state is unknown
 mavlink20.CELLULAR_NETWORK_FAILED_REASON_SIM_MISSING = 2 // SIM is required for the modem but missing
-mavlink20.CELLULAR_NETWORK_FAILED_REASON_SIM_ERROR = 3 // SIM is available, but not usuable for connection
+mavlink20.CELLULAR_NETWORK_FAILED_REASON_SIM_ERROR = 3 // SIM is available, but not usable for connection
 mavlink20.CELLULAR_NETWORK_FAILED_REASON_ENUM_END = 4 // 
 
 // PRECISION_LAND_MODE

@@ -144,7 +144,7 @@ var large_veh_mag_cal = function (yaw_heading, target_system,target_component ) 
                 //  green=success                                                 blue                   blue                              green
                 $('#level_btn2').find('a').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
                     // Animation complete.
-                    $('#level_btn2').find('a').removeAttr('style'); // removeAttr removes all attribure styling, returning it 'stock'
+                    $('#level_btn2').find('a').removeAttr('style'); // removeAttr removes all attribute styling, returning it 'stock'
                   }); 
                 //  return to stock white/blue after some time                           white             blue 
      
@@ -186,7 +186,7 @@ var level_accel_cal = function ( target_system,target_component ) {
             //  green=success                                                 blue                   blue                              green
             $('#level_btn').find('a').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
                 // Animation complete.
-                $('#level_btn').find('a').removeAttr('style'); // removeAttr removes all attribure styling, returning it 'stock'
+                $('#level_btn').find('a').removeAttr('style'); // removeAttr removes all attribute styling, returning it 'stock'
               }); 
             //  return to stock white/blue after some time                           white             blue 
  
@@ -322,12 +322,12 @@ var autopilot_version_handler = function(message){
 mavParserObj.on('AUTOPILOT_VERSION', autopilot_version_handler);
 
 // Attach an event handler for any valid MAVLink message - we use this mostly for unknown packet types, console.log and debug messages. 
-// the majority of specific responses to specifc messages are not handled in the 'generic' handler, but in specific message handlers for each 
+// the majority of specific responses to specific messages are not handled in the 'generic' handler, but in specific message handlers for each 
 // type of message.   eg mavlinkParser1.on('HEATBEAT') is better than here, as this 'generic' block might go away at some point.
 var generic_message_handler = function(message) {
     //console.log(message); //BUZZ uncomment to see fully parsed arriving packets in all their glory
 
-    // don't dissplay or handle parsing errors -  ie Bad prefix errors, but allow signing errors thru
+    // don't display or handle parsing errors -  ie Bad prefix errors, but allow signing errors thru
     if ((message._id == -1 ) && (message._reason != 'Invalid signature') ) { return;}
 
     // untargeted packets..   todo
@@ -432,15 +432,15 @@ var generic_message_handler = function(message) {
     } 
 
     if (  ['MISSION_REQUEST' ].includes(message._name) ) {
-        //console.log(`MISSION_REQUEST recieved `);
+        //console.log(`MISSION_REQUEST received `);
     } 
 
     if (  ['MISSION_ACK' ].includes(message._name) ) {
-        //console.log(`MISSION_ACK recieved `);
+        //console.log(`MISSION_ACK received `);
     } 
 
     if (  ['MISSION_ITEM_REACHED' ].includes(message._name) ) {
-        console.log(`MISSION_ITEM_REACHED recieved num:= ${message.seq} `);
+        console.log(`MISSION_ITEM_REACHED received num:= ${message.seq} `);
     }
 
     if (  ['PARAM_VALUE' ].includes(message._name) &&  message.param_id.startsWith('STAT_FLTTIME')){
@@ -608,7 +608,7 @@ var MSP = {
         }
     },
 
-    // the original MSP spec calls callback_msp AFTER REPLY is recieved,  buzz hack to call it after send ATTEMPT.
+    // the original MSP spec calls callback_msp AFTER REPLY is received,  buzz hack to call it after send ATTEMPT.
     send_message: function (code, data, callback_sent, callback_msp, protocolVersion) {
 
         // buzz

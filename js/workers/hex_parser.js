@@ -28,7 +28,7 @@ function read_hex_file(data) {
     var next_address = 0;
 
     for (var i = 0; i < data.length && hexfile_valid; i++) {
-        // each byte is represnted by two chars
+        // each byte is represented by two chars
         var byte_count = parseInt(data[i].substr(1, 2), 16);
         var address = parseInt(data[i].substr(3, 4), 16);
         var record_type = parseInt(data[i].substr(7, 2), 16);

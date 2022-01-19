@@ -297,7 +297,7 @@ var serial = {
             });
         } else {
             // connection wasn't opened, so we won't try to close anything
-            // instead we will rise canceled flag which will prevent connect from continueing further after being canceled
+            // instead we will rise canceled flag which will prevent connect from continuing further after being canceled
             //self.openCanceled = true;
         }
     },
@@ -393,7 +393,7 @@ var serial = {
 
                     // if there is any data in the queue fire send immediately, otherwise stop trasmitting
                     if (self.outputBuffer.length) {
-                        // keep the buffer withing reasonable limits
+                        // keep the buffer within reasonable limits
                         if (self.outputBuffer.length > 100) {
                             var counter = 0;
 

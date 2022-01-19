@@ -194,7 +194,7 @@ STM32DFU_protocol.prototype.getString = function (index, callback) {
         'request':      6,
         'value':        0x300 | index,
         'index':        0,  // specifies language
-        'length':       255 // max length to retreive
+        'length':       255 // max length to retrieve
     }, function (result) {
         if(self.checkChromeError()) {
             console.log('USB transfer failed! ' + result.resultCode);
@@ -617,7 +617,7 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                         } else {
                             console.log('Failed to initiate unprotect memory command');
                     GUI.log('Failed to initiate unprotect routine');
-                    $('span.progressLabel').text('Failed to initate unprotect');
+                    $('span.progressLabel').text('Failed to initiate unprotect');
                     self.progress_bar_e.addClass('invalid');
                             self.upload_procedure(99);
                         }

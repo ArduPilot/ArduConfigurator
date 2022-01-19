@@ -34,7 +34,7 @@ class EventEmitter{
         if ( uuid == undefined) { uuid=this.uuidv4(); }
 
         console.log('listening for: '+event);
-        this.callbacks[event].push({'cb':cb,'uuid':uuid}) ; // callback and uuid wrapped toghether in a minimal obj
+        this.callbacks[event].push({'cb':cb,'uuid':uuid}) ; // callback and uuid wrapped together in a minimal obj
         return uuid;
     }
 
