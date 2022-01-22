@@ -66,15 +66,36 @@ close_all_outs = function() {
 // create the output hooks for the parser/s
 // we overwrite the default send() instead of overwriting write() or using setConnection(), which don't know the ip or port info.
 // and we accept ip/port either as part of the mavmsg object, or as a sysid in the OPTIONAL 2nd parameter
-generic_link_sender = function(mavmsg,sysid) {
-    //console.log("generic send");
+// The sysid in the 2nd param is supposed to help us keep a lookup table of which link the sysid is known to be on and just send to those,
+//  but right now we are a bit dumb and just send it to all of the links
+// inside the context of this function, 'this' is the MAVLink20Processor as we called by it as part of send()
+backend_generic_link_sender = function(mavmsg,sysid) {
+    console.log("backend send",mavmsg,sysid);
+
+    //console.log("XXXXXXXXXXXXXXXXXX",mavmsg,sysid)
+        
     // this is really just part of the original send()
     buf = mavmsg.pack(this);
+
 
     // a pretty dumb solution here to try to send it out all active uplinks that are reporting is_connected()
     for ( l in link_list){
         var lll= link_list[l];
-        if (lll.is_connected()) lll.ZZsend(buf);
+        // see if we can work out the target system from sysid or similar?
+        if ((! sysid ) && (mavmsg.target_system) ) { sysid = mavmsg.target_system }
+        // then see if we cna find a matching ip/port that it came from originially?
+        var ip_info = sysid_to_ip_address[sysid];
+        // this isn't very smart... it basically says "if it came from a tcp connection, send it to all tcp connections"
+        if ( ip_info  &&  lll.smarttype == ip_info.type) {
+            if (lll.is_connected()) {
+                lll.ZZsend(buf);
+                continue; //
+            }
+        }  
+        // if no ip_info, then just spam all the connected links, which is even dumber
+        if (lll.is_connected()) {
+            lll.ZZsend(buf);
+        }
     }
 
     // this is really just part of the original send()
@@ -101,7 +122,7 @@ generic_out_sender = function(buf) {
 var logger = null;//console; //winston.createLogger({transports:[new(winston.transports.File)({ filename:'mavlink.dev.log'})]});
 
 //var origsend2 = MAVLink20Processor.prototype.send;
-MAVLink20Processor.prototype.send = generic_link_sender;
+MAVLink20Processor.prototype.send = backend_generic_link_sender;
 MAVLink20Processor.prototype.add_link = add_link;
 MAVLink20Processor.prototype.add_out = add_out;
 
@@ -122,7 +143,7 @@ var send_heartbeat_handler = function() {
       heartbeat.system_status = 218; // fieldtype: uint8_t  isarray: False 
       heartbeat.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
 
-      mpo.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
+      //todo buzz hack put this back mpo.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
 
     //    process.stdout.write("\b"); // move cursor back, but does not clear prev pos
     spinner++;
@@ -155,7 +176,7 @@ class SmartSerialLink extends SerialPort {
         //this = new SerialPort(path, { baudRate: 115200, autoOpen: true });// its actually a promise till opened
 
         this.__path=path;
-
+        this.smarttype = 'serial'; // needs to match the 'type': xxxx in sysid_to_ip_address
         this.last_error = undefined;
         this.mavlinktype = undefined;
         this.streamrate = undefined;
@@ -349,7 +370,7 @@ class SmartTCPLink extends net.Socket {
         super()
 
         this.last_error = undefined;
-
+        this.smarttype = 'tcp'; // needs to match the 'type': xxxx in sysid_to_ip_address
         this.remote_ip = ip;//'127.0.0.1';
         this.remote_port = port;//5760;
         this.is_output = is_output;
@@ -520,7 +541,7 @@ class SmartUDPOutLink extends dgram.Socket {
         super('udp4')
 
         this.ISUDPOUTCONNECTED = false; 
-
+        this.smarttype = 'udpout'; // needs to match the 'type': xxxx in sysid_to_ip_address
         this.is_output = is_output;
         this.eventsetup();
 
@@ -547,7 +568,7 @@ class SmartUDPOutLink extends dgram.Socket {
         message.system_status = 218; // fieldtype: uint8_t  isarray: False 
         message.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
 
-        //mpo.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
+        mpo.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
 
         process.stdout.write('#');
 
@@ -656,7 +677,7 @@ class SmartUDPInLink extends dgram.Socket {
         this.bind(portnum);
 
         this.ISUDPINCONNECTED = false; 
-
+        this.smarttype = 'udp'; // needs to match the 'type': xxxx in sysid_to_ip_address 
         this.is_output = is_output;
         this.last_rinfo = undefined;
         this.eventsetup();

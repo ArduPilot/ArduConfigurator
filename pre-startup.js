@@ -1,6 +1,7 @@
 //  #!/usr/bin/env node
 
-
+// This is the backend Node code for ardu-configurator, it handles opening the "app" window, and tcp/udp comms that get forwarded to the 
+//  frontend.  
 // UDP is using mavagent.js's "smartserial.js" almost in its entirety thru this pre-startup.js for arduconfigurator to get UDP data anytime.  
 // surprisingly, it seems to kida mostly work 
 
@@ -56,16 +57,15 @@ mpo.add_link('tcp:localhost:5760'); // to/from sitl
 
 //----------------------------------------------------------------------------------
 
-// Attach an event handler for any valid MAVLink message - we use this mostly for unknown packet types, console.log and debug messages. 
-// the majority of specific responses to specifc messages are not handled in the 'generic' handler, but in specific message handlers for each 
-// type of message.   eg mavlinkParser1.on('HEATBEAT') is better than here, as this 'generic' block might go away at some point.
+// this function takes INCOMING tcp/udp mavlink in Node backend server (smartlinks.js), and forwards them to the GUI thread.
+// Attach an event handler for any valid MAVLink message , this allows us to capture parsed mavlink packets and forward htem to the 'frontend'
 var generic_message_handler = function(message) {
 
     // don't dissplay or handle parsing errors -  ie Bad prefix errors, but allow signing errors thru
     if ((message._id == -1 ) && (message._reason != 'Invalid signature') ) { return;}
 
     // for packets arriving in from a --out target, their target sysid is NOT us...
-    if (message.target_system < 250 ) { /*console.log('--out sending:',message._name); */ mpo.send(message);   } 
+    //if (message.target_system < 250 ) { /*console.log('--out sending:',message._name); */ mpo.send(message);   } 
 
     if (! newWindow) return;// don't try to post to new window till its real.
 
@@ -75,7 +75,9 @@ var generic_message_handler = function(message) {
 
 }
 
-// 
+// this function capture/s message FROM the GUI and consumes them in the backend
+// 1st type is a 'connectNode' message that the gui sends to say "open this tcp/udp connection"
+// 2st type is a 'sendMAV' message that the gui sends to say "this is a mavlink packet that needs sending to tcp/udp outgoing"
 window.addEventListener('message', function(event) {
   // ignore 'false' silently
   if (event.data == false) return;
@@ -83,26 +85,47 @@ window.addEventListener('message', function(event) {
   // event.data is JSON-as-string    
   var data = JSON.parse(event.data);  
 
-  if ( !data.connectNode  ) return; // ignore anything except these. tcp/udp only
+  //if ( !data.connectNode  ) return; // ignore anything except these. tcp/udp only
 
-  close_all_links();
+  //1st type is a 'connectNode' message that the gui sends to say "open this tcp/udp connection"
+  if ( data.connectNode) {
+      close_all_links();
 
-  //'connectTcporUdp': true, 'ip': $ip , 'port': $port 
-  var ip = data.ip;
-  var port = data.port;
-  var type = data.type;
+      //'connectTcporUdp': true, 'ip': $ip , 'port': $port 
+      var ip = data.ip;
+      var port = data.port;
+      var type = data.type;
 
-  console.log("GOT msg from frontend!!!!!!!!!!!!!",event,ip,port,type);
+      console.log("GOT msg from frontend!!!!!!!!!!!!!",event,ip,port,type);
 
-  if ( type == 'udp') {
-    mpo.add_link('udpin:'+ip+':'+port); // eg 'udpin:0.0.0.0:14550'
+      if ( type == 'udp') {
+        mpo.add_link('udpin:'+ip+':'+port); // eg 'udpin:0.0.0.0:14550'
+      }
+      // if ( type == 'udpout') {
+      //   mpo.add_link('udpout:'+ip+':'+port); // eg 'udpin:0.0.0.0:14550'
+      // }
+      if ( type == 'tcp') {
+        mpo.add_link('tcp:'+ip+':'+port);   //eg 'tcp:localhost:5760'
+      }
   }
-  // if ( type == 'udpout') {
-  //   mpo.add_link('udpout:'+ip+':'+port); // eg 'udpin:0.0.0.0:14550'
-  // }
-  if ( type == 'tcp') {
-    mpo.add_link('tcp:'+ip+':'+port);   //eg 'tcp:localhost:5760'
+  if ( data.sendMAV) {  // { 'sendMAV': true, 'pkt': xxxxx }
+
+    //console.log("sendMAV",data);
+
+    //goes thru backend_generic_link_sender in smartlinks.js
+    var pkt = JSON.parse(data.pkt);
+    var sysid = data.sysid;// unused but avail
+
+    // passing the pkt through JSON causes it to loose its __proto__ attribute, and it's no longer a mavlink2.messages.xxxx, instead its a __object__
+    // here we lookup its real class type and tweak it: 
+    var msgId = pkt._id;
+    var decoder = mavlink20.map[msgId]; // big list of class info by id number
+    var m = new decoder.type();   // make a new 'empty' instance of the right class,
+    var newpkt = Object.assign(m, pkt);// 'm' is the right type but empty, pkt is the wrong type but has all the data
+
+    mpo.send(newpkt,sysid); // basically does  a .ZZsend on each of the link_list's that are present.
   }
+
 
 });
 

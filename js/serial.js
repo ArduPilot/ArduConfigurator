@@ -193,18 +193,21 @@ var serial = {
 
         // fake connection info, looks like serial  
         var connectionInfo = {
-            bitrate: 115200,
-            bufferSize: 4096,
-            connectionId: 1,
-            ctsFlowControl: false,
-            dataBits: "eight",
-            name: "",
-            parityBit: "no",
-            paused: false,
-            persistent: false,
-            receiveTimeout: 0,
-            sendTimeout: 0,
-            stopBits: "one",
+            // bitrate: 115200,
+            // bufferSize: 4096,
+            // connectionId: 1,
+            // ctsFlowControl: false,
+            // dataBits: "eight",
+            // name: "",
+            // parityBit: "no",
+            // paused: false,
+            // persistent: false,
+            // receiveTimeout: 0,
+            // sendTimeout: 0,
+            // stopBits: "one",
+            ip: self.connectionIP , 
+            port: self.connectionPort , 
+            type: self.connectionType
         };
 
         if (chrome.runtime.lastError) {
@@ -233,7 +236,7 @@ var serial = {
                 
         });
 
-        console.log(self.logHead + 'Connection opened with ID: ' + self.connectionId + ', url: ' + self.connectionIP + ':' + self.connectionPort);
+        console.log(self.logHead + 'Connection opened with ID: ' + self.connectionId + ', url: ' + self.connectionType + '://' + self.connectionIP + ':' + self.connectionPort);
 
 
     },
@@ -269,12 +272,12 @@ var serial = {
             disconnectFn(this.connectionId, function (result) {
 
                 // this is tcp handling
-                if (chrome.runtime.lastError) {
-                    console.log("3333333",chrome.runtime.lastError.message);
-                }
+                // if (chrome.runtime.lastError) {
+                //     console.log("3333333",chrome.runtime.lastError.message);
+                // }
                 
                 // this is minimal udp handling
-                if (chrome.runtime.lastError.message == 'Socket not found') { 
+                if (chrome.runtime.lastError && ( chrome.runtime.lastError.message == 'Socket not found') ) { 
                     console.log(self.logHead + 'Connection with ID: ' + self.connectionId + ' closed, Sent: ' + self.bytesSent + ' bytes, Received: ' + self.bytesReceived + ' bytes');
                     return;
                 }
@@ -312,7 +315,11 @@ var serial = {
         });
     },
     getInfo: function (callback) {
-        var chromeType = (this.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+//        var chromeType = (this.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+        var chromeType = null;
+        if (serial.connectionType == 'serial')  chromeType = chrome.serial;
+        if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+        if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
         chromeType.getInfo(this.connectionId, callback);
     },
     getControlSignals: function (callback) {
@@ -426,12 +433,20 @@ var serial = {
         listeners: [],
 
         addListener: function (function_reference) {
-            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+            var chromeType = null;
+            if (serial.connectionType == 'serial')  chromeType = chrome.serial;
+            if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+            if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+
             chromeType.onReceive.addListener(function_reference);
             this.listeners.push(function_reference);
         },
         removeListener: function (function_reference) {
-            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+            var chromeType = null;
+            if (serial.connectionType == 'serial')  chromeType = chrome.serial;
+            if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+            if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+
             for (var i = (this.listeners.length - 1); i >= 0; i--) {
                 if (this.listeners[i] == function_reference) {
                     chromeType.onReceive.removeListener(function_reference);
@@ -446,12 +461,22 @@ var serial = {
         listeners: [],
 
         addListener: function (function_reference) {
-            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+//            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+            var chromeType = null;
+            if (serial.connectionType == 'serial')  chromeType = chrome.serial;
+            if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+            if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+
             chromeType.onReceiveError.addListener(function_reference);
             this.listeners.push(function_reference);
         },
         removeListener: function (function_reference) {
-            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+//            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+        var chromeType = null;
+        if (serial.connectionType == 'serial')  chromeType = chrome.serial;
+        if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+        if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+
             for (var i = (this.listeners.length - 1); i >= 0; i--) {
                 if (this.listeners[i] == function_reference) {
                     chromeType.onReceiveError.removeListener(function_reference);

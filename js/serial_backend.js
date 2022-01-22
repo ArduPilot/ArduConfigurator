@@ -117,10 +117,12 @@ $(document).ready(function () {
     $('div.connect_controls a.connect').click(function () {
         if (GUI.connect_lock != true) { // GUI control overrides the user control
 
-            var clicks = $(this).data('clicks');
+            var clicks = $(this).data('clicks')??0;
             var selected_baud = parseInt($baud.val());
             // uses 'port' from main drop-down  first, but if 'Manual' is selected, the uses port-override from other box
-            if ($port.find('option:selected').data() ) { var is_manual = $port.find('option:selected').data().is_manual??0;}
+            if ($port.find('option:selected').data() ) { 
+                is_manual = $port.find('option:selected').data().is_manual??0;
+            }
             var selected_port = $port.find('option:selected').data().isManual ?
                     $portOverride.val() :
                     String($port.val());
@@ -136,8 +138,10 @@ $(document).ready(function () {
                     // lock port select & baud while we are connecting / connected
                     $('#port, #baud, #delay').prop('disabled', true);
                     $('div.connect_controls a.connect_state').text(chrome.i18n.getMessage('connecting'));
-
+                    
+                    // despite being called  'serial', it can do tcp/udp as well. 
                     serial.connect(selected_port, {bitrate: selected_baud}, onOpen);
+
                 } else {
                     var wasConnected = CONFIGURATOR.connectionValid;
 
@@ -250,7 +254,11 @@ function onOpen(openInfo) {
         chrome.storage.local.set({wireless_mode_enabled: $('#wireless-mode').is(":checked")});
         chrome.storage.local.set({auto_connect_enabled: $('#auto-connect').is(":checked")});
 
-        serial.onReceive.addListener(read_serial);
+        if (openInfo.ip !== undefined) {
+          serial.onReceive.addListener(read_tcp_udp);
+        } else { // serial
+          serial.onReceive.addListener(read_serial);
+        }
 
         // disconnect after 10 seconds with error if we don't get IDENT data
         helper.timeout.add('connecting', function () {
@@ -359,6 +367,30 @@ function onClosed(result) {
 
     updateFirmwareVersion();
 }
+
+// a cut-down bit from MSP.read() for tcp 
+function read_tcp_udp(info) {
+    if (this.streamrate == undefined) {
+        send_heartbeat_handler(); // throw a heartbeat first, blindly?
+        set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
+        this.streamrate = 4; 
+        ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
+        autopilot_version_request();
+    }
+
+    // some form of valid mavlink means we can consider ourselves connected as far as the GUI is concerned
+    if (CONFIGURATOR.connectionValid == false ) {
+        console.log("CONNECTED!");
+        CONFIGURATOR.connectionValid = true;
+        CONFIG.flightControllerVersion = "0.0.0"; // buss hack to enable PID pidCount in serial_backend.js 
+        updateFirmwareVersion();// show on-gui top-lef
+        GUI.allowedTabs = GUI.defaultAllowedTabsWhenConnected.slice();
+        onConnect();
+    }
+
+    this.last_received_timestamp = Date.now();
+}
+
 
 function read_serial(info) {
     if (!CONFIGURATOR.cliActive) {

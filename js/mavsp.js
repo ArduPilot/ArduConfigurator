@@ -532,7 +532,7 @@ var MSP = {
     last_received_timestamp:   null,
     analog_last_received_timestamp: null,
 
-    // 
+    // used by serial not tcp/udp:
     read: function (readInfo) {
        // console.log("MSP read serial bytes len:"+JSON.stringify(readInfo.data.byteLength));
         

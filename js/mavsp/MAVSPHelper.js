@@ -21,18 +21,33 @@ function isFunction(variableToCheck){
 // create the output hooks for the parser/s
 // we overwrite the default send() instead of overwriting write() or using setConnection(), which don't know the ip or port info.
 // and we accept ip/port either as part of the mavmsg object, or as a sysid in the OPTIONAL 2nd parameter
-generic_link_sender = function(mavmsg,sysid) {
-    //console.log("generic sender queuing:"+mavmsg._name);
+frontend_generic_link_sender = function(mavmsg,sysid) {
+    console.log("frontend sender/queuing:",mavmsg);
     // this is really just part of the original send()
     // paranoia helps.. very rarely, i get 'pack' is not a functon, so check for it first
-    
-    if(! isFunction(mavmsg.pack)){ 
-        debugger;
-    }
-    var buf = mavmsg.pack(this);  //Buffer
+
+    // tcp/udp special:
+    // send info to the backend
+    // send to any potential TCP/UDP endpoints thru Node and smartlinks.js it keeps a sysid-to-ip-address-and-port lookup table so sysid is enuf
+    // todo right now we send this to the backend even for uart data, as it will be ignored there 
+    if ((sysid != null) && (sysid != 255) ) SYSID = sysid;
+    if (sysid == null ) sysid = SYSID;
+    if (sysid == null ) sysid = 1; // terrible fallback
+
+    var buf = mavmsg.pack(this);  //Buffer.   this .pack is improtant, it must be done prior to json goodness below
+
+    //AFTER .pack()...
+
+    var msgstr = JSON.stringify(mavmsg); 
+    //console.log("zZZZZZZZZZZZZZZZZZZ",msgstr,mavmsg)
+    var sendMAVpkt = { 'sendMAV': true, 'pkt': msgstr , 'sysid': sysid};
+    var msg = JSON.stringify(sendMAVpkt); 
+    window.opener.postMessage(msg, "*");
+
+
+    // the below-block is now for serial type devices in the frontend
 
     var abuf = toArrayBuffer(buf); // ArrayBuffer
-
     //this.write( buf ); // already open, we hope
 
     var message = new MspMessageClass();
@@ -75,7 +90,7 @@ generic_link_sender = function(mavmsg,sysid) {
 
 var logger  = null;
 
-MAVLink20Processor.prototype.send = generic_link_sender; // tell library how to send
+MAVLink20Processor.prototype.send = frontend_generic_link_sender; // tell library how to send
 
 var mavParserObj = new MAVLink20Processor(logger, 255,190); // 255 is the mavlink sysid of this code as a GCS, as per mavproxy.
 var mpo = mavParserObj; // alternative name
@@ -305,6 +320,7 @@ var mspHelper = (function (gui) {
 
         // weird work-around for UDP packets that come in before the GUI is ready for them..
         if (CONFIG == undefined ) {
+            console.log("not connected yet, no CONFIG");
             return;
         }
 

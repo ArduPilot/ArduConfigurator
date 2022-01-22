@@ -129,6 +129,10 @@ mavlink20.message.prototype.sign_packet = function( mav) {
 mavlink20.message.prototype.pack = function(mav, crc_extra, payload) {
 
     this._payload = payload;
+    if ( this._payload == undefined) {
+        debugger;
+        // tip: you are pribably using a 'mavlink20.message' prototype rather than the complete (eg) mavlink20.messages.heartbeat
+    }
     var plen = this._payload.length;
     //in MAVLink2 we can strip trailing zeros off payloads. This allows for simple
     // variable length arrays and smaller packets
