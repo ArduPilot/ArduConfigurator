@@ -264,10 +264,22 @@ var serial = {
                 disconnectFn = chrome.serial.disconnect ;
             }
             if (self.connectionType == 'tcp') {
-                disconnectFn = chrome.sockets.tcp.close;
+
+                 // send info to the backend to disconnect from tcp?  todo?
+                //var msg = JSON.stringify({ 'disconnectNode': true, 'ip': ip , 'port': port , 'type':self.connectionType }); //self.connectionType= 'tcp'
+                //window.opener.postMessage(msg, "*");
+
+                return;
+                //disconnectFn = chrome.sockets.tcp.close;
             }
             if (self.connectionType == 'udp') {
-                disconnectFn = chrome.sockets.tcp.close; // udp is connection-less, use tcp handler and ignore it
+
+                // send info to the backend to disconnect from tcp?  todo?
+                //var msg = JSON.stringify({ 'disconnectNode': true, 'ip': ip , 'port': port , 'type':self.connectionType }); //self.connectionType= 'udp'
+                //window.opener.postMessage(msg, "*");
+
+                return;
+                //disconnectFn = chrome.sockets.tcp.close; // udp is connection-less, use tcp handler and ignore it
             }
             disconnectFn(this.connectionId, function (result) {
 

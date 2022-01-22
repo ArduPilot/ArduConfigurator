@@ -78,14 +78,14 @@ var generic_message_handler = function(message) {
 // this function capture/s message FROM the GUI and consumes them in the backend
 // 1st type is a 'connectNode' message that the gui sends to say "open this tcp/udp connection"
 // 2st type is a 'sendMAV' message that the gui sends to say "this is a mavlink packet that needs sending to tcp/udp outgoing"
+// 3st type is a 'disconnectNode' message that the gui sends to say "close this tcp/udp connection"
+
 window.addEventListener('message', function(event) {
   // ignore 'false' silently
   if (event.data == false) return;
 
   // event.data is JSON-as-string    
   var data = JSON.parse(event.data);  
-
-  //if ( !data.connectNode  ) return; // ignore anything except these. tcp/udp only
 
   //1st type is a 'connectNode' message that the gui sends to say "open this tcp/udp connection"
   if ( data.connectNode) {
@@ -108,6 +108,9 @@ window.addEventListener('message', function(event) {
         mpo.add_link('tcp:'+ip+':'+port);   //eg 'tcp:localhost:5760'
       }
   }
+  // if ( data.disconnectNode) {
+  //   close_all_links(); // overkill, but for now with 1 link active its ok
+  // }
   if ( data.sendMAV) {  // { 'sendMAV': true, 'pkt': xxxxx }
 
     //console.log("sendMAV",data);
