@@ -44,7 +44,8 @@ var GUI_control = function () {
         'mixer',
         'programming'
     ];
-    this.allowedTabs = this.defaultAllowedTabsWhenDisconnected;
+    //this.allowedTabs = this.defaultAllowedTabsWhenDisconnected;
+    this.allowedTabs = this.defaultAllowedTabsWhenConnected;
 
     // check which operating system is user running
     if (navigator.appVersion.indexOf("Win") != -1)          this.operating_system = "Windows";

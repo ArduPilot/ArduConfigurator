@@ -723,7 +723,11 @@ var MSP = {
     }
 };
 
+// serial:
 mavParserObj.on('message', MSP._dispatch_message_mav);
+// tcp/udp:
+mavParserObj.on('message', read_tcp_udp);
+
 
 MSP.SDCARD_STATE_NOT_PRESENT = 0;
 MSP.SDCARD_STATE_FATAL       = 1;

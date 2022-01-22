@@ -22,7 +22,7 @@ function isFunction(variableToCheck){
 // we overwrite the default send() instead of overwriting write() or using setConnection(), which don't know the ip or port info.
 // and we accept ip/port either as part of the mavmsg object, or as a sysid in the OPTIONAL 2nd parameter
 frontend_generic_link_sender = function(mavmsg,sysid) {
-    console.log("frontend sender/queuing:",mavmsg);
+    //console.log("frontend sender/queuing:",mavmsg);
     // this is really just part of the original send()
     // paranoia helps.. very rarely, i get 'pack' is not a functon, so check for it first
 
@@ -318,9 +318,9 @@ var mspHelper = (function (gui) {
 
         //console.log(mavmsg._name);
 
-        // weird work-around for UDP packets that come in before the GUI is ready for them..
+        // minimal work-around for UDP packets that come in before the GUI is ready for them.. we wait till CONFIG isnt undef
         if (CONFIG == undefined ) {
-            console.log("not connected yet, no CONFIG");
+            //console.log("not connected yet, no CONFIG");
             return;
         }
 

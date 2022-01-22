@@ -70,7 +70,7 @@ close_all_outs = function() {
 //  but right now we are a bit dumb and just send it to all of the links
 // inside the context of this function, 'this' is the MAVLink20Processor as we called by it as part of send()
 backend_generic_link_sender = function(mavmsg,sysid) {
-    console.log("backend send",mavmsg,sysid);
+    //console.log("backend send",mavmsg,sysid);
 
     //console.log("XXXXXXXXXXXXXXXXXX",mavmsg,sysid)
         
@@ -415,7 +415,7 @@ class SmartTCPLink extends net.Socket {
     // tcp is already open ,we hope.
     ZZsend(data){
         data = new Buffer.from(data)
-        this.write( data ); // already open, we hope
+        this.write( data ); // already open, we hope , immediate net.Socket.write
     }
 
 
@@ -424,6 +424,9 @@ class SmartTCPLink extends net.Socket {
         this.on('connect',function(){
 
             this.ISTCPCONNECTED = true; 
+
+            //similar to chrome.sockets.tcp.setNoDelay ...
+            this.setNoDelay(); //disable nagle, good for low-latencies.
 
             console.log('TCPClient: connection established with TCP server');
 

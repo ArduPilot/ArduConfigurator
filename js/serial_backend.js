@@ -153,7 +153,8 @@ $(document).ready(function () {
                     GUI.tab_switch_in_progress = false;
                     CONFIGURATOR.connectionValid = false;
                     GUI.connected_to = false;
-                    GUI.allowedTabs = GUI.defaultAllowedTabsWhenDisconnected.slice();
+                    //GUI.allowedTabs = GUI.defaultAllowedTabsWhenDisconnected.slice();
+                    GUI.allowedTabs = GUI.defaultAllowedTabsWhenConnected.slice();
 
                     /*
                      * Flush
@@ -186,7 +187,8 @@ $(document).ready(function () {
                         $('#content').empty();
                     }
 
-                    $('#tabs .tab_landing a').click();
+                    //$('#tabs .tab_landing a').click();
+                    $('#tabs .tab_setup a').click();
                 }
 
                 $(this).data("clicks", !clicks);
@@ -255,7 +257,7 @@ function onOpen(openInfo) {
         chrome.storage.local.set({auto_connect_enabled: $('#auto-connect').is(":checked")});
 
         if (openInfo.ip !== undefined) {
-          serial.onReceive.addListener(read_tcp_udp);
+          //serial.onReceive.addListener(read_tcp_udp); done elsewhere with mavParserObj.on('message', read_tcp_udp);
         } else { // serial
           serial.onReceive.addListener(read_serial);
         }
@@ -368,36 +370,63 @@ function onClosed(result) {
     updateFirmwareVersion();
 }
 
-// a cut-down bit from MSP.read() for tcp 
-function read_tcp_udp(info) {
+
+//static persist it.
+// 0 means not-connected-yet
+// 1 means connected
+// 2 means was-connected
+var is_connected = 0;
+
+// a cut-down bit from MSP.read() for tcp/udp conneciton startup/success
+// this gets called on every incoming tcp/udp packet wether we are ready for it or not.
+function read_tcp_udp(msg) {
+    // this.streamrate is pretty arbitrary here, but its what we used in the serial links too
     if (this.streamrate == undefined) {
         send_heartbeat_handler(); // throw a heartbeat first, blindly?
-        set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
+        //set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
         this.streamrate = 4; 
         ParamsObj.getAll(); // todo delay this? - this immediately starts param fetch
         autopilot_version_request();
     }
 
     // some form of valid mavlink means we can consider ourselves connected as far as the GUI is concerned
-    if (CONFIGURATOR.connectionValid == false ) {
+    if (CONFIG && (CONFIGURATOR.connectionValid == false) && (is_connected==0) ) {
+        is_connected = 1;
         console.log("CONNECTED!");
         CONFIGURATOR.connectionValid = true;
         CONFIG.flightControllerVersion = "0.0.0"; // buss hack to enable PID pidCount in serial_backend.js 
         updateFirmwareVersion();// show on-gui top-lef
         GUI.allowedTabs = GUI.defaultAllowedTabsWhenConnected.slice();
         onConnect();
+        return;// so we don't trigger an immediate disconnect
     }
+        // disconnect?
+    if (CONFIG && (CONFIGURATOR.connectionValid == true) && (is_connected==1) ) {
+        if (! GUI.connected_to) {
+            is_connected = 0;
+            CONFIGURATOR.connectionValid = false;
+            console.log("DIS-CONNECTED!");
+            onClosed();
+            //delete(CONFIG);
+            CONFIG=undefined;
+        }
+    }
+    
+    
+   
+
+    //tcp/udp skips the MSP.read() and other MSP stuff entirely
 
     this.last_received_timestamp = Date.now();
 }
 
 
 function read_serial(info) {
-    if (!CONFIGURATOR.cliActive) {
+    //if (!CONFIGURATOR.cliActive) {
         MSP.read(info);
-    } else if (CONFIGURATOR.cliActive) {
-        TABS.cli.read(info);
-    }
+   // } else if (CONFIGURATOR.cliActive) {
+   //     TABS.cli.read(info);
+   // }
 }
 
 /**

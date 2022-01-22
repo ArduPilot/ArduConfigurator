@@ -218,27 +218,27 @@ var serial = {
         var msg = JSON.stringify({ 'connectNode': true, 'ip': ip , 'port': port , 'type':self.connectionType }); //self.connectionType= 'udp'
         window.opener.postMessage(msg, "*");
 
-        if (callback) callback(connectionInfo);
+
 
         self.onReceive.addListener(function log_bytesReceived(info) {
             self.bytesReceived += info.data.byteLength;
-            if (chrome.runtime.lastError) {
+            //if (chrome.runtime.lastError) {
                 console.error('connectTcporUdp2', chrome.runtime.lastError.message);
-            }
+           // }
         });
         self.onReceiveError.addListener(function watch_for_on_receive_errors(info) {
             console.error(info);
             
 
-                    if (chrome.runtime.lastError) {
+                   // if (chrome.runtime.lastError) {
                         console.error('connectTcporUdp3', chrome.runtime.lastError.message);
-                    }
+                    //}
                 
         });
 
         console.log(self.logHead + 'Connection opened with ID: ' + self.connectionId + ', url: ' + self.connectionType + '://' + self.connectionIP + ':' + self.connectionPort);
 
-
+        if (callback) callback(connectionInfo); // must be last line.
     },
 
 
@@ -268,7 +268,9 @@ var serial = {
                  // send info to the backend to disconnect from tcp?  todo?
                 //var msg = JSON.stringify({ 'disconnectNode': true, 'ip': ip , 'port': port , 'type':self.connectionType }); //self.connectionType= 'tcp'
                 //window.opener.postMessage(msg, "*");
-
+                self.connectionId = false;
+                GUI.connected_to = false;
+                GUI.connecting_to = false;
                 return;
                 //disconnectFn = chrome.sockets.tcp.close;
             }
@@ -277,7 +279,9 @@ var serial = {
                 // send info to the backend to disconnect from tcp?  todo?
                 //var msg = JSON.stringify({ 'disconnectNode': true, 'ip': ip , 'port': port , 'type':self.connectionType }); //self.connectionType= 'udp'
                 //window.opener.postMessage(msg, "*");
-
+                self.connectionId = false;
+                GUI.connected_to = false;
+                GUI.connecting_to = false;
                 return;
                 //disconnectFn = chrome.sockets.tcp.close; // udp is connection-less, use tcp handler and ignore it
             }
