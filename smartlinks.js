@@ -26,19 +26,21 @@ var get_sys_to_ip_table = function() { return sysid_to_ip_address; }
 add_link = function(thingname) {
     console.log("opening LINK:",thingname);
     var words = thingname.split(':'); 
-    if (words[0] == 'serial')  link_list.push(new SmartSerialLink(words[1]));
-    if (words[0]  == 'tcp')    link_list.push(new SmartTCPLink(words[1],words[2]));
-    if (words[0]  == 'udpin')  link_list.push(new SmartUDPInLink(words[2]));
-    if (words[0]  == 'udpout') link_list.push(new SmartUDPOutLink(words[1],words[2]));
+    if (words[0] == 'serial')  link_list.push(new SmartSerialLink(words[1],false));
+    if (words[0]  == 'tcp')    link_list.push(new SmartTCPLink(words[1],words[2],false));
+    if (words[0]  == 'udpin')  link_list.push(new SmartUDPInLink(words[2],false));
+    if (words[0]  == 'udpout') link_list.push(new SmartUDPOutLink(words[1],words[2],false));
 
 }
 
 close_all_links = function() {
     for ( l in link_list){
         var lll= link_list[l];
-        console.log("closing LINK:",lll);
-        //lll.end(); // 1/2 closes by sending send FIN pkt and waitin for remote server to also send FIN back, which might trigger socket.on('close',...)
-        lll.destroy(); /// aggressive and not polite
+        if (lll ) {
+            console.log("closing LINK:",lll);
+            //lll.end(); // 1/2 closes by sending send FIN pkt and waitin for remote server to also send FIN back, which might trigger socket.on('close',...)
+            lll.destroy(); /// aggressive and not polite
+        }
     }
     link_list = [];
 }
@@ -48,7 +50,7 @@ add_out = function(thingname) {
     var words = thingname.split(':'); 
     if (words[0] == 'serial')  out_list.push(new SmartSerialLink(words[1],true));
     if (words[0]  == 'tcp')    out_list.push(new SmartTCPLink(words[1],words[2],true));
-    if (words[0]  == 'udpin')  out_list.push(new SmartUDPInLink(words[2]),true);
+    if (words[0]  == 'udpin')  out_list.push(new SmartUDPInLink(words[2],true));
     if (words[0]  == 'udpout') out_list.push(new SmartUDPOutLink(words[1],words[2],true));
 
 }
@@ -93,7 +95,7 @@ backend_generic_link_sender = function(mavmsg,sysid) {
             }
         }  
         // if no ip_info, then just spam all the connected links, which is even dumber
-        if (lll.is_connected()) {
+        if (lll && lll.is_connected()) {
             lll.ZZsend(buf);
         }
     }
@@ -143,7 +145,8 @@ var send_heartbeat_handler = function() {
       heartbeat.system_status = 218; // fieldtype: uint8_t  isarray: False 
       heartbeat.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
 
-      //todo buzz hack put this back mpo.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
+      //todo buzz hack put this back 
+      mpo.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
 
     //    process.stdout.write("\b"); // move cursor back, but does not clear prev pos
     spinner++;

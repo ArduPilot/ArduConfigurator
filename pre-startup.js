@@ -49,9 +49,9 @@ var mavParserObj = mpo;
 
 //----------------------------------------------------------------------------------
 //console.log("LISTENING FOR UDP IN udpin:0.0.0.0:14550")
-mpo.add_link('udpin:0.0.0.0:14550'); //u-in
+mpo.add_link('udpin:0.0.0.0:14550',false); //u-in
 //console.log("TRYING TCP TO tcp:localhost:5760 till one of them succeeds")
-mpo.add_link('tcp:localhost:5760'); // to/from sitl
+//mpo.add_link('tcp:localhost:5760'); // to/from sitl
 
 //mpo.add_out('udpout:localhost:14551'); //u-out to mavcontrol, missionplanner etc
 
@@ -68,10 +68,21 @@ var generic_message_handler = function(message) {
     //if (message.target_system < 250 ) { /*console.log('--out sending:',message._name); */ mpo.send(message);   } 
 
     if (! newWindow) return;// don't try to post to new window till its real.
+    
 
     // push packed into GUI part of the application.... through "postMessage()"   the GUI/frontend app recieves it in main.js window.addEventListener
     //console.log("eep",JSON.stringify(message));
+    try {
     newWindow.window.postMessage(JSON.stringify({ 'udpmavlink': true, 'pkt':message }), "*"); //the second parameter specifies the message origin. afaik, this is merely a string and has no effect beyond being there
+    } catch (error) {     // if window gets closed, we'll treat it as time to exit as well.
+      console.error(error);
+
+      if ( error.message.startsWith('No window with id') ) {
+        process.exit();
+      }
+      // expected output: ReferenceError: nonExistentFunction is not defined
+      // Note - error messages will vary depending on browser
+    }
 
 }
 
@@ -99,7 +110,7 @@ window.addEventListener('message', function(event) {
       console.log("GOT msg from frontend!!!!!!!!!!!!!",event,ip,port,type);
 
       if ( type == 'udp') {
-        mpo.add_link('udpin:'+ip+':'+port); // eg 'udpin:0.0.0.0:14550'
+        mpo.add_link('udpin:'+ip+':'+port,false); // eg 'udpin:0.0.0.0:14550'
       }
       // if ( type == 'udpout') {
       //   mpo.add_link('udpout:'+ip+':'+port); // eg 'udpin:0.0.0.0:14550'
