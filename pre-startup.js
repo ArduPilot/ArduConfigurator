@@ -51,7 +51,7 @@ var mavParserObj = mpo;
 //console.log("LISTENING FOR UDP IN udpin:0.0.0.0:14550")
 mpo.add_link('udpin:0.0.0.0:14550',false); //u-in
 //console.log("TRYING TCP TO tcp:localhost:5760 till one of them succeeds")
-//mpo.add_link('tcp:localhost:5760'); // to/from sitl
+mpo.add_link('tcp:localhost:5760'); // to/from sitl
 
 //mpo.add_out('udpout:localhost:14551'); //u-out to mavcontrol, missionplanner etc
 
