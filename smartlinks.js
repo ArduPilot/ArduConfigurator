@@ -34,6 +34,7 @@ add_link = function(thingname) {
 }
 
 close_all_links = function() {
+    console.log("close_all_links");
     for ( l in link_list){
         var lll= link_list[l];
         if (lll ) {
@@ -56,6 +57,7 @@ add_out = function(thingname) {
 }
 
 close_all_outs = function() {
+    console.log("close_all_outs");
     for ( o in out_list){
         var ooo= out_list[o];
         console.log("closing OUT: ",ooo);

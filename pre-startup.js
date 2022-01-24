@@ -119,9 +119,9 @@ window.addEventListener('message', function(event) {
         mpo.add_link('tcp:'+ip+':'+port);   //eg 'tcp:localhost:5760'
       }
   }
-  // if ( data.disconnectNode) {
-  //   close_all_links(); // overkill, but for now with 1 link active its ok
-  // }
+   if ( data.disconnectNode) {
+     close_all_links(); // overkill, but for now with 1 link active its ok
+   }
   if ( data.sendMAV) {  // { 'sendMAV': true, 'pkt': xxxxx }
 
     //console.log("sendMAV",data);

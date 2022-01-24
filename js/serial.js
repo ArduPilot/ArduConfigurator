@@ -215,7 +215,7 @@ var serial = {
         }
 
         // send info to the backend
-        var msg = JSON.stringify({ 'connectNode': true, 'ip': ip , 'port': port , 'type':self.connectionType }); //self.connectionType= 'udp'
+        var msg = JSON.stringify({ 'connectNode': true, 'ip': self.connectionIP , 'port': self.connectionPort , 'type':self.connectionType }); //self.connectionType= 'udp'
         window.opener.postMessage(msg, "*");
 
 
@@ -266,8 +266,8 @@ var serial = {
             if (self.connectionType == 'tcp') {
 
                  // send info to the backend to disconnect from tcp?  todo?
-                //var msg = JSON.stringify({ 'disconnectNode': true, 'ip': ip , 'port': port , 'type':self.connectionType }); //self.connectionType= 'tcp'
-                //window.opener.postMessage(msg, "*");
+                var msg = JSON.stringify({ 'disconnectNode': true, 'ip': self.connectionIP , 'port': self.connectionPort , 'type':self.connectionType }); //self.connectionType= 'tcp'
+                window.opener.postMessage(msg, "*");
                 self.connectionId = false;
                 GUI.connected_to = false;
                 GUI.connecting_to = false;
@@ -277,8 +277,8 @@ var serial = {
             if (self.connectionType == 'udp') {
 
                 // send info to the backend to disconnect from tcp?  todo?
-                //var msg = JSON.stringify({ 'disconnectNode': true, 'ip': ip , 'port': port , 'type':self.connectionType }); //self.connectionType= 'udp'
-                //window.opener.postMessage(msg, "*");
+                var msg = JSON.stringify({ 'disconnectNode': true, 'ip': self.connectionIP , 'port': self.connectionPort , 'type':self.connectionType }); //self.connectionType= 'udp'
+                window.opener.postMessage(msg, "*");
                 self.connectionId = false;
                 GUI.connected_to = false;
                 GUI.connecting_to = false;
