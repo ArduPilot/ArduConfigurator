@@ -1337,11 +1337,11 @@ TABS.mission_control.initialize = function (callback) {
                 selectedFeature.setStyle(getWaypointIcon(selectedMarker, true));
 
 
-                var altitudeMeters = app.ConvertCentimetersToMeters(selectedMarker.getAlt());
+                var altitudeMeters = parseInt(selectedMarker.getAlt());
                 var z_num = selectedMarker.getNumber()+1; // internally 0-indexed, GUI for user is 1-indexed
                 //alert(x);
                 $('#pointNumber').val(z_num);
-                $('#altitudeInMeters').text(` ${altitudeMeters}m`);
+                //$('#altitudeInMeters').text(` ${altitudeMeters}m`);
                 var z_lon = Math.round(coord[0] * 10000000) / 10000000;
                 var z_lat = Math.round(coord[1] * 10000000) / 10000000;
                 selectedMarker.setLat(z_lat* 10000000);
@@ -1417,8 +1417,8 @@ TABS.mission_control.initialize = function (callback) {
         // Update Alt display in meters on ALT field keypress up
         //////////////////////////////////////////////////////////////////////////
         $('#pointAlt').keyup(function(){
-            let altitudeMeters = app.ConvertCentimetersToMeters($(this).val());
-            $('#altitudeInMeters').text(` ${altitudeMeters}m`);
+            // let altitudeMeters = app.ConvertCentimetersToMeters($(this).val());
+            // $('#altitudeInMeters').text(` ${altitudeMeters}m`);
         });
         
         /////////////////////////////////////////////
@@ -1560,11 +1560,11 @@ TABS.mission_control.initialize = function (callback) {
             selectedFeature = markers[selectedMarker.getLayerNumber()].getSource().getFeatures()[0];
             selectedFeature.setStyle(getWaypointIcon(selectedMarker, true));
 
-            var altitudeMeters = app.ConvertCentimetersToMeters(selectedMarker.getAlt());
+            var altitudeMeters = parseInt(selectedMarker.getAlt());
             //alert(x);
             var z_num = selectedMarker.getNumber()+1; // internally 0-indexed, GUI for user is 1-indexed
             $('#pointNumber').val(z_num);
-            $('#altitudeInMeters').text(` ${altitudeMeters}m`);
+            //$('#altitudeInMeters').text(` ${altitudeMeters}m`);
             fillEditForm(selectedMarker,` ${altitudeMeters}m`);
         });
         $('a.wp-up').on('click', function (event) {
@@ -1594,11 +1594,11 @@ TABS.mission_control.initialize = function (callback) {
             selectedFeature = markers[selectedMarker.getLayerNumber()].getSource().getFeatures()[0];
             selectedFeature.setStyle(getWaypointIcon(selectedMarker, true));
 
-            var altitudeMeters = app.ConvertCentimetersToMeters(selectedMarker.getAlt());
+            var altitudeMeters = parseInt(selectedMarker.getAlt());
             var z_num = selectedMarker.getNumber()+1; // internally 0-indexed, GUI for user is 1-indexed
             //alert(x);
             $('#pointNumber').val(z_num);
-            $('#altitudeInMeters').text(` ${altitudeMeters}m`);
+            // $('#altitudeInMeters').text(` ${altitudeMeters}m`);
             fillEditForm(selectedMarker,` ${altitudeMeters}m`);
         });
 
