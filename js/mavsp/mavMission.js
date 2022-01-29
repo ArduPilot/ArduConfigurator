@@ -80,7 +80,27 @@ MavMission.prototype.missionRequestHandler = function(missionItemRequest,tt) {
 
     if (tt == 0)    console.log('MISSION_REQUEST <--');
     if (tt == 1)    console.log('MISSION_REQUEST_INT <--');
+    console.log('lat',FC.curr_mav_state['HOME_POSITION'].latitude);
+    if(!this.missionItems[0]){
+		this.missionItems[0] = new mavlink20.messages.mission_item_int(
+			1,  //tgtsysid
+			0,  //tgtcompid
+			0,    // seq
+		    mavlink20.MAV_FRAME_GLOBAL,    // frame
+			mavlink20.MAV_CMD_NAV_WAYPOINT,    // command
+			0,    // current
+			1,   // autocontinue
+			0.000000,  // param1,
+			0.000000,  // param2,
+			0.000000,  // param3
+			0.000000,  // param4
+			FC.curr_mav_state['HOME_POSITION'].latitude,//*10000000,  // x (latitude
+			FC.curr_mav_state['HOME_POSITION'].longitude,//*10000000,  // y (longitude
+			0, //FC.curr_mav_state['HOME_POSITION'].altitude,  // z (altitude
+		);
 
+	
+    }
     if ( this.missionItems[missionItemRequest.seq] ) { 
         // sending new mavlink20.messages.mission_item prepared earlier
         console.log('MISSION_ITEM -->',missionItemRequest.seq);
