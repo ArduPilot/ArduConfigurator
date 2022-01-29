@@ -139,7 +139,7 @@ $(document).ready(function () {
                     $('#port, #baud, #delay').prop('disabled', true);
                     $('div.connect_controls a.connect_state').text(chrome.i18n.getMessage('connecting'));
                     
-                    // despite being called  'connection', it can do tcp/udp as well. 
+                    // despite being called  'connection', it can do serial/tcp/udp  
                     connection.connect(selected_port, {bitrate: selected_baud}, onOpen);
 
                 } else {
@@ -229,6 +229,7 @@ function onInvalidFirmwareVersion()
     $('#tabs .tab_cli a').click();
 }
 
+// this callback is triggered AFTER connect button is pressed and 'connection' is open, for serial,tcp udp etc, so handle all.
 function onOpen(openInfo) {
     if (openInfo) {
         // update connected_to
@@ -237,7 +238,10 @@ function onOpen(openInfo) {
         // reset connecting_to
         GUI.connecting_to = false;
 
-        GUI.log(chrome.i18n.getMessage('serialPortOpened', [openInfo.connectionId]));
+        if ((openInfo.type == 'serial') || (openInfo.type == 'tcp') || (openInfo.type == 'udp')){ 
+        GUI.log(chrome.i18n.getMessage('serialPortOpened', [openInfo.connectionId])); // message is vague , works for any Serial/TCP/UDP
+        }
+    
 
         // save selected port with chrome.storage if the port differs
         chrome.storage.local.get('last_used_port', function (result) {
@@ -291,10 +295,8 @@ function onOpen(openInfo) {
         //onValidFirmware(); //buzz todo we need CONFIG.boardIdentifier and CONFIG.boardVersion set b4 calling this
 
 
-
-
     } else {
-        console.log('Failed to open serial port');
+        console.log('Failed to open serial/tcp/udp port');
         GUI.log(chrome.i18n.getMessage('serialPortOpenFail'));
 
         var $connectButton = $('#connectbutton');
@@ -382,6 +384,7 @@ var is_connected = 0;
 function read_tcp_udp(msg) {
     // this.streamrate is pretty arbitrary here, but its what we used in the serial links too
     if (this.streamrate == undefined) {
+        console.log("got incoming tcp/udp , sending heartbeat and starting param read")
         send_heartbeat_handler(); // throw a heartbeat first, blindly?
         //set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
         this.streamrate = 4; 

@@ -2,7 +2,7 @@
 
 var helper = helper || {};
 
-helper.mspQueue = (function (serial, MSP) {
+helper.mspQueue = (function (connection_thing, MSP) {
 
     var publicScope = {},
         privateScope = {};
@@ -101,7 +101,7 @@ helper.mspQueue = (function (serial, MSP) {
         if (code == MSPCodes.MSP_SET_REBOOT || code == MSPCodes.MSP_EEPROM_WRITE) {
             return 5000;
         } else {
-            return connection.getTimeout();
+            return connection_thing.getTimeout();
         }
     };
 
@@ -128,7 +128,7 @@ helper.mspQueue = (function (serial, MSP) {
         /*
          * if port is blocked or there is no connection, do not process the queue
          */
-        if (publicScope.isLocked() || connection.connectionId === false) {
+        if (publicScope.isLocked() || connection_thing.connectionId === false) {
             helper.eventFrequencyAnalyzer.put("port in use");
             return false;
         }
@@ -180,17 +180,20 @@ helper.mspQueue = (function (serial, MSP) {
             /*
              * Send data to serial port
              */
-            connection.send(request.messageBody, function (sendInfo) {
-                if (sendInfo.bytesSent == request.messageBody.byteLength) {
-                    /*
-                     * message has been sent, check callbacks and free resource
-                     */
-                    if (request.onSend) {
-                        request.onSend();
+            if (connection_thing.connectionType == 'serial' ) {
+
+                connection_thing.send(request.messageBody, function (sendInfo) {
+                    if (sendInfo.bytesSent == request.messageBody.byteLength) {
+                        /*
+                        * message has been sent, check callbacks and free resource
+                        */
+                        if (request.onSend) {
+                            request.onSend();
+                        }
+                        publicScope.freeSoftLock();
                     }
-                    publicScope.freeSoftLock();
-                }
-            });
+                });
+             }
         }
     };
 
@@ -307,4 +310,4 @@ helper.mspQueue = (function (serial, MSP) {
     setInterval(publicScope.balancer, Math.round(1000 / privateScope.balancerFrequency));
 
     return publicScope;
-})(serial, MSP);
+})(connection, MSP);

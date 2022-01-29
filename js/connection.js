@@ -195,7 +195,7 @@ var connection = {
         var connectionInfo = {
             bitrate: 115200,
             // bufferSize: 4096,
-            // connectionId: 1,
+            connectionId: nettype+'://'+ ip + ':' + port, 
             // ctsFlowControl: false,
             // dataBits: "eight",
             // name: "",
@@ -331,11 +331,13 @@ var connection = {
         });
     },
     getInfo: function (callback) {
-//        var chromeType = (this.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
         var chromeType = null;
         if (serial.connectionType == 'serial')  chromeType = chrome.serial;
-        if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
-        if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+        //if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+        //if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+        if (!chromeType) return;
+
+        // getInfo:  https://developer.chrome.com/docs/extensions/reference/sockets_tcp/#method-getInfo
         chromeType.getInfo(this.connectionId, callback);
     },
     getControlSignals: function (callback) {
@@ -358,10 +360,10 @@ var connection = {
                 sendFn=chrome.serial.send;
             }
             if (self.connectionType == 'tcp') { 
-                sendFn=chrome.sockets.tcp.send;
+                sendFn=null;//chrome.sockets.tcp.send;
             }
             if (self.connectionType == 'udp') { 
-                sendFn=chrome.sockets.udp.send;
+                sendFn=null;//chrome.sockets.udp.send;
             }
             // binary:
             //sendFn(self.connectionId, binary, function (sendInfo) {
@@ -451,8 +453,9 @@ var connection = {
         addListener: function (function_reference) {
             var chromeType = null;
             if (connection.connectionType == 'serial')  chromeType = chrome.serial;
-            if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
-            if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+            //if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+            //if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+            if (!chromeType) return;
 
             chromeType.onReceive.addListener(function_reference);
             this.listeners.push(function_reference);
@@ -460,8 +463,9 @@ var connection = {
         removeListener: function (function_reference) {
             var chromeType = null;
             if (connection.connectionType == 'serial')  chromeType = chrome.serial;
-            if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
-            if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+            //if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+            //if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+            if (!chromeType) return;
 
             for (var i = (this.listeners.length - 1); i >= 0; i--) {
                 if (this.listeners[i] == function_reference) {
@@ -477,21 +481,21 @@ var connection = {
         listeners: [],
 
         addListener: function (function_reference) {
-//            var chromeType = (connection.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
             var chromeType = null;
             if (connection.connectionType == 'serial')  chromeType = chrome.serial;
-            if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
-            if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+            //if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+            //if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+            if (!chromeType) return;
 
             chromeType.onReceiveError.addListener(function_reference);
             this.listeners.push(function_reference);
         },
         removeListener: function (function_reference) {
-//            var chromeType = (connection.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
         var chromeType = null;
         if (connection.connectionType == 'serial')  chromeType = chrome.serial;
-        if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
-        if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+        //if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+        //if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+        if (!chromeType) return;
 
             for (var i = (this.listeners.length - 1); i >= 0; i--) {
                 if (this.listeners[i] == function_reference) {
