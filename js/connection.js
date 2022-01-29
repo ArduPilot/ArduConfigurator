@@ -2,7 +2,7 @@
 
 /*global chrome*/
 
-var serial = {
+var connection = {
     connectionId:    false,
     openRequested:   false,
     openCanceled:    false,
@@ -193,7 +193,7 @@ var serial = {
 
         // fake connection info, looks like serial  
         var connectionInfo = {
-            // bitrate: 115200,
+            bitrate: 115200,
             // bufferSize: 4096,
             // connectionId: 1,
             // ctsFlowControl: false,
@@ -450,18 +450,18 @@ var serial = {
 
         addListener: function (function_reference) {
             var chromeType = null;
-            if (serial.connectionType == 'serial')  chromeType = chrome.serial;
-            if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
-            if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+            if (connection.connectionType == 'serial')  chromeType = chrome.serial;
+            if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+            if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
 
             chromeType.onReceive.addListener(function_reference);
             this.listeners.push(function_reference);
         },
         removeListener: function (function_reference) {
             var chromeType = null;
-            if (serial.connectionType == 'serial')  chromeType = chrome.serial;
-            if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
-            if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+            if (connection.connectionType == 'serial')  chromeType = chrome.serial;
+            if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+            if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
 
             for (var i = (this.listeners.length - 1); i >= 0; i--) {
                 if (this.listeners[i] == function_reference) {
@@ -477,21 +477,21 @@ var serial = {
         listeners: [],
 
         addListener: function (function_reference) {
-//            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+//            var chromeType = (connection.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
             var chromeType = null;
-            if (serial.connectionType == 'serial')  chromeType = chrome.serial;
-            if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
-            if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+            if (connection.connectionType == 'serial')  chromeType = chrome.serial;
+            if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+            if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
 
             chromeType.onReceiveError.addListener(function_reference);
             this.listeners.push(function_reference);
         },
         removeListener: function (function_reference) {
-//            var chromeType = (serial.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
+//            var chromeType = (connection.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
         var chromeType = null;
-        if (serial.connectionType == 'serial')  chromeType = chrome.serial;
-        if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
-        if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+        if (connection.connectionType == 'serial')  chromeType = chrome.serial;
+        if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+        if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
 
             for (var i = (this.listeners.length - 1); i >= 0; i--) {
                 if (this.listeners[i] == function_reference) {
@@ -513,7 +513,7 @@ var serial = {
      * @returns {number} [ms]
      */
     getTimeout: function () {
-        if (serial.bitrate >= 57600) {
+        if (connection.bitrate >= 57600) {
             return 3000;
         } else {
             return 4000;

@@ -139,8 +139,8 @@ $(document).ready(function () {
                     $('#port, #baud, #delay').prop('disabled', true);
                     $('div.connect_controls a.connect_state').text(chrome.i18n.getMessage('connecting'));
                     
-                    // despite being called  'serial', it can do tcp/udp as well. 
-                    serial.connect(selected_port, {bitrate: selected_baud}, onOpen);
+                    // despite being called  'connection', it can do tcp/udp as well. 
+                    connection.connect(selected_port, {bitrate: selected_baud}, onOpen);
 
                 } else {
                     var wasConnected = CONFIGURATOR.connectionValid;
@@ -163,7 +163,7 @@ $(document).ready(function () {
                     helper.mspQueue.freeHardLock();
                     helper.mspQueue.freeSoftLock();
 
-                    serial.disconnect(onClosed);
+                    connection.disconnect(onClosed);
                     MSP.disconnect_cleanup();
 
                     // Reset various UI elements
@@ -252,14 +252,14 @@ function onOpen(openInfo) {
             }
         });
 
-        chrome.storage.local.set({last_used_bps: serial.bitrate});
+        chrome.storage.local.set({last_used_bps: connection.bitrate});
         chrome.storage.local.set({wireless_mode_enabled: $('#wireless-mode').is(":checked")});
         chrome.storage.local.set({auto_connect_enabled: $('#auto-connect').is(":checked")});
 
         if (openInfo.ip !== undefined) {
-          //serial.onReceive.addListener(read_tcp_udp); done elsewhere with mavParserObj.on('message', read_tcp_udp);
+          //connection.onReceive.addListener(read_tcp_udp); done elsewhere with mavParserObj.on('message', read_tcp_udp);
         } else { // serial
-          serial.onReceive.addListener(read_serial);
+          connection.onReceive.addListener(read_serial);
         }
 
         // disconnect after 10 seconds with error if we don't get IDENT data
@@ -349,7 +349,7 @@ function onConnect() {
         $('#drop-rate').text("Drop ratio: " + helper.mspQueue.getDropRatio().toFixed(0) + "%");
     }, 100);
 
-    helper.interval.add('global_data_refresh', helper.periodicStatusUpdater.run, helper.periodicStatusUpdater.getUpdateInterval(serial.bitrate), false);
+    helper.interval.add('global_data_refresh', helper.periodicStatusUpdater.run, helper.periodicStatusUpdater.getUpdateInterval(connection.bitrate), false);
 }
 
 function onClosed(result) {

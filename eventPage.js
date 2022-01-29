@@ -21,60 +21,44 @@ function startApplication() {
         createdWindow.onClosed.addListener(function () {
             // automatically close the port when application closes
             // save connectionId in separate variable before createdWindow.contentWindow is destroyed
-            var connectionId = createdWindow.contentWindow.serial.connectionId,
+            var connectionType = createdWindow.contentWindow.Connection.connectionType; //'tcp','udp,'serial' etc
+            var connectionId = createdWindow.contentWindow.Connection.connectionId,
                 valid_connection = createdWindow.contentWindow.CONFIGURATOR.connectionValid,
                 mincommand = createdWindow.contentWindow.MISC.mincommand;
 
-            if (connectionId && valid_connection) {
-                // code below is handmade MSP message (without pretty JS wrapper), it behaves exactly like MSP.send_message
-                // sending exit command just in case the cli tab was open.
-                // reset motors to default (mincommand)
 
-                var bufferOut = new ArrayBuffer(5),
-                bufView = new Uint8Array(bufferOut);
+            //if (connectionId && valid_connection) {
+            if (connectionId || valid_connection) {
 
-                bufView[0] = 0x65; // e
-                bufView[1] = 0x78; // x
-                bufView[2] = 0x69; // i
-                bufView[3] = 0x74; // t
-                bufView[4] = 0x0D; // enter
-
-                chrome.serial.send(connectionId, bufferOut, function () { console.log('Send exit') }); 
-
-                setTimeout(function() {
-                    bufferOut = new ArrayBuffer(22);
-                    bufView = new Uint8Array(bufferOut);
-                    var checksum = 0;
-
-                    bufView[0] = 36; // $
-                    bufView[1] = 77; // M
-                    bufView[2] = 60; // <
-                    bufView[3] = 16; // data length
-                    bufView[4] = 214; // MSP_SET_MOTOR
-
-                    checksum = bufView[3] ^ bufView[4];
-
-                    for (var i = 0; i < 16; i += 2) {
-                        bufView[i + 5] = mincommand & 0x00FF;
-                        bufView[i + 6] = mincommand >> 8;
-
-                        checksum ^= bufView[i + 5];
-                        checksum ^= bufView[i + 6];
-                    }
-
-                    bufView[5 + 16] = checksum;
-
-                    chrome.serial.send(connectionId, bufferOut, function (sendInfo) {
+                
+                if ( connectionType == 'serial' ) {
                         chrome.serial.disconnect(connectionId, function (result) {
-                            console.log('SERIAL: Connection closed - ' + result);
+                            console.log('SERIAL: Connection closed - Window.onClosed');
+                            createdWindow.contentWindow.CONFIGURATOR.connectionValid = false;
+                            createdWindow.contentWindow.Connection.connectionId = null; // no connection.
                         });
-                    });
-                }, 100);
-            } else if (connectionId) {
-                chrome.serial.disconnect(connectionId, function (result) {
-                    console.log('SERIAL: Connection closed - ' + result);
-                });
-            }
+                }
+                if ( connectionType == 'udp' ) {
+                    // buzz todo - send event to backend
+                    
+                    console.log('UDP: Connection closed - Window.onClosed');
+                    createdWindow.contentWindow.CONFIGURATOR.connectionValid = false;
+                    createdWindow.contentWindow.Connection.connectionId = null; // no connection.
+                }
+                if ( connectionType == 'tcp' ) {
+                    // buzz todo - send event to backend
+                    console.log('TCP: Connection closed - Window.onClosed');
+                    createdWindow.contentWindow.CONFIGURATOR.connectionValid = false;
+                    createdWindow.contentWindow.Connection.connectionId = null; // no connection.
+                }
+
+            } //else if (connectionId) {
+            //     chrome.serial.disconnect(connectionId, function (result) {
+            //         console.log('SERIAL: Connection closed - ' + result);
+            //         createdWindow.contentWindow.Connection.connectionId = null; // no connection.
+            //     });
+                
+            // }
         });
     });
 }

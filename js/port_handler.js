@@ -19,7 +19,7 @@ PortHandler.initialize = function () {
 PortHandler.check = function () {
     var self = this;
 
-    serial.getDevices(function(current_ports) {
+    connection.getDevices(function(current_ports) {
         // port got removed or initial_ports wasn't initialized yet
         if (self.array_difference(self.initial_ports, current_ports).length > 0 || !self.initial_ports) {
             var removed_ports = self.array_difference(self.initial_ports, current_ports);
@@ -118,7 +118,7 @@ PortHandler.check = function () {
                 console.log('PortHandler - Found: ' + new_ports);
             } else {
                 console.log('PortHandler - Found: ' + new_ports[0]);
-                serial.newport = new_ports[0]; // remmber name of new port
+                connection.newport = new_ports[0]; // remmber name of new port
             }
 
             self.update_port_select(current_ports);

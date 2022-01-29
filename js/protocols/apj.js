@@ -7,8 +7,8 @@
 //'use strict';
 
 //var serial = {};
-//import('../serial.js');
-//serial.connect = function () { }
+//import('../connection.js');
+//connection.connect = function () { }
 //console.log(serial)
 
 // use it as "await sleep(250);"  // ms
@@ -158,7 +158,7 @@ APJ_protocol.prototype.connect = function (port, baud, hex, options, callback) {
     }
 
     if (self.options.no_reboot) {
-        serial.connect(port, {bitrate: self.baud, parityBit: 'even', stopBits: 'one'}, function (openInfo) {
+        connection.connect(port, {bitrate: self.baud, parityBit: 'even', stopBits: 'one'}, function (openInfo) {
             if (openInfo) {
                 // we are connected, disabling connect button in the UI
                 GUI.connect_lock = true;
@@ -169,7 +169,7 @@ APJ_protocol.prototype.connect = function (port, baud, hex, options, callback) {
             }
         });
     } else {
-        serial.connect(port, {bitrate: self.options.reboot_baud}, function (openInfo) {
+        connection.connect(port, {bitrate: self.options.reboot_baud}, function (openInfo) {
             if (openInfo) {
                 console.log('Sending  reboot');
 
@@ -185,11 +185,11 @@ APJ_protocol.prototype.connect = function (port, baud, hex, options, callback) {
                 //bufferView[0] = 0x52;   zzzzzzz
                 bufferView = [253, 32, 0, 0, 47, 1, 1, 76, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 246, 0, 1, 1, 31, 104]
 
-                // serial.send(bufferOut, function () {} )
-                // serial.send(bufferOut, function () {} )
+                // connection.send(bufferOut, function () {} )
+                // connection.send(bufferOut, function () {} )
 
-                serial.send(bufferOut, function () {
-                    serial.disconnect(function (result) {
+                connection.send(bufferOut, function () {
+                    connection.disconnect(function (result) {
                         if (result) {
                             var intervalMs = 200;
                             var retries = 0;
@@ -203,7 +203,7 @@ APJ_protocol.prototype.connect = function (port, baud, hex, options, callback) {
                                     }
                                 }
                                 // Check for DFU devices
-                                console.log("apj serial.disconnect interval")
+                                console.log("apj connection.disconnect interval")
                                 PortHandler.check_usb_devices(function(dfu_available) {
 
                                     console.log("apj check_usb_devices")
@@ -213,13 +213,13 @@ APJ_protocol.prototype.connect = function (port, baud, hex, options, callback) {
                                     //     return;
                                     // }
                                     // Check for the serial port
-                                    serial.getDevices(function(devices) {
+                                    connection.getDevices(function(devices) {
                                         if (devices && devices.includes(port)) {
                                             // Serial port might briefly reappear on DFU devices while
                                             // the FC is rebooting, so we don't clear the interval
                                             // until we successfully connect.
-                                            serial.connect(port, {bitrate: self.baud, parityBit: 'even', stopBits: 'one'}, function (openInfo) {
-                                                console.log("apj check_usb_devices -> serial.connect")
+                                            connection.connect(port, {bitrate: self.baud, parityBit: 'even', stopBits: 'one'}, function (openInfo) {
+                                                console.log("apj check_usb_devices -> connection.connect")
                                                 if (openInfo) {
                                                     clearInterval(interval);
                                                     self.initialize(); // sets up 10 sec timeout and goes to upload step 1
@@ -267,7 +267,7 @@ APJ_protocol.prototype.initialize = function () {
     // lock some UI elements TODO needs rework
     $('select[name="release"]').prop('disabled', true);
 
-    serial.onReceive.addListener(function (info) {
+    connection.onReceive.addListener(function (info) {
         self.read(info);
     });
 
@@ -377,7 +377,7 @@ APJ_protocol.prototype.send = function (Array, bytes_to_read, callback) {
     console.log("SEND-->",Array); 
 
     // send over the actual data
-    serial.send(bufferOut, this.write_callback ); // we don't really care if/when its written
+    connection.send(bufferOut, this.write_callback ); // we don't really care if/when its written
 
 };
 
@@ -454,8 +454,8 @@ APJ_protocol.prototype.upload_procedure = function (step) {
 
                     // if we still see mavlink stream, force a reboot..
                      if (reply[0] == 254 &&  (( reply[1] == 9)||( reply[1] == 28) ) ) { // starting bytes for a mavlink heartbeat....
-                        serial.emptyOutputBuffer();
-                        serial.bytesReceived = 0; 
+                        connection.emptyOutputBuffer();
+                        connection.bytesReceived = 0; 
                         preflight_reboot();
                         //self.upload_procedure(1);
                         self.connect(self.port,self.baud,self.hex,self.options,self.callback); // recursive retry
@@ -860,7 +860,7 @@ APJ_protocol.prototype.upload_procedure = function (step) {
             helper.interval.remove('APJ_timeout'); // stop APJ timeout timer (everything is finished now)
 
             // close connection
-            serial.disconnect(function (result) {
+            connection.disconnect(function (result) {
 
                 // unlocking connect button
                 GUI.connect_lock = false;

@@ -223,7 +223,7 @@ class uploader{
         // open the port, keep the default timeout short so we can poll quickly
 
         //--------------------------------------------------------------
-        //this.port = serial.Serial(portname, baudrate_bootloader, timeout=2.0)
+        //this.port = connection.Serial(portname, baudrate_bootloader, timeout=2.0)
         //this.port =  new SerialPort(portname, 9600);
         this.port = portname;
         this.baud = baudrate_bootloader;
@@ -241,8 +241,8 @@ class uploader{
 
         this.initialconnect = function () {
 
-            // buffffersize 1 forces the serial.onReceive listener to trigger on every BYTE
-            serial.connect(this.port, {bitrate: this.baud, parityBit: 'even', stopBits: 'one' ,bufferSize:1}, function (openInfo) {
+            // buffffersize 1 forces the connection.onReceive listener to trigger on every BYTE
+            connection.connect(this.port, {bitrate: this.baud, parityBit: 'even', stopBits: 'one' ,bufferSize:1}, function (openInfo) {
                 if (openInfo) {
                     // we are connected, disabling connect button in the UI
                     //GUI.connect_lock = true;
@@ -313,18 +313,18 @@ class uploader{
             this.receive_buffer = [];
 
             // send over the actual data
-            serial.send(bufferOut, function (writeInfo) {});
+            connection.send(bufferOut, function (writeInfo) {});
         };
 
         this.initialize = function () {
 
             //var this = this;
 
-            serial.onReceive.addListener(function (info) {
+            connection.onReceive.addListener(function (info) {
                 self.read(info);
             });
 
-            serial.onReceiveError.addListener(function watch_for_on_receive_errors(info) {
+            connection.onReceiveError.addListener(function watch_for_on_receive_errors(info) {
 
                 switch (info.error) {
 
@@ -408,7 +408,7 @@ class uploader{
         // if (this.port != None){
         //     this.port.close()}
         //console.log("buzz close()! ")
-        serial.disconnect();
+        connection.disconnect();
         this.openInfo = -1; // flg to say we r closed...
     }
 
@@ -422,11 +422,11 @@ class uploader{
         while (this.openInfo == -1){
 
 
-            if ( serial.newport && this.newport != '') {
-                console.log("NEWPORT",serial.newport)
-                this.port = serial.newport;
+            if ( connection.newport && this.newport != '') {
+                console.log("NEWPORT",connection.newport)
+                this.port = connection.newport;
                 this.initialconnect(); //uses this.port, and sets self.openInfo on successful connect
-                serial.newport = undefined;
+                connection.newport = undefined;
             }
             
          

@@ -294,7 +294,7 @@ TABS.cli.initialize = function (callback) {
 
             bufView[0] = 0x23; // #
 
-            serial.send(bufferOut);
+            connection.send(bufferOut);
         }, 250);
 
         GUI.content_ready(callback);
@@ -442,7 +442,7 @@ TABS.cli.send = function (line, callback) {
         bufView[c_key] = line.charCodeAt(c_key);
     }
 
-    serial.send(bufferOut, callback);
+    connection.send(bufferOut, callback);
 };
 
 TABS.cli.cleanup = function (callback) {

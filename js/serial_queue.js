@@ -101,7 +101,7 @@ helper.mspQueue = (function (serial, MSP) {
         if (code == MSPCodes.MSP_SET_REBOOT || code == MSPCodes.MSP_EEPROM_WRITE) {
             return 5000;
         } else {
-            return serial.getTimeout();
+            return connection.getTimeout();
         }
     };
 
@@ -128,7 +128,7 @@ helper.mspQueue = (function (serial, MSP) {
         /*
          * if port is blocked or there is no connection, do not process the queue
          */
-        if (publicScope.isLocked() || serial.connectionId === false) {
+        if (publicScope.isLocked() || connection.connectionId === false) {
             helper.eventFrequencyAnalyzer.put("port in use");
             return false;
         }
@@ -180,7 +180,7 @@ helper.mspQueue = (function (serial, MSP) {
             /*
              * Send data to serial port
              */
-            serial.send(request.messageBody, function (sendInfo) {
+            connection.send(request.messageBody, function (sendInfo) {
                 if (sendInfo.bytesSent == request.messageBody.byteLength) {
                     /*
                      * message has been sent, check callbacks and free resource

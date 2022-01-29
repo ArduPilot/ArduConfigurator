@@ -108,7 +108,7 @@ sources.Js = [
     './js/mavsp/MAVSPchainer.js',//buzz
 
     './js/port_handler.js',
-    './js/serial.js',
+    './js/connection.js',
     './js/servoMixRule.js',
     './js/motorMixRule.js',
     './js/logicCondition.js',
