@@ -82,7 +82,7 @@ If the app starts-up for you, but right-click doesnn't allow you to use chrome-d
 `rm -rf node_modules/nw`
 `rm package-lock.json`
 `npm install --save nw@0.50.3-sdk`
-`npm install --save nw@0.50.3-sdk -g`
+`sudo npm install --save nw@0.50.3-sdk -g`
 `export NWJS_BUILD_TYPE=sdk; npm install`
 
 Bundling/releasing not working properly just now, but when it's working it will run like this:
