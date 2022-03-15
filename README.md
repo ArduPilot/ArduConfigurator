@@ -56,7 +56,7 @@ sudo apt install curl git
 
 ```
 
-2. Install 'nvm' , if you don't already have it, the 'node package manager', and use it to get node 16:
+2. Install 'nvm' , if you don't already have it, the 'node version manager', and use it to get node 16:
 ```
 nvm --version
 
