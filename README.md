@@ -50,9 +50,15 @@ Depending on target operating system, _ArduPilot Configurator_ is distributed as
 
 For local development, **node.js** build system is used.
 
-1. Install the latest version of node.js. For instance on ubuntu 18.04lts:
+1. Install pre-requisites:
 ```
 sudo apt install curl git
+
+```
+
+2. Install 'nvm' , if you don't already have it, the 'node package manager', and use it to get node 16:
+```
+nvm --version
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
@@ -63,23 +69,56 @@ command -v nvm
 nvm install 16.14.0
 
 which node
+```
 
+3. download the app sources :
+```
 git clone https://github.com/ArduPilot/ArduConfigurator.git
 
 cd ArduConfigurator
 
+```
+
+4. run the app in 'dev' mode [be sure your node is v16, see above at step 2 if its not]:
+```
+node --version
+
 npm install 
+
+npm run gulp build
 
 npm run dev
 
 ```
-1. From project folder run `npm install`
-1. To build the JS and CSS files and start the configurator:
-    - With NW.js: Run `npm start`.
+
+
+### More info on some commands:
+
+ - 'npm run dev' runs to it from the source folder without bundling any resources, great for debug and code hacking. Its also the only way the code runs right this instant., sorry, we haven't got any release ready yet. 'npm start' is very similar, but uses a 'bundled' main.html
+
+ - 'npm start' is supposed to be the alternative to running it in dev mode, but as we dont have any release yet, its not the way we use the app at the moment, so this comment is a reminder to not use this command yet.
+
+ - no right-click, no developer tools..? If the app starts-up for you, but right-click doesnn't allow you to use chrome-dev-tools or inspect stuff, then you don't have the 'sdk' version of NW installed.  Theese command/s to try to remedy that are (one or more of these might help), but are not part of a normal install, and you should not run them unless you somehow got the wrong 'nw' version:
+`nvm deactivate`
+`mv ~/.npmrc ~/.npmrc.bak`
+`rm -rf node_modules/nw`
+`rm package-lock.json`
+`npm install --save nw@0.50.3-sdk`
+`sudo npm install --save nw@0.50.3-sdk -g`
+`export NWJS_BUILD_TYPE=sdk; npm install`
+
+ - Bundling/releasing not working properly just now, but when it's working it will run like this:
+'npm run gulp dist' to bundle it.
+'npm run gulp release' to make win32/win64/osx/linux32/linux64 packages.
+
+- this ap can be used as a chrome plugin, but usually is use "integrated" with nw.js [expect bugs if u do this] :  
+    - With NW.js: Run `npm start`[probably not working].
     - With Chrome: Run `npm run gulp`. Then open `chrome://extensions`, enable
     the `Developer mode`, click on the `Load unpacked extension...` button and select the `ArduConfigurator` directory.
 
-Other tasks are also defined in `gulpfile.js`. To run a task, use `npm run gulp task-name`. Available ones are:
+
+
+### Gulp hints? Other tasks are also defined in `gulpfile.js`. To run a task, use `npm run gulp task-name`. Available ones are:
 
 - **build**: Generate JS and CSS output files used by the configurator from their sources. It must be run whenever changes are made to any `.js` or `.css` files in order to have those changes appear
 in the configurator. If new files are added, they must be included in `gulpfile.js`. See the comments at the top of `gulpfile.js` to learn how to do so. See also the `watch` task.
@@ -90,20 +129,6 @@ in the `./dist/` directory.
 directory. Running this task on macOS or Linux requires Wine, since it's needed to set the icon
 for the Windows app. If you don't have Wine installed you can create a release by running the **release-only-linux** task.
 
-Quick start ( Devs use linux , so other platforms YMMV):
-'npm run dev' to run it from the source folder without bundling any resources, great for debug and code hacking. Its also the only way the code runs right this instant., sorry, we haven't got any release ready yet. 'npm start' is very similar, but uses a 'bundled' main.html
-If the app starts-up for you, but right-click doesnn't allow you to use chrome-dev-tools or inspect stuff, then you don't have the 'sdk' version of NW installed.  The command/s to try to remedy that are (one or more of these might help):  
-`nvm deactivate`
-`mv ~/.npmrc ~/.npmrc.bak`
-`rm -rf node_modules/nw`
-`rm package-lock.json`
-`npm install --save nw@0.50.3-sdk`
-`sudo npm install --save nw@0.50.3-sdk -g`
-`export NWJS_BUILD_TYPE=sdk; npm install`
-
-Bundling/releasing not working properly just now, but when it's working it will run like this:
-'npm run gulp dist' to bundle it.
-'npm run gulp release' to make win32/win64/osx/linux32/linux64 packages.
 
 ## BUGs?  absolutely.
 
