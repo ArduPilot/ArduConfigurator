@@ -50,12 +50,28 @@ Depending on target operating system, _ArduPilot Configurator_ is distributed as
 
 For local development, **node.js** build system is used.
 
-1. Install the latest version of node.js. For instance on ubuntu:
+1. Install the latest version of node.js. For instance on ubuntu 18.04lts:
 ```
-sudo apt-get install nodejs
-sudo apt-get install npm
-sudo npm install -g n   # node version manager
-sudo n lts              # latest LTS version of node
+sudo apt install curl git
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+. ~/.profile
+
+command -v nvm
+
+nvm install 16.14.0
+
+which node
+
+git clone https://github.com/ArduPilot/ArduConfigurator.git
+
+cd ArduConfigurator
+
+npm install 
+
+npm run dev
+
 ```
 1. From project folder run `npm install`
 1. To build the JS and CSS files and start the configurator:
