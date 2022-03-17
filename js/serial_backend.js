@@ -153,8 +153,7 @@ $(document).ready(function () {
                     GUI.tab_switch_in_progress = false;
                     CONFIGURATOR.connectionValid = false;
                     GUI.connected_to = false;
-                    //GUI.allowedTabs = GUI.defaultAllowedTabsWhenDisconnected.slice();
-                    GUI.allowedTabs = GUI.defaultAllowedTabsWhenConnected.slice();
+                    GUI.allowedTabs = GUI.defaultAllowedTabsWhenDisconnected.slice();
 
                     /*
                      * Flush
