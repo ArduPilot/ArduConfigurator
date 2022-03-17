@@ -42,7 +42,9 @@ var GUI_control = function () {
         'advanced_tuning',
         'mission_control',
         'mixer',
-        'programming'
+        'programming',
+        'firmware_flasher',
+
     ];
     //this.allowedTabs = this.defaultAllowedTabsWhenDisconnected;
     this.allowedTabs = this.defaultAllowedTabsWhenConnected;
