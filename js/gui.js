@@ -14,7 +14,7 @@ var GUI_control = function () {
         'landing',
         'firmware_flasher',
         'mission_control',
-        'help'
+        'help',
     ];
     this.defaultAllowedTabsWhenConnected = [
         'failsafe',
@@ -44,7 +44,7 @@ var GUI_control = function () {
         'mixer',
         'programming',
         'firmware_flasher',
-
+        'landing',
     ];
     //this.allowedTabs = this.defaultAllowedTabsWhenDisconnected;
     this.allowedTabs = this.defaultAllowedTabsWhenConnected;
