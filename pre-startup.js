@@ -26,7 +26,8 @@ var newWindow; //we declare a global variable to store the handler for our new w
 // this means we DONT use node-main in the manifest to actieve the same result, as it would't have this hook
 nw.Window.open('main.html', {}, win => { 
   newWindow = win; // save in global for later
-  win.showDevTools();
+  newWindow.showDevTools();
+  newWindow.resizeTo(1024, 768);
   newWindow.on("loaded", () => {//We only post a message when the new window is ready to listen to events.
       console.log("NW Window loaded...");
         newWindow.window.postMessage(JSON.stringify({ 'udpmavlink': 'true', 'pkt':""}), "*"); //the second parameter specifies the message origin. afaik, this is merely a string and has no effect beyond being there
