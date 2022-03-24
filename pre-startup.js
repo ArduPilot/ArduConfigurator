@@ -27,11 +27,12 @@ var newWindow; //we declare a global variable to store the handler for our new w
 nw.Window.open('main.html', {}, win => { 
   newWindow = win; // save in global for later
   newWindow.showDevTools();
-  newWindow.resizeTo(1024, 768);
   newWindow.on("loaded", () => {//We only post a message when the new window is ready to listen to events.
       console.log("NW Window loaded...");
         newWindow.window.postMessage(JSON.stringify({ 'udpmavlink': 'true', 'pkt':""}), "*"); //the second parameter specifies the message origin. afaik, this is merely a string and has no effect beyond being there
       //console.log(JSON.stringify(win));
+      newWindow.resizeTo(1280, 1024);
+
   });
  
 });
