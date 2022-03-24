@@ -31,14 +31,6 @@ var connection = {
         var testUrlTCP = path.match(/^tcp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
         var testUrlUDP = path.match(/^udp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
 
-        // or , as an alternative, did they toggle 'ConnectTCP' or 'ConectUDP' toggles?
-        if (helper['tcp-networking'] ) {
-            testUrlTCP = ['tcp','localhost','5760'];// reach out
-        }
-        if (helper['udp-networking'] ) {
-            testUrlUDP = ['udp','localhost','14550'];// listen for incoming udp
-        }
-
         if (testUrlTCP) {
             self.connectTcporUdp(testUrlTCP[1], testUrlTCP[2], options, callback,'tcp');
         }else if (testUrlUDP) {
