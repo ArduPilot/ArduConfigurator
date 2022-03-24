@@ -1,5 +1,9 @@
 //'use strict';
 
+// Lets be honest, the GUI can't render mavink data from more than 1 drone at a time in most cases...
+// .. so we only have 1 'connection' object that represents the 'connected drone'.
+//  
+
 /*global chrome*/
 
 var connection = {
@@ -10,9 +14,10 @@ var connection = {
     bytesReceived:   0,
     bytesSent:       0,
     failed:          0,
-    connectionType:  'serial', // 'serial' or 'tcp'
+    connectionType:  'serial', // 'serial' or 'tcp', the "current", in-use link type
     connectionIP:    '127.0.0.1',
     connectionPort:  2323,
+    isTCPorUDPAvailable: false, //a little bool that tels us if there's any incoming tcp/udp available, even if connectionType=serial
 
     transmitting:   false,
     outputBuffer:  [],
@@ -21,8 +26,18 @@ var connection = {
 
     connect: function (path, options, callback) {
         var self = this;
+
+        // did the user type in a full tcp/udp url in the 'manual' text field?
         var testUrlTCP = path.match(/^tcp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
         var testUrlUDP = path.match(/^udp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
+
+        // or , as an alternative, did they toggle 'ConnectTCP' or 'ConectUDP' toggles?
+        if (helper['tcp-networking'] ) {
+            testUrlTCP = ['tcp','localhost','5760'];// reach out
+        }
+        if (helper['udp-networking'] ) {
+            testUrlUDP = ['udp','localhost','14550'];// listen for incoming udp
+        }
 
         if (testUrlTCP) {
             self.connectTcporUdp(testUrlTCP[1], testUrlTCP[2], options, callback,'tcp');
@@ -37,6 +52,7 @@ var connection = {
         self.openRequested = true;
         self.connectionType = 'serial';
         self.logHead = 'SERIAL: ';
+        
 
         chrome.serial.connect(path, options, function (connectionInfo) {
             if (chrome.runtime.lastError) {
@@ -180,7 +196,10 @@ var connection = {
         self.connectionPort = port || 2323;
         self.connectionPort = parseInt(self.connectionPort);
         self.connectionType = nettype;//'udp';
-        self.logHead = 'SERIAL-nettype: ';
+        self.logHead = 'connection.js: ';
+
+        GUI.connected_to  =false;
+        GUI.connecting_to =false;
 
         console.log('connect to raw nettype ... '+nettype+':'+ ip + ':' + port)
 
@@ -225,6 +244,9 @@ var connection = {
             //if (chrome.runtime.lastError) {
                 console.error('connectTcporUdp2', chrome.runtime.lastError.message);
            // }
+           // if we are in the 'connecting' transition, and we've recieved data, then use that to mean we are 'connected' properly.
+           if (GUI.connecting_to) GUI.connected_to = true;
+           
         });
         self.onReceiveError.addListener(function watch_for_on_receive_errors(info) {
             console.error(info);
@@ -271,6 +293,11 @@ var connection = {
                 self.connectionId = false;
                 GUI.connected_to = false;
                 GUI.connecting_to = false;
+                CONFIGURATOR.connectionValid = false;
+                console.log("NET DIS-CONNECTED!");
+                onClosed();
+                CONFIG=undefined;
+
                 return;
                 //disconnectFn = chrome.sockets.tcp.close;
             }
@@ -282,6 +309,11 @@ var connection = {
                 self.connectionId = false;
                 GUI.connected_to = false;
                 GUI.connecting_to = false;
+                CONFIGURATOR.connectionValid = false;
+                console.log("NET DIS-CONNECTED!");
+                onClosed();
+                CONFIG=undefined;
+
                 return;
                 //disconnectFn = chrome.sockets.tcp.close; // udp is connection-less, use tcp handler and ignore it
             }

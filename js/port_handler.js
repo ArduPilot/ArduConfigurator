@@ -11,8 +11,42 @@ var PortHandler = new function () {
     this.dfu_available = false;
 };
 
+
+
+PortHandler.loadToggleState = function() {
+    chrome.storage.local.get('last_used_bps', function (result) {
+        if (result['last_used_bps']) {
+            $('#baud').val(result['last_used_bps']);
+        }
+    });
+
+    chrome.storage.local.get('wireless_mode_enabled', function (result) {
+        if (result['wireless_mode_enabled']) {
+            $('#wireless-mode').prop('checked', true).change();
+        }
+    });
+    chrome.storage.local.get('auto_connect_enabled', function (result) {
+        if (result['auto_connect_enabled']) {
+            $('#auto-connect').prop('checked', true).change();
+        }
+    });
+    chrome.storage.local.get('tcp_connect_enabled', function (result) {
+        if (result['tcp_connect_enabled']) {
+            $('#tcp-networking').prop('checked', true).change();
+            $('#udp-networking').prop('checked', false).change();
+        }
+    });
+    chrome.storage.local.get('udp_connect_enabled', function (result) {
+        if (result['udp_connect_enabled']) {
+            $('#udp-networking').prop('checked', true).change();
+            $('#tcp-networking').prop('checked', false).change();
+        }
+    });
+}
+
 PortHandler.initialize = function () {
     // start listening, check after 250ms
+    this.loadToggleState();
     this.check();
 };
 
@@ -71,10 +105,10 @@ PortHandler.check = function () {
                                 console.log('Selecting last used port: ' + result.last_used_port);   
                                 $('#port').val(result.last_used_port);
                                 //buzz autoconnect here
-                                //if ( helper['autoconnect']  ) {
+                                if ( helper['autoconnect']  ) {
                                     $('div.connect_controls a.connect').trigger("click");
                                     console.log('opening port: ' + result.last_used_port);
-                                //}  
+                                }  
                             }
                         });
                     } else {
@@ -82,22 +116,30 @@ PortHandler.check = function () {
                     }
                 });
 
-                chrome.storage.local.get('last_used_bps', function (result) {
-                    if (result['last_used_bps']) {
-                        $('#baud').val(result['last_used_bps']);
+                // last-used is overwridden my a tcp or udp switch being active.... as it doesn't recodd them.
+                chrome.storage.local.get('tcp_connect_enabled', function (result) {
+                    if (result['tcp_connect_enabled']) {
+
+                        helper['tcp-networking'] = true;
+                        helper['udp-networking'] = false;
+                        console.log("tcp true"); 
+                        $('div#port-picker #port').val('manual');
+                        $('#port-override').val('tcp://localhost:5760');
+                        $('#port-override-option').show();
+                    }
+                });
+                // last-used is overwridden my a tcp or udp switch being active.... as it doesn't recodd them.
+                chrome.storage.local.get('udp_connect_enabled', function (result) {
+                    if (result['udp_connect_enabled']) {
+                        helper['udp-networking'] = true;
+                        helper['tcp-networking'] = false;
+                        console.log("udp true"); 
+                        $('div#port-picker #port').val('manual');
+                        $('#port-override').val('udp://localhost:14550');
+                        $('#port-override-option').show();
                     }
                 });
 
-                chrome.storage.local.get('wireless_mode_enabled', function (result) {
-                    if (result['wireless_mode_enabled']) {
-                        $('#wireless-mode').prop('checked', true).change();
-                    }
-                });
-                chrome.storage.local.get('auto_connect_enabled', function (result) {
-                    //if (result['auto_connect_enabled']) {
-                        $('#auto-connect').prop('checked', true).change();
-                    //}
-                });
             }
 
             if (!self.initial_ports) {
@@ -122,6 +164,10 @@ PortHandler.check = function () {
             }
 
             self.update_port_select(current_ports);
+
+            // found a new usb device, turn off gui switches for tcp/udp...
+            $('#tcp-networking').prop('checked', false).change();
+            $('#udp-networking').prop('checked', false).change();
 
             // select / highlight new port, if connected -> select connected port
             if (!GUI.connected_to) {
@@ -186,7 +232,10 @@ PortHandler.update_port_select = function (ports) {
         $('div#port-picker #port').append($("<option/>", {value: ports[i], text: ports[i], data: {isManual: false}}));
     }
 
-    $('div#port-picker #port').append($("<option/>", {value: 'manual', text: 'Manual Selection', data: {isManual: true}}));
+    $('div#port-picker #port').append($("<option/>", {value: 'manual', text: 'Manual Selection', data: {isManual: true, value:''}}));
+  //  $('div#port-picker #port').append($("<option/>", {value: 'manual-tcp', text: 'TCP',          data: {isManual: true, value:'tcp://127.0.0.1:5760'}}));
+  //  $('div#port-picker #port').append($("<option/>", {value: 'manual-udp', text: 'UDP',          data: {isManual: true, value:'udp://127.0.0.1:14550'}}));
+
 };
 
 PortHandler.port_detected = function(name, code, timeout, ignore_timeout) {

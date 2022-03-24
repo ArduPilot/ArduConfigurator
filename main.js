@@ -38,12 +38,22 @@ window.addEventListener('message', function(event) {
 
     var message = data.pkt;
 
+    //crazy re-classing after json manggled it....we turn 'message' back into the fully classed object! 
+    var msgId = message._id;
+    var decoder = mavlink20.map[msgId]; // big list of class info by id number
+    var m = new decoder.type();   // make a new 'empty' instance of the right class,
+    var newpkt = Object.assign(m, message);// 'm' is the right type but empty, pkt is the wrong type but has all the data    
+    //message = newpkt;
+
     //console.log("window got mavlink:",message);
 
-    // we're "emit"-ing the packets here lust like MAVLink20Processor.prototype.parseChar
+    // we add a flag to the message so the front-end can tell it came from a tcp or udp source:
+    if (data.udpmavlink) newpkt.udpmavlink = true;
+    
+    // we're "emit"-ing the packets here just like MAVLink20Processor.prototype.parseChar
      // this is the FRONTEND generic_message_handler in js/mavsp.js
-    mpo.emit('message',message); // this is the FRONTEND generic_message_handler in js/mavsp.js  - generic_message_handler(message);
-    mpo.emit(message._name,message);// nad the by-name re-emit of backend packet to frontend using MAVLink20Processor instance
+    mpo.emit('message',newpkt); // this is the FRONTEND generic_message_handler in js/mavsp.js  - generic_message_handler(message);
+    mpo.emit(newpkt._name,newpkt);// and the by-name re-emit of backend packet to frontend using MAVLink20Processor instance
 
     //alert(data);
 }, false);

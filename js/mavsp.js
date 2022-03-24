@@ -319,7 +319,7 @@ var autopilot_version_handler = function(message){
     if (SYSID == undefined ) { return;} // haven't set the sysid global yet, elsewhere.
 
     if (FC.curr_mav_state['AUTOPILOT_VERSION'] == undefined ) { 
-        autopilot_version_request(); // hack to trigger it again so it updates FIXME
+        //autopilot_version_request(); // hack to trigger it again so it updates FIXME
         return;
     } // the other handler/s haven't run yet, delay this one
 
@@ -459,9 +459,8 @@ var generic_message_handler = function(message) {
 }
 
 // generic msg handler
-mavParserObj.on('message', generic_message_handler);
-
-//mavParserObj.on('message', MSP._dispatch_message_mav); this line is actually after MSP obj at bottom of this file
+//mavParserObj.on('message', generic_message_handler);
+//mavParserObj.on('message', MSP._dispatch_message_mav); these lines are actually after MSP obj at bottom of this file
 
     
 /**
@@ -573,7 +572,7 @@ var MSP = {
 
         // some form of valid mavlink means we can consider ourselves connected as far as the GUI is concerned
         if (CONFIGURATOR.connectionValid == false ) {
-            console.log("CONNECTED!");
+            console.log("SERIAL CONNECTED!");
             CONFIGURATOR.connectionValid = true;
             CONFIG.flightControllerVersion = "0.0.0"; // buss hack to enable PID pidCount in serial_backend.js 
             updateFirmwareVersion();// show on-gui top-lef
@@ -590,8 +589,13 @@ var MSP = {
     },
 
 
-    //INCOMING packets thru here...
+    //we get all INCOMING packets thru here, 
     _dispatch_message_mav: function(pkt) {
+
+        // this function gets (unfortuntely) triggered on serial and tcp, so this next line ignores the udp stuff....
+        // ... for udp link/s we do similar param-fetch and set-stream-rates stuff with read_tcp_udp for udp link/s. 
+        if ( pkt.udpmavlink ) return; 
+
         mspHelper.processDataMav(pkt);
     },
 
@@ -723,6 +727,8 @@ var MSP = {
     }
 };
 
+// generic msg handler
+mavParserObj.on('message', generic_message_handler);
 // serial:
 mavParserObj.on('message', MSP._dispatch_message_mav);
 // tcp/udp:

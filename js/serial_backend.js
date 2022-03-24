@@ -7,6 +7,14 @@ $(document).ready(function () {
         $baud = $('#baud'),
         $portOverride = $('#port-override');
 
+    var last_used_port = ''; 
+
+        chrome.storage.local.get('last_used_port', function (result) {
+            if (result.last_used_port) {
+                last_used_port=result.last_used_port;
+            }
+        });
+
     /*
      * Handle "Wireless" mode with strict queueing of messages
      */
@@ -24,9 +32,52 @@ $(document).ready(function () {
         var $this = $(this);
 
         if ($this.is(':checked')) {
-            helper['autoconnect'] = true; //buzz
+            helper['autoconnect'] = true; 
         } else {
             helper['autoconnect'] = false;
+        }
+    });
+
+    $('#tcp-networking').change(function () {
+        var $this = $(this);
+
+        if ($this.is(':checked')) {
+            helper['tcp-networking'] = true;
+
+            if ( $('#udp-networking').is(':checked')) {
+                $('#udp-networking').prop('checked', false).change(); // turn other one off
+            }
+
+            console.log("tcp true"); 
+            $('div#port-picker #port').val('manual');
+            $('#port-override').val('tcp://localhost:5760');
+            $('#port-override-option').show();
+        } else {
+            helper['tcp-networking'] = false;
+            console.log("tcp false"); 
+            $('#port').val(last_used_port);
+           //$('#port-override-option').hide();
+        }
+    });
+    $('#udp-networking').change(function () {
+        var $this = $(this);
+
+        if ($this.is(':checked')) {
+            helper['udp-networking'] = true; 
+
+            if ( $('#tcp-networking').is(':checked')) {
+            $('#tcp-networking').prop('checked', false).change(); // turn other one off
+            }
+
+            console.log("udp true"); 
+           $('div#port-picker #port').val('manual');
+           $('#port-override').val('udp://localhost:14550');
+           $('#port-override-option').show();
+        } else {
+            helper['udp-networking'] = false;
+            console.log("udp false"); 
+            $('#port').val(last_used_port);
+           //$('#port-override-option').hide();
         }
     });
 
@@ -86,13 +137,17 @@ $(document).ready(function () {
 
     GUI.updateManualPortVisibility = function(){
         var selected_port = $port.find('option:selected');
-        if (selected_port.data().isManual) {
+        var x = typeof selected_port.data;
+        if (  x  != 'function' ) return; // occassionally, its undefined
+        var y = selected_port.data()??{isManual: false,isDFU: false}; // fallback for it it doesnt have one
+        if (y.isManual) {
             $('#port-override-option').show();
+            //$('#port-override-option').value = selected_port.data().value;
         }
         else {
             $('#port-override-option').hide();
         }
-        if (selected_port.data().isDFU) {
+        if (y.isDFU) {
             $baud.hide();
         }
         else {
@@ -237,6 +292,9 @@ function onOpen(openInfo) {
         // reset connecting_to
         GUI.connecting_to = false;
 
+        // serial doesn't always set this, so we take the fact that its missing to mean serial..
+        if ( openInfo.type == null) openInfo.type = 'serial';
+
         if ((openInfo.type == 'serial') || (openInfo.type == 'tcp') || (openInfo.type == 'udp')){ 
         GUI.log(chrome.i18n.getMessage('serialPortOpened', [openInfo.connectionId])); // message is vague , works for any Serial/TCP/UDP
         }
@@ -245,19 +303,23 @@ function onOpen(openInfo) {
         // save selected port with chrome.storage if the port differs
         chrome.storage.local.get('last_used_port', function (result) {
             if (result.last_used_port) {
-                if (result.last_used_port != GUI.connected_to) {
+                if ( (result.last_used_port != GUI.connected_to) && (openInfo.type == 'serial')  ) { //last_used_port is for serial-only
                     // last used port doesn't match the one found in local db, we will store the new one
                     chrome.storage.local.set({'last_used_port': GUI.connected_to});
                 }
             } else {
                 // variable isn't stored yet, saving
-                chrome.storage.local.set({'last_used_port': GUI.connected_to});
+                if (openInfo.type == 'serial') {
+                    chrome.storage.local.set({'last_used_port': GUI.connected_to});
+                }
             }
         });
-
+        
         chrome.storage.local.set({last_used_bps: connection.bitrate});
         chrome.storage.local.set({wireless_mode_enabled: $('#wireless-mode').is(":checked")});
         chrome.storage.local.set({auto_connect_enabled: $('#auto-connect').is(":checked")});
+        chrome.storage.local.set({tcp_connect_enabled: $('#tcp-networking').is(":checked")});
+        chrome.storage.local.set({udp_connect_enabled: $('#udp-networking').is(":checked")});
 
         if (openInfo.ip !== undefined) {
           //connection.onReceive.addListener(read_tcp_udp); done elsewhere with mavParserObj.on('message', read_tcp_udp);
@@ -270,7 +332,16 @@ function onOpen(openInfo) {
             if (!CONFIGURATOR.connectionValid) {
                 GUI.log(chrome.i18n.getMessage('noConfigurationReceived'));
 
-                $('div.connect_controls ').click(); // disconnect
+                //$('div.connect_controls').click(); // disconnect
+
+                var $connectButton = $('#connectbutton');
+                $connectButton.find('.connect_state').text(chrome.i18n.getMessage('connect'));
+                $connectButton.find('.connect').removeClass('active');
+                // unlock port select & baud
+                $('#port, #baud, #delay').prop('disabled', false);
+                // reset data
+                $connectButton.find('.connect').data("clicks", false);
+
             }
         }, 10000);
 
@@ -376,11 +447,16 @@ function onClosed(result) {
 // 0 means not-connected-yet
 // 1 means connected
 // 2 means was-connected
-var is_connected = 0;
+var is_networking_connected = 0;
 
 // a cut-down bit from MSP.read() for tcp/udp conneciton startup/success
 // this gets called on every incoming tcp/udp packet wether we are ready for it or not.
 function read_tcp_udp(msg) {
+
+    // this function gets (unfortuntely) triggered on serial and tcp, so this next line ignores the serial stuff....
+    // ... for serial link/s we do similar param-fetch and set-stream-rates stuff with read_serial calling MSP.read, but only when the serial is 'conected'.
+    if ( !msg.udpmavlink ) return; 
+
     // this.streamrate is pretty arbitrary here, but its what we used in the serial links too
     if (this.streamrate == undefined) {
         console.log("got incoming tcp/udp , sending heartbeat and starting param read")
@@ -392,9 +468,9 @@ function read_tcp_udp(msg) {
     }
 
     // some form of valid mavlink means we can consider ourselves connected as far as the GUI is concerned
-    if (CONFIG && (CONFIGURATOR.connectionValid == false) && (is_connected==0) ) {
-        is_connected = 1;
-        console.log("CONNECTED!");
+    if (CONFIG && (CONFIGURATOR.connectionValid == false) && (is_networking_connected==0) ) {
+        //is_networking_connected = 1;
+        console.log("NET CONNECTED!");
         CONFIGURATOR.connectionValid = true;
         CONFIG.flightControllerVersion = "0.0.0"; // buss hack to enable PID pidCount in serial_backend.js 
         updateFirmwareVersion();// show on-gui top-lef
@@ -402,33 +478,17 @@ function read_tcp_udp(msg) {
         onConnect();
         return;// so we don't trigger an immediate disconnect
     }
-        // disconnect?
-    if (CONFIG && (CONFIGURATOR.connectionValid == true) && (is_connected==1) ) {
-        if (! GUI.connected_to) {
-            is_connected = 0;
-            CONFIGURATOR.connectionValid = false;
-            console.log("DIS-CONNECTED!");
-            onClosed();
-            //delete(CONFIG);
-            CONFIG=undefined;
-        }
-    }
-    
-    
-   
 
-    //tcp/udp skips the MSP.read() and other MSP stuff entirely
+    // we don't do disconnect stuff here, as its triggered by a button-press, NOT mavlink stream, so see connection.js->connectTcporUdp->disconnect
+
 
     this.last_received_timestamp = Date.now();
 }
 
-
+// for historical reasons, its called MSP.read
 function read_serial(info) {
-    //if (!CONFIGURATOR.cliActive) {
+
         MSP.read(info);
-   // } else if (CONFIGURATOR.cliActive) {
-   //     TABS.cli.read(info);
-   // }
 }
 
 /**

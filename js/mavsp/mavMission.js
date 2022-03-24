@@ -78,12 +78,20 @@ MavMission.prototype.missionRequestHandler = function(missionItemRequest,tt) {
     //console.log("missionRequestHandler",this.missionItems.length);
     //console.log("missionRequestHandler-seq:",missionItemRequest.seq);
 
-    if (tt == 0)    console.log('MISSION_REQUEST <--');
-    if (tt == 1)    console.log('MISSION_REQUEST_INT <--');
+    if (tt == 0)    console.log('MISSION_REQUEST <--',missionItemRequest.seq,missionItemRequest);
+    if (tt == 1)    console.log('MISSION_REQUEST_INT <--',missionItemRequest.seq,missionItemRequest);
 
+    // hack to allow us to send even when HOME isn't set... but only if waypoint 1 IS set.
+    if ( (missionItemRequest.seq == 0 ) && ( this.missionItems[0] === undefined ) && ( this.missionItems[1] ) ) {
+        console.log('MISSION_ITEM 0 FAKED AS NO HOME LOCATION IS SET-->',missionItemRequest.seq,missionItemRequest);
+        this.missionItems[0] = this.missionItems[1];
+        this.missionItems[0].seq = 0; // set it so its seq num is zero too
+    }
+
+    // normal behaviour...
     if ( this.missionItems[missionItemRequest.seq] ) { 
         // sending new mavlink20.messages.mission_item prepared earlier
-        console.log('MISSION_ITEM -->',missionItemRequest.seq);
+        console.log('MISSION_ITEM -->',missionItemRequest.seq,missionItemRequest);
         var pkt = this.missionItems[missionItemRequest.seq]; // its either a packet or 'last'
         if (pkt != 'last' ) {
 	        mavlinkParser.send(pkt);
@@ -108,7 +116,7 @@ MavMission.prototype.sendToVehicle = function() {
 	var missionCount = new mavlink20.messages.mission_count(this.target_system, this.target_component, this.missionItems.length);
     //missionCount.mission_type =  this.mission_type;
         console.log('count mission',missionCount._id,JSON.stringify(missionCount),missionCount);
-    console.log('MISSION_COUNT -->');
+    console.log('MISSION_COUNT -->',missionCount);
 	mavlinkParser.send(missionCount, uavConnection);
 
 
@@ -129,7 +137,7 @@ MavMission.prototype.enableSendMission = function() {
 	// If the ack is OK, signal OK; if not, signal an error event
 	mavlinkParser.on('MISSION_ACK', function(ack) {
 
-        console.log('MISSION_ACK <--');
+        console.log('MISSION_ACK <--',ack);
 
 		if(mavlink20.MAV_MISSION_ACCEPTED === ack.type) {
             console.log('mission:sent to drone');
@@ -141,7 +149,11 @@ MavMission.prototype.enableSendMission = function() {
             console.log("invalid mission - not accepting mission commands at all right now");
             //t.send_complete = true;
 		} else if(mavlink20.MAV_MISSION_INVALID_SEQUENCE === ack.type) { 
+            // go back and re-try the prev one..?
             console.log("invalid sequence");
+            //var pkt = this.missionItems[missionItemRequest.seq-1];
+            //mavlinkParser.send(pkt);
+            this.send_seq--;
 		} else {
             console.log(ack);
 			//throw new Error('Unexpected mission acknowledgement received in mavMission.js');
@@ -203,8 +215,8 @@ MavMission.prototype.missionCountHandler = function(missionCount) {
 MavMission.prototype.missionItemHandler = function(missionItem,tt) {
 
 
-    if (tt == 0)    console.log('MISSION_ITEM <--',missionItem.seq);
-    if (tt == 1)    console.log('MISSION_ITEM_INT <-- ',missionItem.seq);
+    if (tt == 0)    console.log('MISSION_ITEM <--',missionItem.seq,missionItem);
+    if (tt == 1)    console.log('MISSION_ITEM_INT <-- ',missionItem.seq,missionItem);
 
     if ( this.missionItems[missionItem.seq] == 'last' ) { 
         //console.log('fetchMission-end');
@@ -212,6 +224,14 @@ MavMission.prototype.missionItemHandler = function(missionItem,tt) {
         console.log(`MISSION fetch completed from drone:= ${this.missionItems.length} items `);
         this.fetch_complete = true;
     }
+    // sometimes 'missionItem' comes to us as a raw 'object' instead of a properly formed 
+    // if ( (typeof missionItem) == 'Object' ) {
+    //     var msgId = missionItem._id;
+    //     var decoder = mavlink20.map[msgId]; // big list of class info by id number
+    //     var m = new decoder.type();   // make a new 'empty' instance of the right class,
+    //     var newpkt = Object.assign(m, missionItem);// 'm' is the right type but empty, pkt is the wrong type but has all the data    
+    //     missionItem = newpkt;
+    // }
 
     // we store them in memory in this.missionItems array.
     this.missionItems[missionItem.seq] =  missionItem;
@@ -224,7 +244,7 @@ MavMission.prototype.missionItemHandler = function(missionItem,tt) {
         var mack = new mavlink20.messages.mission_ack(this.target_system, this.target_component, 
                             mavlink20.MAV_MISSION_ACCEPTED, this.mission_type);
         //console.log('mission ack',mack.seq,JSON.stringify(mack));
-        console.log('MISSION_ACK ->');
+        console.log('MISSION_ACK ->',mack);
         this.send_timout = Date.now(); //returns the number of milliseconds elapsed since January 1, 1970
 	    mavlinkParser.send(mack, uavConnection);
 
@@ -237,7 +257,7 @@ MavMission.prototype.missionItemHandler = function(missionItem,tt) {
     this.send_seq++;
     var mri = new mavlink20.messages.mission_request_int(this.target_system, this.target_component, this.send_seq, this.mission_type);
     //console.log('request mission item+1',mri.seq,JSON.stringify(mri));
-    console.log('MISSION_REQUEST_INT ->');
+    console.log('MISSION_REQUEST_INT ->',mri);
     this.send_timout = Date.now(); //returns the number of milliseconds elapsed since January 1, 1970
 	mavlinkParser.send(mri, uavConnection);
 }
@@ -275,7 +295,7 @@ MavMission.prototype.enableGetMission = function() {
 
 	// attach mission_request handler, let it cook - we'll listen for both, despite only needing one
     var tt = this;
-	mavlinkParser.on('MISSION_ITEM_INT', function(msg) { tt.missionItemHandler(msg,1) } );
+	mavlinkParser.on('MISSION_ITEM_INT', function(msg) { tt.missionItemHandler(msg,1) } ); //TODO tt is not a real mavlink obj, just a vanilla js obj, and thats bad as it has no 'pack'
     var tt = this;
 	mavlinkParser.on('MISSION_ITEM', function(msg) { tt.missionItemHandler(msg,0) } );
 
@@ -369,14 +389,14 @@ MavMission.prototype.DroneToMission = async function(filename) {
                 var wp_type = MWNP.WPTYPE.WAYPOINT;
                 //if ( e.command == 16 ) wp_type = MWNP.WPTYPE.WAYPOINT; // The scheduled action for the waypoint.
 
-                // skip 'home' = 'zero' wp from drone
+                // skip 'home' = 'zero' wp from drone, as drone is zero-indexed WITH Home, and GCS is 1-indexed WITHOUT home
                 if ( e.seq != 0 ) {
                     //number, action, lat, lon, alt=0, p1=0, p2=0, p3=0, endMission=0, isUsed=true, isAttached=false, attachedId=""
                     MISSION_PLANER.put(new Waypoint(
                         e.seq,//data.getUint8(0),//number
                         wp_type,//data.getUint8(1),       //action like MWNP.WPTYPE.JUMP  or MWNP.WPTYPE.WAYPOINT
-                        e.x*10000000,//data.getInt32(2, true), //lat
-                        e.y*10000000,//data.getInt32(6, true), //lon
+                        e.x,//*10000000,//data.getInt32(2, true), //lat
+                        e.y,//*10000000,//data.getInt32(6, true), //lon
                         e.z,//data.getInt32(10, true), //alt
                         e.param1,//data.getInt16(14, true), //p1 
                         e.param2,//data.getInt16(16, true), //p2 
@@ -398,8 +418,8 @@ MavMission.prototype.DroneToMission = async function(filename) {
 MavMission.prototype.MissionToDrone = async function(miss) {
     var self = this;
     
-    //save current home
-    var home = this.missionItems[0];
+    //save current/old home if we have one, if not get from zero't mission item
+    var home = this.missionItems[0]??miss[0];
 
     // clear the internal list
     this.missionItems = [];

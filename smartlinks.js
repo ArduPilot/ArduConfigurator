@@ -81,6 +81,10 @@ backend_generic_link_sender = function(mavmsg,sysid) {
     // this is really just part of the original send()
     buf = mavmsg.pack(this);
 
+    // mtype = "OUT";
+    // if (mavmsg.fromfrontend ) mtype = "FRONT";
+    // console.log(mtype,mavmsg,sysid);
+
 
     // a pretty dumb solution here to try to send it out all active uplinks that are reporting is_connected()
     for ( l in link_list){
@@ -147,14 +151,14 @@ var send_heartbeat_handler = function() {
       heartbeat.system_status = 218; // fieldtype: uint8_t  isarray: False 
       heartbeat.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
 
-      //todo buzz hack put this back 
-      mpo.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
+      //disabling heartbeat in backend, as we have it in frontend
+      //mpo.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
 
     //    process.stdout.write("\b"); // move cursor back, but does not clear prev pos
-    spinner++;
-    spinner = spinner%4;
-    process.stdout.write("\b"); // move cursor back, but does not clear prev pos
-    process.stdout.write(spinners[spinner]);
+    //spinner++;
+    //spinner = spinner%4;
+    //process.stdout.write("\b"); // move cursor back, but does not clear prev pos
+    //process.stdout.write(spinners[spinner]);
 
 }
 
@@ -167,8 +171,9 @@ var set_stream_rates = function(rate,target_system,target_component) {
     var rsr = new mavlink20.messages.request_data_stream(target_system,target_component,
                                 mavlink20.MAV_DATA_STREAM_ALL,rate, 1);
 
-    mpo.send(rsr); 
-    console.log('Set Stream Rates =4');
+    //disabling RSR in backend, as we have it in frontend
+    //mpo.send(rsr); 
+    //console.log('Set Stream Rates =4');
 }
 
 
@@ -280,7 +285,7 @@ class SmartSerialLink extends SerialPort {
             if (goodpackets[0] == undefined ) return;
 
             if (this.streamrate == undefined) {
-                set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
+                //set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
                 this.streamrate = 4; 
             }
 
@@ -485,8 +490,10 @@ class SmartTCPLink extends net.Socket {
 
             if (goodpackets[0] == undefined ) return;
 
+            //console.log("IN",goodpackets);
+
             if (this.streamrate == undefined) {
-                set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
+                //set_stream_rates(4,goodpackets[0]._header.srcSystem,goodpackets[0]._header.srcComponent); 
                 this.streamrate = 4; 
             }
             if ( goodpackets[0]._header !== undefined ) 
@@ -578,7 +585,7 @@ class SmartUDPOutLink extends dgram.Socket {
 
         mpo.send(heartbeat,255); // we don't know the sysid yet, so 255 as a broadcast ip is ok.
 
-        process.stdout.write('#');
+        //process.stdout.write('#');
 
         var buffer = new Buffer.from(message.pack(mpo));
 

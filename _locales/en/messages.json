@@ -2534,6 +2534,12 @@
     "AutoConnectSwitch": {
         "message": "AutoConnect"
     },
+    "ConnectTCPSwitch": {
+        "message": "ConnectTCP"
+    },
+    "ListenUDPSwitch": {
+        "message": "ListenUDP"
+    },
     "rthConfiguration": {
         "message": "RTH settings"
     },

@@ -111,7 +111,7 @@ sysids[SYSID] = true;
 // global mav mission object for gettting/sending missions to drone
 var MissionObj = undefined ; // we delay instantion till we know SYSID // new MavMission(SYSID,COMPID,mavlink20, mavParserObj , null, logger);
 
-async function send_canned_mission_to_drone() {
+async function send_current_mission_to_drone() {
     // obj for missions
     if (MissionObj ==undefined )  MissionObj = new MavMission(SYSID,COMPID,mavlink20, mavParserObj , null, logger);
 
@@ -125,17 +125,48 @@ async function send_canned_mission_to_drone() {
     // now we'll build something in a equivalent suitable format from the GUI data:
     var miss = [];
 
+    // whole mission is always in global from right now.
+    //if terrain_alt:
+    //frame = mavlink20.MAV_FRAME_GLOBAL_TERRAIN_ALT
+    //else:
+    var frame = mavlink20.MAV_FRAME_GLOBAL_RELATIVE_ALT;
+
+    // this is always 1.
+    var autocontinue = 1;
+
+    var gui_miss = MISSION_PLANER.get();
+    var gui_miss_len = MISSION_PLANER.get().length;
+    
+    var homelat = gui_miss[0].getLatMap(); //its badically just getLat /10000000
+    var homelon = gui_miss[0].getLonMap(); // HACK buzz, using the 1st wayponts lat/long
+    var homealt = gui_miss[0].getAlt(); // 
+
+    // first off tho, we need the Zero'th element to always be HOME, and the mission starts from ONE
+    //get_home_as_WP();  todo
+    miss[0] = [
+        0,//e.seq, // 0
+        0,//e.current,  //1
+        frame,//e.frame,  //2
+        0,//e.command, //3
+        0,//e.param1, //4
+        0,//e.param2, //5
+        0,//e.param3, //6
+        0,//e.param4, //7
+        homelat,//e.x,///10000000,    //8
+        homelon,//e.y,///10000000,    //9
+        homealt,//e.z,  //10
+        autocontinue
+    ];
+
     //////////////////////////////////////////////
     //var waypointId = 0;
     //var wp = MISSION_PLANER.extractBuffer(waypointId);
-
-        var gui_miss = MISSION_PLANER.get();
-        var gui_miss_len = MISSION_PLANER.get().length;
+        
 
         for ( e of gui_miss) { // e stands for 'element' . Yes an 'of' loop!
 
             var act = e.getAction(); // eg == MWNP.WPTYPE.SET_HEAD or == MWNP.WPTYPE.JUMP
-            var seq = e.getNumber();
+            var seq = e.getNumber(); //getNumber is 1-based, doesn't need to take into account we put home in-front.
             var p1 = e.getP1();
             var p2 = e.getP3();
             var p3 = e.getP3();
@@ -150,12 +181,6 @@ async function send_canned_mission_to_drone() {
             // element.setP2(123);
             // element.setP3(123);
             // element.setAction(zzz);
-            var autocontinue = 1; 
-
-            //if terrain_alt:
-            //frame = mavlink20.MAV_FRAME_GLOBAL_TERRAIN_ALT
-            //else:
-            var frame = mavlink20.MAV_FRAME_GLOBAL_RELATIVE_ALT
 
             var tmp = [
                 seq,//e.seq, // 0
@@ -173,6 +198,8 @@ async function send_canned_mission_to_drone() {
 
             miss.push(tmp);
         }
+
+        MISSION_PLANER.missionDisplayDebug();
         
     //////////////////////////////////
     console.log('START SEND MISSION to drone:',readfilename);
@@ -4298,60 +4325,22 @@ var mspHelper = (function (gui) {
         callback(); // without a response, we'll call the callback anyway
     };
     
-    self.loadWaypoints = function (callback) { //getWaypointsFromFC
+    self.GetWaypoints = function (callback) { //getWaypointsFromFC
         MISSION_PLANER.reinit();
         let waypointId = 1;
 
         get_mission_from_drone(callback);
-        // //MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);
-        // getFirstWP();
-        
-        // function getFirstWP() {
-        //     //MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
-        //     nextWaypoint();
-        // };
-        
-        // function nextWaypoint() {
-        //     waypointId++;
-        //     if (waypointId < MISSION_PLANER.getCountBusyPoints()) {
-        //        // MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);
-        //         nextWaypoint();
-        //     }
-        //     else {
-        //         //MSP.send_message(MSPCodes.MSP_WP, [waypointId], false, null);  
-        //         callback(); // without a response, we'll call the callback anyway
-        //     }
-        // };
-        //callback();
+      
     };
      
-    self.saveWaypoints = function (callback) {  //sendWaypointsToFC
+    self.SendWaypoints = function (callback) {  //sendWaypointsToFC
         let waypointId = 1;
 
-        //buzz MISSION_PLANER todo, this isn't interaactive with the gui yet.
+        //buzz MISSION_PLANER todo, this isn't properly interaactive with the gui yet, but SendWaypoints is called with a timeout after it.
 
-        send_canned_mission_to_drone();
+        send_current_mission_to_drone(); // an async function call outside the object was easier
 
 
-        //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
-        // nextWaypoint();
-
-        // function nextWaypoint() {
-        //     waypointId++;
-        //     if (waypointId < MISSION_PLANER.get().length) {
-        //         //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
-        //         nextWaypoint();
-        //     }
-        //     else {
-        //         //MSP.send_message(MSPCodes.MSP_SET_WP, MISSION_PLANER.extractBuffer(waypointId), false, null);
-        //         endMission();
-        //     }
-        // };
-        
-        // function endMission() {
-        //     //MSP.send_message(MSPCodes.MSP_WP_GETINFO, false, false, null);  
-        //     callback(); // without a response, we'll call the callback anyway
-        // }
     };
     
     self.loadSafehomes = function (callback) {

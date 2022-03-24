@@ -86,7 +86,7 @@ TABS.mission_control.initialize = function (callback) {
         // var loadChainer = new MSPChainerClass();
         // loadChainer.setChain([
         //     mspHelper.getMissionInfo,
-        //     //mspHelper.loadWaypoints,
+        //     //mspHelper.GetWaypoints,
         //     //mspHelper.loadSafehomes
         // ]);
         // loadChainer.setExitPoint(loadHtml);
@@ -1999,8 +1999,13 @@ TABS.mission_control.initialize = function (callback) {
     //
     /////////////////////////////////////////////
     function getWaypointsFromFC() {
-        mspHelper.loadWaypoints(); // getWaypointsFromFC
+        console.log('BEFOREGET--------------------');
+        MISSION_PLANER.missionDisplayDebug();// glorified console.log b4 
+        console.log('AFTERGET--------------------');
+        mspHelper.GetWaypoints(); // getWaypointsFromFC
         setTimeout(function(){
+
+            MISSION_PLANER.missionDisplayDebug();// glorified console.log after
             mission.reinit();
             mission.copy(MISSION_PLANER);
             mission.update(true);
@@ -2010,10 +2015,17 @@ TABS.mission_control.initialize = function (callback) {
     }
     
     function sendWaypointsToFC() {
+        console.log('BEFORESEND--------------------');
+        MISSION_PLANER.missionDisplayDebug();// glorified console.log b4
+        console.log('AFTERSEND--------------------');
         MISSION_PLANER.reinit();
         MISSION_PLANER.copy(mission);
         MISSION_PLANER.update(true, true);
-        mspHelper.saveWaypoints();
+        MISSION_PLANER.missionDisplayDebug();// glorified console.log after
+        console.log('AFTERSEND2--------------------');
+
+        mspHelper.SendWaypoints();// to drone.. async. etc
+        // and after a timeout we do stuff, which is a bit crap, but ok for now.
         setTimeout(function(){
             mission.setMaxWaypoints(MISSION_PLANER.getMaxWaypoints());
             mission.setValidMission(MISSION_PLANER.getValidMission());

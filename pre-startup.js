@@ -49,9 +49,9 @@ var mavParserObj = mpo;
 
 //----------------------------------------------------------------------------------
 //console.log("LISTENING FOR UDP IN udpin:0.0.0.0:14550")
-mpo.add_link('udpin:0.0.0.0:14550',false); //u-in
+//mpo.add_link('udpin:0.0.0.0:14550',false); //u-in
 //console.log("TRYING TCP TO tcp:localhost:5760 till one of them succeeds")
-mpo.add_link('tcp:localhost:5760'); // to/from sitl
+//mpo.add_link('tcp:localhost:5760'); // to/from sitl
 
 //mpo.add_out('udpout:localhost:14551'); //u-out to mavcontrol, missionplanner etc
 
@@ -136,6 +136,8 @@ window.addEventListener('message', function(event) {
     var decoder = mavlink20.map[msgId]; // big list of class info by id number
     var m = new decoder.type();   // make a new 'empty' instance of the right class,
     var newpkt = Object.assign(m, pkt);// 'm' is the right type but empty, pkt is the wrong type but has all the data
+
+    newpkt.fromfrontend = true; // debug for buzz to help with routing
 
     mpo.send(newpkt,sysid); // basically does  a .ZZsend on each of the link_list's that are present.
   }
