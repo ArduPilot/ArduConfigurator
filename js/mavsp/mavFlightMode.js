@@ -110,6 +110,10 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
 
 		// Translate the bitfields for use in the client.
         //copter or plane or something else?
+        if (heartbeat.type == mavlink20.MAV_TYPE_GENERIC ) { //0
+            // before Copter has a FRAME_CLASS or FRAME_TYPE set it shows up as a 'generic' , so we'll treat that more like a copter...
+            self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
+        }
         if (heartbeat.type == mavlink20.MAV_TYPE_FIXED_WING ) { //1
             // arduplane uses packet.custom_mode to index into mode_mapping_apm 
             self.newState.mode = mode_mapping_apm[heartbeat.custom_mode]; 
@@ -133,7 +137,8 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
             self.newState.mode = mode_mapping_ar[heartbeat.custom_mode]; 
         }
         // add more vehicles here as support is added elsewhere.
-        var known_types = [ mavlink20.MAV_TYPE_FIXED_WING,
+        var known_types = [ mavlink20.MAV_TYPE_GENERIC,
+                            mavlink20.MAV_TYPE_FIXED_WING,
                             mavlink20.MAV_TYPE_QUADROTOR,
                             mavlink20.MAV_TYPE_COAXIAL,
                             mavlink20.MAV_TYPE_HELICOPTER,
