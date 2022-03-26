@@ -732,49 +732,95 @@ const mixerList = [
 const platformList = [
     {
         id: 0,
+        name: "Choose a Vehicle Type First!",
+        type: '',
+        enabled: true,
+        flapsPossible: false,
+        // frame_class_possible: true,
+        // frame_type_possible: true
+    },
+        {
+        id: 1,
         name: "Multirotor",
+        type: 'Copter',
+        excludeonly: '-heli',
         enabled: true,
         flapsPossible: false,
         // frame_class_possible: true,
         // frame_type_possible: true
     },
     {
-        id: 1,
+        id: 2,
         name: "Airplane",
+        type: 'Plane',
         enabled: true,
         flapsPossible: true
     },
     {
-        id: 2,
+        id: 3,
         name: "Helicopter",
+        type: 'Copter',
+        includeonly: '-heli',
         enabled: false,
         flapsPossible: false,
         // frame_class_possible: true,
         // frame_type_possible: true
     },
     {
-        id: 3,
+        id: 4,
         name: "Tricopter",
+        type: 'Copter',
+        excludeonly: '-heli',
         enabled: true,
         flapsPossible: false,
         // frame_class_possible: true,
         // frame_type_possible: true
     },
     {
-        id: 4,
-        name: "Rover",
-        enabled: true,
-        flapsPossible: false
-    },
-    {
         id: 5,
-        name: "Boat",
+        name: "Rover",
+        type: 'Rover',
         enabled: true,
         flapsPossible: false
     },
     {
         id: 6,
+        name: "Boat",
+        type: 'Rover',
+        enabled: true,
+        flapsPossible: false
+    },
+    {
+        id: 7,
+        name: "Antenna-Tracker",
+        type: 'AntennaTracker', // from the release data its got this in the 'vehicletype' json/apj
+        enabled: true,
+        flapsPossible: false,
+        // frame_class_possible: true,
+        // frame_type_possible: true
+    }, 
+    {
+        id: 8,
+        name: "AP_Periph",
+        type: 'AP_Periph', // from the release data its got this in the 'vehicletype' json/apj
+        enabled: true,
+        flapsPossible: false,
+        // frame_class_possible: true,
+        // frame_type_possible: true
+    },
+    {
+        id: 9,
+        name: "Submarine",
+        type: 'Sub', // from the release data its got this in the 'vehicletype' json/apj
+        enabled: true,
+        flapsPossible: false,
+        // frame_class_possible: true,
+        // frame_type_possible: true
+    },
+    {
+        id: 10,
         name: "Other",
+        type: '',
         enabled: true,
         flapsPossible: false
     }

@@ -1839,6 +1839,10 @@
 
         "message": "Select your board to see available online firmware releases - Select the correct firmware appropriate for your board."
     },
+    "firmwareFlasherSelectVehicleDescription": {
+
+        "message": "Select What type of vehicle you want to flash... copter, plane, etc"
+    },
     "firmwareFlasherOnlineSelectFirmwareVersionDescription": {
         "message": "Select firmware version for your board."
     },

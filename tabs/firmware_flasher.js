@@ -1,6 +1,8 @@
 /*global $,nwdialog*/
 //'use strict';
 
+currentPlatform = window.currentPlatform??{};// global defined elsewhere
+
 TABS.firmware_flasher = {};
 TABS.firmware_flasher.initialize = function (callback) {
 
@@ -49,34 +51,41 @@ TABS.firmware_flasher.initialize = function (callback) {
         //     };
         // }
 
-        $('input.show_development_releases').click(function(){
-            buildBoardOptions();
+        
+        // 
+        window.platformSelect = $('#platform-type2'); // these two of these ,copter/plane selector, in firmware_flasher.js and maxer.js
+        window.mixerPreset = $('#mixer-preset2');      // these two of these ,frame type selector, in firmware_flasher.js and maxer.js
+        buzz_veh_sels();
+
+        $('#platform-type2').click(function(){
+            console.log("selected..",currentPlatform.name); // comes from window.platformSelect, populated by mixer.js from the above -type2 gui element.
+            //currentPlatform.name is one of 'Multirotor' etc
+            buildBoardOptions(true,true);
         });
 
-        var buildBoardOptions = function(){
 
-            var boards_e = $('select[name="board"]').empty();
+        $('input.show_development_releases').click(function(){
+            buildBoardOptions(true,true);
+        });
+
+        $('#spinny').css("display",'none');
+        //$('#spinny').css("display",'inline');
+
+        var buildBoardOptions = function(redodropdown1,redodropdown2){
+
+            var boards_e = $('select[name="board"]');
+            var versions_e = $('select[name="firmware_version"]');
+
+            if (redodropdown1) {
+            boards_e.empty();
             var showDevReleases = ($('input.show_development_releases').is(':checked'));
             boards_e.append($("<option value='0'>{0}</option>".format(chrome.i18n.getMessage('firmwareFlasherOptionLabelSelectBoard'))));
-
-            var versions_e = $('select[name="firmware_version"]').empty();
+            }
+            if (redodropdown2) {
+            versions_e.empty();
             versions_e.append($("<option value='0'>{0}</option>".format(chrome.i18n.getMessage('firmwareFlasherOptionLabelSelectFirmwareVersion'))));
+            }
 
-            //  {
-//             "mav-type": "ANTENNA_TRACKER",
-//             "vehicletype": "AntennaTracker",
-//             "mav-firmware-version-minor": "1",
-//             "format": "ELF",
-//             "url": "https://firmware.ardupilot.org/AntennaTracker/stable-1.1.0/edge/antennatracker",
-//             "mav-firmware-version-type": "STABLE-1.1.0",
-//             "mav-firmware-version-patch": "0",
-//             "mav-autopilot": "ARDUPILOTMEGA",
-//             "platform": "edge",
-//             "mav-firmware-version": "1.1.0",
-//             "git-sha": "e22170628d5a03a18c0445c5af2d3f3688c37ed4",
-//             "mav-firmware-version-major": "1",
-//             "latest": 0
-//         },
 
 //          {
 //             "board_id": 136,
@@ -104,14 +113,18 @@ TABS.firmware_flasher.initialize = function (callback) {
 //             "latest": 0
 //         },
 
-            var releases = {};
+            var releases = {}; // key is boardtype, like 'CubeBlack', value is a list of all releases matching that board
             var sortedTargets = [];
             var unsortedTargets = [];
+            var vehicletypes = [];
             TABS.firmware_flasher.releasesData.forEach(function(release){
                 //release.assets.forEach(function(asset){
                     var result = release.url;
 
                     var board_type = release.platform;
+
+                    var vehicletype = release.vehicletype; // eg AntennaTracker,
+                    vehicletypes[vehicletype] = 1;
 
                     // if ((!showDevReleases && release.prerelease) || !result) {
                     //     return;
@@ -158,6 +171,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                         "url"       : release.url,
                         "file"      : release.platform,
                         "target"    : release.platform,
+                        "vehicletype"    : release.vehicletype, // eg AntennaTracker,Copter,Plane,AP_Perip,Sub, 
                         "date"      : release['mav-type'],//formattedDate,
                         "notes"     : "",//release.body,
                         "status"    : release['mav-firmware-version-type'],
@@ -181,7 +195,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                                     $("<option value='{0}'>{0}</option>".format(
                                             descriptor.target
                                     )).data('summary', descriptor);
-                            boards_e.append(select_e);
+                            if (redodropdown1) boards_e.append(select_e);
                         }
                     });
                 });
@@ -195,13 +209,16 @@ TABS.firmware_flasher.initialize = function (callback) {
 
         $.get('https://firmware.ardupilot.org/manifest.json', function (releasesData){
             TABS.firmware_flasher.releasesData = releasesData.firmware;
-            buildBoardOptions();
+            buildBoardOptions(true,true);
 
             // bind events
             $('select[name="board"]').change(function() {
 
                 $("a.load_remote_file").addClass('disabled');
                 var target = $(this).val();
+
+
+                buildBoardOptions(false,true);
 
                 if (!GUI.connect_lock) {
                     $('.progress').val(0).removeClass('valid invalid');
@@ -210,29 +227,70 @@ TABS.firmware_flasher.initialize = function (callback) {
                     $('div.release_info').slideUp();
                     $('a.flash_firmware').addClass('disabled');
 
-                    var versions_e = $('select[name="firmware_version"]').empty();
+                    // get vehicle type of intereest
+                    var vehtype = currentPlatform.type;// //Plane,Copter, Rover, AntennaTracker, etc
+                    var excludeonly = currentPlatform.excludeonly??'';// //Plane,Copter, Rover, AntennaTracker, etc
+                    var includeonly = currentPlatform.includeonly??'';// //Plane,Copter, Rover, AntennaTracker, etc
+
+                    var versions_e = $('select[name="firmware_version"]');
+                    versions_e.empty();
                     if(target == 0) {
                         versions_e.append($("<option value='0'>{0}</option>".format(chrome.i18n.getMessage('firmwareFlasherOptionLabelSelectFirmwareVersion'))));
                     } else {
-                        versions_e.append($("<option value='0'>{0} {1}</option>".format(chrome.i18n.getMessage('firmwareFlasherOptionLabelSelectFirmwareVersionFor'), target)));
+                        versions_e.append($("<option value='0'>{0} {1} {2}</option>".format(chrome.i18n.getMessage('firmwareFlasherOptionLabelSelectFirmwareVersionFor'), target, vehtype)));
                     }
+
+                    var unsorted_options_apj = [];
+                    var unsorted_options_hex = [];
+                    var sortkeysA = [];
+                    var sortkeysH = [];
 
                     TABS.firmware_flasher.releases[target].forEach(function(descriptor) {
 
-                        if ( descriptor.date.startsWith("ANTENNA")) return; // skip all antenna_trackers
+                        //if ( descriptor.date.startsWith("ANTENNA")) return; // skip all antenna_trackers
 
-                        var select_e =
-                                $("<option value='{0}'>{1} - {2} - {3} ({4})- {5}</option>".format(
-                                        descriptor.uid,
-                                        descriptor.name,
-                                        descriptor.target,
-                                        descriptor.date,
-                                        descriptor.status,
-                                        descriptor.filename
-                                )).data('summary', descriptor);
+                        // only show options matching vehtype
+                        if ( descriptor.vehicletype == vehtype ) { 
 
-                        versions_e.append(select_e);
+                            if ((excludeonly != '' ) && (descriptor.filename.includes(excludeonly)) ) {
+                                return;
+                            }
+                            if ((includeonly != '' ) && (! descriptor.filename.includes(includeonly)) ) {
+                                return;
+                            }
+                            var select_e =
+                                    $("<option value='{0}'>{1} - {2} - {3} ({4})- {5}</option>".format(
+                                            descriptor.uid,
+                                            descriptor.name,
+                                            descriptor.target,
+                                            descriptor.date,
+                                            descriptor.status,
+                                            descriptor.filename
+                                    )).data('summary', descriptor);
+
+                                    if ( descriptor.filename.includes(".apj")){
+                                        unsorted_options_apj[descriptor.name+"apj"] = select_e;
+                                        sortkeysA.push(descriptor.name+"apj");
+                                    }
+                                    if ( descriptor.filename.includes("_with_bl.hex")) {
+                                        unsorted_options_hex[descriptor.name+"hex"] = select_e;
+                                        sortkeysA.push(descriptor.name+"hex");
+                                        //sortkeysH.push(descriptor.name);
+                                    }
+                                }
                     });
+
+                    sortkeysA.sort();
+                    sortkeysA.reverse();
+                    for (var e of sortkeysA) {
+                        if (e.includes("apj")) versions_e.append(unsorted_options_apj[e]);
+                        if (e.includes("hex")) versions_e.append(unsorted_options_hex[e]);
+                    }
+                    // sortkeysH.sort();
+                    // sortkeysH.reverse();
+                    // for (var e of sortkeysH) {
+                    //     versions_e.append(unsorted_options_hex[e]);
+                    // }
                 }
             });
 

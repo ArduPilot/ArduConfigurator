@@ -280,6 +280,8 @@ APJ_protocol.prototype.initialize = function () {
             $('span.progressLabel').text('APJ - timed out, programming: FAILED');
             self.progress_bar_e.addClass('invalid');
 
+            $('#spinny').css("display",'none');
+
             googleAnalytics.sendEvent('Flashing', 'Programming', 'timeout');
 
             // protocol got stuck, clear timer and disconnect
@@ -310,6 +312,8 @@ APJ_protocol.prototype.read = function (readInfo) {
     }
 
     if (data.length > 0 )console.log('READ-->',Array.from(data)); // display as Array as its simpler
+
+    //TODO if data.length == 0 , then we got no response and should timeout sooner..
 
     for (var i = 0; i < data.length; i++) {
         this.receive_buffer.push(data[i]);
@@ -429,6 +433,7 @@ APJ_protocol.prototype.upload_procedure = function (step) {
         case 1:
             // initialize serial interface on the MCU side, auto baud rate settings
             $('span.progressLabel').text('Contacting bootloader ...');
+            $('#spinny').css("display",'inline');
 
             console.log("uploading step... ",step)
 
@@ -486,6 +491,7 @@ APJ_protocol.prototype.upload_procedure = function (step) {
                     GUI.connect_lock = false;
 
                     $('span.progressLabel').text('No response from the bootloader, programming: FAILED');
+                    $('#spinny').css("display",'none');
                     self.progress_bar_e.addClass('invalid');
 
                     helper.interval.remove('apj_initialize_mcu');
@@ -852,6 +858,7 @@ APJ_protocol.prototype.upload_procedure = function (step) {
             var message = 'Success, probably.' ;
             console.log(message);
             $('span.progressLabel').text(message);
+            $('#spinny').css("display",'none');
 
             self.upload_procedure(99);
             break;

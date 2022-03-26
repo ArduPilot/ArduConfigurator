@@ -4,6 +4,15 @@
             <div class="spacer">
                 <table class="cf_table" style="margin-top: 10px;">
                     <tr>
+                        <td>
+                        <select id="platform-type2">
+                            <option value="0">Loading ...</option>
+                        </select> 
+                        </td>        <!-- these two fields also exist in mixer.js on a different page-->
+                        <td colspan=2><span class="description" i18n="firmwareFlasherSelectVehicleDescription"></span></td>                        
+                    <!--  <select id="mixer-preset2"></select></span><br> - these two fields also exist in mixer.js on a different page-->
+                    </tr>
+                    <tr>
                         <td><select name="board">
                                 <option value="0">Loading ...</option>
                         </select></td>
@@ -156,6 +165,7 @@
         <div class="info"><a name="progressbar"></a>
             <progress class="progress" value="0" min="0" max="100"></progress>
             <span class="progressLabel" i18n="firmwareFlasherLoadFirmwareFile"></span>
+            <img src="/images/spinny.gif" id="spinny" width="600px" height="400px" style="position: fixed; top: 150px; left: 10%;display:inline">
         </div>
     </div>
     <div class="content_toolbar">

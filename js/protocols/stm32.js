@@ -181,6 +181,8 @@ STM32_protocol.prototype.initialize = function () {
             console.log('STM32 - timed out, programming failed ...');
 
             $('span.progressLabel').text('STM32 - timed out, programming: FAILED');
+            $('#spinny').css("display",'none');
+        
             self.progress_bar_e.addClass('invalid');
 
             googleAnalytics.sendEvent('Flashing', 'Programming', 'timeout');
@@ -379,6 +381,7 @@ STM32_protocol.prototype.upload_procedure = function (step) {
         case 1:
             // initialize serial interface on the MCU side, auto baud rate settings
             $('span.progressLabel').text('Contacting bootloader ...');
+            $('#spinny').css("display",'inline');
 
             var send_counter = 0;
             helper.interval.add('stm32_initialize_mcu', function () { // 200 ms interval (just in case mcu was already initialized), we need to break the 2 bytes command requirement
@@ -391,6 +394,8 @@ STM32_protocol.prototype.upload_procedure = function (step) {
                         self.upload_procedure(2);
                     } else {
                         $('span.progressLabel').text('Communication with bootloader failed');
+                        $('#spinny').css("display",'none');
+
                         self.progress_bar_e.addClass('invalid');
 
                         helper.interval.remove('stm32_initialize_mcu');
@@ -405,6 +410,8 @@ STM32_protocol.prototype.upload_procedure = function (step) {
                     console.log('STM32 - no response from bootloader, disconnecting');
 
                     $('span.progressLabel').text('No response from the bootloader, programming: FAILED');
+                    $('#spinny').css("display",'none');
+
                     self.progress_bar_e.addClass('invalid');
 
                     helper.interval.remove('stm32_initialize_mcu');
@@ -722,6 +729,9 @@ STM32_protocol.prototype.upload_procedure = function (step) {
                         if (verify) {
                             console.log('Programming: SUCCESSFUL');
                             $('span.progressLabel').text('Programming: SUCCESSFUL');
+                            $('#spinny').css("display",'none');
+
+
                             googleAnalytics.sendEvent('Flashing', 'Programming', 'success');
 
                             // update progress bar
@@ -732,6 +742,7 @@ STM32_protocol.prototype.upload_procedure = function (step) {
                         } else {
                             console.log('Programming: FAILED');
                             $('span.progressLabel').text('Programming: FAILED');
+                            $('#spinny').css("display",'none');
                             googleAnalytics.sendEvent('Flashing', 'Programming', 'fail');
 
                             // update progress bar

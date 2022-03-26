@@ -608,6 +608,8 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                                             console.log('Failed to execute unprotect memory command');
                             GUI.log('Failed to unprotect chip');
                             $('span.progressLabel').text('Failed to unprotect board');
+                            $('#spinny').css("display",'none');
+        
                             self.progress_bar_e.addClass('invalid');
                             console.log(data);
                                             self.upload_procedure(99);
@@ -618,6 +620,8 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                             console.log('Failed to initiate unprotect memory command');
                     GUI.log('Failed to initiate unprotect routine');
                     $('span.progressLabel').text('Failed to initiate unprotect');
+                    $('#spinny').css("display",'none');
+        
                     self.progress_bar_e.addClass('invalid');
                             self.upload_procedure(99);
                         }
@@ -734,6 +738,8 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                   }
                 }
                 $('span.progressLabel').text('Erasing ...');
+                $('#spinny').css("display",'inline');
+
                 console.log('Executing local chip erase');
 
                 var page = 0;
@@ -928,6 +934,7 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                         if (verify) {
                             console.log('Programming: SUCCESSFUL');
                             $('span.progressLabel').text('Programming: SUCCESSFUL');
+                            $('#spinny').css("display",'none');
 
                             $('.flash_on_connect').click(); // turn OFF the flash-on-connect to prevent reflash loop.
 
@@ -939,7 +946,8 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                         } else {
                             console.log('Programming: FAILED');
                             $('span.progressLabel').text('Programming: FAILED');
-
+                            $('#spinny').css("display",'none');
+                            
                             // update progress bar
                             self.progress_bar_e.addClass('invalid');
 

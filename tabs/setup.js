@@ -5,15 +5,14 @@
 TABS.setup = {
     yaw_fix: 0.0
 };
-
-window.$platformSelect  = window.$platformSelect??{};
-$platformSelect = window.$platformSelect;
+window.platformSelect  = window.platformSelect??{};
+platformSelect = window.platformSelect;
 
 window.$hasFlapsWrapper = $('#has-flaps-wrapper');
 $hasFlapsWrapper = window.$hasFlapsWrapper;
 
-window.$mixerPreset  = window.$mixerPreset??{};
-$mixerPreset = window.$mixerPreset;
+window.mixerPreset  = window.mixerPreset??{};
+mixerPreset = window.mixerPreset;
 
 
 TABS.setup.initialize = function (callback) {
@@ -52,8 +51,8 @@ TABS.setup.initialize = function (callback) {
 
 
 
-        window.$platformSelect = $('#platform-type');
-        window.$mixerPreset = $('#mixer-preset');
+        window.platformSelect = $('#platform-type');
+        window.mixerPreset = $('#mixer-preset');
         buzz_veh_sels();
 
 
