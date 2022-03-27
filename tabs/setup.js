@@ -8,6 +8,9 @@ TABS.setup = {
 window.platformSelect  = window.platformSelect??{};
 platformSelect = window.platformSelect;
 
+currentPlatform = window.currentPlatform??{};// global defined elsewhere
+console.log('setup.js platformSelect changed',currentPlatform);
+
 window.$hasFlapsWrapper = $('#has-flaps-wrapper');
 $hasFlapsWrapper = window.$hasFlapsWrapper;
 
@@ -49,11 +52,14 @@ TABS.setup.initialize = function (callback) {
             GUI_control.prototype.log("<span style='color: red; font-weight: bolder'><strong>" + chrome.i18n.getMessage("logPwmOutputDisabled") + "</strong></span>");
         }
 
+        var prev_selection = window.currentPlatform.name;
 
+        window.platformSelect = $('#platform-type'); // the drop-down on this scsreen
 
-        window.platformSelect = $('#platform-type');
+        //if window.platformSelect
+
         window.mixerPreset = $('#mixer-preset');
-        buzz_veh_sels();
+        buzz_veh_sels(prev_selection); // 
 
 
         // initialize 3D
@@ -260,6 +266,11 @@ TABS.setup.initialize3D = function () {
     // modelWrapper adds an extra axis of rotation to avoid gimbal lock with the euler angles
     modelWrapper = new THREE.Object3D();
 
+    // MIXER_CONFIG.platformType is set by the connected drone in mavsp.js, but if we're not connected, or starting 
+    //  out, we'll grab it from firmware_flasher.js's drop-down, in window.currentPlatform 
+    if (MIXER_CONFIG.platformType == -1) {
+        MIXER_CONFIG.platformType = window.currentPlatform.id;
+    } 
     var veh_type =  platformList[MIXER_CONFIG.platformType].name;
     //var mix_type =  mixerList[MIXER_CONFIG.platformType];
 
@@ -272,6 +283,8 @@ TABS.setup.initialize3D = function () {
             GUI_control.prototype.log("<span style='color: red; font-weight: bolder'><strong>" + chrome.i18n.getMessage("mixerNotConfigured") + "</strong></span>");
        // } else {
             model_file = helper.mixer.getById(MIXER_CONFIG.appliedMixerPreset).model; // buzz 3d
+
+            console.log("model_file:", model_file);
        // }
    // } else {
     //    model_file = 'fallback'
@@ -303,18 +316,27 @@ TABS.setup.initialize3D = function () {
         'spitfire'  : {'file' :'resources/models/spitfire-1.2m.gltf', 'scaling':5, 'sceneoffset':0},
         'flying_wing' : {'file' :'resources/models/flying_wing.gltf', 'scaling':0.8, 'sceneoffset':0},
         'talon' : {'file' :'resources/models/mini-talon-1m.bix-tex.gltf', 'scaling':8, 'sceneoffset':0},
-        'bixler' : {'file' :'resources/models/bixler-1m.gltf', 'scaling':5, 'sceneoffset':0},
+        'bixler' : {'file' :'resources/models/bixler-1m.gltf', 'scaling':6, 'sceneoffset':0},
         'griffin' : {'file' :'resources/models/griffin-1m.black.gltf', 'scaling':5, 'sceneoffset':0},
         'cub' : {'file' :'resources/models/piper-supercub.fixed.tex.gltf', 'scaling':5, 'sceneoffset':0},
         'alti' : {'file' :'resources/models/alti-transition3.propped.gltf', 'scaling':5, 'sceneoffset':0},
+        'cuav_tvbs' : {'file' :'resources/models/cuav_tvbs1.gltf', 'scaling':7, 'sceneoffset':0},
         // copter-like-things
         'tricopter' : {'file' :'resources/models/tricopter.gltf', 'scaling':1, 'sceneoffset':0},
         //
         'quad_x' : {'file' :'resources/models/quad_x.gltf', 'scaling':0.8, 'sceneoffset':0},
+        'quad_plus' : {'file' :'resources/models/quad_plus.gltf', 'scaling':6, 'sceneoffset':0},
         //'quad_+' : {'file' :'resources/models/quad_+.gltf', 'scaling':0.6, 'sceneoffset':0},
         //
-        'hex_plus' : {'file' :'resources/models/hex_plus.gltf', 'scaling':0.6, 'sceneoffset':0},
+        //'hex_plus' : {'file' :'resources/models/hex_plus.gltf', 'scaling':0.6, 'sceneoffset':0},
+        'hex_plus' : {'file' :'resources/models/hex_plus.gltf', 'scaling':6, 'sceneoffset':0},
+        'hex_plus2' : {'file' :'resources/models/hex_plus2.gltf', 'scaling':6, 'sceneoffset':0},
+        'hex_x' : {'file' :'resources/models/hex_x.gltf', 'scaling':6, 'sceneoffset':0},
+        'hex_x2' : {'file' :'resources/models/hex_x2.gltf', 'scaling':6, 'sceneoffset':0},
         //'hex_+' : {'file' :'resources/models/hex_+.gltf', 'scaling':0.8, 'sceneoffset':0},
+        'octo_plus8' : {'file' :'resources/models/octo_plus8.gltf', 'scaling':6, 'sceneoffset':0},
+        'octo_x8' : {'file' :'resources/models/octo_x8.gltf', 'scaling':6, 'sceneoffset':0},
+        'octo_quad_x8' : {'file' :'resources/models/octo_quad_x8.gltf', 'scaling':6, 'sceneoffset':0},
         //
         'y4' : {'file' :'resources/models/y4.gltf', 'scaling':0.6, 'sceneoffset':0},
         'y6' : {'file' :'resources/models/y6.gltf', 'scaling':0.6, 'sceneoffset':0},

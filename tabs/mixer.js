@@ -9,6 +9,7 @@ platformSelect = window.platformSelect;
 // 
 window.currentPlatform = window.currentPlatform??{};
 currentPlatform = window.currentPlatform;
+console.log('mixer.js platformSelect changed',currentPlatform);
 
 
 window.$hasFlapsWrapper = $('#has-flaps-wrapper');
@@ -17,7 +18,8 @@ $hasFlapsWrapper = window.$hasFlapsWrapper;
 window.mixerPreset  = window.mixerPreset??{};
 mixerPreset = window.mixerPreset;
 
-function buzz_veh_sels() {
+// try to keep previous selection when rebuilding selector..
+function buzz_veh_sels(prev_selection) {
     
 
     platformSelect.find("*").remove();
@@ -27,18 +29,25 @@ function buzz_veh_sels() {
     for (let i in platforms) {
         if (platforms.hasOwnProperty(i)) {
             let p = platforms[i];
-            platformSelect.append('<option value="' + p.id + '">' + p.name + '</option>');
+            var c='';
+            if ( (prev_selection !== undefined) && (prev_selection == p.name) )
+                c='selected';
+            platformSelect.append('<option value="' + p.id + '" '+c+'>' + p.name + '</option>');
         }
     }
 
     function fillMixerPreset() { 
+        if (MIXER_CONFIG.platformType == -1 ) MIXER_CONFIG.platformType = window.currentPlatform.id??-1; // two places we could get it from
         let mixers = helper.mixer.getByPlatform(MIXER_CONFIG.platformType);
 
         mixerPreset.find("*").remove();
         for (i in mixers) {
             if (mixers.hasOwnProperty(i)) {
                 let m = mixers[i];
-                mixerPreset.append('<option value="' + m.id + '">' + m.name + '</option>');
+                var p='';
+                if ( prev_selection == m.name) 
+                    p='selected';
+                mixerPreset.append('<option value="' + m.id + '" '+p+'>' + m.name + '</option>');
             }
         }
     }
@@ -56,7 +65,7 @@ function buzz_veh_sels() {
         currentPlatform =  platformList[MIXER_CONFIG.platformType];
 
         console.log('mixer.js platformSelect changed',currentPlatform);
-
+        window.currentPlatform = currentPlatform;
 
         var platformSelectParent = platformSelect.parent('.select');
 
@@ -78,13 +87,13 @@ function buzz_veh_sels() {
     if ( !MIXER_CONFIG ) {
         MIXER_CONFIG = ALLSETTINGS.MIXER_CONFIG; //on first load user might not have gotten the mixer list/s yet
     }
-    if ( !MIXER_CONFIG.platformType ) {
+    if ( ( !MIXER_CONFIG.platformType )||( MIXER_CONFIG.platformType == -1)) {
         MIXER_CONFIG.platformType = 0; //on first load user might not have selected a type yet.
     }
 
     currentPlatform =  platformList[MIXER_CONFIG.platformType];
 
-    platformSelect.val(MIXER_CONFIG.platformType).change();
+    //platformSelect.val(MIXER_CONFIG.platformType).change();
 
 
     mixerPreset.change(function () {
@@ -504,9 +513,10 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         $hasFlaps.change();
 
 
+        var prev_selection = window.currentPlatform.name;
         window.platformSelect = $('#platform-type');
         window.mixerPreset = $('#mixer-preset');
-        buzz_veh_sels();
+        buzz_veh_sels(prev_selection);
 
 
         modal = new jBox('Modal', {

@@ -51,11 +51,13 @@ TABS.firmware_flasher.initialize = function (callback) {
         //     };
         // }
 
-        
         // 
+
+        var prev_selection = window.currentPlatform.name;
+
         window.platformSelect = $('#platform-type2'); // these two of these ,copter/plane selector, in firmware_flasher.js and maxer.js
         window.mixerPreset = $('#mixer-preset2');      // these two of these ,frame type selector, in firmware_flasher.js and maxer.js
-        buzz_veh_sels();
+        buzz_veh_sels(prev_selection);
 
         $('#platform-type2').click(function(){
             console.log("selected..",currentPlatform.name); // comes from window.platformSelect, populated by mixer.js from the above -type2 gui element.
@@ -117,6 +119,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             var sortedTargets = [];
             var unsortedTargets = [];
             var vehicletypes = [];
+            if (TABS.firmware_flasher.releasesData == undefined) return;
             TABS.firmware_flasher.releasesData.forEach(function(release){
                 //release.assets.forEach(function(asset){
                     var result = release.url;

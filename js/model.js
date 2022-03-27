@@ -32,13 +32,17 @@ const INPUT_STABILIZED_ROLL = 0,
     INPUT_FEATURE_FLAPS = 14;
 
 const
-    PLATFORM_MULTIROTOR     = 0,
-    PLATFORM_AIRPLANE       = 1,
-    PLATFORM_HELICOPTER     = 2,
-    PLATFORM_TRICOPTER      = 3,
-    PLATFORM_ROVER          = 4,
-    PLATFORM_BOAT           = 5,
-    PLATFORM_OTHER          = 6;
+    PLATFORM_UNKNOWN        = 0,
+    PLATFORM_MULTIROTOR     = 1,
+    PLATFORM_AIRPLANE       = 2,
+    PLATFORM_HELICOPTER     = 3,
+    PLATFORM_TRICOPTER      = 4,
+    PLATFORM_ROVER          = 5,
+    PLATFORM_BOAT           = 6,
+    PLATFORM_ANTENNA        = 7,
+    PLATFORM_PERIPH         = 8,
+    PLATFORM_SUB            = 9,
+    PLATFORM_OTHER          = 10;
 
 // cut-n-pasted from https://ardupilot.org/copter/docs/parameters.html#frame-class july 2021
 // values for FRAME_CLASS param.
@@ -124,7 +128,7 @@ const mixerList = [
     {
         id: 2,
         name: 'Quad +',
-        model: 'quad_x',
+        model: 'quad_plus',
         image: 'quad_p',
         enabled: true,
         legacy: true,
@@ -184,7 +188,7 @@ const mixerList = [
     {
         id: 7,
         name: 'Hex +',
-        model: 'hex_plus',
+        model: 'hex_plus2',
         image: 'hex_p',
         enabled: true,
         legacy: true,
@@ -221,7 +225,7 @@ const mixerList = [
         ]
     },     // 8
     {
-        id: 27,
+        id: 9,
         name: 'Flying Wing with differential thrust',
         model: 'flying_wing',
         image: 'flying_wing',
@@ -238,29 +242,11 @@ const mixerList = [
             new ServoMixRule(SERVO_FLAPPERON_2, INPUT_STABILIZED_ROLL, -50, 0),
             new ServoMixRule(SERVO_FLAPPERON_2, INPUT_STABILIZED_PITCH, 50, 0),
         ]
-    },     // 27
-    // {
-    //     id: 9,
-    //     name: 'Y4',
-    //     model: 'y4',
-    //     image: 'y4',
-    //     enabled: true,
-    //     legacy: true,
-    //     platform: PLATFORM_MULTIROTOR,
-    //     frame_class: '', //FRAME_CLASS=???
-    //     frame_type: '',  //FRAME_TYPE=???
-    //     motorMixer: [
-    //         new MotorMixRule(1.0, 0.0, 1.0, -1.0),          // REAR_TOP CW
-    //         new MotorMixRule(1.0, -1.0, -1.0, 0.0),          // FRONT_R CCW
-    //         new MotorMixRule(1.0, 0.0, 1.0, 1.0),          // REAR_BOTTOM CCW
-    //         new MotorMixRule(1.0, 1.0, -1.0, 0.0),          // FRONT_L CW
-    //     ],
-    //     servoMixer: []
-    // },                           // 9
+    },       // 9
     {
         id: 10,
         name: 'Hex X',
-        model: 'hex_x',
+        model: 'hex_x2',
         image: 'hex_x',
         enabled: true,
         legacy: true,
@@ -280,7 +266,7 @@ const mixerList = [
     {
         id: 11,
         name: 'Octo X8', // 8 arms, not 4
-        model: 'custom',
+        model: 'octo_x8',
         image: 'octo_x8',
         enabled: true,
         legacy: true,
@@ -301,9 +287,9 @@ const mixerList = [
     },             // 11
     {
         id: 12,
-        name: 'Octo Flat +',  // 8 arms, not 4
-        model: 'custom',
-        image: 'octo_flat_p',
+        name: 'Octo +8',  // 8 arms, not 4
+        model: 'octo_plus8',
+        image: 'octo_plus8',
         enabled: true,
         legacy: true,
         platform: PLATFORM_MULTIROTOR,
@@ -323,8 +309,8 @@ const mixerList = [
     },     // 12
     {
         id: 13,
-        name: 'Octo-Quad X', // 8 motors,4 arms
-        model: 'custom',
+        name: 'Octo-Quad X8', // 8 motors,4 arms
+        model: 'octo_quad_x8',
         image: 'tba',  // was octo_flat_x
         enabled: true,
         legacy: true,
@@ -392,73 +378,6 @@ const mixerList = [
         motorMixer: [],
         servoMixer: []
     },              // 16
-    // {
-    //     id: 17,
-    //     name: 'V-tail Quad',
-    //     model: 'quad_vtail',
-    //     image: 'vtail_quad',
-    //     enabled: true,
-    //     legacy: true,
-    //     platform: PLATFORM_MULTIROTOR,
-    //     motorMixer: [
-    //         new MotorMixRule(1.0, -0.58, 0.58, 1.0),        // REAR_R
-    //         new MotorMixRule(1.0, -0.46, -0.39, -0.5),       // FRONT_R
-    //         new MotorMixRule(1.0, 0.58, 0.58, -1.0),        // REAR_L
-    //         new MotorMixRule(1.0, 0.46, -0.39, 0.5),         // FRONT_L
-    //     ],
-    //     servoMixer: []
-    // },  // 17
-    // {
-    //     id: 18,
-    //     name: 'Hex H',
-    //     model: 'custom',
-    //     image: 'custom',
-    //     enabled: true,
-    //     legacy: true,
-    //     platform: PLATFORM_MULTIROTOR,
-    //     motorMixer: [
-    //         new MotorMixRule(1.0, -1.0, 1.0, -1.0),     // REAR_R
-    //         new MotorMixRule(1.0, -1.0, -1.0, 1.0),     // FRONT_R
-    //         new MotorMixRule(1.0, 1.0, 1.0, 1.0),     // REAR_L
-    //         new MotorMixRule(1.0, 1.0, -1.0, -1.0),     // FRONT_L
-    //         new MotorMixRule(1.0, 0.0, 0.0, 0.0),     // RIGHT
-    //         new MotorMixRule(1.0, 0.0, 0.0, 0.0),     // LEFT
-    //     ],
-    //     servoMixer: []
-    // },                // 18
-    // {
-    //     id: 17,
-    //     name: 'PPM to SERVO',
-    //     model: 'custom',
-    //     image: 'custom',
-    //     enabled: false,
-    //     legacy: true,
-    //     platform: PLATFORM_OTHER,
-    //     motorMixer: [],
-    //     servoMixer: []
-    // },         // 17
-    // {
-    //     id: 18,
-    //     name: 'Dualcopter',
-    //     model: 'custom',
-    //     image: 'custom',
-    //     enabled: false,
-    //     legacy: true,
-    //     platform: PLATFORM_MULTIROTOR,
-    //     motorMixer: [],
-    //     servoMixer: []
-    // },           // 18
-    // {
-    //     id: 19,
-    //     name: 'Singlecopter',
-    //     model: 'custom',
-    //     image: 'custom',
-    //     enabled: false,
-    //     legacy: true,
-    //     platform: PLATFORM_MULTIROTOR,
-    //     motorMixer: [],
-    //     servoMixer: []
-    // },         // 19
     {
         id: 20,
         name: 'QuadPlane - no tilting props, 1 forward + 4 lifting',
@@ -590,7 +509,7 @@ const mixerList = [
     {
         id: 27,
         name: 'Airplane with differential thrust',
-        model: 'custom',
+        model: 'cuav_tvbs',
         image: 'airplane',
         enabled: true,
         legacy: false,
@@ -729,9 +648,12 @@ const mixerList = [
     }         // end 34        
 ];
 
+
+
+
 const platformList = [
     {
-        id: 0,
+        id: PLATFORM_UNKNOWN,
         name: "Choose a Vehicle Type First!",
         type: '',
         enabled: true,
@@ -740,7 +662,7 @@ const platformList = [
         // frame_type_possible: true
     },
         {
-        id: 1,
+        id: PLATFORM_MULTIROTOR,
         name: "Multirotor",
         type: 'Copter',
         excludeonly: '-heli',
@@ -750,14 +672,14 @@ const platformList = [
         // frame_type_possible: true
     },
     {
-        id: 2,
+        id: PLATFORM_AIRPLANE,
         name: "Airplane",
         type: 'Plane',
         enabled: true,
         flapsPossible: true
     },
     {
-        id: 3,
+        id: PLATFORM_HELICOPTER,
         name: "Helicopter",
         type: 'Copter',
         includeonly: '-heli',
@@ -767,7 +689,7 @@ const platformList = [
         // frame_type_possible: true
     },
     {
-        id: 4,
+        id: PLATFORM_TRICOPTER,
         name: "Tricopter",
         type: 'Copter',
         excludeonly: '-heli',
@@ -777,21 +699,21 @@ const platformList = [
         // frame_type_possible: true
     },
     {
-        id: 5,
+        id: PLATFORM_ROVER,
         name: "Rover",
         type: 'Rover',
         enabled: true,
         flapsPossible: false
     },
     {
-        id: 6,
+        id: PLATFORM_BOAT,
         name: "Boat",
         type: 'Rover',
         enabled: true,
         flapsPossible: false
     },
     {
-        id: 7,
+        id: PLATFORM_ANTENNA,
         name: "Antenna-Tracker",
         type: 'AntennaTracker', // from the release data its got this in the 'vehicletype' json/apj
         enabled: true,
@@ -800,7 +722,7 @@ const platformList = [
         // frame_type_possible: true
     }, 
     {
-        id: 8,
+        id: PLATFORM_PERIPH,
         name: "AP_Periph",
         type: 'AP_Periph', // from the release data its got this in the 'vehicletype' json/apj
         enabled: true,
@@ -809,7 +731,7 @@ const platformList = [
         // frame_type_possible: true
     },
     {
-        id: 9,
+        id: PLATFORM_SUB,
         name: "Submarine",
         type: 'Sub', // from the release data its got this in the 'vehicletype' json/apj
         enabled: true,
@@ -818,7 +740,7 @@ const platformList = [
         // frame_type_possible: true
     },
     {
-        id: 10,
+        id: PLATFORM_OTHER,
         name: "Other",
         type: '',
         enabled: true,
