@@ -356,9 +356,9 @@ var connection = {
     },
     getInfo: function (callback) {
         var chromeType = null;
-        if (serial.connectionType == 'serial')  chromeType = chrome.serial;
-        //if (serial.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
-        //if (serial.connectionType == 'udp')  chromeType = chrome.sockets.udp;
+        if (connection.connectionType == 'serial')  chromeType = chrome.serial;
+        //if (connection.connectionType == 'tcp')  chromeType = chrome.sockets.tcp;
+        //if (connection.connectionType == 'udp')  chromeType = chrome.sockets.udp;
         if (!chromeType) return;
 
         // getInfo:  https://developer.chrome.com/docs/extensions/reference/sockets_tcp/#method-getInfo
