@@ -106,35 +106,53 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
         // else ignore data for other sysids than the one we are interested in.
         if ( heartbeat._header.srcSystem != sysid ) return; 
 
-        self.vehicleType = heartbeat.type;
+        
 
 		// Translate the bitfields for use in the client.
         //copter or plane or something else?
-        if (heartbeat.type == mavlink20.MAV_TYPE_GENERIC ) { //0
+        if ((self.vehicleType != heartbeat.type)&&(heartbeat.type == mavlink20.MAV_TYPE_GENERIC )) { //0
             // before Copter has a FRAME_CLASS or FRAME_TYPE set it shows up as a 'generic' , so we'll treat that more like a copter...
             self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
+            console.log("MAV_TYPE_GENERIC ardupilot vehicle type:",heartbeat.type);
+            self.vehicleType = heartbeat.type;
         }
-        if (heartbeat.type == mavlink20.MAV_TYPE_FIXED_WING ) { //1
+        if ((self.vehicleType != heartbeat.type)&&(heartbeat.type == mavlink20.MAV_TYPE_FIXED_WING )) { //1
             // arduplane uses packet.custom_mode to index into mode_mapping_apm 
             self.newState.mode = mode_mapping_apm[heartbeat.custom_mode]; 
             //MIXER_CONFIG.platformType = PLATFORM_AIRPLANE ; // set in mavsp.js heartbeat_handler
+            console.log("MAV_TYPE_FIXED_WING ardupilot vehicle type:",heartbeat.type);
+            self.vehicleType = heartbeat.type;
         }
-        if (heartbeat.type == mavlink20.MAV_TYPE_QUADROTOR ) { //2
+        if ((self.vehicleType != heartbeat.type)&&(heartbeat.type == mavlink20.MAV_TYPE_QUADROTOR )) { //2
             // arducopter uses packet.custom_mode to index into mode_mapping_acm 
             self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
             //MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR ; // set in mavsp.js heartbeat_handler
+            console.log("MAV_TYPE_QUADROTOR ardupilot vehicle type:",heartbeat.type);
+            self.vehicleType = heartbeat.type;
         }
-        if (heartbeat.type == mavlink20.MAV_TYPE_COAXIAL ) { //3
+        if ((self.vehicleType != heartbeat.type)&&(heartbeat.type == mavlink20.MAV_TYPE_COAXIAL )) { //3
             // arducopter uses packet.custom_mode to index into mode_mapping_acm 
             self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
+            console.log("MAV_TYPE_COAXIAL ardupilot vehicle type:",heartbeat.type);
+            self.vehicleType = heartbeat.type;
         } 
-        if (heartbeat.type == mavlink20.MAV_TYPE_HELICOPTER ) { //4
+        if ((self.vehicleType != heartbeat.type)&&(heartbeat.type == mavlink20.MAV_TYPE_HELICOPTER )) { //4
             // arducopter uses packet.custom_mode to index into mode_mapping_acm 
             self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
+            console.log("MAV_TYPE_HELICOPTER ardupilot vehicle type:",heartbeat.type);
+            self.vehicleType = heartbeat.type;
         }
-        if (heartbeat.type == mavlink20.MAV_TYPE_GROUND_ROVER ) { //10
+        if ((self.vehicleType != heartbeat.type)&&(heartbeat.type == mavlink20.MAV_TYPE_GROUND_ROVER )) { //10
             // arducopter uses packet.custom_mode to index into mode_mapping_acm 
             self.newState.mode = mode_mapping_ar[heartbeat.custom_mode]; 
+            console.log("MAV_TYPE_GROUND_ROVER ardupilot vehicle type:",heartbeat.type);
+            self.vehicleType = heartbeat.type;
+        }
+        if ((self.vehicleType != heartbeat.type)&&(heartbeat.type == mavlink20.MAV_TYPE_GROUND_ROVER )) { //10
+            // arducopter uses packet.custom_mode to index into mode_mapping_acm 
+            self.newState.mode = mode_mapping_ar[heartbeat.custom_mode]; 
+            console.log("MAV_TYPE_GROUND_ROVER ardupilot vehicle type:",heartbeat.type);
+            self.vehicleType = heartbeat.type;
         }
         // add more vehicles here as support is added elsewhere.
         var known_types = [ mavlink20.MAV_TYPE_GENERIC,

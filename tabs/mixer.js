@@ -30,24 +30,26 @@ function buzz_veh_sels(prev_selection) {
         if (platforms.hasOwnProperty(i)) {
             let p = platforms[i];
             var c='';
-            if ( (prev_selection !== undefined) && (prev_selection == p.name) )
+            if ( (prev_selection.name !== undefined) && (prev_selection.name == p.name) )
                 c='selected';
             platformSelect.append('<option value="' + p.id + '" '+c+'>' + p.name + '</option>');
         }
     }
 
+    console.log("here");
+
     function fillMixerPreset() { 
         if (MIXER_CONFIG.platformType == -1 ) MIXER_CONFIG.platformType = window.currentPlatform.id??-1; // two places we could get it from
         let mixers = helper.mixer.getByPlatform(MIXER_CONFIG.platformType);
 
-        mixerPreset.find("*").remove();
+        window.mixerPreset.find("*").remove();
         for (i in mixers) {
             if (mixers.hasOwnProperty(i)) {
                 let m = mixers[i];
                 var p='';
-                if ( prev_selection == m.name) 
+                if ( prev_selection.name == m.name) 
                     p='selected';
-                mixerPreset.append('<option value="' + m.id + '" '+p+'>' + m.name + '</option>');
+                window.mixerPreset.append('<option value="' + m.id + '" '+p+'>' + m.name + '</option>');
             }
         }
     }
@@ -78,7 +80,7 @@ function buzz_veh_sels(prev_selection) {
         }
 
         fillMixerPreset();
-        mixerPreset.change();
+        window.mixerPreset.change();
 
         
     });
@@ -88,7 +90,7 @@ function buzz_veh_sels(prev_selection) {
         MIXER_CONFIG = ALLSETTINGS.MIXER_CONFIG; //on first load user might not have gotten the mixer list/s yet
     }
     if ( ( !MIXER_CONFIG.platformType )||( MIXER_CONFIG.platformType == -1)) {
-        MIXER_CONFIG.platformType = 0; //on first load user might not have selected a type yet.
+        MIXER_CONFIG.platformType = prev_selection.id??0; //on first load user might not have selected a type yet.
     }
 
     currentPlatform =  platformList[MIXER_CONFIG.platformType];
@@ -100,8 +102,16 @@ function buzz_veh_sels(prev_selection) {
 
         //console.log('PLEASE REFRESH TAB BY VISITING ANOTHER THEN COME BACK');
 
+        // when changing tabs, and under some circumstances, mixerPreset.val can be NaN if the drop-down isn't populated yet.
+        console.log("mixerPreset changed",window.mixerPreset.val());
+        if(mixerPreset.val() === null ) {
+           
+            var x = 0;// dounno, pick first one
+            window.mixerPreset.val(0);//.change();
+
+        }
      
-        const presetId = parseInt(mixerPreset.val(), 10);
+        const presetId = parseInt(window.mixerPreset.val(), 10);
         currentMixerPreset = helper.mixer.getById(presetId);
 
         MIXER_CONFIG.appliedMixerPreset = presetId; // buzz 3d chooser
@@ -159,9 +169,9 @@ function buzz_veh_sels(prev_selection) {
     });
 
     if (MIXER_CONFIG.appliedMixerPreset > -1) {
-        mixerPreset.val(MIXER_CONFIG.appliedMixerPreset).change();
+        window.mixerPreset.val(MIXER_CONFIG.appliedMixerPreset).change();
     } else {
-        mixerPreset.change();
+        window.mixerPreset.change();
     }
 
 }
@@ -513,7 +523,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         $hasFlaps.change();
 
 
-        var prev_selection = window.currentPlatform.name;
+        var prev_selection = window.currentPlatform; // prev_selection includes .id and .name attrs
         window.platformSelect = $('#platform-type');
         window.mixerPreset = $('#mixer-preset');
         buzz_veh_sels(prev_selection);
@@ -530,7 +540,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         });
 
         $('#execute-button').click(function () {
-            const presetId = parseInt(mixerPreset.val(), 10);
+            const presetId = parseInt(window.mixerPreset.val(), 10);
             currentMixerPreset = helper.mixer.getById(presetId);
 
             helper.mixer.loadServoRules(currentMixerPreset);
@@ -543,7 +553,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
         });
 
         $('#load-mixer-button').click(function () {
-            const presetId = parseInt(mixerPreset.val(), 10); // eg presetID=3 means 'Quad X' ( see model.js /  id: 3 => name: 'Quad X', )
+            const presetId = parseInt(window.mixerPreset.val(), 10); // eg presetID=3 means 'Quad X' ( see model.js /  id: 3 => name: 'Quad X', )
             currentMixerPreset = helper.mixer.getById(presetId);
 
             helper.mixer.loadServoRules(currentMixerPreset);

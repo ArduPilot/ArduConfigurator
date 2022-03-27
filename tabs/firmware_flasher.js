@@ -2,6 +2,7 @@
 //'use strict';
 
 currentPlatform = window.currentPlatform??{};// global defined elsewhere
+console.log('flasher.js platformSelect changed',currentPlatform);
 
 TABS.firmware_flasher = {};
 TABS.firmware_flasher.initialize = function (callback) {
@@ -25,7 +26,8 @@ TABS.firmware_flasher.initialize = function (callback) {
 
         function parse_hex(str, callback) {
             // parsing hex in different thread
-            var worker = new Worker('./build/hex_parser.js');
+            //var worker = new Worker('./build/hex_parser.js');
+            var worker = new Worker('./js/workers/hex_parser.js');
 
             // "callback"
             worker.onmessage = function (event) {
@@ -33,7 +35,8 @@ TABS.firmware_flasher.initialize = function (callback) {
             };
 
             // send data/string over for processing, but label it so other mgs from tother windows aren't confused
-            worker.postMessage("parse_hex",str);
+            var payload= JSON.stringify({ 'parse_hex': 'true', 'str':str});
+            worker.postMessage(payload, "*");
         }
 
         // function parseFilename(filename) {
@@ -53,14 +56,13 @@ TABS.firmware_flasher.initialize = function (callback) {
 
         // 
 
-        var prev_selection = window.currentPlatform.name;
-
+        var prev_selection = window.currentPlatform; // prev_selection includes .id and .name attrs
         window.platformSelect = $('#platform-type2'); // these two of these ,copter/plane selector, in firmware_flasher.js and maxer.js
         window.mixerPreset = $('#mixer-preset2');      // these two of these ,frame type selector, in firmware_flasher.js and maxer.js
         buzz_veh_sels(prev_selection);
 
         $('#platform-type2').click(function(){
-            console.log("selected..",currentPlatform.name); // comes from window.platformSelect, populated by mixer.js from the above -type2 gui element.
+            console.log("FIRM selected..",currentPlatform.name); // comes from window.platformSelect, populated by mixer.js from the above -type2 gui element.
             //currentPlatform.name is one of 'Multirotor' etc
             buildBoardOptions(true,true);
         });

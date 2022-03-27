@@ -311,7 +311,7 @@ APJ_protocol.prototype.read = function (readInfo) {
        // return;
     }
 
-    if (data.length > 0 )console.log('READ-->',Array.from(data)); // display as Array as its simpler
+    //if (data.length > 0 )console.log('READ-->',Array.from(data)); // display as Array as its simpler
 
     //TODO if data.length == 0 , then we got no response and should timeout sooner..
 
@@ -378,7 +378,7 @@ APJ_protocol.prototype.send = function (Array, bytes_to_read, callback) {
     // empty receive buffer before next command is out
     this.receive_buffer = [];
 
-    console.log("SEND-->",Array); 
+    //console.log("SEND-->",Array); 
 
     // send over the actual data
     connection.send(bufferOut, this.write_callback ); // we don't really care if/when its written

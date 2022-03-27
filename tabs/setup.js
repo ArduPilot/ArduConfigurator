@@ -52,15 +52,27 @@ TABS.setup.initialize = function (callback) {
             GUI_control.prototype.log("<span style='color: red; font-weight: bolder'><strong>" + chrome.i18n.getMessage("logPwmOutputDisabled") + "</strong></span>");
         }
 
-        var prev_selection = window.currentPlatform.name;
-
-        window.platformSelect = $('#platform-type'); // the drop-down on this scsreen
-
-        //if window.platformSelect
-
-        window.mixerPreset = $('#mixer-preset');
+        var prev_selection = window.currentPlatform; // prev_selection includes .id and .name attrs
+        window.platformSelect = $('#platform-type3'); // the drop-down on this scsreen
+        window.mixerPreset = $('#mixer-preset3');
         buzz_veh_sels(prev_selection); // 
 
+        $('#platform-type3').click(function(){
+            console.log("SETUP selected..",currentPlatform.name); // comes from window.platformSelect, populated by mixer.js from the above -type2 gui element.
+            //currentPlatform.name is one of 'Multirotor' etc
+            //buildBoardOptions(true,true);
+            self.initialize3D();
+        });
+
+        $('#mixer-preset3').click(function(){
+            var t = window.mixerPreset.val();
+            console.log("SETUP FRAME selected..",currentPlatform.name,t); // comes from window.platformSelect, populated by mixer.js from the above -type2 gui element.
+            //currentPlatform.name is one of 'Multirotor' etc
+            //buildBoardOptions(true,true);
+            self.initialize3D();
+        });
+
+        platformSelect.change();
 
         // initialize 3D
         self.initialize3D(); // buzz
@@ -131,7 +143,21 @@ TABS.setup.initialize = function (callback) {
             pitch_e = $('dd.pitch'),
             heading_e = $('dd.heading');
 
+
+
         function get_slow_data() {
+
+
+            // update the drop-down for the vehicle type displayed if the mav feed from the veh says we are a diff type.
+            if (MIXER_CONFIG.platformType != currentPlatform.id ) {
+                platformSelect.val(MIXER_CONFIG.platformType).change();
+                //platformSelect.change();
+                console.log("drop-down changed by MAV stream...","MIXER_CONFIG.platformType",MIXER_CONFIG.platformType,currentPlatform);
+                self.initialize3D();
+
+            } 
+
+
             // buz hack
             //CONFIG.activeSensors = 
             if (have_sensor(CONFIG.activeSensors, 'gps')) {
@@ -177,6 +203,7 @@ TABS.setup.initialize = function (callback) {
 
         helper.mspBalancedInterval.add('setup_data_pull_fast', 40, 1, get_fast_data);
         helper.mspBalancedInterval.add('setup_data_pull_slow', 250, 1, get_slow_data);
+       // helper.mspBalancedInterval.add('setup_data_realyslow', 1000, 1, get_reallyslow_data);
 
         helper.interval.add('gui_analog_update', function () {
             bat_cells_e.text(chrome.i18n.getMessage('initialSetupBatteryDetectedCellsValue', [ANALOG.cell_count]));
@@ -284,7 +311,7 @@ TABS.setup.initialize3D = function () {
        // } else {
             model_file = helper.mixer.getById(MIXER_CONFIG.appliedMixerPreset).model; // buzz 3d
 
-            console.log("model_file:", model_file);
+            console.log("initialize3D model_file:", model_file);
        // }
    // } else {
     //    model_file = 'fallback'

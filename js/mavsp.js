@@ -294,6 +294,7 @@ var heartbeat_handler =  function(message) {
     if ( FC.curr_mav_state['HEARTBEAT'].type == mavlink20.MAV_TYPE_GROUND_ROVER ) 
         MIXER_CONFIG.platformType == PLATFORM_ROVER ;
     // buzz todo add boat, etc etc here 
+    //console.log("MIXER_CONFIG.platformType",MIXER_CONFIG.platformType);
 
 
     // don't go past this point unless its the first time we've seen this sysid
