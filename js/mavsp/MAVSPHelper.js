@@ -37,49 +37,47 @@ frontend_generic_link_sender = function(mavmsg,sysid) {
     var buf = mavmsg.pack(this);  //Buffer.   this .pack is improtant, it must be done prior to json goodness below
 
     //AFTER .pack()...
-
-    var msgstr = JSON.stringify(mavmsg); 
-    //console.log("zZZZZZZZZZZZZZZZZZZ",msgstr,mavmsg)
-    var sendMAVpkt = { 'sendMAV': true, 'pkt': msgstr , 'sysid': sysid};
-    var msg = JSON.stringify(sendMAVpkt); 
-    window.opener.postMessage(msg, "*");
+    if (connection.connectionType != 'serial') {
+        var msgstr = JSON.stringify(mavmsg); 
+        //console.log("zZZZZZZZZZZZZZZZZZZ",msgstr,mavmsg)
+        var sendMAVpkt = { 'sendMAV': true, 'pkt': msgstr , 'sysid': sysid};
+        var msg = JSON.stringify(sendMAVpkt); 
+        window.opener.postMessage(msg, "*");
+    }
+    //console.log(frontend_generic_link_sender.caller);
 
 
     // the below-block is now for serial type devices in the frontend
+    if (connection.connectionType == 'serial') {
 
-    var abuf = toArrayBuffer(buf); // ArrayBuffer
-    //this.write( buf ); // already open, we hope
+        var abuf = toArrayBuffer(buf); // ArrayBuffer
+        //this.write( buf ); // already open, we hope
 
-    var message = new MspMessageClass();
-        message.code = mavmsg._id;//code
-        message.name = mavmsg._name;
-        message.messageBody = abuf;
-        message.onSend  = function (sendInfo) {  
+        var message = new MspMessageClass();
+            message.code = mavmsg._id;//code
+            message.name = mavmsg._name;
+            message.messageBody = abuf;
+            message.onSend  = function (sendInfo) {  
 
-            if ( mavmsg._name != "HEARTBEAT") {
-                //console.log("msg sent! "+message.name); brief
-                console.log("sending-->");/*console.log(message);*/console.log(mavmsg);  //verbose
+                if ( mavmsg._name != "HEARTBEAT") {
+                    //console.log("msg sent! "+message.name); brief
+                    console.log("sending-->");/*console.log(message);*/console.log(mavmsg);  //verbose
+                }
+
+                //console.log(message.caller);
+
+                // after a successful send, stop the timeout counter 
+                MSP.removeCallback(message.code);
+                //clearTimeout(this.timer);
+
+            }
+            message.onFinish  = function (sendInfo) {  
+                publicScope.freeSoftLock(); 
             }
 
-            // after a successful send, stop the timeout counter 
-            MSP.removeCallback(message.code);
-            //clearTimeout(this.timer);
+        helper.mspQueue.put(message);
 
-           }
-        message.onFinish  = function (sendInfo) {  
-            publicScope.freeSoftLock(); 
-           }
-
-       // message.onSend  = null;//callback_sent;
-        /* In case of MSP_REBOOT special procedure is required
-         */
-        //if (code == MSPCodes.MSP_SET_REBOOT || code == MSPCodes.MSP_EEPROM_WRITE) {
-        //    message.retryCounter = 10;
-       // }
-
-
-
-    helper.mspQueue.put(message);
+    }
 
 
     // this is really just part of the original send()
