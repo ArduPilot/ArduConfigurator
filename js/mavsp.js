@@ -234,7 +234,53 @@ var mag_cal_start = function ( target_system,target_component ) {
         0,1,1,0,0,0,0 // params 1-7  // as per MP's "Onboard Mag Cal" -> "Start" button in the 'Compass' screen. 
         );
     mavParserObj.send(packet); 
-    console.log('Send mag_cal_start!');
+    console.log('Send mag_cal_start! and hooking responses..');
+
+      // add temporary hook to listen for ACK, eg COMMAND_ACK command= 42006 result= 4
+    //https://github.com/mavlink/c_library_v2/blob/master/common/mavlink_msg_command_ack.h
+    var m1 = mavlinkParser.on('COMMAND_ACK', function(ack) {
+        var from = this;
+        if ( ( ack.command == mavlink20.MAV_CMD_DO_START_MAG_CAL )  && (ack.result == mavlink20.MAV_RESULT_ACCEPTED ) ) {  // MAV_RESULT_ACCEPTED=0 = success
+
+            console.log('Send mag_cal_start REPLIED - SUCCESS');
+
+            // after getting an acknowledgement in the mavlink stream, stop listening
+            mavlinkParser.off('COMMAND_ACK',m1 ); // note we pass in the uuid 'm1' here be be sure we remove the *correct* 'off' hook
+
+            $('#mag_btn').find('a').delay(2000).css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#008000');//.css('a:hover', 'purple'); // test
+            //  green=success                                                 blue                   blue                              green
+            $('#mag_btn').find('a').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
+                // Animation complete.
+                $('#mag_btn').find('a').removeAttr('style'); // removeAttr removes all attribute styling, returning it 'stock'
+              }); 
+            //  return to stock white/blue after some time                           white             blue 
+ 
+        }   
+        if ( ( ack.command == mavlink20.MAV_CMD_DO_START_MAG_CAL )  && (
+            (ack.result == mavlink20.MAV_RESULT_TEMPORARILY_REJECTED )||(ack.result == mavlink20.MAV_RESULT_DENIED)||(ack.result == mavlink20.MAV_RESULT_UNSUPPORTED )||(ack.result == mavlink20.MAV_RESULT_FAILED) 
+            ) ) {  
+            // anything like this MAV_RESULT_TEMPORARILY_REJECTED=1, MAV_RESULT_DENIED=2 , MAV_RESULT_UNSUPPORTED=3 , MAV_RESULT_FAILED=4 is failure.
+
+            console.log('Send mag_cal_start REPLIED - failure - perhaps no compass detected, or no compass installed');
+
+            // after getting an acknowledgement in the mavlink stream, stop listening
+            mavlinkParser.off('COMMAND_ACK',m1 ); // note we pass in the uuid 'm1' here be be sure we remove the *correct* 'off' hook
+
+            $('#mag_btn').find('a').delay(2000).css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#800000');//.css('a:hover', 'purple'); // test
+            //  red=fail                                                 blue                   blue                              red
+            $('#mag_btn').find('a').delay(3000).animate({backgroundColor: '#ffffff','color': '#37a8db'}, 'slow', 'swing',function() {
+                // Animation complete.
+                $('#mag_btn').find('a').removeAttr('style'); // removeAttr removes all attribute styling, returning it 'stock'
+              }); 
+            //  return to stock white/blue after some time                           white             blue 
+ 
+        }  
+        //mavlink20.MAV_RESULT_IN_PROGRESS=5
+
+        // see also MAVLINK_MSG_ID_MAG_CAL_PROGRESS and MAVLINK_MSG_ID_MAG_CAL_REPORT packets handled elsewhere
+    }
+    );
+
 }
 var mag_cal_accept = function ( target_system,target_component ) {
     if (target_system == undefined )target_system = SYSID;
