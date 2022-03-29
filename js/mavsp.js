@@ -375,7 +375,7 @@ var autopilot_version_handler = function(message){
 
 mavParserObj.on('AUTOPILOT_VERSION', autopilot_version_handler);
 
-// Attach an event handler for any valid MAVLink message - we use this mostly for unknown packet types, console.log and debug messages. 
+// Attach an event handler for any valid INCOING MAVLink message - we use this mostly for unknown packet types, console.log and debug messages. 
 // the majority of specific responses to specific messages are not handled in the 'generic' handler, but in specific message handlers for each 
 // type of message.   eg mavlinkParser1.on('HEATBEAT') is better than here, as this 'generic' block might go away at some point.
 var generic_message_handler = function(message) {
@@ -388,10 +388,10 @@ var generic_message_handler = function(message) {
     if (message.target_system == 0 ) { }
 
     // for packets arriving in from a --out target, their target sysid is NOT us...
-    if ((message.target_system < 250 ) && (message.target_system != 0) )  { 
-        /*console.log('--out sending:',message._name); */
-         mpo.send(message);   
-    } 
+    // if ((message.target_system < 250 ) && (message.target_system != 0) )  { 
+    //     /*console.log('--out sending:',message._name); */
+    //      mpo.send(message);   
+    // } 
 
     //console.log("message",message);
 
