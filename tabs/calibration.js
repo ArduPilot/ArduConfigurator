@@ -337,9 +337,9 @@ TABS.calibration.initialize = function (callback) {
 
         // respond to button press/s
         $('#opflow_btn').on('click', function () {
-            MSP.send_message(MSPCodes.MSP2_ARDUPILOT_OPFLOW_CALIBRATION, false, false, function () {
-                GUI.log(chrome.i18n.getMessage('initialSetupOpflowCalibStarted'));
-            });
+            // MSP.send_message(MSPCodes.MSP2_ARDUPILOT_OPFLOW_CALIBRATION, false, false, function () {
+            //     GUI.log(chrome.i18n.getMessage('initialSetupOpflowCalibStarted'));
+            // });
 
             var button = $(this);
 

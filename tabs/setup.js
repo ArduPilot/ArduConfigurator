@@ -96,13 +96,13 @@ TABS.setup.initialize = function (callback) {
         // button on 'setup' tab
         $('a.resetSettings').click(function () {
             if (confirm(chrome.i18n.getMessage('confirm_reset_settings'))) {
-                MSP.send_message(MSPCodes.MSP_RESET_CONF, false, false, function () {
+                //MSP.send_message(MSPCodes.MSP_RESET_CONF, false, false, function () {
                     GUI.log(chrome.i18n.getMessage('initialSetupSettingsRestored'));
     
                     GUI.tab_switch_cleanup(function () {
                         TABS.setup.initialize();
                     });
-                });
+               // });
             }
         });
 

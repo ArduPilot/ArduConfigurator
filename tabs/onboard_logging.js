@@ -17,13 +17,14 @@ TABS.onboard_logging.initialize = function (callback) {
     }
 
     if (CONFIGURATOR.connectionValid) {
-        MSP.send_message(MSPCodes.MSP_BF_CONFIG, false, false, function() {
-            MSP.send_message(MSPCodes.MSP_DATAFLASH_SUMMARY, false, false, function() {
-                MSP.send_message(MSPCodes.MSP_SDCARD_SUMMARY, false, false, function() {
-		            MSP.send_message(MSPCodes.MSP2_BLACKBOX_CONFIG, false, false, load_html);
-                });
-            });
-        });
+        // MSP.send_message(MSPCodes.MSP_BF_CONFIG, false, false, function() {
+        //     MSP.send_message(MSPCodes.MSP_DATAFLASH_SUMMARY, false, false, function() {
+        //         MSP.send_message(MSPCodes.MSP_SDCARD_SUMMARY, false, false, function() {
+		//             MSP.send_message(MSPCodes.MSP2_BLACKBOX_CONFIG, false, false, load_html);
+        //         });
+        //     });
+        // });
+        load_html();
     }
 
     function gcd(a, b) {
@@ -34,7 +35,8 @@ TABS.onboard_logging.initialize = function (callback) {
     }
 
     function save_to_eeprom() {
-        MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, reboot);
+        //MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, reboot);
+        reboot();
     }
 
     function reboot() {
@@ -252,9 +254,9 @@ TABS.onboard_logging.initialize = function (callback) {
             sdcardTimer = setTimeout(function() {
                 sdcardTimer = false;
                 if (CONFIGURATOR.connectionValid) {
-                    MSP.send_message(MSPCodes.MSP_SDCARD_SUMMARY, false, false, function() {
+                    //MSP.send_message(MSPCodes.MSP_SDCARD_SUMMARY, false, false, function() {
                         update_html();
-                    });
+                    //});
                 }
             }, 2000);
         }
@@ -292,13 +294,13 @@ TABS.onboard_logging.initialize = function (callback) {
     }
 
     function flash_update_summary(onDone) {
-        MSP.send_message(MSPCodes.MSP_DATAFLASH_SUMMARY, false, false, function() {
+       // MSP.send_message(MSPCodes.MSP_DATAFLASH_SUMMARY, false, false, function() {
             update_html();
 
             if (onDone) {
                 onDone();
             }
-        });
+        //});
     }
 
     function flash_save_begin() {
@@ -386,7 +388,8 @@ TABS.onboard_logging.initialize = function (callback) {
     function flash_erase() {
         $(".dataflash-confirm-erase").addClass('erasing');
 
-        MSP.send_message(MSPCodes.MSP_DATAFLASH_ERASE, false, false, poll_for_erase_completion);
+       // MSP.send_message(MSPCodes.MSP_DATAFLASH_ERASE, false, false, poll_for_erase_completion);
+        poll_for_erase_completion();
     }
 
     function flash_erase_cancel() {

@@ -463,7 +463,7 @@ TABS.outputs.initialize = function (callback) {
                 return;
             }
 
-            MSP.send_message(MSPCodes.MSP_RAW_IMU, false, false, null);
+            //MSP.send_message(MSPCodes.MSP_RAW_IMU, false, false, null);
             update_accel_graph();
         }, 25, true);
 
@@ -598,7 +598,7 @@ TABS.outputs.initialize = function (callback) {
                     buffer_delay = setTimeout(function () {
                         buffer = buffering_set_motor.pop();
 
-                        MSP.send_message(MSPCodes.MSP_SET_MOTOR, buffer);
+                        //MSP.send_message(MSPCodes.MSP_SET_MOTOR, buffer);
 
                         buffering_set_motor = [];
                         buffer_delay = false;

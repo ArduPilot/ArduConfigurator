@@ -226,9 +226,9 @@ TABS.adjustments.initialize = function (callback) {
             mspHelper.sendAdjustmentRanges(save_to_eeprom);
 
             function save_to_eeprom() {
-                MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
-                   // GUI.log(chrome.i18n.getMessage('adjustmentsEepromSaved'));
-                });
+                // MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
+                //    // GUI.log(chrome.i18n.getMessage('adjustmentsEepromSaved'));
+                // });
                 GUI.log(chrome.i18n.getMessage('adjustmentsEepromSaved'));
             }
 

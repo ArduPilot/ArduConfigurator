@@ -157,7 +157,7 @@ TABS.pid_tuning.initialize = function (callback) {
         });
 
         $('#resetPIDs').on('click', function(){
-            MSP.send_message(MSPCodes.MSP_SET_RESET_CURR_PID, false, false, false);
+            //MSP.send_message(MSPCodes.MSP_SET_RESET_CURR_PID, false, false, false);
 	        updateActivatedTab();
         });
 

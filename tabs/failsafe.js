@@ -152,15 +152,18 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
             }
 
             function save_failssafe_config() {
-                MSP.send_message(MSPCodes.MSP_SET_FAILSAFE_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FAILSAFE_CONFIG), false, save_bf_config);
+                //MSP.send_message(MSPCodes.MSP_SET_FAILSAFE_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FAILSAFE_CONFIG), false, save_bf_config);
+                save_bf_config();
             }
 
             function save_bf_config() {
-                MSP.send_message(MSPCodes.MSP_SET_BF_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BF_CONFIG), false, save_to_eeprom);
+                //MSP.send_message(MSPCodes.MSP_SET_BF_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BF_CONFIG), false, save_to_eeprom);
+                save_to_eeprom();
             }
 
             function save_to_eeprom() {
-                MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, reboot);
+                //MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, reboot);
+                //reboot();
             }
 
             function reboot() {

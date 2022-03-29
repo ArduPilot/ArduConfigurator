@@ -339,17 +339,20 @@ TABS.ports.initialize = function (callback) {
             SERIAL_CONFIG.ports.push(serialPort);
         });
 
-        MSP.send_message(MSPCodes.MSP2_SET_CF_SERIAL_CONFIG, mspHelper.crunch(MSPCodes.MSP2_SET_CF_SERIAL_CONFIG), false, save_to_eeprom);
+        //MSP.send_message(MSPCodes.MSP2_SET_CF_SERIAL_CONFIG, mspHelper.crunch(MSPCodes.MSP2_SET_CF_SERIAL_CONFIG), false, save_to_eeprom);
+        save_to_eeprom();
         
         function save_to_eeprom() {
-            MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, on_saved_handler);
+            //MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, on_saved_handler);
+            on_saved_handler();
         }
 
         function on_saved_handler() {
             GUI.log(chrome.i18n.getMessage('configurationEepromSaved'));
 
             GUI.tab_switch_cleanup(function() {
-                MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false, on_reboot_success_handler);
+                //MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false, on_reboot_success_handler);
+                on_reboot_success_handler();
             });
         }
 

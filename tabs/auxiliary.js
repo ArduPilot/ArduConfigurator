@@ -312,9 +312,9 @@ TABS.auxiliary.initialize = function (callback) {
             }
 
             function save_to_eeprom() {
-                MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
-                    GUI.log(chrome.i18n.getMessage('auxiliaryEepromSaved'));
-                });
+                // MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
+                //     GUI.log(chrome.i18n.getMessage('auxiliaryEepromSaved'));
+                // });
             }
         });
 

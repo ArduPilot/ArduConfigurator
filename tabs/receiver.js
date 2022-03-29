@@ -302,15 +302,18 @@ TABS.receiver.initialize = function (callback) {
             MISC.rssi_channel = parseInt($('select[name="rssi_channel"]').val());
 
             function save_rc_map() {
-                MSP.send_message(MSPCodes.MSP_SET_RX_MAP, mspHelper.crunch(MSPCodes.MSP_SET_RX_MAP), false, save_misc);
+                //MSP.send_message(MSPCodes.MSP_SET_RX_MAP, mspHelper.crunch(MSPCodes.MSP_SET_RX_MAP), false, save_misc);
+                save_misc();
             }
 
             function save_misc() {
-                MSP.send_message(MSPCodes.MSP_SET_MISC, mspHelper.crunch(MSPCodes.MSP_SET_MISC), false, save_rc_configs);
+                //MSP.send_message(MSPCodes.MSP_SET_MISC, mspHelper.crunch(MSPCodes.MSP_SET_MISC), false, save_rc_configs);
+                save_rc_configs();
             }
 
             function save_rc_configs() {
-                MSP.send_message(MSPCodes.MSP_SET_RC_DEADBAND, mspHelper.crunch(MSPCodes.MSP_SET_RC_DEADBAND), false, storeSettings);
+                //MSP.send_message(MSPCodes.MSP_SET_RC_DEADBAND, mspHelper.crunch(MSPCodes.MSP_SET_RC_DEADBAND), false, storeSettings);
+                storeSettings();
             }
 
             function storeSettings() {
@@ -318,19 +321,20 @@ TABS.receiver.initialize = function (callback) {
             }
 
             function save_to_eeprom() {
-                MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
+                //MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
                     GUI.log(chrome.i18n.getMessage('receiverEepromSaved'));
 
                     GUI.tab_switch_cleanup(function () {
-                        MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false, function () {
+                        //MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false, function () {
                             GUI.log(chrome.i18n.getMessage('deviceRebooting'));
                             GUI.handleReconnect($('.tab_receiver a'));
-                        });
+                        //});
                     });
-                });
+                //});
             }
 
-            MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE), false, save_rc_map);
+            //MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE, mspHelper.crunch(MSPCodes.MSPV2_ARDUPILOT_SET_RATE_PROFILE), false, save_rc_map);
+            save_rc_map();
         });
 
         $("a.sticks").click(function () {

@@ -434,7 +434,7 @@ TABS.sensors.initialize = function (callback) {
                         return;
                     }
 
-                    MSP.send_message(MSPCodes.MSP_RAW_IMU, false, false, null);
+                    //MSP.send_message(MSPCodes.MSP_RAW_IMU, false, false, null);
                     update_imu_graphs();
                 }, fastest, true);
             }
@@ -450,7 +450,8 @@ TABS.sensors.initialize = function (callback) {
                         return;
                     }
 
-                    MSP.send_message(MSPCodes.MSP_ALTITUDE, false, false, update_altitude_graph);
+                    //MSP.send_message(MSPCodes.MSP_ALTITUDE, false, false, update_altitude_graph);
+                    update_altitude_graph();
                 }, rates.baro, true);
             }
 
@@ -465,7 +466,8 @@ TABS.sensors.initialize = function (callback) {
                         return;
                     }
 
-                    MSP.send_message(MSPCodes.MSP_SONAR, false, false, update_sonar_graphs);
+                    //MSP.send_message(MSPCodes.MSP_SONAR, false, false, update_sonar_graphs);
+                    update_sonar_graphs();
                 }, rates.sonar, true);
             }
 
@@ -480,7 +482,8 @@ TABS.sensors.initialize = function (callback) {
                         return;
                     }
 
-                    MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_AIR_SPEED, false, false, update_airspeed_graphs);
+                    //MSP.send_message(MSPCodes.MSPV2_ARDUPILOT_AIR_SPEED, false, false, update_airspeed_graphs);
+                    update_airspeed_graphs();
                 }, rates.airspeed, true);
             }
 
@@ -495,7 +498,8 @@ TABS.sensors.initialize = function (callback) {
                         return;
                     }
 
-                    MSP.send_message(MSPCodes.MSP2_ARDUPILOT_TEMPERATURES, false, false, update_temperature_graphs);
+                    //MSP.send_message(MSPCodes.MSP2_ARDUPILOT_TEMPERATURES, false, false, update_temperature_graphs);
+                    update_temperature_graphs();
                 }, 1000, true);
             }
 
@@ -510,7 +514,8 @@ TABS.sensors.initialize = function (callback) {
                         return;
                     }
 
-                    MSP.send_message(MSPCodes.MSP2_ARDUPILOT_DEBUG, false, false, update_debug_graphs);
+                    //MSP.send_message(MSPCodes.MSP2_ARDUPILOT_DEBUG, false, false, update_debug_graphs);
+                    update_debug_graphs();
                 }, rates.debug, true);
             }
 
