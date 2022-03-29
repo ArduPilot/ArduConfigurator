@@ -696,15 +696,15 @@ var MSP = {
             break;
         case MSPCodes.MSPV2_ARDUPILOT_STATUS:
 
-            //heartbeat isn't realy but its sent often enough 
-            var heartbeat = new mavlink20.messages.heartbeat(); 
-            heartbeat.custom_mode = 963497464; // fieldtype: uint32_t  isarray: False 
-            heartbeat.type = 17; // fieldtype: uint8_t  isarray: False 
-            heartbeat.autopilot = 84; // fieldtype: uint8_t  isarray: False 
-            heartbeat.base_mode = 151; // fieldtype: uint8_t  isarray: False 
-            heartbeat.system_status = 218; // fieldtype: uint8_t  isarray: False 
-            heartbeat.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
-            mavParserObj.send(heartbeat);
+            // //heartbeat isn't realy but its sent often enough 
+            // var heartbeat = new mavlink20.messages.heartbeat(); 
+            // heartbeat.custom_mode = 963497464; // fieldtype: uint32_t  isarray: False 
+            // heartbeat.type = 17; // fieldtype: uint8_t  isarray: False 
+            // heartbeat.autopilot = 84; // fieldtype: uint8_t  isarray: False 
+            // heartbeat.base_mode = 151; // fieldtype: uint8_t  isarray: False 
+            // heartbeat.system_status = 218; // fieldtype: uint8_t  isarray: False 
+            // heartbeat.mavlink_version = 3; // fieldtype: uint8_t  isarray: False 
+            // mavParserObj.send(heartbeat);
 
             // buzz todo
             break;
