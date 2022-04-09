@@ -1796,6 +1796,7 @@ var mspHelper = (function (gui) {
                             data.getInt8(i),
                             data.getInt8(i + 1),
                             data.getInt16(i + 2, true),
+                            0,
                             data.getInt8(i + 4)
                         ));
                     }
@@ -1812,6 +1813,7 @@ var mspHelper = (function (gui) {
                             data.getInt8(i + 1),
                             data.getInt16(i + 2, true),
                             data.getInt8(i + 4),
+                            0,
                             data.getInt8(i + 5)
                         ));
                     }
@@ -3596,26 +3598,26 @@ var mspHelper = (function (gui) {
 
         function sendMixer() {
 
-            var buffer = [];
+            // var buffer = [];
 
-            // send one at a time, with index
+            // // send one at a time, with index
 
-            var servoRule = SERVO_RULES.get()[servoIndex];
+            // var servoRule = SERVO_RULES.get()[servoIndex];
 
-            //ARDUPILOT 2.2 uses different MSP frame
-            buffer.push(servoIndex);
-            buffer.push(servoRule.getTarget());
-            buffer.push(servoRule.getInput());
-            buffer.push(lowByte(servoRule.getRate()));
-            buffer.push(highByte(servoRule.getRate()));
-            buffer.push(servoRule.getSpeed());
-            buffer.push(servoRule.getConditionId());
+            // //ARDUPILOT 2.2 uses different MSP frame
+            // buffer.push(servoIndex);
+            // buffer.push(servoRule.getTarget());
+            // buffer.push(servoRule.getInput());
+            // buffer.push(lowByte(servoRule.getRate()));
+            // buffer.push(highByte(servoRule.getRate()));
+            // buffer.push(servoRule.getSpeed());
+            // buffer.push(servoRule.getConditionId());
 
-            // prepare for next iteration
-            servoIndex++;
-            if (servoIndex == SERVO_RULES.getServoRulesCount()) { //This is the last rule. Not pretty, but we have to send all rules
-                nextFunction = onCompleteCallback;
-            }
+            // // prepare for next iteration
+            // servoIndex++;
+            // if (servoIndex == SERVO_RULES.getServoRulesCount()) { //This is the last rule. Not pretty, but we have to send all rules
+            //     nextFunction = onCompleteCallback;
+            // }
             //MSP.send_message(MSPCodes.MSP2_ARDUPILOT_SET_SERVO_MIXER, buffer, false, null);
             nextFunction();
         }

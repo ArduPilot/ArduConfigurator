@@ -50,7 +50,7 @@ let ServoMixerRuleCollection = function () {
 
     self.inflate = function () {
         while (self.hasFreeSlots()) {
-            self.put(new ServoMixRule(0, 0, 0, 0));
+            self.put(new ServoMixRule(0, 0, 0, 0, 0));
         }
     };
 

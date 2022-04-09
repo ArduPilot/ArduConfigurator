@@ -3415,13 +3415,14 @@
         "message": "Fixed Value (µs)"
     },
     "weight": {
-       // "message": "Weight (%)"
         "message": "MIN-PWM"
     },
+    "trim": {
+         "message": "TRIM-PWM"
+     },
     "speed": {
-       // "message": "Speed (10µs/s)"
-        "message": "MAX-PWM"
-    },
+         "message": "MAX-PWM"
+     },
     "mixerPresetTitle": {
        // "message": "Mixer preset"
        "message": "Optionally choose one of these common vehicle layouts? ( then click Show Suggested Layout)"

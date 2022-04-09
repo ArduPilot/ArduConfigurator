@@ -321,6 +321,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
                     <td><select class="mix-rule-input"></select></td>\
                     <td class="mixer-fixed-value-col"><input type="number" class="mix-rule-fixed-value" min="875" max="2125" disabled /></td> \
                     <td><input type="number" class="mix-rule-rate" step="1" min="975" max="2025" /></td>\
+                    <td><input type="number" class="mix-rule-trim" step="1" min="975" max="2025" /></td>\
                     <td><input type="number" class="mix-rule-speed" step="1" min="975" max="2025" /></td>\
                     <td class="mixer-table__condition"></td>\
                     <td><span class="btn default_btn narrow red"><a href="#" data-role="role-servo-delete" data-i18n="servoMixerDelete"></a></span></td>\
@@ -351,14 +352,19 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
                 });
 
                 $row.find(".mix-rule-rate").val(servoRule.getRate()).change(function () {
-                    //servoRule.setRate($(this).val());
-                    $row.find(".mix-rule-fixed-value").val(mapServoWeightToFixedValue($(this).val()));
+                    servoRule.setRate($(this).val());
+                    //$row.find(".mix-rule-fixed-value").val(mapServoWeightToFixedValue($(this).val()));
+                });
+
+                $row.find(".mix-rule-trim").val(servoRule.getTrim()).change(function () {
+                    servoRule.setTrim($(this).val());
+                    //$row.find(".mix-rule-fixed-value").val(mapServoWeightToFixedValue($(this).val()));
                 });
 
                 $row.find(".mix-rule-fixed-value").val(mapServoWeightToFixedValue($row.find(".mix-rule-rate").val()));
 
                 $row.find(".mix-rule-speed").val(servoRule.getSpeed()).change(function () {
-                    //servoRule.setSpeed($(this).val());
+                    servoRule.setSpeed($(this).val());
                 });
 
                 $row.find("[data-role='role-servo-delete']").attr("data-index", servoRuleIndex);
@@ -367,7 +373,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
             }
         }
 
-        let rate_inputs = $('.mix-rule-rate');
+       // let rate_inputs = $('.mix-rule-rate');
        // rate_inputs.attr("min", 1000);
        // rate_inputs.attr("max", 2000);
 
@@ -622,7 +628,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
 
         $("[data-role='role-servo-add']").click(function () {
             if (SERVO_RULES.hasFreeSlots()) {
-                SERVO_RULES.put(new ServoMixRule(0, 0, 1000, 2000));
+                SERVO_RULES.put(new ServoMixRule(0, 0, 1000, 1500, 2000));
                 renderServoMixRules();
                 renderOutputMapping();
             }
@@ -630,14 +636,64 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
 
         $("[data-role='role-motor-add']").click(function () {
             if (MOTOR_RULES.hasFreeSlots()) {
-                MOTOR_RULES.put(new MotorMixRule(1, 0, 1000, 2000));
+                MOTOR_RULES.put(new MotorMixRule(1, 0, 1000, 1500, 2000));
                 renderMotorMixRules();
                 renderOutputMapping();
             }
         });
 
         $("[data-role='role-logic-conditions-open']").click(function () {
-            LOGIC_CONDITIONS.open();
+            //LOGIC_CONDITIONS.open();
+
+            // buzz todo save-servo-outputs now...
+
+            console.log("saving servo setup to verhicle now..") // triggered by 'Save Servo Layout now' button
+
+            // get the rule/s as shown in GUI, and push to
+            const rules = SERVO_RULES.get();
+            for (let servoRuleIndex in rules) {
+                if (rules.hasOwnProperty(servoRuleIndex)) {
+                    const servoRule = rules[servoRuleIndex];
+
+                    var servonum =  servoRule.getTarget();// todo buzz rename getTarget etc
+                    var servofunc =  servoRule.getInput();
+                    var servomin =  servoRule.getRate();
+                    var servotrim =  servoRule.getTrim();// named correctly
+                    var servomax =  servoRule.getSpeed();
+                    
+                    // set SERVO1_FUNCTION	
+                    var paramname = 'SERVO'+servonum+'_FUNCTION';
+                    var paramvalue = servofunc;
+                    console.log("setting param:"+paramname+" to:"+paramvalue);
+                    ParamsObj.set(paramname,paramvalue,6000); // worst case a few secs 
+
+                    // set SERVO1_MIN	
+                    var paramname = 'SERVO'+servonum+'_MIN';
+                    var paramvalue = servomin;
+                    console.log("setting param:"+paramname+" to:"+paramvalue);
+                    ParamsObj.set(paramname,paramvalue,6000); // worst case a few secs 
+
+                    // set SERVO1_TRIM	
+                    var paramname = 'SERVO'+servonum+'_TRIM';
+                    var paramvalue = servotrim;
+                    console.log("setting param:"+paramname+" to:"+paramvalue);
+                    ParamsObj.set(paramname,paramvalue,6000); // worst case a few secs  
+
+                    // set SERVO1_MAX	
+                    var paramname = 'SERVO'+servonum+'_MAX';
+                    var paramvalue = servomax;
+                    console.log("setting param:"+paramname+" to:"+paramvalue);
+                    ParamsObj.set(paramname,paramvalue,6000); // worst case a few secs 
+
+
+                    //if (FC.getServoMixInputNames()[servoRule.getInput()] === '...') {
+                        //$fixedValueCol.show();
+                       // return;
+                    //}
+                }
+            }
+
+
         });
 
         $('#save-button').click(saveAndReboot);

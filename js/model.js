@@ -239,10 +239,10 @@ const mixerList = [
             // new MotorMixRule(1.0, 1.0, -0.666667, 0.0),    // LEFT
         ],
         servoMixer: [
-            new ServoMixRule(1 , SERVO_Motor1, 1000, 2000),
-            new ServoMixRule(2 , SERVO_Motor2, 1000, 2000),
-            new ServoMixRule(4 , SERVO_Motor4, 1000, 2000),
-            new ServoMixRule(7,  TailTiltServo,1000, 2000), // aka Motor7 aka 39
+            new ServoMixRule(1 , SERVO_Motor1, 1000, 1500, 2000),
+            new ServoMixRule(2 , SERVO_Motor2, 1000, 1500, 2000),
+            new ServoMixRule(4 , SERVO_Motor4, 1000, 1500, 2000),
+            new ServoMixRule(7,  TailTiltServo,1000, 1500, 2000), // aka Motor7 aka 39
         ]
     },            // 1
     {
@@ -262,10 +262,10 @@ const mixerList = [
             // new MotorMixRule(1.0, 1.0, -1.0, -1.0),          // FRONT_L
         ],
         servoMixer: [
-            new ServoMixRule(1 , SERVO_Motor1, 1000, 2000),
-            new ServoMixRule(2 , SERVO_Motor2, 1000, 2000),
-            new ServoMixRule(3 , SERVO_Motor3, 1000, 2000),
-            new ServoMixRule(4,  SERVO_Motor4, 1000, 2000), 
+            new ServoMixRule(1 , SERVO_Motor1, 1000, 1500, 2000),
+            new ServoMixRule(2 , SERVO_Motor2, 1000, 1500, 2000),
+            new ServoMixRule(3 , SERVO_Motor3, 1000, 1500, 2000),
+            new ServoMixRule(4,  SERVO_Motor4, 1000, 1500, 2000), 
         ]
     },               // 3
     {
@@ -285,10 +285,10 @@ const mixerList = [
             // new MotorMixRule(1.0, 0.0, -1.0, -1.0),         // FRONT
         ],
         servoMixer: [
-            new ServoMixRule(1 , SERVO_Motor1, 1000, 2000),
-            new ServoMixRule(2 , SERVO_Motor2, 1000, 2000),
-            new ServoMixRule(3 , SERVO_Motor3, 1000, 2000),
-            new ServoMixRule(4,  SERVO_Motor4, 1000, 2000), 
+            new ServoMixRule(1 , SERVO_Motor1, 1000, 1500, 2000),
+            new ServoMixRule(2 , SERVO_Motor2, 1000, 1500, 2000),
+            new ServoMixRule(3 , SERVO_Motor3, 1000, 1500, 2000),
+            new ServoMixRule(4,  SERVO_Motor4, 1000, 1500, 2000), 
         ]
     },               // 2
     // {
@@ -332,12 +332,12 @@ const mixerList = [
             // new MotorMixRule(1.0, 1.0, -0.666667, 1.0),     // UNDER_LEFT
         ],
         servoMixer: [
-            new ServoMixRule(1 , SERVO_Motor1, 1000, 2000),
-            new ServoMixRule(2 , SERVO_Motor2, 1000, 2000),
-            new ServoMixRule(3 , SERVO_Motor3, 1000, 2000),
-            new ServoMixRule(4,  SERVO_Motor4, 1000, 2000), 
-            new ServoMixRule(5 , SERVO_Motor5, 1000, 2000),
-            new ServoMixRule(6,  SERVO_Motor6, 1000, 2000), 
+            new ServoMixRule(1 , SERVO_Motor1, 1000, 1500, 2000),
+            new ServoMixRule(2 , SERVO_Motor2, 1000, 1500, 2000),
+            new ServoMixRule(3 , SERVO_Motor3, 1000, 1500, 2000),
+            new ServoMixRule(4,  SERVO_Motor4, 1000, 1500, 2000), 
+            new ServoMixRule(5 , SERVO_Motor5, 1000, 1500, 2000),
+            new ServoMixRule(6,  SERVO_Motor6, 1000, 1500, 2000), 
         ]
     },                           // 6
     {
@@ -359,12 +359,12 @@ const mixerList = [
             // new MotorMixRule(1.0, 0.0, 1.0, -1.0),          // REAR
         ],
         servoMixer: [
-            new ServoMixRule(1 , SERVO_Motor1, 1000, 2000),
-            new ServoMixRule(2 , SERVO_Motor2, 1000, 2000),
-            new ServoMixRule(3 , SERVO_Motor3, 1000, 2000),
-            new ServoMixRule(4,  SERVO_Motor4, 1000, 2000), 
-            new ServoMixRule(5 , SERVO_Motor5, 1000, 2000),
-            new ServoMixRule(6,  SERVO_Motor6, 1000, 2000), 
+            new ServoMixRule(1 , SERVO_Motor1, 1000, 1500, 2000),
+            new ServoMixRule(2 , SERVO_Motor2, 1000, 1500, 2000),
+            new ServoMixRule(3 , SERVO_Motor3, 1000, 1500, 2000),
+            new ServoMixRule(4,  SERVO_Motor4, 1000, 1500, 2000), 
+            new ServoMixRule(5 , SERVO_Motor5, 1000, 1500, 2000),
+            new ServoMixRule(6,  SERVO_Motor6, 1000, 1500, 2000), 
         ]
     },               // 7
     {
@@ -380,9 +380,9 @@ const mixerList = [
             //new MotorMixRule(1.0, 0.0, 0.0, 0.0),
         ],
         servoMixer: [
-            new ServoMixRule(1                 , SERVO_Throttle, 1000, 2000),
-            new ServoMixRule(3                 , SERVO_ElevonLeft,  1000, 2000),
-            new ServoMixRule(4                 , SERVO_ElevonRight, 1000, 2000),
+            new ServoMixRule(1                 , SERVO_Throttle, 1000, 1500, 2000),
+            new ServoMixRule(3                 , SERVO_ElevonLeft,  1000, 1500, 2000),
+            new ServoMixRule(4                 , SERVO_ElevonRight, 1000, 1500, 2000),
         ]
     },     // 8
     {
@@ -398,11 +398,11 @@ const mixerList = [
             // new MotorMixRule(1.0, 0.0, 0.0, -0.1)
         ],
         servoMixer: [
-            new ServoMixRule(1                 , SERVO_ThrottleLeft, 1000, 2000),
-           // new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 2000),
-            new ServoMixRule(2                 , SERVO_ThrottleRight, 1000, 2000),
-            new ServoMixRule(3                 , SERVO_ElevonLeft,  1000, 2000),
-            new ServoMixRule(4                 , SERVO_ElevonRight, 1000, 2000),
+            new ServoMixRule(1                 , SERVO_ThrottleLeft, 1000, 1500, 2000),
+           // new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 1500, 2000),
+            new ServoMixRule(2                 , SERVO_ThrottleRight, 1000, 1500, 2000),
+            new ServoMixRule(3                 , SERVO_ElevonLeft,  1000, 1500, 2000),
+            new ServoMixRule(4                 , SERVO_ElevonRight, 1000, 1500, 2000),
         ]
     },       // 9
     {
@@ -424,12 +424,12 @@ const mixerList = [
             // new MotorMixRule(1.0, 1.0, 0.0, 1.0),     // LEFT
         ],
         servoMixer: [
-            new ServoMixRule(1 , SERVO_Motor1, 1000, 2000),
-            new ServoMixRule(2 , SERVO_Motor2, 1000, 2000),
-            new ServoMixRule(3 , SERVO_Motor3, 1000, 2000),
-            new ServoMixRule(4,  SERVO_Motor4, 1000, 2000), 
-            new ServoMixRule(5 , SERVO_Motor5, 1000, 2000),
-            new ServoMixRule(6,  SERVO_Motor6, 1000, 2000), 
+            new ServoMixRule(1 , SERVO_Motor1, 1000, 1500, 2000),
+            new ServoMixRule(2 , SERVO_Motor2, 1000, 1500, 2000),
+            new ServoMixRule(3 , SERVO_Motor3, 1000, 1500, 2000),
+            new ServoMixRule(4,  SERVO_Motor4, 1000, 1500, 2000), 
+            new ServoMixRule(5 , SERVO_Motor5, 1000, 1500, 2000),
+            new ServoMixRule(6,  SERVO_Motor6, 1000, 1500, 2000), 
         ]
     },                  // 10
     {
@@ -453,14 +453,14 @@ const mixerList = [
             // new MotorMixRule(1.0, 1.0, -1.0, 1.0),          // UNDER_FRONT_L
         ],
         servoMixer: [
-            new ServoMixRule(1 , SERVO_Motor1, 1000, 2000),
-            new ServoMixRule(2 , SERVO_Motor2, 1000, 2000),
-            new ServoMixRule(3 , SERVO_Motor3, 1000, 2000),
-            new ServoMixRule(4,  SERVO_Motor4, 1000, 2000), 
-            new ServoMixRule(5 , SERVO_Motor5, 1000, 2000),
-            new ServoMixRule(6,  SERVO_Motor6, 1000, 2000), 
-            new ServoMixRule(7 , SERVO_Motor7, 1000, 2000),
-            new ServoMixRule(8,  SERVO_Motor8, 1000, 2000), 
+            new ServoMixRule(1 , SERVO_Motor1, 1000, 1500, 2000),
+            new ServoMixRule(2 , SERVO_Motor2, 1000, 1500, 2000),
+            new ServoMixRule(3 , SERVO_Motor3, 1000, 1500, 2000),
+            new ServoMixRule(4,  SERVO_Motor4, 1000, 1500, 2000), 
+            new ServoMixRule(5 , SERVO_Motor5, 1000, 1500, 2000),
+            new ServoMixRule(6,  SERVO_Motor6, 1000, 1500, 2000), 
+            new ServoMixRule(7 , SERVO_Motor7, 1000, 1500, 2000),
+            new ServoMixRule(8,  SERVO_Motor8, 1000, 1500, 2000), 
         ]
     },             // 11
     {
@@ -484,14 +484,14 @@ const mixerList = [
             // new MotorMixRule(1.0, 1.0, 0.0, -1.0),              // LEFT
         ],
         servoMixer: [
-            new ServoMixRule(1 , SERVO_Motor1, 1000, 2000),
-            new ServoMixRule(2 , SERVO_Motor2, 1000, 2000),
-            new ServoMixRule(3 , SERVO_Motor3, 1000, 2000),
-            new ServoMixRule(4,  SERVO_Motor4, 1000, 2000), 
-            new ServoMixRule(5 , SERVO_Motor5, 1000, 2000),
-            new ServoMixRule(6,  SERVO_Motor6, 1000, 2000), 
-            new ServoMixRule(7 , SERVO_Motor7, 1000, 2000),
-            new ServoMixRule(8,  SERVO_Motor8, 1000, 2000), 
+            new ServoMixRule(1 , SERVO_Motor1, 1000, 1500, 2000),
+            new ServoMixRule(2 , SERVO_Motor2, 1000, 1500, 2000),
+            new ServoMixRule(3 , SERVO_Motor3, 1000, 1500, 2000),
+            new ServoMixRule(4,  SERVO_Motor4, 1000, 1500, 2000), 
+            new ServoMixRule(5 , SERVO_Motor5, 1000, 1500, 2000),
+            new ServoMixRule(6,  SERVO_Motor6, 1000, 1500, 2000), 
+            new ServoMixRule(7 , SERVO_Motor7, 1000, 1500, 2000),
+            new ServoMixRule(8,  SERVO_Motor8, 1000, 1500, 2000), 
         ]
     },     // 12
     {
@@ -516,14 +516,14 @@ const mixerList = [
             // new MotorMixRule(1.0, 1.0, 0.414178, -1.0),      // MIDREAR_L
         ],
         servoMixer: [
-            new ServoMixRule(1 , SERVO_Motor1, 1000, 2000),
-            new ServoMixRule(2 , SERVO_Motor2, 1000, 2000),
-            new ServoMixRule(3 , SERVO_Motor3, 1000, 2000),
-            new ServoMixRule(4,  SERVO_Motor4, 1000, 2000), 
-            new ServoMixRule(5 , SERVO_Motor5, 1000, 2000),
-            new ServoMixRule(6,  SERVO_Motor6, 1000, 2000), 
-            new ServoMixRule(7 , SERVO_Motor7, 1000, 2000),
-            new ServoMixRule(8,  SERVO_Motor8, 1000, 2000), 
+            new ServoMixRule(1 , SERVO_Motor1, 1000, 1500, 2000),
+            new ServoMixRule(2 , SERVO_Motor2, 1000, 1500, 2000),
+            new ServoMixRule(3 , SERVO_Motor3, 1000, 1500, 2000),
+            new ServoMixRule(4,  SERVO_Motor4, 1000, 1500, 2000), 
+            new ServoMixRule(5 , SERVO_Motor5, 1000, 1500, 2000),
+            new ServoMixRule(6,  SERVO_Motor6, 1000, 1500, 2000), 
+            new ServoMixRule(7 , SERVO_Motor7, 1000, 1500, 2000),
+            new ServoMixRule(8,  SERVO_Motor8, 1000, 1500, 2000), 
         ]
     },     // 13
     {
@@ -540,11 +540,11 @@ const mixerList = [
             //new MotorMixRule(1.0, 0.0, 0.0, 0.0),
         ],
         servoMixer: [
-            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 2000),
-            new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 2000),
-            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 2000),
-            new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 2000),
-           // new ServoMixRule(5, SERVO_FlapAuto,    1000, 2000),
+            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 1500, 2000),
+            new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 1500, 2000),
+            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 1500, 2000),
+            new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 1500, 2000),
+           // new ServoMixRule(5, SERVO_FlapAuto,    1000, 1500, 2000),
         ]
     },           // 14
     {
@@ -592,15 +592,15 @@ const mixerList = [
             // new MotorMixRule(1.0, 1.0, -1.0, -0.0),        // FRONT_L
         ],
         servoMixer: [ // AETR surfaces too
-        new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 2000),
-        new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 2000),
-        new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 2000),
-        new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 2000),
+        new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 1500, 2000),
+        new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 1500, 2000),
+        new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 1500, 2000),
+        new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 1500, 2000),
 
-        new ServoMixRule(5 , SERVO_Motor5, 1000, 2000),
-        new ServoMixRule(6,  SERVO_Motor6, 1000, 2000), 
-        new ServoMixRule(7 , SERVO_Motor7, 1000, 2000),
-        new ServoMixRule(8,  SERVO_Motor8, 1000, 2000), 
+        new ServoMixRule(5 , SERVO_Motor5, 1000, 1500, 2000),
+        new ServoMixRule(6,  SERVO_Motor6, 1000, 1500, 2000), 
+        new ServoMixRule(7 , SERVO_Motor7, 1000, 1500, 2000),
+        new ServoMixRule(8,  SERVO_Motor8, 1000, 1500, 2000), 
 
         ]
     },  // 20    
@@ -624,17 +624,17 @@ const mixerList = [
             // new MotorMixRule(1.0, 1.0, -1.0, -0.0),        // FRONT_L
         ],
         servoMixer: [ // AETR surfaces too
-        new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 2000),
-        new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 2000),
-        //new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 2000),
-        new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 2000),
+        new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 1500, 2000),
+        new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 1500, 2000),
+        //new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 1500, 2000),
+        new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 1500, 2000),
 
-        new ServoMixRule(5 , SERVO_Motor5, 1000, 2000),
-        new ServoMixRule(6,  SERVO_Motor6, 1000, 2000), 
-        new ServoMixRule(7 , SERVO_Motor7, 1000, 2000),
-        new ServoMixRule(8,  SERVO_Motor8, 1000, 2000), 
+        new ServoMixRule(5 , SERVO_Motor5, 1000, 1500, 2000),
+        new ServoMixRule(6,  SERVO_Motor6, 1000, 1500, 2000), 
+        new ServoMixRule(7 , SERVO_Motor7, 1000, 1500, 2000),
+        new ServoMixRule(8,  SERVO_Motor8, 1000, 1500, 2000), 
 
-        new ServoMixRule(9  , SERVO_TiltMotorsFront, 1000, 2000),
+        new ServoMixRule(9  , SERVO_TiltMotorsFront, 1000, 1500, 2000),
 
         // buzz todo need to set  set Q_FRAME_CLASS and Q_FRAME_TYPE . Q_FRAME_CLASS can be:
         // 1 for quad
@@ -686,10 +686,10 @@ const mixerList = [
     //         new MotorMixRule(1.0, 1.0, -1.0, -0.0),        // FRONT_L
     //     ],
     //     servoMixer: [ // AETR surfaces too
-    //         new ServoMixRule(SERVO_ELEVATOR_NUM,    INPUT_STABILIZED_PITCH, 1000, 2000),
-    //         new ServoMixRule(SERVO_THROTTLE_NUM, INPUT_STABILIZED_ROLL,  1000, 2000),
-    //         new ServoMixRule(SERVO_RUDDER_NUM, INPUT_STABILIZED_ROLL,  1000, 2000),
-    //         new ServoMixRule(SERVO_FLAPPERON_1_NUM,      INPUT_STABILIZED_YAW,   1000, 2000),
+    //         new ServoMixRule(SERVO_ELEVATOR_NUM,    INPUT_STABILIZED_PITCH, 1000, 1500, 2000),
+    //         new ServoMixRule(SERVO_THROTTLE_NUM, INPUT_STABILIZED_ROLL,  1000, 1500, 2000),
+    //         new ServoMixRule(SERVO_RUDDER_NUM, INPUT_STABILIZED_ROLL,  1000, 1500, 2000),
+    //         new ServoMixRule(SERVO_FLAPPERON_1_NUM,      INPUT_STABILIZED_YAW,   1000, 1500, 2000),
     //     ]
     // },  // 22
     {
@@ -717,11 +717,11 @@ const mixerList = [
             //new MotorMixRule(1.0, 0.0, 0.0, 0.0),
         ],
         servoMixer: [
-            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 2000),
-            new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 2000),
-            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 2000),
-            new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 2000),
-            new ServoMixRule(6, SERVO_FlapAuto,    1000, 2000),
+            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 1500, 2000),
+            new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 1500, 2000),
+            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 1500, 2000),
+            new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 1500, 2000),
+            new ServoMixRule(6, SERVO_FlapAuto,    1000, 1500, 2000),
         ]
     },           // 24
     // {
@@ -761,12 +761,12 @@ const mixerList = [
           //  new MotorMixRule(1.0, 0.0, 0.0, -0.3)
         ],
         servoMixer: [
-            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 2000),
-            new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 2000),
-            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_ThrottleLeft, 1000, 2000),
-            new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 2000),
-            //new ServoMixRule(5               , SERVO_FlapAuto,    1000, 2000),
-            new ServoMixRule(5               , SERVO_ThrottleRight, 1000, 2000),
+            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 1500, 2000),
+            new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 1500, 2000),
+            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_ThrottleLeft, 1000, 1500, 2000),
+            new ServoMixRule(SERVO_RUDDER_NUM, SERVO_Rudder, 1000, 1500, 2000),
+            //new ServoMixRule(5               , SERVO_FlapAuto,    1000, 1500, 2000),
+            new ServoMixRule(5               , SERVO_ThrottleRight, 1000, 1500, 2000),
         ]
     }, // end 27
     {
@@ -781,11 +781,11 @@ const mixerList = [
             new MotorMixRule(1.0, 0.0, 0.0, 0.0),
         ],
         servoMixer: [
-            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 2000),
-            new ServoMixRule(2                , SERVO_Aileron, 1000, 2000),
-            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 2000),
-            new ServoMixRule(4               , SERVO_VTailLeft, 1000, 2000),
-            new ServoMixRule(5               , SERVO_VTailRight,   1000, 2000),
+            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 1500, 2000),
+            new ServoMixRule(2                , SERVO_Aileron, 1000, 1500, 2000),
+            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 1500, 2000),
+            new ServoMixRule(4               , SERVO_VTailLeft, 1000, 1500, 2000),
+            new ServoMixRule(5               , SERVO_VTailRight,   1000, 1500, 2000),
 
         ]
     }, // end 28
@@ -801,11 +801,11 @@ const mixerList = [
             new MotorMixRule(1.0, 0.0, 0.0, 0.0),
         ],
         servoMixer: [
-            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 2000),
-            new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 2000),
-            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 2000),
-            new ServoMixRule(SERVO_RUDDER_NUM, SERVO_VTailLeft, 1000, 2000),
-            new ServoMixRule(5               , SERVO_VTailRight,   1000, 2000),
+            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 1500, 2000),
+            new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 1500, 2000),
+            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 1500, 2000),
+            new ServoMixRule(SERVO_RUDDER_NUM, SERVO_VTailLeft, 1000, 1500, 2000),
+            new ServoMixRule(5               , SERVO_VTailRight,   1000, 1500, 2000),
         ]
     }, // end 29
     {
@@ -820,9 +820,9 @@ const mixerList = [
             new MotorMixRule(1.0, 0.0, 0.0, 0.0),
         ],
         servoMixer: [
-            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 2000),
-            new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 2000),
-            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 2000),
+            new ServoMixRule(SERVO_AILERON_NUM, SERVO_Aileron,  1000, 1500, 2000),
+            new ServoMixRule(SERVO_ELEVATOR_NUM, SERVO_Elevator, 1000, 1500, 2000),
+            new ServoMixRule(SERVO_THROTTLE_NUM, SERVO_Throttle, 1000, 1500, 2000),
         ]
     }, // end 30
     {
@@ -837,8 +837,8 @@ const mixerList = [
             new MotorMixRule(1.0, 0.0, 0.0, 0.0),
         ],
         servoMixer: [
-            new ServoMixRule(1, SERVO_Throttle, 1000, 2000),
-            new ServoMixRule(2  , SERVO_Rudder, 1000, 2000),
+            new ServoMixRule(1, SERVO_Throttle, 1000, 1500, 2000),
+            new ServoMixRule(2  , SERVO_Rudder, 1000, 1500, 2000),
         ]
     }, // end 31
     {
@@ -854,8 +854,8 @@ const mixerList = [
             new MotorMixRule(1.0, 0.0, 0.0, 0.0),
         ],
         servoMixer: [
-            new ServoMixRule(1, SERVO_ThrottleLeft, 1000, 2000),
-            new ServoMixRule(2  , SERVO_ThrottleRight, 1000, 2000),
+            new ServoMixRule(1, SERVO_ThrottleLeft, 1000, 1500, 2000),
+            new ServoMixRule(2  , SERVO_ThrottleRight, 1000, 1500, 2000),
         ]
     }, // end 32
     {
@@ -870,8 +870,8 @@ const mixerList = [
             new MotorMixRule(1.0, 0.0, 0.0, 0.0),
         ],
         servoMixer: [
-            new ServoMixRule(1, SERVO_Throttle, 1000, 2000),
-            new ServoMixRule(2  , SERVO_Rudder, 1000, 2000),
+            new ServoMixRule(1, SERVO_Throttle, 1000, 1500, 2000),
+            new ServoMixRule(2  , SERVO_Rudder, 1000, 1500, 2000),
         ]
     }    // end 33
     ,
@@ -887,8 +887,8 @@ const mixerList = [
             new MotorMixRule(1.0, 0.0, 0.0, 0.0),
         ],
         servoMixer: [
-            new ServoMixRule(1, SERVO_Throttle, 1000, 2000),
-            new ServoMixRule(2  , SERVO_Rudder, 1000, 2000),
+            new ServoMixRule(1, SERVO_Throttle, 1000, 1500, 2000),
+            new ServoMixRule(2  , SERVO_Rudder, 1000, 1500, 2000),
         ]
     }         // end 34        
 ];
@@ -1061,6 +1061,7 @@ helper.mixer = (function (mixerList) {
                         r.getTarget(),
                         r.getInput(),
                         r.getRate(),
+                        r.getTrim(),
                         r.getSpeed()
                     )
                 );

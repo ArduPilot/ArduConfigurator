@@ -2,7 +2,7 @@
 //'use strict';
 
     // ardu uses 'rate' to mean PWM_MIN and 'speed' to mean PWM_MAX - buzz to rename this 
-let ServoMixRule = function (target, input, rate, speed, condition) {
+let ServoMixRule = function (target, input, rate, trim, speed, condition) {
 
     var self = {};
 
@@ -25,9 +25,16 @@ let ServoMixRule = function (target, input, rate, speed, condition) {
     self.getRate = function () {
         return rate;
     };
+    self.getTrim = function () {
+        return trim;
+    };
 
     self.setRate = function (data) {
         rate = data;
+    };
+
+    self.setTrim = function (data) {
+        trim = data;
     };
 
     self.getSpeed = function () {
