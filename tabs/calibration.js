@@ -268,10 +268,13 @@ TABS.calibration.initialize = function (callback) {
 
                 var ctx = c.getContext("2d");
 
+                // make these match the .css styling for the id=gyrocal <canvas> object
+                var canvasWidth = 500;
+                var canvasHeight = 50;
 
                 // wipe cancvas
                 ctx.fillStyle = "#FFFF99";
-                ctx.fillRect(0, 0, 500, 100);
+                ctx.fillRect(0, 0, canvasWidth, canvasHeight);
                 var raw = String.fromCharCode(0,0,0,0,0,0,0,0,0,0);
                 if ( FC.curr_mav_state && FC.curr_mav_state['MAG_CAL_PROGRESS'] && FC.curr_mav_state['MAG_CAL_PROGRESS'].completion_mask  ){
                     raw = FC.curr_mav_state['MAG_CAL_PROGRESS'].completion_mask;
@@ -298,7 +301,7 @@ TABS.calibration.initialize = function (callback) {
                 points.forEach( (v,i) => {
                     ctx.fillStyle = "#CC0000";
                     var sx = 10+i*40+10*i; // box is 500 wide and we have 10 of them
-                    var sy = 100-v/2.4;  // box is 100 tall, and we go to 255
+                    var sy = canvasHeight-v/2.4;  // box is 100 tall, and we go to 255
                     var width = 30; // vert bars are 30 wide
                     var height = v/2.4; // goes to bottom 100->255 scaling
                     ctx.fillRect(sx, sy, width, height);

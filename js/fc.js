@@ -917,7 +917,7 @@ var FC = {
             11: "BLOCKED_NAVIGATION_SAFETY",
             12: "BLOCKED_COMPASS_NOT_CALIBRATED",
             13: "BLOCKED_ACCELEROMETER_NOT_CALIBRATED",
-            14: null,
+            14: "BLOCKED_RC_NOT_CALIBRATED",
             15: "BLOCKED_HARDWARE_FAILURE",
             26: "BLOCKED_INVALID_SETTING",
         }
@@ -1006,18 +1006,22 @@ var FC = {
             2 : 'Flap  => 2',
             3 : 'FlapAuto  => 3',
             4 : 'Aileron  => 4',
+            5 : '-5-unused-',
             6 : 'MountPan  => 6',
             7 : 'MountTilt  => 7',
             8 : 'MountRoll  => 8',
             9 : 'MountOpen  => 9',
             10 : 'CameraTrigger  => 10',
+            11 : '-11-unused-',
             12 : 'Mount2Pan  => 12',
             13 : 'Mount2Tilt  => 13',
             14 : 'Mount2Roll  => 14',
             15 : 'Mount2Open  => 15',
             16 : 'DifferentialSpoilerLeft1  => 16',
             17 : 'DifferentialSpoilerRight1  => 17',
+            18 : '-18-unused-',
             19 : 'Elevator  => 19',
+            20 : '-20-unused-',
             21 : 'Rudder  => 21',
             22 : 'SprayerPump  => 22',
             23 : 'SprayerSpinner  => 23',
@@ -1028,6 +1032,8 @@ var FC = {
             28 : 'Gripper  => 28',
             29 : 'LandingGear  => 29',
             30 : 'EngineRunEnable  => 30',
+            31 : '-31-unused-',
+            32 : '-32-unused-',
             33 : 'Motor1  => 33',
             34 : 'Motor2  => 34',
             35 : 'Motor3  => 35',
@@ -1037,9 +1043,15 @@ var FC = {
             39 : 'Motor7/TailTiltServo  => 39',
             40 : 'Motor8  => 40',
             41 : 'TiltMotorsFront  => 41',
+            42 : '-42-unused-',
+            43 : '-43-unused-',
+            44 : '-44-unused-',
             45 : 'TiltMotorsRear  => 45',
             46 : 'TiltMotorRearLeft  => 46',
             47 : 'TiltMotorRearRight  => 47',
+            48 : '-48-unused-',
+            49 : '-49-unused-',
+            50 : '-50-unused-',
             51 : 'RCIN1  => 51',
             52 : 'RCIN2  => 52',
             53 : 'RCIN3  => 53',
@@ -1057,8 +1069,11 @@ var FC = {
             65 : 'RCIN15  => 65',
             66 : 'RCIN16  => 66',
             67 : 'Ignition => 67',
+            68 : '-68-unused-',
             69 : 'Starter  => 69',
             70 : 'Throttle  => 70',
+            71 : '-71-unused-',
+            72 : '-72-unused-',
             73 : 'ThrottleLeft  => 73',
             74 : 'ThrottleRight  => 74',
             75 : 'TiltMotorFrontLeft  => 75',
@@ -1067,12 +1082,15 @@ var FC = {
             78 : 'ElevonRight  => 78',
             79 : 'VTailLeft  => 79',
             80 : 'VTailRight  => 80',
+            81 : '-81-unused-',
             82 : 'Motor9  => 82',
             83 : 'Motor10  => 83',
             84 : 'Motor11  => 84',
             85 : 'Motor12  => 85',
             86 : 'DifferentialSpoilerLeft2  => 86',
             87 : 'DifferentialSpoilerRight2  => 87',
+            88 : '-88-unused-',
+            89 : '-89-unused-',
             90 : 'CameraISO  => 90',
             91 : 'CameraAperture  => 91',
             92 : 'CameraFocus  => 92',
@@ -1093,6 +1111,16 @@ var FC = {
             107 : 'Script14  => 107',
             108 : 'Script15  => 108',
             109 : 'Script16  => 109',
+            110 : '-110-unused-',
+            111 : '-111-unused-',
+            112 : '-112-unused-',
+            113 : '-113-unused-',
+            114 : '-114-unused-',
+            115 : '-115-unused-',
+            116 : '-116-unused-',
+            117 : '-117-unused-',
+            118 : '-118-unused-',
+            119 : '-119-unused-',
             120 : 'NeoPixel1  => 120',
             121 : 'NeoPixel2  => 121',
             122 : 'NeoPixel3  => 122',
@@ -1101,10 +1129,12 @@ var FC = {
             125 : 'RatePitch  => 125',
             126 : 'RateThrust => 126',
             127 : 'RateYaw    => 127',
+            128 : '-128-unused-',
             129 : 'ProfiLED1  => 129',
             130 : 'ProfiLED2  => 130',
             131 : 'ProfiLED3  => 131',
             132 : 'ProfiLEDClock => 132',
+            133 : '-133-unused-',
             134 : 'SERVOn_MIN  => 134',
             135 : 'SERVOn_TRIM  => 135',
             136 : 'SERVOn_MAX  => 136',
@@ -1122,46 +1152,6 @@ var FC = {
         var Ardu_ServoX_functionsARR = Object.keys(Ardu_ServoX_functionsObjNAME);
         return Ardu_ServoX_functionsARR; 
 
-        // return [
-        //     'Stabilized Roll',      // 0
-        //     'Stabilized Pitch',     // 1
-        //     'Stabilized Yaw',       // 2
-        //     'Stabilized Throttle',  // 3
-        //     'RC Roll',              // 4
-        //     'RC Pitch',             // 5
-        //     'RC Yaw',               // 6
-        //     'RC Throttle',          // 7
-        //     'RC Channel 5',         // 8
-        //     'RC Channel 6',         // 9
-        //     'RC Channel 7',         // 10
-        //     'RC Channel 8',         // 11
-        //     'Gimbal Pitch',         // 12
-        //     'Gimbal Roll',          // 13
-        //     'Flaps',                // 14
-        //     'RC Channel 9',         // 15
-        //     'RC Channel 10',        // 16
-        //     'RC Channel 11',        // 17
-        //     'RC Channel 12',        // 18
-        //     'RC Channel 13',        // 19
-        //     'RC Channel 14',        // 20
-        //     'RC Channel 15',        // 21
-        //     'RC Channel 16',        // 22
-        //     'Stabilized Roll+',     // 23
-        //     'Stabilized Roll-',     // 24
-        //     'Stabilized Pitch+',    // 25
-        //     'Stabilized Pitch-',    // 26
-        //     'Stabilized Yaw+',      // 27
-        //     'Stabilized Yaw-',      // 28,
-        //     'MAX',                  // 29,
-        //     'GVAR 0',               // 30
-        //     'GVAR 1',               // 31
-        //     'GVAR 2',               // 32
-        //     'GVAR 3',               // 33
-        //     'GVAR 4',               // 34
-        //     'GVAR 5',               // 35
-        //     'GVAR 6',               // 36
-        //     'GVAR 7',               // 37
-        // ];
     },
     getServoMixInputName: function (input) {
         return this.getServoMixInputNames()[input];

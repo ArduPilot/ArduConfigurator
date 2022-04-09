@@ -2295,6 +2295,9 @@
     "BLOCKED_ACCELEROMETER_NOT_CALIBRATED": {
         "message": "Accelerometer calibrated"
     },
+    "BLOCKED_RC_NOT_CALIBRATED": {
+        "message": "RC link calibrated"
+    },
     "BLOCKED_HARDWARE_FAILURE": {
         "message": "Hardware health"
     },
@@ -3334,13 +3337,13 @@
         "message": "Do you really want to delete this Waypoint with non-Geo JUMP/SET_HEAD/RTH options? \nIf yes, Non-Geo options attached will be removed also!"
     },
     "servoMixer": {
-        "message": "Servo mixer"
+        "message": "Servo Outputs Setup"
     },
     "servoMixerDelete": {
         "message": "Delete"
     },
     "servoMixerAdd": {
-        "message": "Add new mixer rule"
+        "message": "Add new Servo/Motor OUTPUT"
     },
     "platformType": {
         "message": "Platform type"
@@ -3356,7 +3359,7 @@
     },
     "mixerLoadPresetRules": {
         //"message": "Load mixer"
-        "message": "View preset"
+        "message": "Show Suggested Layout"
     },
     "mixerLoadAndApplyPresetRules": {
        // "message": "Load and apply"
@@ -3421,7 +3424,7 @@
     },
     "mixerPresetTitle": {
        // "message": "Mixer preset"
-       "message": "Optionally choose one of these common vehicle layouts? ( then click View Preset)"
+       "message": "Optionally choose one of these common vehicle layouts? ( then click Show Suggested Layout)"
 
     },
     "fcFirmwareUpdateRequired": {

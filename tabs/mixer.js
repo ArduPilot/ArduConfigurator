@@ -68,6 +68,8 @@ function buzz_veh_sels(prev_selection) {
 
         console.log('mixer.js platformSelect changed',currentPlatform);
         window.currentPlatform = currentPlatform;
+        //buzz here
+
 
         var platformSelectParent = platformSelect.parent('.select');
 
@@ -95,7 +97,7 @@ function buzz_veh_sels(prev_selection) {
 
     currentPlatform =  platformList[MIXER_CONFIG.platformType];
 
-    //platformSelect.val(MIXER_CONFIG.platformType).change();
+    platformSelect.val(MIXER_CONFIG.platformType).change();
 
 
     mixerPreset.change(function () {
@@ -123,32 +125,71 @@ function buzz_veh_sels(prev_selection) {
         var parm_tbl = ParamsObj.get_param_table();
 
         if (parm_tbl == undefined ) return; 
-        if (parm_tbl['FRAME_CLASS'] == undefined ) return; 
+        if ((parm_tbl['FRAME_CLASS'] == undefined ) && (parm_tbl['Q_FRAME_CLASS'] == undefined )) return; 
 
-        var Fclass = parm_tbl['FRAME_CLASS'].param_value??'';
-        var Ftype = parm_tbl['FRAME_TYPE'].param_value??'';
+        // copter frame class stuff 
+        if (parm_tbl['FRAME_CLASS'] != undefined ) {
+            var Fclass = parm_tbl['FRAME_CLASS'].param_value??'';
+            var Ftype = parm_tbl['FRAME_TYPE'].param_value??'';
 
-        if (currentMixerPreset.frame_class ) {
-            console.log("This model requires a FRAME_CLASS of ",currentMixerPreset.frame_class);
-            if (ardu_frame_classes[Fclass] != currentMixerPreset.frame_class ) {
-                // setting vehicle's FRAME_CLASS..
-                var paramname = 'FRAME_CLASS';
-                var paramvalue = Fclass; 
-                console.log("setting param:"+paramname+" to:"+paramvalue);
-                ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
-            }  
+            if (currentMixerPreset.frame_class ) {
+                console.log("This model requires a FRAME_CLASS of ",currentMixerPreset.frame_class);
+                if (ardu_frame_classes[Fclass] != currentMixerPreset.frame_class ) {
+                    // setting vehicle's FRAME_CLASS..
+                    var paramname = 'FRAME_CLASS';
+                    var paramvalue = Fclass; 
+                    console.log("setting param:"+paramname+" to:"+paramvalue);
+                    ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+                }  
+            }
+            if (currentMixerPreset.frame_type ) {
+                console.log("This model requires a FRAME_TYPE of ",currentMixerPreset.frame_type);
+                if (ardu_frame_types[Ftype] != currentMixerPreset.frame_type ) {
+                    // setting vehicle's FRAME_TYPE..
+                    var paramname = 'FRAME_TYPE';
+                    var paramvalue = Ftype; 
+                    console.log("setting param:"+paramname+" to:"+paramvalue);
+                    ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+                }  
+            }
         }
-        if (currentMixerPreset.frame_type ) {
-            console.log("This model requires a FRAME_TYPE of ",currentMixerPreset.frame_type);
-            if (ardu_frame_types[Ftype] != currentMixerPreset.frame_type ) {
-                // setting vehicle's FRAME_TYPE..
-                var paramname = 'FRAME_TYPE';
-                var paramvalue = Ftype; 
-                console.log("setting param:"+paramname+" to:"+paramvalue);
-                ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
-            }  
-        }
+        //quadplane frame class stuff and optional tilt
+        if (parm_tbl['Q_FRAME_CLASS'] != undefined ) {
+            var QFclass = parm_tbl['Q_FRAME_CLASS'].param_value??'';
+            var QFtype = parm_tbl['Q_FRAME_TYPE'].param_value??'';
+            var QTilt = parm_tbl['Q_TILT_TYPE'].param_value??'';
 
+            if (currentMixerPreset.q_frame_class ) {
+                console.log("This model requires a Q_FRAME_CLASS of ",currentMixerPreset.q_frame_class);
+                if (Qardu_frame_classes[QFclass] != currentMixerPreset.q_frame_class ) {
+                    // setting vehicle's FRAME_CLASS..
+                    var paramname = 'Q_FRAME_CLASS';
+                    var paramvalue = currentMixerPreset.q_frame_class;
+                    console.log("setting param:"+paramname+" to:"+paramvalue);
+                    ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+                }  
+            }
+            if (currentMixerPreset.q_frame_type ) {
+                console.log("This model requires a Q_FRAME_TYPE of ",currentMixerPreset.q_frame_type);
+                if (Qardu_frame_types[QFtype] != currentMixerPreset.q_frame_type ) {
+                    // setting vehicle's FRAME_TYPE..
+                    var paramname = 'Q_FRAME_TYPE';
+                    var paramvalue = currentMixerPreset.q_frame_type; 
+                    console.log("setting param:"+paramname+" to:"+paramvalue);
+                    ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+                }  
+            }
+            if ((currentMixerPreset.q_tilt_type !== undefined) && (currentMixerPreset.q_tilt_type !== '')) {
+                console.log("This model requires a Q_TILT_TYPE of ",currentMixerPreset.q_tilt_type);
+                if (Qardu_frame_types[QFtype] != currentMixerPreset.q_frame_type ) {
+                    // setting vehicle's FRAME_TYPE..
+                    var paramname = 'Q_TILT_TYPE';
+                    var paramvalue = currentMixerPreset.q_tilt_type; 
+                    console.log("setting param:"+paramname+" to:"+paramvalue);
+                    ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+                }  
+            }
+        }
         // if (currentMixerPreset.id == 3) {
         //     $wizardButton.parent().removeClass("is-hidden");
         // } else {
@@ -581,7 +622,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
 
         $("[data-role='role-servo-add']").click(function () {
             if (SERVO_RULES.hasFreeSlots()) {
-                SERVO_RULES.put(new ServoMixRule(0, 0, 100, 0));
+                SERVO_RULES.put(new ServoMixRule(0, 0, 1000, 2000));
                 renderServoMixRules();
                 renderOutputMapping();
             }
@@ -589,7 +630,7 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
 
         $("[data-role='role-motor-add']").click(function () {
             if (MOTOR_RULES.hasFreeSlots()) {
-                MOTOR_RULES.put(new MotorMixRule(1, 0, 0, 0));
+                MOTOR_RULES.put(new MotorMixRule(1, 0, 1000, 2000));
                 renderMotorMixRules();
                 renderOutputMapping();
             }

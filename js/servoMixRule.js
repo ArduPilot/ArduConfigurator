@@ -1,6 +1,7 @@
 /*global $*/
 //'use strict';
 
+    // ardu uses 'rate' to mean PWM_MIN and 'speed' to mean PWM_MAX - buzz to rename this 
 let ServoMixRule = function (target, input, rate, speed, condition) {
 
     var self = {};

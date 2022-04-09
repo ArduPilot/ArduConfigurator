@@ -68,13 +68,34 @@
                                 </div>
                             </div> -->
 
-                            <div class="gui_box grey" id="accPosAll">
+
+                            <div class="gui_box grey" id="rcCalibration">
+                                <div class="gui_box_titlebar">
+                                    <div class="spacer_box_title" ZZdata-i18n="calibrationHead77" title="RC-Calibration">RC INPUTS Calibration</div>
+                                </div>
+                                <div class="spacer_box">
+                                    <table class="cf_table gyrocal">
+                                        <canvas width=500px height=200px id="RCcal">
+                                            
+                                        </canvas><br>
+                                        <div id="rcCalibrationcanvas">RC-Calibration [Setting min,max,trim,reverse on RC INPUT channels]<br>
+                                            1. Ensure your transmitter and reciever are ON and connected and ....<br>
+                                            2. Ensure your motor/s do not have power/no props..<br>
+                                            3. Click the 'RC Calibrate' botton and ...<br>
+                                            4. Move all your RC transmitter sticks and switches to their extreme positions, so the RED bars hit the limits...<br>
+                                            5  Choose to reverse a channel if the GREEN slider/s does not move the same direction you moved it.
+                                            6. Click 'RC Done' when happy with the results. 
+                                        </div>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="gui_box grey" id="accPosAll" style="width: 520px;">
                                 <div class="gui_box_titlebar">
                                     <div class="spacer_box_title" ZZdata-i18n="calibrationHead66" title="Gyro Cal Graph">Gyro Cal Graph</div>
                                 </div>
                                 <div class="spacer_box">
                                     <table class="cf_table gyrocal">
-                                        <canvas width=500px height=100px id="gyrocal">
+                                        <canvas width=500px height=50px id="gyrocal">
                                             
                                         </canvas><br>
                                         <div id="3d_cal_notes">Press [Calibrate Compass 3D] then ...<br>
@@ -83,8 +104,6 @@
                                     </table>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>

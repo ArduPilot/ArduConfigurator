@@ -121,6 +121,8 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
             self.newState.mode = mode_mapping_apm[heartbeat.custom_mode]; 
             //MIXER_CONFIG.platformType = PLATFORM_AIRPLANE ; // set in mavsp.js heartbeat_handler
             console.log("MAV_TYPE_FIXED_WING ardupilot vehicle type:",heartbeat.type);
+            GUI_control.prototype.log("<span style='color: red; font-weight: bolder'><strong>You appear to be connected to a PLANE firmware.</strong></span>");
+
             self.vehicleType = heartbeat.type;
         }
         if ((self.vehicleType != heartbeat.type)&&(heartbeat.type == mavlink20.MAV_TYPE_QUADROTOR )) { //2
@@ -128,6 +130,8 @@ MavFlightMode.prototype.attachHandlers = function(sysid,mavlink,mavlinkParser) {
             self.newState.mode = mode_mapping_acm[heartbeat.custom_mode]; 
             //MIXER_CONFIG.platformType == PLATFORM_MULTIROTOR ; // set in mavsp.js heartbeat_handler
             console.log("MAV_TYPE_QUADROTOR ardupilot vehicle type:",heartbeat.type);
+            GUI_control.prototype.log("<span style='color: red; font-weight: bolder'><strong>You appear to be connected to a COPTER firmware.</strong</span>");
+
             self.vehicleType = heartbeat.type;
         }
         if ((self.vehicleType != heartbeat.type)&&(heartbeat.type == mavlink20.MAV_TYPE_COAXIAL )) { //3
