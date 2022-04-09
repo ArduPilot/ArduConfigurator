@@ -3569,7 +3569,7 @@
         "message": "If there are no vibration problems and motors are not overheating, try to set 188Hz instead"
     },
     "tabLogicConditions": {
-        "message": "Logic conditions"
+        "message": "Save Servo Layout now"
     },
     "logicId": {
         "message": "#"
