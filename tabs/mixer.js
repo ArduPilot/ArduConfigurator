@@ -139,7 +139,7 @@ function buzz_veh_sels(prev_selection) {
                     var paramname = 'FRAME_CLASS';
                     var paramvalue = Fclass; 
                     console.log("setting param:"+paramname+" to:"+paramvalue);
-                    ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+                    ParamsObj.set(paramname,paramvalue,6000); // worst case 3 secs 
                 }  
             }
             if (currentMixerPreset.frame_type ) {
@@ -149,7 +149,7 @@ function buzz_veh_sels(prev_selection) {
                     var paramname = 'FRAME_TYPE';
                     var paramvalue = Ftype; 
                     console.log("setting param:"+paramname+" to:"+paramvalue);
-                    ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+                    ParamsObj.set(paramname,paramvalue,6000); // worst case 3 secs 
                 }  
             }
         }
@@ -166,7 +166,7 @@ function buzz_veh_sels(prev_selection) {
                     var paramname = 'Q_FRAME_CLASS';
                     var paramvalue = currentMixerPreset.q_frame_class;
                     console.log("setting param:"+paramname+" to:"+paramvalue);
-                    ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+                    ParamsObj.set(paramname,paramvalue,6000); // worst case 3 secs 
                 }  
             }
             if (currentMixerPreset.q_frame_type ) {
@@ -176,7 +176,7 @@ function buzz_veh_sels(prev_selection) {
                     var paramname = 'Q_FRAME_TYPE';
                     var paramvalue = currentMixerPreset.q_frame_type; 
                     console.log("setting param:"+paramname+" to:"+paramvalue);
-                    ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+                    ParamsObj.set(paramname,paramvalue,6000); // worst case 3 secs 
                 }  
             }
             if ((currentMixerPreset.q_tilt_type !== undefined) && (currentMixerPreset.q_tilt_type !== '')) {
@@ -186,7 +186,7 @@ function buzz_veh_sels(prev_selection) {
                     var paramname = 'Q_TILT_TYPE';
                     var paramvalue = currentMixerPreset.q_tilt_type; 
                     console.log("setting param:"+paramname+" to:"+paramvalue);
-                    ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+                    ParamsObj.set(paramname,paramvalue,6000); // worst case 3 secs 
                 }  
             }
         }

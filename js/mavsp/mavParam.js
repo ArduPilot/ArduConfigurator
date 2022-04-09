@@ -67,6 +67,8 @@ function paramHandler(msg) {
     if(pendingAcks[param_name_cleaned]) {
         delete pendingAcks[param_name_cleaned];
         console.log(param_name_cleaned+" -> got ACK!");
+        GUI_control.prototype.log("<span style='color: green; font-weight: normal'>Param Set:" +param_name_cleaned+' -> '+msg.param_value+"</span>");
+
 
         // stop any retries
         clearInterval(senderHandler[param_name_cleaned]);

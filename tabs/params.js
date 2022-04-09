@@ -266,7 +266,7 @@ TABS.params.initialize = function (callback, scrollPosition) {
             var paramvalue = input.value; // the <input type=text" for the parm
 
             console.log("setting param:"+paramname+" to:"+paramvalue);
-            ParamsObj.set(paramname,paramvalue,3000); // worst case 3 secs 
+            ParamsObj.set(paramname,paramvalue,6000); // worst case a few secs
 
             $("#params-"+paramname).css('background-color', '#ffffff'); // normal white
 
