@@ -5,6 +5,30 @@ TABS.calibration = {};
 
 TABS.calibration.model =  0;
 
+
+TABS.calibration.show_hide_steps = function (sh) {
+
+    console.log('TABS.calibration.show_hide_steps',sh);
+
+    if ( sh == 0 ) {
+    // class = step1 etc
+        $('div.step1').hide();
+        $('div.step2').hide();
+        $('div.step3').hide();
+        $('div.step4').hide();
+        $('div.step5').hide();
+        $('div.step6').hide();
+    } else {
+        $('div.step1').show();
+        $('div.step2').show();
+        $('div.step3').show();
+        $('div.step4').show();
+        $('div.step5').show();
+        $('div.step6').show();
+    }
+
+}
+
 TABS.calibration.initialize = function (callback) {
 
     //var loadChainer = new MSPChainerClass();
@@ -31,6 +55,13 @@ TABS.calibration.initialize = function (callback) {
         mspHelper.saveToEeprom
     ]);
     saveChainer.setExitPoint(reboot);
+
+    var show_steps = false;
+    var start_calib = false;
+
+    var tmp_SERVO_RULES             = new ServoMixerRuleCollection();// while we collect the info as part of the RC calibration, we hold it here till its ready.
+    tmp_SERVO_RULES.flush();
+    
 
     function reboot() {
         //noinspection JSUnresolvedVariable
@@ -83,12 +114,22 @@ TABS.calibration.initialize = function (callback) {
         updateSensorData();
     }
 
+
     // see also periodicStatusUpdater.js for 'Calibrate Accelerometer' button responses
 
     // triggered when the 'Calibrate Accelerometer' button is  pressed. zz
     function calibrateNew() {
 
         $('#calibrate-start-button').css('pointer-events', 'none').css('opacity', '0.4'); // make 'Calibrate Access' non-interactive, briefly
+
+
+        if ((show_steps == false) && (start_calib == false)) {
+            show_steps = true;
+            start_calib = true;
+
+            TABS.calibration.show_hide_steps(1);
+        }
+
 
        // var newStep = null;
         var $button = $(this);
@@ -313,30 +354,10 @@ TABS.calibration.initialize = function (callback) {
                 //map.width_ = width; map.height_ = height;
             }, 200);
 
-            // var countdown = 0;
-            // helper.interval.add('compass_calibration_interval', function () {
-            //     //countdown++;
-            //     //if (countdown >= 300) { // at 100ms intervals, 30sec
-            //         //setTimeout(function () {
-            //             $(button).removeClass('disabled');
-
-            //             //modalProcessing.close();
-            //             GUI.log(chrome.i18n.getMessage('initialSetupMagCalibEnded'));
-                        
-            //             //MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, null);
-            //             updateSensorData();
-            //             helper.interval.remove('compass_calibration_interval');
-
-            //             //Cleanup
-            //            // delete modalProcessing;
-            //            // $('.jBox-wrapper').remove();
-            //        // }, 100);
-            //     //} else {
-            //         //modalProcessing.content.find('.modal-compass-countdown').text(countdown);
-            //     //}
-
-            // }, 1000);
+          
         });
+
+
 
         // respond to button press/s
         $('#opflow_btn').on('click', function () {
@@ -386,6 +407,193 @@ TABS.calibration.initialize = function (callback) {
         localize();
 
         $('#calibrate-start-button').on('click', calibrateNew);
+
+        $('#calibrate-start-button2').on('click', function() {
+
+          var in_progress = $('#calib_btn2').find('a').text()=='RC Done'?true:false;
+
+          if ( in_progress) { 
+
+              $('#calib_btn2').find('a').text("Start RC Calibration");// set it back after
+
+              helper.interval.remove('rc_calibration_interval'); // remove interval updater.
+
+              $('#calib_btn2').find('a').removeAttr('style'); // removeAttr removes all attribute styling, returning it 'stock'
+
+              // buzz todo get all the min-trim-max values and send them someplae.
+
+          }
+
+          if ( ! in_progress) {
+            $('#calib_btn2').find('a').delay(2000).css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#FDBE02');//yellow
+            $('#calib_btn2').find('a').text("RC Done");
+
+           // $('#calib_btn2').find('a').delay(2000).css('border', '1px solid #37a8db').css('color', '#37a8db').css('background-color', '#008000');// green
+
+            helper.interval.add('rc_calibration_interval', function () {
+
+                var c = document.getElementById("RCcal");  // 200x200pixels
+                //let width = $("#gyrocal canvas").width(), height = $("#gyrocal canvas").height();
+
+                if (c == undefined ) return;
+
+                var ctx = c.getContext("2d");
+
+                var canvasWidth = 200;
+                var canvasHeight = 200;
+                // wipe cancvas
+                ctx.fillStyle = "#FFFF99";
+                ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+
+                // tip:The upper-left corner of the canvas has the coordinates (0,0)
+                // fill-rect goes down-and-to-the-right
+
+                // starting from centre, ofset by ox, oy, then draw a box wxh centred on that point
+                function drawbox_from_centre(xc,yc,ox,oy,w,h,fill,verb) {
+
+                    if (verb ) console.log(xc,yc,ox,oy,w,h);
+
+                        var start_left = xc+ox-(w/2); 
+                        var start_top =  yc+oy-(h/2);
+                        var width = w;
+                        var height = h;
+                        ctx.fillStyle = fill;//"#CC0000";
+                        if (verb )console.log(start_left, start_top, width, height);
+                        ctx.fillRect(start_left, start_top, width, height);
+                }
+
+
+                // left x centre
+                lxc = 50; // 1/4 of 200
+                lyc = 50; // 1/4 of 200
+
+                // right y centre
+                rxc = 150; // 3/4 of 200
+                ryc = 50;  // 1/4 of 200
+
+                // draw 50x50 squares
+                drawbox_from_centre(lxc,lyc,0,0,90,90,"#CCCCFF",false);//light blueish
+                drawbox_from_centre(rxc,ryc,0,0,90,90,"#CCCCFF",false);
+
+                //console.log(RC.channels[0]);
+
+                let rules = tmp_SERVO_RULES.get();
+
+                //foreach channel that coming in, if we don't have a rule, make one, if we have a rule, update it.
+                for (let RCidx in RC.channels) { 
+
+                    // draw min/max boxesand cache info in tmp_SERVO_RULES
+
+                        if (rules.hasOwnProperty(RCidx)) {
+                            const servoRule = rules[RCidx];
+                            var x1 = servoRule.getTarget();
+                            var x2 = servoRule.getInput();
+                            var x3 = servoRule.getRate();
+                            var x4 = servoRule.getTrim();
+                            var x5 = servoRule.getSpeed();
+
+                            console.log("chan:",RC.channels[RCidx]);
+
+                            rules[RCidx].setTarget(RCidx );
+                            rules[RCidx].setInput( x2 );
+                            if ( RC.channels[RCidx] < x3) rules[RCidx].setRate( RC.channels[RCidx] );  // min
+                            rules[RCidx].setTrim( 1500 );  // trim
+                            if ( RC.channels[RCidx] > x5) rules[RCidx].setSpeed( RC.channels[RCidx]); // max
+
+                            // ail
+                            if (RCidx == 0 ) {
+                                var ylo = ((x3-1000)/10); //0-50
+                                var yhi = ((x5-1000)/10); // 0-50
+                                drawbox_from_centre(rxc,ryc,ylo,0,yhi,8,"#00BB00",false);
+                            }
+                            // ele
+                            if (RCidx == 1 ) {
+                                var ylo = ((x3-1000)/10); //0-100
+                                var yhi = ((x5-1000)/10); // 0-100
+                              drawbox_from_centre(rxc,ryc,0,0,8,ylo-yhi,"#00BB00",false);
+                            }                           
+                            // thr
+                            if (RCidx == 2 ) {
+                                var ylo = ((x3-1000)/10); //0-100
+                                var yhi = ((x5-1000)/10); // 0-100
+                              drawbox_from_centre(lxc,lyc,0,0,8,ylo-yhi,"#00BB00",false);
+                            }                           
+                            // rud
+                            if (RCidx == 3 ) {
+                                var ylo = ((x3-1000)/10); //0-100
+                                var yhi = ((x5-1000)/10); // 0-100
+                                drawbox_from_centre(lxc,lyc,ylo,0,yhi,8,"#00BB00",false);
+                            }
+                            //5-8
+                            if (RCidx == 4 ) {
+                                var ylo = ((x3-1000)/10); //0-100
+                                var yhi = ((x5-1000)/10); // 0-100
+                                drawbox_from_centre(rxc,ryc+74,-ylo,0,yhi,8,"#009900",false);
+                                ctx.font = "12px Arial";
+                                ctx.strokeText("CH5 -->", lxc-20,lyc+74+8);      
+                            }
+                            if (RCidx == 5 ) {
+                                var ylo = ((x3-1000)/10); //0-100
+                                var yhi = ((x5-1000)/10); // 0-100
+                                drawbox_from_centre(rxc,ryc+96,-ylo,0,yhi,8,"#009900",false);
+                                ctx.font = "12px Arial";
+                                ctx.strokeText("CH6 -->", lxc-20,lyc+96+8); 
+                            }
+                            if (RCidx == 6 ) {
+                                var ylo = ((x3-1000)/10); //0-100
+                                var yhi = ((x5-1000)/10); // 0-100
+                                drawbox_from_centre(rxc,ryc+118,-ylo,0,yhi,8,"#009900",false);
+                                ctx.font = "12px Arial";
+                                ctx.strokeText("CH7 -->", lxc-20,lyc+118+8); 
+                            }
+                            if (RCidx == 7 ) {
+                                var ylo = ((x3-1000)/10); //0-100
+                                var yhi = ((x5-1000)/10); // 0-100
+                                drawbox_from_centre(rxc,ryc+140,-ylo,0,yhi,8,"#009900",false);
+                                ctx.font = "12px Arial";
+                                ctx.strokeText("CH8 -->", lxc-20,lyc+140+8); 
+                            }
+
+                        } else {
+                            tmp_SERVO_RULES.put(
+                                            new ServoMixRule(
+                                                RCidx,
+                                                0, // unused right now in tmp_
+                                                1500,
+                                                1500,
+                                                1500
+                                            )
+                                        );
+                        }
+
+                }
+
+                // draw current pos
+                // for now we display it 'mode 2' ie Aileron/Ele on right stiuck, Thr/Rudd on left stick
+                // ail
+                var rc1_pos = Math.round((RC.channels[0]-1000)/10)-50; // starts as 1000-2000 ish, we make it 0-1000, then scale it -50 to 50 as an int
+                drawbox_from_centre(rxc,ryc,rc1_pos,0,2,20,"#FF0000",false);
+                // ele
+                var rc2_pos = Math.round((RC.channels[1]-1000)/10)-50; // starts as 1000-2000 ish, we make it 0-1000, then scale it -50 to 50 as an int
+                drawbox_from_centre(rxc,ryc,0,rc2_pos,20,2,"#FF0000",false);
+                // thr
+                var rc3_pos = Math.round((RC.channels[2]-1000)/10)-50; // starts as 1000-2000 ish, we make it 0-1000, then scale it -50 to 50 as an int
+                drawbox_from_centre(lxc,lyc,rc3_pos,0,2,20,"#FF0000",false);
+                // rudd
+                var rc4_pos = Math.round((RC.channels[3]-1000)/10)-50; // starts as 1000-2000 ish, we make it 0-1000, then scale it -50 to 50 as an int
+                drawbox_from_centre(lxc,lyc,0,rc4_pos,20,2,"#FF0000",false);
+
+
+
+
+            }, 200); // buzz todo make 200
+          }
+
+        });
+
+        TABS.calibration.show_hide_steps(0);// hide steps to start with
+
         //MSP.send_message(MSPCodes.MSP_CALIBRATION_DATA, false, false, null); // buzz
         updateSensorData();
         GUI.content_ready(callback);

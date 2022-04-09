@@ -75,17 +75,36 @@
                                 </div>
                                 <div class="spacer_box">
                                     <table class="cf_table gyrocal">
-                                        <canvas width=500px height=200px id="RCcal">
-                                            
-                                        </canvas><br>
-                                        <div id="rcCalibrationcanvas">RC-Calibration [Setting min,max,trim,reverse on RC INPUT channels]<br>
-                                            1. Ensure your transmitter and reciever are ON and connected and ....<br>
-                                            2. Ensure your motor/s do not have power/no props..<br>
-                                            3. Click the 'RC Calibrate' botton and ...<br>
-                                            4. Move all your RC transmitter sticks and switches to their extreme positions, so the RED bars hit the limits...<br>
-                                            5  Choose to reverse a channel if the GREEN slider/s does not move the same direction you moved it.
-                                            6. Click 'RC Done' when happy with the results. 
-                                        </div>
+                                        <tr>
+                                           
+                                            <td width="25%">
+                                                <video width="250" height="220" controls autoplay>
+                                                    <source src="/resources/models/tx_sticks.webm" type="video/webm" />
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            </td>
+
+                                            <td width="35%">
+                                                <div id="rcCalibrationcanvas">RC-Calibration <br>[Setting min,max,trim,reverse on RC INPUT channels]<br>
+                                                    1. Ensure your transmitter and reciever are ON and connected and ....<br>
+                                                    2. Ensure your motor/s do not have power/no props..<br>
+                                                    3. Click the 'Start RC Calibration' botton and ...<br>
+                                                    4. Move all your RC transmitter sticks and switches to their extreme positions, so the RED/GREEN bars hit the limits...<br>
+                                                    5  Choose to reverse a channel if the RED slider/s does not move the same direction you moved it.<br>
+                                                    6. Click 'RC Done' when happy with the results. 
+                                                </div>
+                                            </td>
+                                            <td width="30%" style="border:1px">
+                                                <!-- <a class="level i18n-replaced" href="#" data-i18n="LevBtn3" title="Start RC Calibration" style="vertical-align: top;">Start RC Calibration</a> -->
+                                                <div class="default_btn">
+                                                <div id="calib_btn2">
+                                                    <a id="calibrate-start-button2" class="calibrate" href="#" data-i18n="AccBtn2"></a>
+                                                </div>
+                                                </div>
+                                                <canvas width=200px height=200px id="RCcal"> </canvas><br>
+                                            </td>
+
+                                        </tr>
                                     </table>
                                 </div>
                             </div>

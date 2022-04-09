@@ -146,7 +146,11 @@
     padding-top: 20px;
     width: calc(100% - 5px);
     }
- 
+#calib_btn2 a {
+        height:30px;
+        padding-top: 20px;
+        width: calc(100% - 5px);
+        }
 .tab-calibration input {
     width: 57px;
     padding-left: 3px;

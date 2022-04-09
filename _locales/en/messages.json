@@ -2343,6 +2343,9 @@
     "AccBtn": {
         "message": "Calibrate Accelerometer"
     },
+    "AccBtn2": {
+        "message": "Start RC Calibration"
+    },
     "MagCalText": {
         "message": "After pressing the button you have to hold the copter in the air and rotate it so that each side (front, back, left, right, top and bottom) points down towards the earth."
     },
@@ -2369,6 +2372,9 @@
     },
     "LevBtn2": {
         "message": "Compass Level calibration"
+    },
+    "LevBtn3": {
+        "message": "Start RC calibration"
     },
     "tabMixer": {
         "message": "Vehicle Type & Mixer"

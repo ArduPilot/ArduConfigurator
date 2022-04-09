@@ -112,9 +112,19 @@ helper.periodicStatusUpdater = (function () {
                     newtext = "Please place vehicle <span style='color:purple'>UPSIDE DOWN</span> then press the button.";
                     $('#calibrate-start-button').css('pointer-events', 'auto').css('opacity', '1.0'); // make 'Calibrate Access' interactive again
                 }
-                if ( FC.longyREQ > 6) { // 16777215 is greater than 6
+                if ( FC.longyREQ == 16777215 ) { // 16777215 is greater than 6
                     newtext = "Success!, recommend reboot now.";
+                    console.log(newtext);
                     //FC.longyREQ = 0;
+                    TABS.calibration.show_hide_steps(0);// hide steps when done
+
+                }
+                if ( FC.longyREQ == 16777216) { // 16777216 is greater than 6
+                    newtext = "Failed, recommend reboot now.";
+                    console.log(newtext);
+                    //FC.longyREQ = 0;
+                    TABS.calibration.show_hide_steps(0);// hide steps when done
+
                 }
                 //$('div.note').html("stage:"+TABS.calibration.model+" "+newtext+" req:"+FC.longyREQ);
                 $('div.note').html(newtext+"<br>req:"+FC.longyREQ+"<br>model["+TABS.calibration.model+"]<br>");

@@ -1789,36 +1789,36 @@ var mspHelper = (function (gui) {
                 }
                 break;
             case MSPCodes.MSP_SERVO_MIX_RULES:
-                SERVO_RULES.flush();
-                if (data.byteLength % 8 === 0) {
-                    for (i = 0; i < data.byteLength; i += 8) {
-                        SERVO_RULES.put(new ServoMixRule(
-                            data.getInt8(i),
-                            data.getInt8(i + 1),
-                            data.getInt16(i + 2, true),
-                            0,
-                            data.getInt8(i + 4)
-                        ));
-                    }
-                }
-                SERVO_RULES.cleanup();
+                // SERVO_RULES.flush();
+                // if (data.byteLength % 8 === 0) {
+                //     for (i = 0; i < data.byteLength; i += 8) {
+                //         SERVO_RULES.put(new ServoMixRule(
+                //             data.getInt8(i),
+                //             data.getInt8(i + 1),
+                //             data.getInt16(i + 2, true),
+                //             0,
+                //             data.getInt8(i + 4)
+                //         ));
+                //     }
+                // }
+                // SERVO_RULES.cleanup();
 
                 break;
             case MSPCodes.MSP2_ARDUPILOT_SERVO_MIXER:
-                SERVO_RULES.flush();
-                if (data.byteLength % 6 === 0) {
-                    for (i = 0; i < data.byteLength; i += 6) {
-                        SERVO_RULES.put(new ServoMixRule(
-                            data.getInt8(i),
-                            data.getInt8(i + 1),
-                            data.getInt16(i + 2, true),
-                            data.getInt8(i + 4),
-                            0,
-                            data.getInt8(i + 5)
-                        ));
-                    }
-                }
-                SERVO_RULES.cleanup();
+                // SERVO_RULES.flush();
+                // if (data.byteLength % 6 === 0) {
+                //     for (i = 0; i < data.byteLength; i += 6) {
+                //         SERVO_RULES.put(new ServoMixRule(
+                //             data.getInt8(i),
+                //             data.getInt8(i + 1),
+                //             data.getInt16(i + 2, true),
+                //             data.getInt8(i + 4),
+                //             0,
+                //             data.getInt8(i + 5)
+                //         ));
+                //     }
+                // }
+                // SERVO_RULES.cleanup();
                 break;
 
             case MSPCodes.MSP_SET_SERVO_MIX_RULE:
