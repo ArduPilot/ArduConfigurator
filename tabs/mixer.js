@@ -685,6 +685,8 @@ TABS.mixer.initialize = function (callback, scrollPosition) {
                     console.log("setting param:"+paramname+" to:"+paramvalue);
                     ParamsObj.set(paramname,paramvalue,6000); // worst case a few secs 
 
+                    // stop the gui complaining about no-mixer configured
+                    MIXER_CONFIG.savedMixerPreset = 1;
 
                     //if (FC.getServoMixInputNames()[servoRule.getInput()] === '...') {
                         //$fixedValueCol.show();

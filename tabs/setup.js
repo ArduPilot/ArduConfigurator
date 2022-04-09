@@ -299,42 +299,23 @@ TABS.setup.initialize3D = function () {
         MIXER_CONFIG.platformType = window.currentPlatform.id;
     } 
     var veh_type =  platformList[MIXER_CONFIG.platformType].name;
-    //var mix_type =  mixerList[MIXER_CONFIG.platformType];
 
-    //if veh_type == "Multirotor" } {}
+    
 
-    // load the model including materials
-    //if (useWebGlRenderer) {
-        //if (MIXER_CONFIG.appliedMixerPreset === -1) {
-        //    model_file = 'custom';
-            GUI_control.prototype.log("<span style='color: red; font-weight: bolder'><strong>" + chrome.i18n.getMessage("mixerNotConfigured") + "</strong></span>");
-       // } else {
-            model_file = helper.mixer.getById(MIXER_CONFIG.appliedMixerPreset).model; // buzz 3d
+    if (MIXER_CONFIG.savedMixerPreset === -1) {
+        GUI_control.prototype.log("<span style='color: red; font-weight: bolder'><strong>" + chrome.i18n.getMessage("mixerNotConfigured") + "</strong></span>");
+    }
 
-            console.log("initialize3D model_file:", model_file);
-       // }
-   // } else {
-    //    model_file = 'fallback'
-    //}
+    model_file = helper.mixer.getById(MIXER_CONFIG.appliedMixerPreset).model; // buzz 3d
+
+    console.log("initialize3D model_file:", model_file);
 
     // Temporary workaround for 'custom' model until akfreak's custom model is merged.
     if (model_file == 'custom')   model_file = 'fallback';
     if (model_file == undefined ) model_file = 'fallback';
-    
 
     // setup scene
     scene = new THREE.Scene();
-
-    //loader = new THREE.LegacyJSONLoader();
-    //loader.load('./resources/models/' + model_file + '.json', function (geometry, materials) { // buzz 3d
-        //var modelMaterial = new THREE.MeshFaceMaterial(materials);
-        //model = new THREE.Mesh(geometry, modelMaterial);
-
-        //model.scale.set(15, 15, 15);
-
-        //modelWrapper.add(model);
-        //scene.add(modelWrapper);
-   // });
 
     //buzz 3d gltf loader , as GLTF is a newer format thats supported going forward in newer Three.js versions.
     // the 'key' here is from model.js mixerList[] that defines aircraft/subtypes/servos relationships

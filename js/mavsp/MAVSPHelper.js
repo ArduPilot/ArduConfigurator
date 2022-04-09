@@ -2760,15 +2760,15 @@ var mspHelper = (function (gui) {
                 console.log('Mission load');
                 break;
             case MSPCodes.MSP2_ARDUPILOT_MIXER:
-                MIXER_CONFIG.yawMotorDirection = data.getInt8(0);
-                MIXER_CONFIG.yawJumpPreventionLimit = data.getUint16(1, true);
-                //MIXER_CONFIG.platformType = data.getInt8(3);
-                MIXER_CONFIG.hasFlaps = data.getInt8(4);
-                MIXER_CONFIG.appliedMixerPreset = data.getInt16(5, true);
-                MIXER_CONFIG.numberOfMotors = data.getInt8(7);
-                MIXER_CONFIG.numberOfServos = data.getInt8(8);
-                MOTOR_RULES.setMotorCount(MIXER_CONFIG.numberOfMotors);
-                SERVO_RULES.setServoCount(MIXER_CONFIG.numberOfServos);
+                // MIXER_CONFIG.yawMotorDirection = data.getInt8(0);
+                // MIXER_CONFIG.yawJumpPreventionLimit = data.getUint16(1, true);
+                // //MIXER_CONFIG.platformType = data.getInt8(3);
+                // MIXER_CONFIG.hasFlaps = data.getInt8(4);
+                // MIXER_CONFIG.appliedMixerPreset = data.getInt16(5, true);
+                // MIXER_CONFIG.numberOfMotors = data.getInt8(7);
+                // MIXER_CONFIG.numberOfServos = data.getInt8(8);
+                // MOTOR_RULES.setMotorCount(MIXER_CONFIG.numberOfMotors);
+                // SERVO_RULES.setServoCount(MIXER_CONFIG.numberOfServos);
                 break;
             case MSPCodes.MSP2_ARDUPILOT_SET_MIXER:
                 console.log('Mixer config saved');
@@ -3462,13 +3462,13 @@ var mspHelper = (function (gui) {
                 break;
 
             case MSPCodes.MSP2_ARDUPILOT_SET_MIXER:
-                buffer.push(MIXER_CONFIG.yawMotorDirection);
-                buffer.push(lowByte(MIXER_CONFIG.yawJumpPreventionLimit));
-                buffer.push(highByte(MIXER_CONFIG.yawJumpPreventionLimit));
-                buffer.push(MIXER_CONFIG.platformType);
-                buffer.push(MIXER_CONFIG.hasFlaps);
-                buffer.push(lowByte(MIXER_CONFIG.appliedMixerPreset));
-                buffer.push(highByte(MIXER_CONFIG.appliedMixerPreset));
+                // buffer.push(MIXER_CONFIG.yawMotorDirection);
+                // buffer.push(lowByte(MIXER_CONFIG.yawJumpPreventionLimit));
+                // buffer.push(highByte(MIXER_CONFIG.yawJumpPreventionLimit));
+                // buffer.push(MIXER_CONFIG.platformType);
+                // buffer.push(MIXER_CONFIG.hasFlaps);
+                // buffer.push(lowByte(MIXER_CONFIG.appliedMixerPreset));
+                // buffer.push(highByte(MIXER_CONFIG.appliedMixerPreset));
                 break;
 
             case MSPCodes.MSP2_ARDUPILOT_SET_MC_BRAKING:
